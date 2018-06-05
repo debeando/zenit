@@ -4,9 +4,9 @@ import (
   "flag"
   "fmt"
   "os"
-  "github.com/swapbyt3s/proxysql_crawler/collect"
-  "github.com/swapbyt3s/proxysql_crawler/config"
-  "github.com/swapbyt3s/proxysql_crawler/setup"
+  "github.com/swapbyt3s/zenit/collect"
+  "github.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/setup"
 )
 
 func main() {

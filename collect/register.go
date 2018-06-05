@@ -4,8 +4,8 @@ package collect
 import (
   "fmt"
   "os"
-  "github.com/swapbyt3s/proxysql_crawler/config"
-  "github.com/swapbyt3s/proxysql_crawler/lib"
+  "github.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/lib"
 )
 
 func Prepare() {

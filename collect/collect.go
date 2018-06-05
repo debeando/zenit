@@ -3,7 +3,7 @@ package collect
 
 import (
   "fmt"
-  "github.com/swapbyt3s/proxysql_crawler/collect/proxysql"
+  "github.com/swapbyt3s/zenit/collect/proxysql"
 )
 
 func Run() {

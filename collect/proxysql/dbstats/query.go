@@ -5,8 +5,8 @@ import (
   "fmt"
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
-  "github.com/swapbyt3s/proxysql_crawler/config"
-  "github.com/swapbyt3s/proxysql_crawler/lib"
+  "github.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/lib"
 )
 
 type Query struct {

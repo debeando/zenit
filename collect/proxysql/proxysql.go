@@ -2,8 +2,8 @@
 package proxysql
 
 import (
-  "github.com/swapbyt3s/proxysql_crawler/collect/proxysql/dbmain"
-  "github.com/swapbyt3s/proxysql_crawler/collect/proxysql/dbstats"
+  "github.com/swapbyt3s/zenit/collect/proxysql/dbmain"
+  "github.com/swapbyt3s/zenit/collect/proxysql/dbstats"
 )
 
 func Run() {
