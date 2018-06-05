@@ -1,0 +1,184 @@
+// Package collect all servers from ProxySQL and ingest into MySQL.
+package collect
+
+import (
+  "fmt"
+  "reflect"
+  "strings"
+  "database/sql"
+  _ "github.com/go-sql-driver/mysql"
+  "github.com/swapbyt3s/proxysql_stats_crawler/config"
+  "github.com/swapbyt3s/proxysql_stats_crawler/lib"
+)
+
+// mover este fichero cl modulo main
+
+type Server struct {
+  hostgroup_id        int    `tag_name:"hostgroup_id"`
+  hostname            string `tag_name:"hostname"`
+  port                int    `tag_name:"port"`
+  status              string `tag_name:"status"`
+  weight              int    `tag_name:"weight"`
+  compression         int    `tag_name:"compression"`
+  max_connections     int    `tag_name:"max_connections"`
+  max_replication_lag int    `tag_name:"max_replication_lag"`
+  use_ssl             int    `tag_name:"use_ssl"`
+  max_latency_ms      int    `tag_name:"max_latency_ms"`
+  comment             string `tag_name:"comment"`
+}
+
+func Servers() {
+  fmt.Printf("==> Collect Servers\n")
+
+  proxysql_conn, _ := lib.Connect(config.DSN_PROXYSQL)
+  defer proxysql_conn.Close()
+
+  mysql_conn, _ := lib.Connect(config.DSN_MYSQL)
+  defer mysql_conn.Close()
+
+  servers := getServers(proxysql_conn)
+  putServers(mysql_conn, servers)
+
+  // crear lista de servers de la variable: servers
+
+  // esto no hace falta...
+  //dest := refrestServer(mysql_conn, servers)
+
+  //
+  delServers(servers)
+
+}
+
+func getServers(conn *sql.DB) []Server {
+  sql := fmt.Sprintf("SELECT %s FROM main.mysql_servers;", getColumns(Server{}))
+
+  servers := []Server{}
+  rows, _ := conn.Query(sql)
+  // cols, _ := rows.Columns()
+  // defer rows.Close()
+
+  for rows.Next() {
+    var server Server
+
+    rows.Scan(
+      &server.hostgroup_id,
+      &server.hostname,
+      &server.port,
+      &server.status,
+      &server.weight,
+      &server.compression,
+      &server.max_connections,
+      &server.max_replication_lag,
+      &server.use_ssl,
+      &server.max_latency_ms,
+      &server.comment)
+
+    servers = append(servers, server)
+  }
+  fmt.Printf("  > servers: %#v\n", servers)
+
+  return servers
+}
+
+func getHostname(conn *sql.DB) int {
+  //sql := "SELECT id FROM servers WHERE hostname = ? AND ipv4 = INET_ATON(?)"
+  return 1
+}
+
+func putServers(conn *sql.DB, servers []Server) {
+  proxysql_id := 1
+  sql := fmt.Sprintf("INSERT IGNORE INTO servers (proxysql_id,%s) VALUES (%s);",
+                     getColumns(Server{}),
+                     getParameters(Server{}, 1))
+
+  fmt.Printf("%s\n", sql)
+
+  for _, s := range  servers {
+    fmt.Printf("--> hostname: %s\n", s.hostname)
+    //fmt.Printf("%#v\n", s)
+    _, err := conn.Exec(sql,
+      proxysql_id,
+      s.hostgroup_id,
+      s.hostname,
+      s.port,
+      s.status,
+      s.weight,
+      s.compression,
+      s.max_connections,
+      s.max_replication_lag,
+      s.use_ssl,
+      s.max_latency_ms,
+      s.comment)
+    lib.CheckErr(err, "")
+  }
+}
+
+// func refrestServer(conn *sql.DB, servers []Server) []Server {
+//   sql := `
+// SELECT hostgroup_id,
+//        hostname,
+//        port,
+//        status,
+//        weight,
+//        compression,
+//        max_connections,
+//        max_replication_lag,
+//        use_ssl,
+//        max_latency_ms,
+//        comment
+// FROM servers;
+// `
+//
+//   rows, _ := conn.Query(sql)
+//   defer rows.Close()
+//
+//   for rows.Next() {
+//     var server Server
+//     rows.Scan(
+//       &server.hostgroup_id,
+//       &server.hostname,
+//       &server.port,
+//       &server.status,
+//       &server.weight,
+//       &server.compression,
+//       &server.max_connections,
+//       &server.max_replication_lag,
+//       &server.use_ssl,
+//       &server.max_latency_ms,
+//       &server.comment)
+//
+// //      lib.CheckErr(err, "...")
+//     servers = append(servers, server)
+//   }
+//
+//   return servers
+// }
+
+func delServers(org []Server) {
+  // fmt.Printf("--> org: %#v\n", orgs)
+  //fmt.Printf("--> dst: %#v\n", org)
+
+  for _, o := range org {
+    //fmt.Printf("  > %#v\n", dst)
+    fmt.Printf("  > (%d, %d, %s, %d)\n", 1, o.hostgroup_id, o.hostname, o.port)
+  }
+
+  // SELECT * FROM servers WHERE (proxysql_id, hostgroup_id, hostname, port) NOT IN ((1, 1, "192.168.1.35", 3306));
+
+  //fmt.Printf("\n--> SYNCSlice equal: %b\n", reflect.DeepEqual(orgs, dsts))
+}
+
+func getColumns(obj interface{}) string {
+  var columns []string
+  fields := reflect.TypeOf(obj)
+
+  for index := 0; index < fields.NumField(); index++ {
+    columns = append(columns, fields.Field(index).Tag.Get("tag_name"))
+  }
+
+  return strings.Join(columns,",")
+}
+
+func getParameters(obj interface{}, aditional int) string {
+  return strings.Trim(strings.Repeat("?,", reflect.TypeOf(obj).NumField() + aditional), ",")
+}
