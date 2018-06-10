@@ -11,8 +11,6 @@ type Query struct {
   digest_text string
   count_star  int
   sum_time    int
-  min_time    int
-  max_time    int
 }
 
 const QUERY_SQL = `
@@ -20,9 +18,7 @@ SELECT hostgroup,
        schemaname,
        digest_text,
        count_star,
-       sum_time,
-       min_time,
-       max_time
+       sum_time
 FROM queries;
 `
 
@@ -47,9 +43,7 @@ func GetQueries() {
       &query.schemaname,
       &query.digest_text,
       &query.count_star,
-      &query.sum_time,
-      &query.min_time,
-      &query.max_time)
+      &query.sum_time)
 
     Parser(query)
   }

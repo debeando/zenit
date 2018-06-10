@@ -4,7 +4,7 @@ import (
   "fmt"
 )
 
-func Prometheus() {
+func PrometheusExport() {
   stats := LoadStats()
   items := stats.ToArray()
 

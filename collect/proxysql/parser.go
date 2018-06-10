@@ -26,7 +26,7 @@ func Parser(digest Query) {
         count: digest.count_star,
       })
     } else {
-      stats.Increment(digest.schemaname, table, attribute, digest.count_star)
+      stats.Increment(digest.schemaname, table, attribute, digest.count_star, digest.sum_time)
     }
   }
 }
