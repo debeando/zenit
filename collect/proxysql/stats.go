@@ -57,24 +57,22 @@ func (stats *Stats) Count() int {
   return len(stats.Items)
 }
 
-func (stats *Stats) Contains(schema string, table string, attribute string) bool {
+func (stats *Stats) Contains(s Stat) int {
   for i := range(stats.Items) {
-    if (stats.Items[i].schema == schema && stats.Items[i].table == table && stats.Items[i].attribute == attribute) {
-      return true
+    if (stats.Items[i].schema == s.schema && stats.Items[i].table == s.table && stats.Items[i].attribute == s.attribute) {
+      return i
     }
   }
-  return false
+  return 0
 }
 
-func (stats *Stats) Increment(schema string, table string, attribute string, count int, time int, min int, max int) {
-  for i := range(stats.Items) {
-    if (stats.Items[i].schema == schema && stats.Items[i].table == table && stats.Items[i].attribute == attribute) {
-      stats.Items[i].count =+ count
-      stats.Items[i].sum =+ time
-      stats.Items[i].min =+ min
-      stats.Items[i].max =+ max
-    }
-  }
+func (stats *Stats) Increment(s Stat) {
+  i := stats.Contains(s)
+
+  stats.Items[i].count =+ s.count
+  stats.Items[i].sum =+ s.sum
+  stats.Items[i].min =+ s.min
+  stats.Items[i].max =+ s.max
 }
 
 // PrometheusFormat: Transform data to Prometheus format.

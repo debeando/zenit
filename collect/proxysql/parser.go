@@ -18,18 +18,20 @@ func Parser(digest Query) {
   if len(digest.digest_text) > 0 {
     table, attribute := Match(digest.digest_text)
 
-    if ! stats.Contains(digest.schemaname, table, attribute) {
-      stats.AddItem(Stat{
-        schema: digest.schemaname,
-        table: table,
-        attribute: attribute,
-        count: digest.count_star,
-        sum: digest.sum_time,
-        min: digest.min_time,
-        max: digest.max_time,
-      })
+    item := Stat{
+      schema: digest.schemaname,
+      table: table,
+      attribute: attribute,
+      count: digest.count_star,
+      sum: digest.sum_time,
+      min: digest.min_time,
+      max: digest.max_time,
+    }
+
+    if (stats.Contains(item) == 0) {
+      stats.AddItem(item)
     } else {
-      stats.Increment(digest.schemaname, table, attribute, digest.count_star, digest.sum_time, digest.min_time, digest.max_time)
+      stats.Increment(item)
     }
   }
 }
