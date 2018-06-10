@@ -1,6 +1,6 @@
 package proxysql
 
 func Run() {
-  Parser(GetQueries())
+  GetQueries()
   Prometheus()
 }

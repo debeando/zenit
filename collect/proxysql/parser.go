@@ -3,7 +3,6 @@ package proxysql
 import (
   "regexp"
   "strings"
-  "sort"
 )
 
 const REGEX_SQL = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z.]+)`
@@ -13,28 +12,23 @@ func init() {
   re, _ = regexp.Compile(REGEX_SQL)
 }
 
-func Parser(queries []Query) {
+func Parser(digest Query) {
   stats := LoadStats()
 
-  for _, q := range queries {
-    if len(q.digest_text) > 0 {
-      schema := q.schemaname
-      table, attribute := Match(q.digest_text)
+  if len(digest.digest_text) > 0 {
+    table, attribute := Match(digest.digest_text)
 
-      if ! stats.Contains(schema, table, attribute) {
-        stats.AddItem(Stat{
-          schema: schema,
-          table: table,
-          attribute: attribute,
-          count: 1,
-        })
-      } else {
-        stats.Increment(schema, table, attribute)
-      }
+    if ! stats.Contains(digest.schemaname, table, attribute) {
+      stats.AddItem(Stat{
+        schema: digest.schemaname,
+        table: table,
+        attribute: attribute,
+        count: digest.count_star,
+      })
+    } else {
+      stats.Increment(digest.schemaname, table, attribute, digest.count_star)
     }
   }
-
-  sort.Sort(BySchemaAndTable(stats.Items))
 }
 
 func Match(query string) (table string, attribute string) {

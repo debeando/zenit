@@ -26,7 +26,7 @@ SELECT hostgroup,
 FROM queries;
 `
 
-func GetQueries() (queries []Query) {
+func GetQueries() {
   conn, err := lib.Connect(config.DSN_PROXYSQL)
   defer conn.Close()
   if err != nil {
@@ -51,8 +51,6 @@ func GetQueries() (queries []Query) {
       &query.min_time,
       &query.max_time)
 
-    queries = append(queries, query)
+    Parser(query)
   }
-
-  return queries
 }

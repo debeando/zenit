@@ -2,6 +2,7 @@ package proxysql
 
 import (
   "fmt"
+  "sort"
 )
 
 type Stat struct {
@@ -63,17 +64,22 @@ func (stats *Stats) Contains(schema string, table string, attribute string) bool
   return false
 }
 
-func (stats *Stats) Increment(schema string, table string, attribute string) {
+func (stats *Stats) Increment(schema string, table string, attribute string, count int) {
   for i := range(stats.Items) {
     if (stats.Items[i].schema == schema && stats.Items[i].table == table && stats.Items[i].attribute == attribute) {
-      stats.Items[i].count++
+      stats.Items[i].count =+ count
     }
   }
 }
 
 func (stats *Stats) ToArray() (a []string) {
+  stats.Sort()
   for i := range(stats.Items) {
     a = append(a, fmt.Sprintf("%s.%s.%s.count %d", stats.Items[i].schema, stats.Items[i].table, stats.Items[i].attribute, stats.Items[i].count))
   }
   return a
+}
+
+func (stats *Stats) Sort() {
+  sort.Sort(BySchemaAndTable(stats.Items))
 }
