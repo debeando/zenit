@@ -12,5 +12,5 @@ Zenit tool collect stats data and send to ...
 
 Allow remote access:
 
-set admin-admin_credentials="admin:admin;radminuser:radminpass";
-LOAD ADMIN VARIABLES TO RUNTIME;
+  SET admin-admin_credentials = "admin:admin;radminuser:radminpass";
+  LOAD ADMIN VARIABLES TO RUNTIME;

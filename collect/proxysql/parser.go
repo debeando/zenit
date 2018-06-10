@@ -5,7 +5,7 @@ import (
   "strings"
 )
 
-const REGEX_SQL = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z._]+)`
+const REGEX_SQL = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z0-9._]+)`
 var re *regexp.Regexp
 
 func init() {
@@ -16,19 +16,19 @@ func Parser(digest Query) {
   stats := LoadStats()
 
   if len(digest.digest_text) > 0 {
-    table, attribute := Match(digest.digest_text)
+    table, command := Match(digest.digest_text)
 
     item := Stat{
       schema: digest.schemaname,
       table: table,
-      attribute: attribute,
+      command: command,
       count: digest.count_star,
       sum: digest.sum_time,
       min: digest.min_time,
       max: digest.max_time,
     }
 
-    if (stats.Contains(item) == 0) {
+    if ! stats.Contains(item) {
       stats.AddItem(item)
     } else {
       stats.Increment(item)
@@ -36,19 +36,19 @@ func Parser(digest Query) {
   }
 }
 
-func Match(query string) (table string, attribute string) {
+func Match(query string) (table string, command string) {
   groups    := re.FindStringSubmatch(query)
   table      = GetTable(groups)
-  attribute  = GetAttribute(groups)
+  command  = GetCommand(groups)
 
-  return table, attribute
+  return table, command
 }
 
 func IsSet(arr []string, index int) bool {
   return (len(arr) > index)
 }
 
-func GetAttribute(values []string) string {
+func GetCommand(values []string) string {
   if IsSet(values, 1) {
     return strings.ToLower(values[1])
   }
