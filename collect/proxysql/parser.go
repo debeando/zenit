@@ -5,7 +5,7 @@ import (
   "strings"
 )
 
-const REGEX_SQL = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z.]+)`
+const REGEX_SQL = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z._]+)`
 var re *regexp.Regexp
 
 func init() {
@@ -24,9 +24,12 @@ func Parser(digest Query) {
         table: table,
         attribute: attribute,
         count: digest.count_star,
+        sum: digest.sum_time,
+        min: digest.min_time,
+        max: digest.max_time,
       })
     } else {
-      stats.Increment(digest.schemaname, table, attribute, digest.count_star, digest.sum_time)
+      stats.Increment(digest.schemaname, table, attribute, digest.count_star, digest.sum_time, digest.min_time, digest.max_time)
     }
   }
 }

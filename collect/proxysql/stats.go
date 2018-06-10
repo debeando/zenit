@@ -10,7 +10,9 @@ type Stat struct {
   table     string
   attribute string
   count     int
-  time      int
+  sum       int
+  min       int
+  max       int
 }
 
 type Stats struct {
@@ -64,11 +66,13 @@ func (stats *Stats) Contains(schema string, table string, attribute string) bool
   return false
 }
 
-func (stats *Stats) Increment(schema string, table string, attribute string, count int, time int) {
+func (stats *Stats) Increment(schema string, table string, attribute string, count int, time int, min int, max int) {
   for i := range(stats.Items) {
     if (stats.Items[i].schema == schema && stats.Items[i].table == table && stats.Items[i].attribute == attribute) {
       stats.Items[i].count =+ count
-      stats.Items[i].time  =+ time
+      stats.Items[i].sum =+ time
+      stats.Items[i].min =+ min
+      stats.Items[i].max =+ max
     }
   }
 }
@@ -79,7 +83,10 @@ func (stats *Stats) ToArray() (a []string) {
   for i := range(stats.Items) {
     path := fmt.Sprintf("%s.%s.%s", stats.Items[i].schema, stats.Items[i].table, stats.Items[i].attribute)
     a = append(a, fmt.Sprintf("%s.count %d", path, stats.Items[i].count))
-    a = append(a, fmt.Sprintf("%s.time %d", path, stats.Items[i].time))
+    a = append(a, fmt.Sprintf("%s.time %d", path, stats.Items[i].sum))
+    a = append(a, fmt.Sprintf("%s.min %d", path, stats.Items[i].min))
+    a = append(a, fmt.Sprintf("%s.max %d", path, stats.Items[i].max))
+    a = append(a, fmt.Sprintf("%s.avg %d", path, (stats.Items[i].sum / stats.Items[i].count)))
   }
   return a
 }
