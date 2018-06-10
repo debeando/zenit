@@ -3,6 +3,9 @@
 [Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) Project is a crawler stats for ProxySQL and MySQL. Zenit is a
 russian was spy satellite.
 
+Zenit tool collect stats data and send to ...
+- ProxySQL
+
 ## ProxySQL
 
 ### Configure

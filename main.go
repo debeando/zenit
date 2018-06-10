@@ -4,31 +4,29 @@ import (
   "flag"
   "fmt"
   "os"
-  "github.com/swapbyt3s/zenit/collect"
   "github.com/swapbyt3s/zenit/config"
-  "github.com/swapbyt3s/zenit/setup"
+  "github.com/swapbyt3s/zenit/collect"
 )
 
 func main() {
-  helpPtr            := flag.Bool("help",             false, "Show this help.")
-  versionPtr         := flag.Bool("version",          false, "Show version.")
-  collectProxySQLPtr := flag.Bool("collect-proxysql", false, "Collect all stats from ProxySQL.")
-  setupPtr           := flag.Bool("setup",            false, "Create schemas on MySQL.")
+  flg_help     := flag.Bool("help",             false, "Show this help.")
+  flg_version  := flag.Bool("version",          false, "Show version.")
+  flg_proxysql := flag.Bool("collect-proxysql", false, "Collect all stats from ProxySQL.")
+  // -collect-mysql
+  // -output-prometheus
+  // -output-influxdb
 
   flag.Parse()
 
   if len(os.Args) == 1 {
     help()
   } else if len(os.Args) >= 2 {
-    if *helpPtr {
+    if *flg_help {
       help()
-    } else if *versionPtr {
+    } else if *flg_version {
       fmt.Printf("%s\n", config.VERSION)
-    } else if *collectProxySQLPtr {
-      collect.Prepare()
-      collect.Run()
-    } else if *setupPtr {
-      setup.Run()
+    } else if *flg_proxysql {
+      collect.ProxySQL()
     } else {
       fmt.Printf("%q is not valid command.\n", os.Args[1])
       help()

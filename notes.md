@@ -1,3 +1,7 @@
+
+
+
+
 UPDATE global_variables SET variable_value='0.0.0.0:6032' WHERE variable_name='mysql-interfaces';
 SET admin-admin_credentials="admin:admin;radminuser:radminpass";
 

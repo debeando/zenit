@@ -1,3 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-go build -ldflags "-s -w"
+set -e
+
+go build -ldflags "-s -w" -o zenit main.go
