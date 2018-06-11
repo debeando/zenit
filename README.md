@@ -12,5 +12,6 @@ Zenit tool collect stats data and send to ...
 
 Allow remote access:
 
+  mysql -u admin -padmin -h 127.0.0.1 -P 6032
   SET admin-admin_credentials = "admin:admin;radminuser:radminpass";
   LOAD ADMIN VARIABLES TO RUNTIME;
