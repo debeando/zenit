@@ -69,9 +69,9 @@ func (stats *Stats) Increment(s Stat) {
   for i := range(stats.Items) {
     if (stats.Items[i].schema == s.schema && stats.Items[i].table == s.table && stats.Items[i].command == s.command) {
       stats.Items[i].count =+ s.count
-      stats.Items[i].sum =+ s.sum
-      stats.Items[i].min =+ s.min
-      stats.Items[i].max =+ s.max
+      stats.Items[i].sum   =+ s.sum
+      stats.Items[i].min   =+ s.min
+      stats.Items[i].max   =+ s.max
       break
     }
   }

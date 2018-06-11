@@ -19,13 +19,13 @@ func Parser(digest Query) {
     table, command := Match(digest.digest_text)
 
     item := Stat{
-      schema: digest.schemaname,
-      table: table,
+      schema:  digest.schemaname,
+      table:   table,
       command: command,
-      count: digest.count_star,
-      sum: digest.sum_time,
-      min: digest.min_time,
-      max: digest.max_time,
+      count:   digest.count_star,
+      sum:     digest.sum_time,
+      min:     digest.min_time,
+      max:     digest.max_time,
     }
 
     if ! stats.Contains(item) {
@@ -37,8 +37,8 @@ func Parser(digest Query) {
 }
 
 func Match(query string) (table string, command string) {
-  groups    := re.FindStringSubmatch(query)
-  table      = GetTable(groups)
+  groups  := re.FindStringSubmatch(query)
+  table    = GetTable(groups)
   command  = GetCommand(groups)
 
   return table, command
