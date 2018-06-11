@@ -1,8 +1,8 @@
 package proxysql
 
 import (
-  "github.com/swapbyt3s/zenit/config"
-  "github.com/swapbyt3s/zenit/lib"
+  "gitlab.com/swapbyt3s/zenit/config"
+  "gitlab.com/swapbyt3s/zenit/lib"
 )
 
 type Query struct {
@@ -23,7 +23,7 @@ SELECT hostgroup,
        sum_time,
        min_time,
        max_time
-FROM queries;
+FROM stats.stats_mysql_query_digest;
 `
 
 func GetQueries() {

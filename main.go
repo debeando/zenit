@@ -4,8 +4,8 @@ import (
   "flag"
   "fmt"
   "os"
-  "github.com/swapbyt3s/zenit/config"
-  "github.com/swapbyt3s/zenit/collect"
+  "gitlab.com/swapbyt3s/zenit/config"
+  "gitlab.com/swapbyt3s/zenit/collect"
 )
 
 func main() {
