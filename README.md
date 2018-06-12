@@ -6,6 +6,8 @@ russian was spy satellite.
 Zenit tool collect stats data and send to ...
 - ProxySQL
 
+The numeric values has represent time has in microseconds.
+
 ## ProxySQL
 
 ### Configure

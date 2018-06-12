@@ -6,18 +6,16 @@ import (
 )
 
 type Query struct {
-  hostgroup   uint
-  schemaname  string
-  digest_text string
-  count_star  uint
-  sum_time    uint // In microseconds.
-  min_time    uint // In microseconds.
-  max_time    uint // In microseconds.
+  schema string
+  digest string
+  count  uint
+  sum    uint
+  min    uint
+  max    uint
 }
 
 const QUERY_SQL = `
-SELECT hostgroup,
-       schemaname,
+SELECT schemaname,
        digest_text,
        count_star,
        sum_time,
@@ -43,13 +41,12 @@ func GetQueries() {
     var query Query
 
     rows.Scan(
-      &query.hostgroup,
-      &query.schemaname,
-      &query.digest_text,
-      &query.count_star,
-      &query.sum_time,
-      &query.min_time,
-      &query.max_time)
+      &query.schema,
+      &query.digest,
+      &query.count,
+      &query.sum,
+      &query.min,
+      &query.max)
 
     Parser(query)
   }

@@ -12,20 +12,20 @@ func init() {
   re, _ = regexp.Compile(REGEX_SQL)
 }
 
-func Parser(digest Query) {
+func Parser(q Query) {
   stats := LoadStats()
 
-  if len(digest.digest_text) > 0 {
-    table, command := Match(digest.digest_text)
+  if len(q.digest) > 0 {
+    table, command := Match(q.digest)
 
     item := Stat{
-      schema:  digest.schemaname,
+      schema:  q.schema,
       table:   table,
       command: command,
-      count:   digest.count_star,
-      sum:     digest.sum_time,
-      min:     digest.min_time,
-      max:     digest.max_time,
+      count:   q.count,
+      sum:     q.sum,
+      min:     q.min,
+      max:     q.max,
     }
 
     if ! stats.Contains(item) {
