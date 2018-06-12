@@ -8,10 +8,10 @@ type Stat struct {
   schema  string
   table   string
   command string
-  count   int
-  sum     int
-  min     int
-  max     int
+  count   uint
+  sum     uint
+  min     uint
+  max     uint
 }
 
 type Stats struct {
