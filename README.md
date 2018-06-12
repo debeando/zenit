@@ -15,3 +15,11 @@ Allow remote access:
   mysql -u admin -padmin -h 127.0.0.1 -P 6032
   SET admin-admin_credentials = "admin:admin;radminuser:radminpass";
   LOAD ADMIN VARIABLES TO RUNTIME;
+
+## Prometheus
+
+Integration for Prometheus,
+
+
+  cp zenit /usr/local/bin/
+  * * * * * /usr/local/bin/zenit -collect-proxysql > /usr/local/prometheus/textfile_collector/proxysql_stats_queries.prom
