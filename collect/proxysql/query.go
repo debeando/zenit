@@ -6,13 +6,13 @@ import (
 )
 
 type Query struct {
-  hostgroup   int
+  hostgroup   uint
   schemaname  string
   digest_text string
-  count_star  int
-  sum_time    int // In microseconds.
-  min_time    int // In microseconds.
-  max_time    int // In microseconds.
+  count_star  uint
+  sum_time    uint // In microseconds.
+  min_time    uint // In microseconds.
+  max_time    uint // In microseconds.
 }
 
 const QUERY_SQL = `
