@@ -14,10 +14,10 @@ func PrometheusExport() {
     path  = path + fmt.Sprintf(",table=\"%s\"",   stats.Items[i].table)
     path  = path + fmt.Sprintf(",command=\"%s\"", stats.Items[i].command)
 
-    fmt.Printf("%s,calc=\"count\"} %d\n", path, stats.Items[i].count)
-    fmt.Printf("%s,calc=\"time\"} %d\n", path, stats.Items[i].sum)
-    fmt.Printf("%s,calc=\"min\"} %d\n", path, stats.Items[i].min)
-    fmt.Printf("%s,calc=\"max\"} %d\n", path, stats.Items[i].max)
-    fmt.Printf("%s,calc=\"avg\"} %d\n", path, (stats.Items[i].sum / stats.Items[i].count))
+    fmt.Printf("%s,calc=\"count\"} %d\n", path, stats.GetCount(i))
+    fmt.Printf("%s,calc=\"time\"} %d\n", path, stats.GetSum(i))
+    fmt.Printf("%s,calc=\"min\"} %d\n", path, stats.GetMin(i))
+    fmt.Printf("%s,calc=\"max\"} %d\n", path, stats.GetMax(i))
+    fmt.Printf("%s,calc=\"avg\"} %d\n", path, stats.GetAvg(i))
   }
 }

@@ -80,3 +80,23 @@ func (stats *Stats) Increment(s Stat) {
 func (stats *Stats) Sort() {
   sort.Sort(BySchemaAndTable(stats.Items))
 }
+
+func (stats *Stats) GetCount(i int) uint {
+  return stats.Items[i].count
+}
+
+func (stats *Stats) GetSum(i int) uint {
+  return stats.Items[i].sum
+}
+
+func (stats *Stats) GetMin(i int) uint {
+  return stats.Items[i].min
+}
+
+func (stats *Stats) GetMax(i int) uint {
+  return stats.Items[i].max
+}
+
+func (stats *Stats) GetAvg(i int) uint {
+  return stats.Items[i].sum / stats.Items[i].count
+}

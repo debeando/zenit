@@ -18,15 +18,14 @@ func Parser(q Query) {
   if len(q.digest) > 0 {
     table, command := Match(q.digest)
 
-    item := Stat{
-      schema:  q.schema,
-      table:   table,
-      command: command,
-      count:   q.count,
-      sum:     q.sum,
-      min:     q.min,
-      max:     q.max,
-    }
+    item := Stat{}
+    item.schema  = q.schema
+    item.table   = table
+    item.command = command
+    item.count   = q.count
+    item.sum     = q.sum
+    item.min     = q.min
+    item.max     = q.max
 
     if ! stats.Contains(item) {
       stats.AddItem(item)

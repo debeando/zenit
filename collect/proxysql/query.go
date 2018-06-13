@@ -25,7 +25,7 @@ FROM stats.stats_mysql_query_digest;
 `
 
 func GetQueries() {
-  conn, err := lib.Connect(config.DSN_PROXYSQL)
+  conn, err := lib.MySQLConnect(config.DSN_PROXYSQL)
   defer conn.Close()
   if err != nil {
     panic(err)
