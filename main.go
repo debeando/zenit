@@ -11,7 +11,8 @@ import (
 func main() {
   flg_help     := flag.Bool("help",             false, "Show this help.")
   flg_version  := flag.Bool("version",          false, "Show version.")
-  flg_proxysql := flag.Bool("collect-proxysql", false, "Collect all stats from ProxySQL.")
+  flg_proxysql := flag.Bool("collect-proxysql", false, "Stats from ProxySQL.")
+  flg_os       := flag.Bool("collect-os",       false, "Info from Linux Operating System.")
   // -collect-mysql
   // -output-prometheus
   // -output-influxdb
@@ -27,6 +28,8 @@ func main() {
       fmt.Printf("%s\n", config.VERSION)
     } else if *flg_proxysql {
       collect.ProxySQL()
+    } else if *flg_os {
+      collect.OS()
     } else {
       fmt.Printf("%q is not valid command.\n", os.Args[1])
       help()
