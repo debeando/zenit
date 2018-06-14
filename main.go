@@ -11,11 +11,13 @@ import (
 func main() {
   flg_help     := flag.Bool("help",             false, "Show this help.")
   flg_version  := flag.Bool("version",          false, "Show version.")
+  // flg_percona  := flag.Bool("collect-percona",  false, "Info & Stats from Percona.")
   flg_proxysql := flag.Bool("collect-proxysql", false, "Stats from ProxySQL.")
   flg_os       := flag.Bool("collect-os",       false, "Info from Linux Operating System.")
-  // -collect-mysql
+  // -collect-mysql {table sizes,limit pk datatype,status,variables,slave status}
   // -output-prometheus
   // -output-influxdb
+  // -collect-os {ram,cpu,cores,network,swap,disk[size,free],iops}
 
   flag.Parse()
 
