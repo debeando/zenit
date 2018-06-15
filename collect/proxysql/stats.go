@@ -82,6 +82,22 @@ func (stats *Stats) Sort() {
   sort.Sort(BySchemaAndTable(stats.Items))
 }
 
+func (stats *Stats) GetSchema(i int) string {
+  return stats.Items[i].schema
+}
+
+func (stats *Stats) GetTable(i int) string {
+  return stats.Items[i].table
+}
+
+func (stats *Stats) GetCommand(i int) string {
+  return stats.Items[i].command
+}
+
+func (stats *Stats) GetGroup(i int) string {
+  return stats.Items[i].group
+}
+
 func (stats *Stats) GetCount(i int) uint {
   return stats.Items[i].count
 }

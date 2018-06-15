@@ -5,9 +5,16 @@ import (
 )
 
 var VERSION      string = "0.1.0"
+var DSN_MYSQL    string = "root@tcp(127.0.0.1:3306)/"
 var DSN_PROXYSQL string = "radminuser:radminpass@tcp(127.0.0.1:6032)/"
 
 func init() {
+  env_dsn_mysql := os.Getenv("DSN_MYSQL")
+
+  if env_dsn_mysql != "" {
+    DSN_MYSQL = env_dsn_mysql
+  }
+
   env_dsn_proxysql := os.Getenv("DSN_PROXYSQL")
 
   if env_dsn_proxysql != "" {
