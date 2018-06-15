@@ -19,6 +19,7 @@ func Parser(q Query) {
     table, command := Match(q.digest)
 
     item := Stat{}
+    item.group   = q.group
     item.schema  = q.schema
     item.table   = table
     item.command = command

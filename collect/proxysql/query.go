@@ -6,6 +6,7 @@ import (
 )
 
 type Query struct {
+  group  string
   schema string
   digest string
   count  uint
@@ -15,7 +16,11 @@ type Query struct {
 }
 
 const QUERY_SQL = `
-SELECT schemaname,
+SELECT CASE
+         WHEN hostgroup IN (SELECT writer_hostgroup FROM main.mysql_replication_hostgroups) THEN 'writer'
+         WHEN hostgroup IN (SELECT reader_hostgroup FROM main.mysql_replication_hostgroups) THEN 'reader'
+       END AS 'group',
+       schemaname,
        digest_text,
        count_star,
        sum_time,
@@ -41,6 +46,7 @@ func GetQueries() {
     var query Query
 
     rows.Scan(
+      &query.group,
       &query.schema,
       &query.digest,
       &query.count,

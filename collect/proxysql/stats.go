@@ -5,6 +5,7 @@ import (
 )
 
 type Stat struct {
+  group   string
   schema  string
   table   string
   command string
@@ -58,7 +59,7 @@ func (stats *Stats) Count() int {
 
 func (stats *Stats) Contains(s Stat) bool {
   for i := range(stats.Items) {
-    if (stats.Items[i].schema == s.schema && stats.Items[i].table == s.table && stats.Items[i].command == s.command) {
+    if (stats.Items[i].group == s.group && stats.Items[i].schema == s.schema && stats.Items[i].table == s.table && stats.Items[i].command == s.command) {
       return true
     }
   }
@@ -67,7 +68,7 @@ func (stats *Stats) Contains(s Stat) bool {
 
 func (stats *Stats) Increment(s Stat) {
   for i := range(stats.Items) {
-    if (stats.Items[i].schema == s.schema && stats.Items[i].table == s.table && stats.Items[i].command == s.command) {
+    if (stats.Items[i].group == s.group && stats.Items[i].schema == s.schema && stats.Items[i].table == s.table && stats.Items[i].command == s.command) {
       stats.Items[i].count =+ s.count
       stats.Items[i].sum   =+ s.sum
       stats.Items[i].min   =+ s.min

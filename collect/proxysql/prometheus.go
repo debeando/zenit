@@ -13,6 +13,7 @@ func PrometheusExport() {
     path  = path + fmt.Sprintf("{schema=\"%s\"",  stats.Items[i].schema)
     path  = path + fmt.Sprintf(",table=\"%s\"",   stats.Items[i].table)
     path  = path + fmt.Sprintf(",command=\"%s\"", stats.Items[i].command)
+    path  = path + fmt.Sprintf(",group=\"%s\"",   stats.Items[i].group)
 
     fmt.Printf("%s,calc=\"count\"} %d\n", path, stats.GetCount(i))
     fmt.Printf("%s,calc=\"time\"} %d\n", path, stats.GetSum(i))
