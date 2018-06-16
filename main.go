@@ -16,11 +16,11 @@ func main() {
   flg_os       := flag.Bool("collect-os",       false, "Info from Linux Operating System.")
   flg_percona  := flag.Bool("collect-percona",  false, "Info & Stats from Percona Toolkit.")
   flg_proxysql := flag.Bool("collect-proxysql", false, "Stats from ProxySQL.")
-  // -collect-mysql {limit pk datatype,status,variables,slave status}
+  // -collect-mysql {status,variables,slave status}
   // check is open port from any
   // -output-prometheus
   // -output-influxdb
-  // -collect-os {cpu,cores,network,swap,disk[size,free],iops}
+  // -collect-os {network,swap,disk[size,free],iops}
 
   flag.Parse()
 

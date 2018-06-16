@@ -25,6 +25,16 @@ Integration for Prometheus,
   cp zenit /usr/local/bin/
   * * * * * /usr/local/bin/zenit -collect > /usr/local/prometheus/textfile_collector/zenit.prom
 
+## Development
+
+Build, upload to docker container and run:
+
+GOOS=linux go build -ldflags "-s -w" -o zenit main.go && \
+docker cp zenit d1c86f2f36ff:/root && \
+docker exec -i -t d1c86f2f36ff /root/zenit -collect-os
+
+You only need update the ID container from last command.
+
 # Todo:
 - @@log_error
   mysql_errors_on_log
