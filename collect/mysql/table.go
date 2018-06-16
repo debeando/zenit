@@ -15,20 +15,20 @@ type Tables struct {
   Items []Table
 }
 
-var list *Tables
+var list_tables *Tables
 
-const QUERY_SQL = `
+const QUERY_SQL_TABLES = `
 SELECT table_schema AS 'schema', table_name AS 'table', data_length + index_length AS 'size'
 FROM information_schema.tables
-WHERE table_schema NOT IN ('mysql', 'sys', 'performance_schema', 'information_schema')
+WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schema','percona')
 ORDER BY table_schema, table_name;
 `
 
 func LoadTables() *Tables {
-  if list == nil {
-    list = &Tables{}
+  if list_tables == nil {
+    list_tables = &Tables{}
   }
-  return list
+  return list_tables
 }
 
 func (tables *Tables) AddItem(item Table) []Table {
@@ -55,7 +55,7 @@ func GetTables() {
     panic(err)
   }
 
-  rows, err := conn.Query(QUERY_SQL)
+  rows, err := conn.Query(QUERY_SQL_TABLES)
   defer rows.Close()
   if err != nil {
     panic(err)
@@ -64,13 +64,13 @@ func GetTables() {
   tables := LoadTables()
 
   for rows.Next() {
-    var table Table
+    var t Table
 
     rows.Scan(
-      &table.schema,
-      &table.table,
-      &table.size)
+      &t.schema,
+      &t.table,
+      &t.size)
 
-    tables.AddItem(table)
+    tables.AddItem(t)
   }
 }

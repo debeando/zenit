@@ -41,18 +41,18 @@ SELECT CASE
 FROM stats.stats_mysql_query_digest;
 `
 
-var re *regexp.Regexp
-var list *Queries
+var re           *regexp.Regexp
+var list_queries *Queries
 
 func init() {
   re, _ = regexp.Compile(REGEX_SQL)
 }
 
 func LoadQueries() *Queries {
-  if list == nil {
-    list = &Queries{}
+  if list_queries == nil {
+    list_queries = &Queries{}
   }
-  return list
+  return list_queries
 }
 
 func (a BySchemaAndTable) Len() int {
@@ -163,18 +163,18 @@ func GetQueries() {
   }
 
   for rows.Next() {
-    var query Query
+    var q Query
 
     rows.Scan(
-      &query.group,
-      &query.schema,
-      &query.digest,
-      &query.count,
-      &query.sum,
-      &query.min,
-      &query.max)
+      &q.group,
+      &q.schema,
+      &q.digest,
+      &q.count,
+      &q.sum,
+      &q.min,
+      &q.max)
 
-    Parser(query)
+    Parser(q)
   }
 }
 
