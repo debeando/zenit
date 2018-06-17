@@ -2,8 +2,8 @@ package os
 
 import (
   "fmt"
-  "time"
   "strings"
+  "time"
   "gitlab.com/swapbyt3s/zenit/lib"
 )
 
@@ -16,7 +16,7 @@ func GetCPU() {
   c := [2]CPU{}
 
   c[0].idle, c[0].total = getCPUSample()
-  time.Sleep(200 * time.Millisecond)
+  time.Sleep(300 * time.Millisecond)
   c[1].idle, c[1].total = getCPUSample()
 
   if c[0].total > 0 && c[1].total > 0 && c[0].idle > 0 && c[1].idle > 0 {
@@ -29,13 +29,15 @@ func GetCPU() {
 }
 
 func getCPUSample() (idle uint64, total uint64) {
-  lines  := lib.ReadFile("/proc/stat")
-  fields := strings.Fields(lines[0])
+  lines := lib.ReadFile("/proc/stat")
+  if len(lines) > 0 {
+    fields := strings.Fields(lines[0])
 
-  for i := 1; i < len(fields); i++ {
-    total += lib.StringToUInt64(fields[i])
-    if i == 4 {
-      idle = lib.StringToUInt64(fields[i])
+      for i := 1; i < len(fields); i++ {
+        total += lib.StringToUInt64(fields[i])
+        if i == 4 {
+          idle = lib.StringToUInt64(fields[i])
+        }
     }
   }
   return

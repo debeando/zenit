@@ -2,6 +2,7 @@ package os
 
 import (
   "fmt"
+  "math"
   "strings"
   "gitlab.com/swapbyt3s/zenit/lib"
 )
@@ -45,6 +46,10 @@ func GetMem() {
 
   mem.used    = mem.total - mem.free - mem.buffers - mem.cached
   mem.percent = float64(mem.used) / float64(mem.total) * 100.0
+
+  if math.IsNaN(mem.percent) {
+    mem.percent = 0
+  }
 
   fmt.Printf("os.linux_mem.total %d\n", mem.total)
   fmt.Printf("os.linux_mem.free %d\n", mem.free)

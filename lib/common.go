@@ -34,7 +34,10 @@ func ReadFile(path string) (lines []string) {
 
 func ValueFromFile(path string) uint64 {
   lines := ReadFile(path)
-  return StringToUInt64(lines[0])
+  if len(lines) > 0 {
+    return StringToUInt64(lines[0])
+  }
+  return 0
 }
 
 func StringToUInt64(value string) uint64 {
