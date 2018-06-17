@@ -1,5 +1,5 @@
 package percona
 
 func Run() {
-  GetRunningProcess()
+  GatherRunningProcess()
 }

@@ -77,7 +77,7 @@ func (c *Columns) GetDataType(i int) string {
 }
 
 
-func GetOverflow() {
+func GatherOverflow() {
   conn, err := lib.MySQLConnect(config.DSN_PROXYSQL)
   defer conn.Close()
   if err != nil {

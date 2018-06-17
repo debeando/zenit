@@ -5,8 +5,15 @@ import (
 )
 
 func PrometheusExport() {
+  status  := LoadStatus()
   tables  := LoadTables()
   columns := LoadColumns()
+
+  for i := range(status.Items) {
+    path := "mysql_status"
+    path  = path + fmt.Sprintf("{name=\"%s\"}", status.GetName(i))
+    fmt.Printf("%s %d\n", path, status.GetValue(i))
+  }
 
   for i := range(tables.Items) {
     path := "mysql_stats_tables"

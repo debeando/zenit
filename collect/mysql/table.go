@@ -48,8 +48,8 @@ func (tables *Tables) GetSize(i int) uint64 {
   return tables.Items[i].size
 }
 
-func GetTables() {
-  conn, err := lib.MySQLConnect(config.DSN_PROXYSQL)
+func GatherTables() {
+  conn, err := lib.MySQLConnect(config.DSN_MYSQL)
   defer conn.Close()
   if err != nil {
     panic(err)

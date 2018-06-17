@@ -1,7 +1,8 @@
 package mysql
 
 func Run() {
-  // GetTables()
-  GetOverflow()
+  GatherStatus()
+  GatherTables()
+  GatherOverflow()
   PrometheusExport()
 }

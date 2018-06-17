@@ -17,7 +17,7 @@ type Mem struct {
   percent   float64
 }
 
-func GetMem() {
+func GatherMem() {
   lines  := lib.ReadFile("/proc/meminfo")
   mem := Mem{}
   for _, line := range(lines) {

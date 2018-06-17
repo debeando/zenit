@@ -12,7 +12,7 @@ type CPU struct {
   total uint64
 }
 
-func GetCPU() {
+func GatherCPU() {
   c := [2]CPU{}
 
   c[0].idle, c[0].total = getCPUSample()

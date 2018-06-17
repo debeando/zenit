@@ -1,7 +1,7 @@
 package os
 
 func Run() {
-  GetSysLimits()
-  GetMem()
-  GetCPU()
+  GatherSysLimits()
+  GatherMem()
+  GatherCPU()
 }

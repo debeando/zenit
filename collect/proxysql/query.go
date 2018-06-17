@@ -149,7 +149,7 @@ func (queries *Queries) GetAvg(i int) uint {
   return queries.Items[i].sum / queries.Items[i].count
 }
 
-func GetQueries() {
+func GatherQueries() {
   conn, err := lib.MySQLConnect(config.DSN_PROXYSQL)
   defer conn.Close()
   if err != nil {
