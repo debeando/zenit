@@ -20,6 +20,7 @@ func GetCPU() {
   c[1].idle, c[1].total = getCPUSample()
 
   if c[0].total > 0 && c[1].total > 0 && c[0].idle > 0 && c[1].idle > 0 {
+    fmt.Printf("- e...\n")
     total := c[1].total - c[0].total
     idle  := c[1].idle  - c[0].idle
     percentage := (float64(total) - float64(idle)) / float64(total) * 100.0
