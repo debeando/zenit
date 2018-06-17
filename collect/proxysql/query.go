@@ -26,8 +26,9 @@ type Queries struct {
 
 type BySchemaAndTable []Query
 
-const REGEX_SQL = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z0-9._]+)`
-const QUERY_SQL = `
+const (
+  REGEX_SQL = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z0-9._]+)`
+  QUERY_SQL = `
 SELECT CASE
          WHEN hostgroup IN (SELECT writer_hostgroup FROM main.mysql_replication_hostgroups) THEN 'writer'
          WHEN hostgroup IN (SELECT reader_hostgroup FROM main.mysql_replication_hostgroups) THEN 'reader'
@@ -40,9 +41,12 @@ SELECT CASE
        max_time
 FROM stats.stats_mysql_query_digest;
 `
+)
 
-var re           *regexp.Regexp
-var list_queries *Queries
+var (
+  re           *regexp.Regexp
+  list_queries *Queries
+)
 
 func init() {
   re, _ = regexp.Compile(REGEX_SQL)

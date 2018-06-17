@@ -23,26 +23,26 @@ type Columns struct {
 
 var list_columns *Columns
 
-const dt_tinyint      uint8  = 127
-const dt_smallint     uint16 = 32767
-const dt_mediumint    uint32 = 8388607
-const dt_int          uint32 = 2147483647
-const dt_bigint       uint64 = 9223372036854775807
-const dt_us_tinyint   uint8  = 255
-const dt_us_smallint  uint16 = 65535
-const dt_us_mediumint uint32 = 16777215
-const dt_us_int       uint32 = 4294967295
-const dt_us_bigint    uint64 = 18446744073709551615
-
-const QUERY_SQL_COLUMNS = `
+const (
+  dt_tinyint      uint8  = 127
+  dt_smallint     uint16 = 32767
+  dt_mediumint    uint32 = 8388607
+  dt_int          uint32 = 2147483647
+  dt_bigint       uint64 = 9223372036854775807
+  dt_us_tinyint   uint8  = 255
+  dt_us_smallint  uint16 = 65535
+  dt_us_mediumint uint32 = 16777215
+  dt_us_int       uint32 = 4294967295
+  dt_us_bigint    uint64 = 18446744073709551615
+  QUERY_SQL_COLUMNS = `
 SELECT table_schema, table_name, column_name, column_type
 FROM information_schema.columns
 WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schema','percona')
   AND column_type LIKE '%int%'
   AND column_key = 'PRI'
 `
-
-const QUERY_SQL_MAX_INT = "SELECT COALESCE(MAX(%s), 0) FROM %s.%s"
+  QUERY_SQL_MAX_INT = "SELECT COALESCE(MAX(%s), 0) FROM %s.%s"
+)
 
 func LoadColumns() *Columns {
   if list_columns == nil {
