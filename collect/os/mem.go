@@ -4,7 +4,7 @@ import (
   "fmt"
   "math"
   "strings"
-  "gitlab.com/swapbyt3s/zenit/lib"
+  "gitlab.com/swapbyt3s/zenit/common"
 )
 
 type Mem struct {
@@ -18,7 +18,7 @@ type Mem struct {
 }
 
 func GatherMem() {
-  lines  := lib.ReadFile("/proc/meminfo")
+  lines  := common.ReadFile("/proc/meminfo")
   mem := Mem{}
   for _, line := range(lines) {
     fields := strings.Split(line, ":")
@@ -28,7 +28,7 @@ func GatherMem() {
     }
 
     key   := strings.TrimSpace(fields[0])
-    value := lib.StringToUInt64(strings.Replace(fields[1], " kB", "", -1)) * 1024
+    value := common.StringToUInt64(strings.Replace(fields[1], " kB", "", -1)) * 1024
 
     switch key {
     case "MemTotal":

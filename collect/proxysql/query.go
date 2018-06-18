@@ -5,7 +5,7 @@ import (
   "sort"
   "strings"
   "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/lib"
+  "gitlab.com/swapbyt3s/zenit/common"
 )
 
 type Query struct {
@@ -154,7 +154,7 @@ func (queries *Queries) GetAvg(i int) uint {
 }
 
 func GatherQueries() {
-  conn, err := lib.MySQLConnect(config.DSN_PROXYSQL)
+  conn, err := common.MySQLConnect(config.DSN_PROXYSQL)
   defer conn.Close()
   if err != nil {
     panic(err)

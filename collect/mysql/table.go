@@ -2,7 +2,7 @@ package mysql
 
 import (
   "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/lib"
+  "gitlab.com/swapbyt3s/zenit/common"
 )
 
 type Table struct {
@@ -49,7 +49,7 @@ func (tables *Tables) GetSize(i int) uint64 {
 }
 
 func GatherTables() {
-  conn, err := lib.MySQLConnect(config.DSN_MYSQL)
+  conn, err := common.MySQLConnect(config.DSN_MYSQL)
   defer conn.Close()
   if err != nil {
     panic(err)

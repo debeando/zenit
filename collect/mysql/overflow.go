@@ -4,7 +4,7 @@ import (
   "fmt"
   "strings"
   "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/lib"
+  "gitlab.com/swapbyt3s/zenit/common"
 )
 
 type Column struct {
@@ -78,7 +78,7 @@ func (c *Columns) GetDataType(i int) string {
 
 
 func GatherOverflow() {
-  conn, err := lib.MySQLConnect(config.DSN_MYSQL)
+  conn, err := common.MySQLConnect(config.DSN_MYSQL)
   defer conn.Close()
   if err != nil {
     panic(err)

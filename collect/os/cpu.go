@@ -4,7 +4,7 @@ import (
   "fmt"
   "strings"
   "time"
-  "gitlab.com/swapbyt3s/zenit/lib"
+  "gitlab.com/swapbyt3s/zenit/common"
 )
 
 type CPU struct {
@@ -29,14 +29,14 @@ func GatherCPU() {
 }
 
 func getCPUSample() (idle uint64, total uint64) {
-  lines := lib.ReadFile("/proc/stat")
+  lines := common.ReadFile("/proc/stat")
   if len(lines) > 0 {
     fields := strings.Fields(lines[0])
 
       for i := 1; i < len(fields); i++ {
-        total += lib.StringToUInt64(fields[i])
+        total += common.StringToUInt64(fields[i])
         if i == 4 {
-          idle = lib.StringToUInt64(fields[i])
+          idle = common.StringToUInt64(fields[i])
         }
     }
   }

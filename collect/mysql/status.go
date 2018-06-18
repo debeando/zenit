@@ -4,7 +4,7 @@ import (
   "strings"
   "database/sql"
   "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/lib"
+  "gitlab.com/swapbyt3s/zenit/common"
 )
 
 type State struct {
@@ -41,7 +41,7 @@ func (s *Status) GetValue(i int) uint64 {
 }
 
 func GatherStatus() {
-  conn, err := lib.MySQLConnect(config.DSN_MYSQL)
+  conn, err := common.MySQLConnect(config.DSN_MYSQL)
   defer conn.Close()
   if err != nil {
     panic(err)
@@ -61,7 +61,7 @@ func GatherStatus() {
   for rows.Next() {
     rows.Scan(&key, &val)
 
-    if value, ok := lib.MySQLParseValue(val); ok {
+    if value, ok := common.MySQLParseValue(val); ok {
       status.AddItem(State{name: strings.ToLower(key), value: value})
     }
   }
