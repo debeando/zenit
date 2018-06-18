@@ -1,9 +1,13 @@
 # Zenit
 
-[Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) Project is a crawler stats for ProxySQL and MySQL. Zenit is a
+[Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) Project is missing DBA tool. Zenit is a
 russian was spy satellite.
 
-Zenit tool collect stats data and send to ...
+Zenit tool collect stats data from:
+
+- Linux OS
+- MySQL
+- Percona ToolKit
 - ProxySQL
 
 The numeric values has represent time has in microseconds.
