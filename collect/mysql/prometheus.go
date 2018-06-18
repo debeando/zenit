@@ -24,7 +24,7 @@ func PrometheusExport() {
   }
 
   for i := range(columns.Items) {
-    path := "mysql_stats_tables"
+    path := "mysql_stats_overflow"
     path  = path + fmt.Sprintf("{schema=\"%s\"", columns.GetSchema(i))
     path  = path + fmt.Sprintf(",table=\"%s\"",  columns.GetTable(i))
     path  = path + fmt.Sprintf(",type=\"overflow\"")

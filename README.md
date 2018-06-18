@@ -22,8 +22,9 @@ Allow remote access:
 
 Integration for Prometheus,
 
+  chown root. zenit
   cp zenit /usr/local/bin/
-  * * * * * /usr/local/bin/zenit -collect > /usr/local/prometheus/textfile_collector/zenit.prom
+  * * * * * /usr/local/bin/zenit -collect="mysql" > /usr/local/prometheus/textfile_collector/zenit.prom
 
 ## Development
 
