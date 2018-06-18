@@ -4,17 +4,15 @@ import (
   "flag"
   "fmt"
   "os"
+  "strings"
   "gitlab.com/swapbyt3s/zenit/config"
   "gitlab.com/swapbyt3s/zenit/collect"
 )
 
 func main() {
-  flg_help     := flag.Bool("help",             false, "Show this help.")
-  flg_version  := flag.Bool("version",          false, "Show version.")
-  flg_mysql    := flag.Bool("collect-mysql",    false, "Stats from MySQL.")
-  flg_os       := flag.Bool("collect-os",       false, "Info from Linux Operating System.")
-  flg_percona  := flag.Bool("collect-percona",  false, "Info & Stats from Percona Toolkit.")
-  flg_proxysql := flag.Bool("collect-proxysql", false, "Stats from ProxySQL.")
+  fHelp     := flag.Bool("help",      false, "Show this help.")
+  fVersion  := flag.Bool("version",   false, "Show version.")
+  fCollect  := flag.String("collect",    "", "List of metrics to collect.")
   // -collect-mysql {status,variables,slave status}
   // check is open port from any
   // -output-prometheus
@@ -31,18 +29,12 @@ func main() {
   if len(os.Args) == 1 {
     help()
   } else if len(os.Args) >= 2 {
-    if *flg_help {
+    if *fHelp {
       help()
-    } else if *flg_version {
+    } else if *fVersion {
       fmt.Printf("%s\n", config.VERSION)
-    } else if *flg_mysql {
-      collect.MySQL()
-    } else if *flg_percona {
-      collect.Percona()
-    } else if *flg_proxysql {
-      collect.ProxySQL()
-    } else if *flg_os {
-      collect.OS()
+    } else if len(*fCollect) > 0 {
+      collect.Run(strings.Split(*fCollect, ","))
     } else {
       fmt.Printf("%q is not valid command.\n", os.Args[1])
       help()

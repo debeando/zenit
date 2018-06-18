@@ -47,3 +47,12 @@ func StringToUInt64(value string) uint64 {
   }
   return i
 }
+
+func StringInArray(key string, list []string) bool {
+  for _, l := range list {
+    if l == key {
+      return true
+    }
+  }
+  return false
+}
