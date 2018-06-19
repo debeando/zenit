@@ -6,9 +6,11 @@ import (
 )
 
 type Table struct {
-  schema string
-  table  string
-  size   uint64
+  schema    string
+  table     string
+  size      uint64
+  rows      uint64
+  increment uint64
 }
 
 type Tables struct {
@@ -18,7 +20,11 @@ type Tables struct {
 var list_tables *Tables
 
 const QUERY_SQL_TABLES = `
-SELECT table_schema AS 'schema', table_name AS 'table', data_length + index_length AS 'size'
+SELECT table_schema AS 'schema',
+       table_name AS 'table',
+       data_length + index_length AS 'size',
+       table_rows AS 'rows',
+       auto_increment AS 'increment'
 FROM information_schema.tables
 WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schema','percona')
 ORDER BY table_schema, table_name;
@@ -48,6 +54,14 @@ func (tables *Tables) GetSize(i int) uint64 {
   return tables.Items[i].size
 }
 
+func (tables *Tables) GetRows(i int) uint64 {
+  return tables.Items[i].rows
+}
+
+func (tables *Tables) GetIncrement(i int) uint64 {
+  return tables.Items[i].increment
+}
+
 func GatherTables() {
   conn, err := common.MySQLConnect(config.DSN_MYSQL)
   defer conn.Close()
@@ -69,7 +83,9 @@ func GatherTables() {
     rows.Scan(
       &t.schema,
       &t.table,
-      &t.size)
+      &t.size,
+      &t.rows,
+      &t.increment)
 
     tables.AddItem(t)
   }
