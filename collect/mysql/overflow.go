@@ -3,8 +3,10 @@ package mysql
 import (
   "fmt"
   "strings"
-  "gitlab.com/swapbyt3s/zenit/config"
+  "strconv"
   "gitlab.com/swapbyt3s/zenit/common"
+  "gitlab.com/swapbyt3s/zenit/config"
+  "gitlab.com/swapbyt3s/zenit/output"
 )
 
 type Column struct {
@@ -16,12 +18,6 @@ type Column struct {
   current   uint64
   percent   float64
 }
-
-type Columns struct {
-  Items []Column
-}
-
-var list_columns *Columns
 
 const (
   dt_tinyint      uint8  = 127
@@ -44,39 +40,6 @@ WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schem
   QUERY_SQL_MAX_INT = "SELECT COALESCE(MAX(%s), 0) FROM %s.%s"
 )
 
-func LoadColumns() *Columns {
-  if list_columns == nil {
-    list_columns = &Columns{}
-  }
-  return list_columns
-}
-
-func (c *Columns) AddItem(item Column) []Column {
-  c.Items = append(c.Items, item)
-  return c.Items
-}
-
-func (c *Columns) GetSchema(i int) string {
-  return c.Items[i].schema
-}
-
-func (c *Columns) GetTable(i int) string {
-  return c.Items[i].table
-}
-
-func (c *Columns) GetPercent(i int) float64 {
-  return c.Items[i].percent
-}
-
-func (c *Columns) GetUnsigned(i int) bool {
-  return c.Items[i].unsigned
-}
-
-func (c *Columns) GetDataType(i int) string {
-  return c.Items[i].data_type
-}
-
-
 func GatherOverflow() {
   conn, err := common.MySQLConnect(config.DSN_MYSQL)
   defer conn.Close()
@@ -90,7 +53,7 @@ func GatherOverflow() {
     panic(err)
   }
 
-  columns := LoadColumns()
+  var a = output.LoadAccumulator()
 
   for rows.Next() {
     var c Column
@@ -139,6 +102,14 @@ func GatherOverflow() {
       }
     }
 
-    columns.AddItem(c)
+    a.AddItem(output.Metric{
+      Key:   "mysql_stats_overflow",
+      Tags:  []output.Tag{output.Tag{"schema", c.schema},
+                          output.Tag{"table", c.table},
+                          output.Tag{"type", "overflow"},
+                          output.Tag{"data_type", c.data_type},
+                          output.Tag{"unsigned", strconv.FormatBool(c.unsigned)}},
+      Value: c.percent,
+    })
   }
 }

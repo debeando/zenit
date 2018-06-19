@@ -2,8 +2,9 @@ package collect
 
 import (
   "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/collect/os"
+  "gitlab.com/swapbyt3s/zenit/output"
   "gitlab.com/swapbyt3s/zenit/collect/mysql"
+  "gitlab.com/swapbyt3s/zenit/collect/os"
   "gitlab.com/swapbyt3s/zenit/collect/percona"
   "gitlab.com/swapbyt3s/zenit/collect/proxysql"
 )
@@ -54,4 +55,6 @@ func Run(services []string) {
   }
 
   proxysql.PrometheusExport()
+
+  output.Prometheus()
 }

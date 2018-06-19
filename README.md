@@ -3,7 +3,7 @@
 [Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) Project is missing DBA tool. Zenit is a
 russian was spy satellite.
 
-Zenit tool collect stats data from:
+This tool collect stats data from:
 
 - Linux OS
 - MySQL
@@ -38,7 +38,7 @@ Integration for Prometheus, in this example is add the follow commands into cron
 
 ```cron
 * * * * * /usr/local/bin/zenit -collect="mysql" > /usr/local/prometheus/textfile_collector/zenit.prom
-* * * * * DSN_MYSQL="monitor:monitor@tcp(10.9.35.40:3306)/" /usr/local/bin/zenit -collect="mysql-tables,mysql-overflow" >> /usr/local/prometheus/textfile_collector/zenit.prom
+*/5 * * * * DSN_MYSQL="monitor:monitor@tcp(10.9.35.40:3306)/" /usr/local/bin/zenit -collect="mysql-tables,mysql-overflow" >> /usr/local/prometheus/textfile_collector/zenit.prom
 ```
 
 ## Development
