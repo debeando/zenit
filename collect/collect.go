@@ -42,8 +42,6 @@ func Run(services []string) {
     mysql.GatherOverflow()
   }
 
-  mysql.PrometheusExport()
-
   // Percona
   if common.StringInArray("percona-process", services) {
     percona.GatherRunningProcess()

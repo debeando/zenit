@@ -18,11 +18,11 @@ func Prometheus() {
       s = append(s, fmt.Sprintf("%s=\"%s\"", k, v))
     }
     t := strings.Join(s,",")
-
+    fmt.Printf("{%s}", t)
     if common.IsIntegral(a.Items[i].Value) {
-      fmt.Printf("{%s} %d", t, uint64(a.Items[i].Value))
+      fmt.Printf(" %d", uint64(a.Items[i].Value))
     } else {
-      fmt.Printf("{%s} %.2f", t, a.Items[i].Value)
+      fmt.Printf(" %.2f", a.Items[i].Value)
     }
     fmt.Printf("\n")
   }

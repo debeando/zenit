@@ -10,9 +10,9 @@ import (
 )
 
 func main() {
-  fHelp     := flag.Bool("help",      false, "Show this help.")
-  fVersion  := flag.Bool("version",   false, "Show version.")
-  fCollect  := flag.String("collect",    "", "List of metrics to collect.")
+  fHelp    := flag.Bool("help",      false, "Show this help.")
+  fVersion := flag.Bool("version",   false, "Show version.")
+  fCollect := flag.String("collect",    "", "List of metrics to collect.")
   // -collect-mysql {status,variables,slave status}
   // check is open port from any
   // -output-prometheus
