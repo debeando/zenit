@@ -53,7 +53,7 @@ func GatherOverflow() {
     panic(err)
   }
 
-  var a = output.LoadAccumulator()
+  var a = output.Load()
 
   for rows.Next() {
     var c Column
@@ -103,13 +103,13 @@ func GatherOverflow() {
     }
 
     a.AddItem(output.Metric{
-      Key:   "mysql_stats_overflow",
-      Tags:  []output.Tag{output.Tag{"schema", c.schema},
-                          output.Tag{"table", c.table},
-                          output.Tag{"type", "overflow"},
-                          output.Tag{"data_type", c.data_type},
-                          output.Tag{"unsigned", strconv.FormatBool(c.unsigned)}},
-      Value: c.percent,
+      Key: "mysql_stats_overflow",
+      Tags: []output.Tag{output.Tag{"schema", c.schema},
+                         output.Tag{"table", c.table},
+                         output.Tag{"type", "overflow"},
+                         output.Tag{"data_type", c.data_type},
+                         output.Tag{"unsigned", strconv.FormatBool(c.unsigned)}},
+      Values: c.percent,
     })
   }
 }

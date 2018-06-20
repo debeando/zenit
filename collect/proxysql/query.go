@@ -2,10 +2,10 @@ package proxysql
 
 import (
   "regexp"
-  "sort"
   "strings"
-  "gitlab.com/swapbyt3s/zenit/config"
   "gitlab.com/swapbyt3s/zenit/common"
+  "gitlab.com/swapbyt3s/zenit/config"
+  "gitlab.com/swapbyt3s/zenit/output"
 )
 
 type Query struct {
@@ -16,15 +16,7 @@ type Query struct {
   digest  string
   count   uint
   sum     uint
-  min     uint
-  max     uint
 }
-
-type Queries struct {
-  Items []Query
-}
-
-type BySchemaAndTable []Query
 
 const (
   REGEX_SQL = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z0-9._]+)`
@@ -36,121 +28,16 @@ SELECT CASE
        schemaname,
        digest_text,
        count_star,
-       sum_time,
-       min_time,
-       max_time
+       sum_time
 FROM stats.stats_mysql_query_digest;
 `
 )
 
-var (
-  re           *regexp.Regexp
-  list_queries *Queries
-)
+
+var re *regexp.Regexp
 
 func init() {
   re, _ = regexp.Compile(REGEX_SQL)
-}
-
-func LoadQueries() *Queries {
-  if list_queries == nil {
-    list_queries = &Queries{}
-  }
-  return list_queries
-}
-
-func (a BySchemaAndTable) Len() int {
-  return len(a)
-}
-
-func (a BySchemaAndTable) Swap(i, j int) {
-  a[i], a[j] = a[j], a[i]
-}
-
-func (a BySchemaAndTable) Less(i, j int) bool {
-  if a[i].schema < a[j].schema {
-    return true
-  }
-  if a[i].schema > a[j].schema {
-    return false
-  }
-  return a[i].table < a[j].table
-}
-
-func (queries *Queries) AddItem(item Query) []Query {
-  queries.Items = append(queries.Items, item)
-  return queries.Items
-}
-
-func (queries *Queries) Count() int {
-  return len(queries.Items)
-}
-
-func (queries *Queries) Contains(s Query) bool {
-  for i := range(queries.Items) {
-    if (queries.Items[i].group   == s.group  &&
-        queries.Items[i].schema  == s.schema &&
-        queries.Items[i].table   == s.table  &&
-        queries.Items[i].command == s.command) {
-      return true
-    }
-  }
-  return false
-}
-
-func (queries *Queries) Increment(s Query) {
-  for i := range(queries.Items) {
-    if (queries.Items[i].group   == s.group  &&
-        queries.Items[i].schema  == s.schema &&
-        queries.Items[i].table   == s.table  &&
-        queries.Items[i].command == s.command) {
-      queries.Items[i].count =+ s.count
-      queries.Items[i].sum   =+ s.sum
-      queries.Items[i].min   =+ s.min
-      queries.Items[i].max   =+ s.max
-      break
-    }
-  }
-}
-
-func (queries *Queries) Sort() {
-  sort.Sort(BySchemaAndTable(queries.Items))
-}
-
-func (queries *Queries) GetSchema(i int) string {
-  return queries.Items[i].schema
-}
-
-func (queries *Queries) GetTable(i int) string {
-  return queries.Items[i].table
-}
-
-func (queries *Queries) GetCommand(i int) string {
-  return queries.Items[i].command
-}
-
-func (queries *Queries) GetGroup(i int) string {
-  return queries.Items[i].group
-}
-
-func (queries *Queries) GetCount(i int) uint {
-  return queries.Items[i].count
-}
-
-func (queries *Queries) GetSum(i int) uint {
-  return queries.Items[i].sum
-}
-
-func (queries *Queries) GetMin(i int) uint {
-  return queries.Items[i].min
-}
-
-func (queries *Queries) GetMax(i int) uint {
-  return queries.Items[i].max
-}
-
-func (queries *Queries) GetAvg(i int) uint {
-  return queries.Items[i].sum / queries.Items[i].count
 }
 
 func GatherQueries() {
@@ -174,35 +61,42 @@ func GatherQueries() {
       &q.schema,
       &q.digest,
       &q.count,
-      &q.sum,
-      &q.min,
-      &q.max)
+      &q.sum)
 
     Parser(q)
   }
+
+  //a := output.Load()
+  //queries := LoadQueries()
+  //queries.Sort()
+  //for i := range(queries.Items) {
+  //  a.AddItem(output.Metric{
+  //    Key:   "proxysql_stats_queries",
+  //    Tags:  []output.Tag{output.Tag{"schema",  queries.GetSchema(i)},
+  //                        output.Tag{"table",   queries.GetTable(i)},
+  //                        output.Tag{"command", queries.GetCommand(i)},
+  //                        output.Tag{"group",   queries.GetGroup(i)},
+  //                        output.Tag{"calc",    "\"count\""}},
+  //    Value: float64(queries.GetCount(i)),
+  //  })
+  //}
 }
 
 func Parser(q Query) {
-  stats := LoadQueries()
-
   if len(q.digest) > 0 {
     table, command := Match(q.digest)
 
-    item := Query{}
-    item.group   = q.group
-    item.schema  = q.schema
-    item.table   = table
-    item.command = command
-    item.count   = q.count
-    item.sum     = q.sum
-    item.min     = q.min
-    item.max     = q.max
+    var a = output.Load()
 
-    if ! stats.Contains(item) {
-      stats.AddItem(item)
-    } else {
-      stats.Increment(item)
-    }
+    a.AddItem(output.Metric{
+      Key: "mysql_stats_overflow",
+      Tags: []output.Tag{output.Tag{"group", q.group},
+                         output.Tag{"schema", q.schema},
+                         output.Tag{"table", table},
+                         output.Tag{"command", command}},
+      Values: []output.Value{output.Value{"count", q.count},
+                             output.Value{"sum", q.sum}},
+    })
   }
 }
 

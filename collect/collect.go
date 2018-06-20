@@ -52,7 +52,5 @@ func Run(services []string) {
     proxysql.GatherQueries()
   }
 
-  proxysql.PrometheusExport()
-
   output.Prometheus()
 }

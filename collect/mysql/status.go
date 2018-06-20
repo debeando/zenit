@@ -22,7 +22,7 @@ func GatherStatus() {
     panic(err)
   }
 
-  var a = output.LoadAccumulator()
+  var a = output.Load()
   var k string
   var v sql.RawBytes
 
@@ -30,9 +30,9 @@ func GatherStatus() {
     rows.Scan(&k, &v)
     if value, ok := common.MySQLParseValue(v); ok {
       a.AddItem(output.Metric{
-        Key:   "mysql_status",
-        Tags:  []output.Tag{output.Tag{"name", k}},
-        Value: float64(value),
+        Key: "mysql_status",
+        Tags: []output.Tag{output.Tag{"name", k}},
+        Values: value,
       })
     }
   }

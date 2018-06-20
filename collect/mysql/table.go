@@ -38,7 +38,7 @@ func GatherTables() {
     panic(err)
   }
 
-  var a = output.LoadAccumulator()
+  var a = output.Load()
 
   for rows.Next() {
     var t Table
@@ -53,23 +53,10 @@ func GatherTables() {
     a.AddItem(output.Metric{
       Key:   "mysql_stats_tables",
       Tags:  []output.Tag{output.Tag{"schema", t.schema},
-                          output.Tag{"table", t.table},
-                          output.Tag{"type", "size"}},
-      Value: t.size,
-    })
-    a.AddItem(output.Metric{
-      Key:   "mysql_stats_tables",
-      Tags:  []output.Tag{output.Tag{"schema", t.schema},
-                          output.Tag{"table", t.table},
-                          output.Tag{"type", "rows"}},
-      Value: t.rows,
-    })
-    a.AddItem(output.Metric{
-      Key:   "mysql_stats_tables",
-      Tags:  []output.Tag{output.Tag{"schema", t.schema},
-                          output.Tag{"table", t.table},
-                          output.Tag{"type", "increment"}},
-      Value: t.increment,
+                          output.Tag{"table", t.table}},
+      Values: []output.Value{output.Value{"size", t.size},
+                             output.Value{"rows", t.rows},
+                             output.Value{"increment", t.increment}},
     })
   }
 }

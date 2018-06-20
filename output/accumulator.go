@@ -6,25 +6,48 @@ type Tag struct {
 }
 
 type Metric struct {
-  Key     string
-  Tags  []Tag
-  Value   float64
+  Key      string
+  Tags   []Tag
+  Values   interface{}
 }
 
-type Accumulator struct {
-  Items []Metric
+type Value struct {
+  Key   string
+  Value interface{}
 }
 
-var accumulator *Accumulator
+type Items []Metric
 
-func LoadAccumulator() *Accumulator {
-  if accumulator == nil {
-    accumulator = &Accumulator{}
+var items *Items
+
+func Load() *Items {
+  if items == nil {
+    items = &Items{}
   }
-  return accumulator
+  return items
 }
 
-func (a *Accumulator) AddItem(item Metric) []Metric {
-  a.Items = append(a.Items, item)
-  return a.Items
+func (l *Items) AddItem(m Metric) {
+  if ! items.Unique(m) {
+    *l = append(*l, m)
+  } else {
+    // Sum...
+  }
+}
+
+func (l *Items) Unique(m Metric) bool {
+  for _, i := range *l {
+    if i.Key == m.Key {
+      if len(i.Tags) != len(m.Tags) {
+        return false
+      }
+      for idx := range m.Tags {
+        if i.Tags[idx] != m.Tags[idx] {
+          return false
+        }
+      }
+      return true
+    }
+  }
+  return false
 }

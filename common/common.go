@@ -56,7 +56,3 @@ func StringInArray(key string, list []string) bool {
   }
   return false
 }
-
-func IsIntegral(val float64) bool {
-  return val == float64(uint64(val))
-}

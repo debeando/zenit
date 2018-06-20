@@ -3,26 +3,28 @@ package output
 import (
   "fmt"
   "strings"
-  "gitlab.com/swapbyt3s/zenit/common"
 )
 
 func Prometheus() {
-  var a = LoadAccumulator()
+  var a = Load()
 
-  for i := range(a.Items) {
-    fmt.Printf("%s", a.Items[i].Key)
+  for _, m := range *a {
+    fmt.Printf("%s", m.Key)
     s := []string{}
-    for t := range(a.Items[i].Tags) {
-      k := a.Items[i].Tags[t].Name
-      v := strings.ToLower(a.Items[i].Tags[t].Value)
+    for t := range(m.Tags) {
+      k := m.Tags[t].Name
+      v := strings.ToLower(m.Tags[t].Value)
       s = append(s, fmt.Sprintf("%s=\"%s\"", k, v))
     }
     t := strings.Join(s,",")
     fmt.Printf("{%s}", t)
-    if common.IsIntegral(a.Items[i].Value) {
-      fmt.Printf(" %d", uint64(a.Items[i].Value))
-    } else {
-      fmt.Printf(" %.2f", a.Items[i].Value)
+    switch value := m.Values.(type) {
+    case uint64:
+      fmt.Printf(" %d", value)
+    case float64:
+      fmt.Printf(" %.2f", value)
+    default:
+      fmt.Printf(" 0")
     }
     fmt.Printf("\n")
   }

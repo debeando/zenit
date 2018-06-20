@@ -1,6 +1,33 @@
 
+CREATE TABLE main.mysql_replication_hostgroups (
+writer_hostgroup INT NOT NULL PRIMARY KEY,
+reader_hostgroup INT NOT NULL,
+UNIQUE (reader_hostgroup)
+);
 
+INSERT INTO main.mysql_replication_hostgroups VALUES (1,2);
 
+CREATE TABLE stats.stats_mysql_query_digest (
+  hostgroup INT,
+  schemaname VARCHAR(64) NOT NULL,
+  username VARCHAR(64) NOT NULL,
+  digest VARCHAR(24) NOT NULL,
+  digest_text VARCHAR(255) NOT NULL,
+  count_star BIGINT NOT NULL,
+  first_seen BIGINT NOT NULL,
+  last_seen BIGINT NOT NULL,
+  sum_time BIGINT NOT NULL,
+  min_time BIGINT NOT NULL,
+  max_time BIGINT NOT NULL,
+  PRIMARY KEY(schemaname, username, digest)
+);
+
+TRUNCATE stats.stats_mysql_query_digest;
+INSERT INTO stats.stats_mysql_query_digest
+VALUES
+(1, 'test', 'root', '0x7721D69250CB40'  , 'SELECT c FROM sbtest3 WHERE id=?', 8122800, 1441091306, 1441101551, 7032352665, 100, 1000),
+(2, 'test', 'root', '0x3BC2F7549D058B6F', 'SELECT c FROM sbtest4 WHERE id=?', 8100134, 1441091306, 1441101551, 7002512958, 100, 2000),
+(2, 'test', 'root', '0x4BC2F7549D08B6H',  'SELECT c FROM sbtest4 WHERE id=?', 8100134, 1441091306, 1441101551, 7002512958, 100, 2000);
 
 UPDATE global_variables SET variable_value='0.0.0.0:6032' WHERE variable_name='mysql-interfaces';
 SET admin-admin_credentials="admin:admin;radminuser:radminpass";
