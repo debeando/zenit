@@ -1,10 +1,10 @@
 package os
 
 import (
-  "fmt"
   "math"
   "strings"
   "gitlab.com/swapbyt3s/zenit/common"
+  "gitlab.com/swapbyt3s/zenit/output"
 )
 
 type Mem struct {
@@ -51,11 +51,16 @@ func GatherMem() {
     mem.percent = 0
   }
 
-  fmt.Printf("os.linux_mem.total %d\n", mem.total)
-  fmt.Printf("os.linux_mem.free %d\n", mem.free)
-  fmt.Printf("os.linux_mem.available %d\n", mem.available)
-  fmt.Printf("os.linux_mem.buffers %d\n", mem.buffers)
-  fmt.Printf("os.linux_mem.cached %d\n", mem.cached)
-  fmt.Printf("os.linux_mem.used %d\n", mem.used)
-  fmt.Printf("os.linux_mem.used_percent %.2f\n", mem.percent)
+  output.Load().AddItem(output.Metric{
+    Key: "os",
+    Tags: []output.Tag{output.Tag{"system", "linux"},
+                       output.Tag{"hardware", "mem"}},
+    Values: []output.Value{output.Value{"total", mem.total},
+                           output.Value{"free", mem.free},
+                           output.Value{"available", mem.available},
+                           output.Value{"buffers", mem.buffers},
+                           output.Value{"cached", mem.cached},
+                           output.Value{"used", mem.used},
+                           output.Value{"used_percent", mem.percent}},
+  })
 }

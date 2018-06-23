@@ -33,7 +33,6 @@ FROM stats.stats_mysql_query_digest;
 `
 )
 
-
 var re *regexp.Regexp
 
 func init() {
@@ -63,40 +62,19 @@ func GatherQueries() {
       &q.count,
       &q.sum)
 
-    Parser(q)
-  }
+    if len(q.digest) > 0 {
+      table, command := Match(q.digest)
 
-  //a := output.Load()
-  //queries := LoadQueries()
-  //queries.Sort()
-  //for i := range(queries.Items) {
-  //  a.AddItem(output.Metric{
-  //    Key:   "proxysql_stats_queries",
-  //    Tags:  []output.Tag{output.Tag{"schema",  queries.GetSchema(i)},
-  //                        output.Tag{"table",   queries.GetTable(i)},
-  //                        output.Tag{"command", queries.GetCommand(i)},
-  //                        output.Tag{"group",   queries.GetGroup(i)},
-  //                        output.Tag{"calc",    "\"count\""}},
-  //    Value: float64(queries.GetCount(i)),
-  //  })
-  //}
-}
-
-func Parser(q Query) {
-  if len(q.digest) > 0 {
-    table, command := Match(q.digest)
-
-    var a = output.Load()
-
-    a.AddItem(output.Metric{
-      Key: "mysql_stats_overflow",
-      Tags: []output.Tag{output.Tag{"group", q.group},
-                         output.Tag{"schema", q.schema},
-                         output.Tag{"table", table},
-                         output.Tag{"command", command}},
-      Values: []output.Value{output.Value{"count", q.count},
-                             output.Value{"sum", q.sum}},
-    })
+      output.Load().AddItem(output.Metric{
+        Key: "mysql_stats_overflow",
+        Tags: []output.Tag{output.Tag{"group", q.group},
+                           output.Tag{"schema", q.schema},
+                           output.Tag{"table", table},
+                           output.Tag{"command", command}},
+        Values: []output.Value{output.Value{"count", q.count},
+                               output.Value{"sum", q.sum}},
+      })
+    }
   }
 }
 

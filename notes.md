@@ -1,3 +1,4 @@
+CREATE DATABASE main;
 
 CREATE TABLE main.mysql_replication_hostgroups (
 writer_hostgroup INT NOT NULL PRIMARY KEY,

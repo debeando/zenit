@@ -9,23 +9,34 @@ func Prometheus() {
   var a = Load()
 
   for _, m := range *a {
-    fmt.Printf("%s", m.Key)
-    s := []string{}
-    for t := range(m.Tags) {
-      k := m.Tags[t].Name
-      v := strings.ToLower(m.Tags[t].Value)
-      s = append(s, fmt.Sprintf("%s=\"%s\"", k, v))
+    switch m.Values.(type) {
+    case uint64, float64:
+      fmt.Printf("%s{%s} %s\n", m.Key, getTags(m.Tags), getValue(m.Values))
+    case []Value:
+      for _, i := range m.Values.([]Value) {
+        fmt.Printf("%s{%s,type=\"%s\"} %s\n", m.Key, getTags(m.Tags), i.Key, getValue(i.Value))
+      }
     }
-    t := strings.Join(s,",")
-    fmt.Printf("{%s}", t)
-    switch value := m.Values.(type) {
-    case uint64:
-      fmt.Printf(" %d", value)
-    case float64:
-      fmt.Printf(" %.2f", value)
-    default:
-      fmt.Printf(" 0")
-    }
-    fmt.Printf("\n")
   }
+}
+
+func getTags(tags []Tag) string {
+  s := []string{}
+  for t := range(tags) {
+    k := tags[t].Name
+    v := strings.ToLower(tags[t].Value)
+    s = append(s, fmt.Sprintf("%s=\"%s\"", k, v))
+  }
+  return strings.Join(s,",")
+}
+
+func getValue(value interface{}) string {
+  switch v := value.(type) {
+  case uint, uint64:
+    return fmt.Sprintf("%d", v)
+  case float64:
+    return fmt.Sprintf("%.2f", v)
+  }
+
+  return "0"
 }

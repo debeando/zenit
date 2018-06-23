@@ -1,10 +1,10 @@
 package os
 
 import (
-  "fmt"
   "strings"
   "time"
   "gitlab.com/swapbyt3s/zenit/common"
+  "gitlab.com/swapbyt3s/zenit/output"
 )
 
 type CPU struct {
@@ -24,7 +24,12 @@ func GatherCPU() {
     idle  := c[1].idle  - c[0].idle
     percentage := (float64(total) - float64(idle)) / float64(total) * 100.0
 
-    fmt.Printf("os.linux_cpu.used_percent %.2f\n", percentage)
+    output.Load().AddItem(output.Metric{
+      Key: "os",
+      Tags: []output.Tag{output.Tag{"system", "linux"},
+                         output.Tag{"hardware", "cpu"}},
+      Values: []output.Value{output.Value{"used_percent", percentage}},
+    })
   }
 }
 
