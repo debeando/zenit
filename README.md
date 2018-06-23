@@ -1,7 +1,6 @@
 # Zenit
 
-[Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) Project is missing DBA tool. Zenit is a
-russian was spy satellite.
+[Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) Project is missing DBA knife tool. Zenit is a russian was spy satellite.
 
 This tool collect stats data from:
 
