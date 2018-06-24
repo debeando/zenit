@@ -4,7 +4,7 @@
 
 This tool collect stats data from:
 
-- Linux OS
+- Linux OS (CentOS)
 - MySQL
 - Percona ToolKit
 - ProxySQL
@@ -53,7 +53,6 @@ docker exec -i -t d1c86f2f36ff /root/zenit -collect-os
 You only need update the ID container from last command.
 
 # Todo:
-- Create a object called Accumulator to store any collect {key=mysql_status, tags={a=z}}
 - @@log_error
   mysql_errors_on_log
 # Check if running audit plugin?

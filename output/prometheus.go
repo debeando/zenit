@@ -10,7 +10,7 @@ func Prometheus() {
 
   for _, m := range *a {
     switch m.Values.(type) {
-    case uint64, float64:
+    case uint, uint64, float64:
       fmt.Printf("%s{%s} %s\n", m.Key, getTags(m.Tags), getValue(m.Values))
     case []Value:
       for _, i := range m.Values.([]Value) {

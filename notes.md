@@ -26,9 +26,12 @@ CREATE TABLE stats.stats_mysql_query_digest (
 TRUNCATE stats.stats_mysql_query_digest;
 INSERT INTO stats.stats_mysql_query_digest
 VALUES
-(1, 'test', 'root', '0x7721D69250CB40'  , 'SELECT c FROM sbtest3 WHERE id=?', 8122800, 1441091306, 1441101551, 7032352665, 100, 1000),
-(2, 'test', 'root', '0x3BC2F7549D058B6F', 'SELECT c FROM sbtest4 WHERE id=?', 8100134, 1441091306, 1441101551, 7002512958, 100, 2000),
-(2, 'test', 'root', '0x4BC2F7549D08B6H',  'SELECT c FROM sbtest4 WHERE id=?', 8100134, 1441091306, 1441101551, 7002512958, 100, 2000);
+(1, 'test', 'root', '0x7721', 'SELECT c FROM sbtest3 WHERE id=?', 1, 1441091306, 1441101551, 1, 100, 1000),
+(2, 'test', 'root', '0x4H20', 'SELECT c FROM sbtest5 WHERE id=?', 2, 1441091306, 1441101551, 1, 100, 2000),
+(2, 'test', 'root', '0x4H2A', 'SELECT c FROM sbtest4 WHERE id=?', 2, 1441091306, 1441101551, 1, 100, 2000),
+(2, 'test', 'root', '0x4H2B', 'SELECT c FROM sbtest4 WHERE id=?', 2, 1441091306, 1441101551, 1, 100, 2000),
+(2, 'test', 'root', '0x4H2C', 'SELECT c FROM sbtest4 WHERE id=?', 1, 1441091306, 1441101551, 1, 100, 2000),
+(2, 'test', 'root', '0x4H2D', 'SELECT c FROM sbtest4 WHERE id=?', 3, 1441091306, 1441101551, 1, 100, 2000);
 
 UPDATE global_variables SET variable_value='0.0.0.0:6032' WHERE variable_name='mysql-interfaces';
 SET admin-admin_credentials="admin:admin;radminuser:radminpass";
