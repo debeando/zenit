@@ -2,6 +2,7 @@ package common
 
 import (
   "io/ioutil"
+  "net"
   "os"
   "os/exec"
   "strconv"
@@ -55,4 +56,37 @@ func StringInArray(key string, list []string) bool {
     }
   }
   return false
+}
+
+func GetEnv(key string, default_value string) string {
+  val, ok := os.LookupEnv(key)
+  if !ok {
+    if len(default_value) > 0 {
+      return default_value
+    }
+  }
+  return val
+}
+
+func Hostname() string {
+  host, err := os.Hostname()
+  if err != nil {
+    panic(err)
+  }
+
+  return host
+}
+
+func IpAddress() string {
+  addrs, _ := net.InterfaceAddrs()
+
+  for _, a := range addrs {
+    if ipnet, ok := a.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+      if ipnet.IP.To4() != nil {
+        return ipnet.IP.String()
+      }
+    }
+  }
+
+  return ""
 }

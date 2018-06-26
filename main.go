@@ -7,12 +7,14 @@ import (
   "strings"
   "gitlab.com/swapbyt3s/zenit/config"
   "gitlab.com/swapbyt3s/zenit/collect"
+  "gitlab.com/swapbyt3s/zenit/command"
 )
 
 func main() {
   fHelp    := flag.Bool("help",      false, "Show this help.")
   fVersion := flag.Bool("version",   false, "Show version.")
   fCollect := flag.String("collect",    "", "List of metrics to collect.")
+  fRun     := flag.String("run",        "", "Run bash command and wait to finish to notify via slack.")
   // -collect-mysql {status,variables,slave status}
   // check is open port from any
   // -output-prometheus
@@ -35,6 +37,8 @@ func main() {
       fmt.Printf("%s\n", config.VERSION)
     } else if len(*fCollect) > 0 {
       collect.Run(strings.Split(*fCollect, ","))
+    } else if len(*fRun) > 0 {
+      command.Run(*fRun)
     } else {
       fmt.Printf("%q is not valid command.\n", os.Args[1])
       help()

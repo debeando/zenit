@@ -1,25 +1,20 @@
 package config
 
 import (
-  "os"
+  "gitlab.com/swapbyt3s/zenit/common"
 )
 
 var(
-  VERSION      string = "0.1.0"
-  DSN_MYSQL    string = "root@tcp(127.0.0.1:3306)/"
-  DSN_PROXYSQL string = "radminuser:radminpass@tcp(127.0.0.1:6032)/"
+  DSN_MYSQL     string = "root@tcp(127.0.0.1:3306)/"
+  DSN_PROXYSQL  string = "radminuser:radminpass@tcp(127.0.0.1:6032)/"
+  SLACK_CHANNEL string = "alerts"
+  SLACK_TOKEN   string = ""
+  VERSION       string = "0.1.0"
 )
 
 func init() {
-  env_dsn_mysql := os.Getenv("DSN_MYSQL")
-
-  if env_dsn_mysql != "" {
-    DSN_MYSQL = env_dsn_mysql
-  }
-
-  env_dsn_proxysql := os.Getenv("DSN_PROXYSQL")
-
-  if env_dsn_proxysql != "" {
-    DSN_PROXYSQL = env_dsn_proxysql
-  }
+  SLACK_CHANNEL = common.GetEnv("SLACK_CHANNEL", SLACK_CHANNEL)
+  SLACK_TOKEN   = common.GetEnv("SLACK_TOKEN", "")
+  DSN_MYSQL     = common.GetEnv("DSN_MYSQL", DSN_MYSQL)
+  DSN_PROXYSQL  = common.GetEnv("DSN_PROXYSQL", DSN_PROXYSQL)
 }

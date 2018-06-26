@@ -67,3 +67,9 @@ You only need update the ID container from last command.
   > general log
   > error log
   > slow log
+- To ClickHouse
+  > audit log
+  > general log
+  > error log
+  > slow log
+  > binarylogs
