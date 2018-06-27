@@ -9,7 +9,7 @@ var(
   DSN_PROXYSQL  string = "radminuser:radminpass@tcp(127.0.0.1:6032)/"
   SLACK_CHANNEL string = "alerts"
   SLACK_TOKEN   string = ""
-  VERSION       string = "0.1.0"
+  VERSION       string = "0.1.4"
 )
 
 func init() {

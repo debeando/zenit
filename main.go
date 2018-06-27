@@ -10,10 +10,7 @@ import (
   "gitlab.com/swapbyt3s/zenit/command"
 )
 
-const (
-  VERSION = "v0.1.4"
-  USAGE = "zenit (%s) written by Nicola Strappazzon C. <swapbyt3s@gmail.com>\nUsage: %s <command>\n"
-)
+const USAGE = "zenit (%s) written by Nicola Strappazzon C. <swapbyt3s@gmail.com>\nUsage: %s <command>\n"
 
 func main() {
   fHelp    := flag.Bool("help",      false, "Show this help.")
@@ -54,7 +51,7 @@ func main() {
 }
 
 func help() {
-  fmt.Printf(USAGE, VERSION, os.Args[0])
+  fmt.Printf(USAGE, config.VERSION, os.Args[0])
   flag.PrintDefaults()
   os.Exit(1)
 }
