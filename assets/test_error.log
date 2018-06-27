@@ -1,0 +1,44 @@
+171003 11:45:23 [Note] Event Scheduler: Purging the queue. 0 events
+171003 11:45:23  InnoDB: Starting shutdown...
+171003 11:45:26  InnoDB: Shutdown completed; log sequence number 1473088714579
+171003 11:45:26 [Note] /usr/sbin/mysqld: Shutdown complete
+171003 11:45:26 mysqld_safe mysqld from pid file /mnt/dbstorage/mysql-data/zenith-sandbox-mysql-master.pid ended
+171003 11:45:27 mysqld_safe Starting mysqld daemon with databases from /mnt/dbstorage/mysql-data
+171003 11:45:27 [Warning] options --log-slow-admin-statements, --log-queries-not-using-indexes and --log-slow-slave-statements have no effect if --log_slow_queries is not set
+171003 11:45:27 [Note] /usr/sbin/mysqld (mysqld 5.5.50-38.0-log) starting as process 29075 ...
+171003 11:45:27 [Note] Plugin 'FEDERATED' is disabled.
+InnoDB: Warning: innodb_overwrite_relay_log_info is enabled. Updates by other storage engines may not be synchronized.
+171003 11:45:27 InnoDB: The InnoDB memory heap is disabled
+171003 11:45:27 InnoDB: Mutexes and rw_locks use GCC atomic builtins
+171003 11:45:27 InnoDB: Compressed tables use zlib 1.2.3
+171003 11:45:27 InnoDB: Using Linux native AIO
+171003 11:45:27 InnoDB: Initializing buffer pool, size = 2.0G
+171003 11:45:27 InnoDB: Completed initialization of buffer pool
+171003 11:45:27 InnoDB: highest supported file format is Barracuda.
+171003 11:45:27  InnoDB: Waiting for the background threads to start
+171003 11:45:28 Percona XtraDB (http://www.percona.com) 5.5.50-38.0 started; log sequence number 1473088714579
+InnoDB: something wrong with relay-log.info. InnoDB will not overwrite it.
+171003 11:45:28 [Note] Event Scheduler: Loaded 0 events
+171003 11:45:28 [Note] /usr/sbin/mysqld: ready for connections.
+Version: '5.5.50-38.0-log'  socket: '/mnt/dbstorage/mysql-data/mysql.sock'  port: 3306  Percona Server (GPL), Release 38.0, Revision b05b24c
+171003 11:45:29 [Warning] IP address '10.15.43.149' could not be resolved: Name or service not known
+171003 11:45:32 [Warning] IP address '10.15.47.232' could not be resolved: Name or service not known
+171003 11:45:33 [Warning] IP address '10.15.46.244' could not be resolved: Name or service not known
+171003 11:45:45 [Warning] IP address '10.15.43.248' could not be resolved: Name or service not known
+171003 11:45:46 [Warning] IP address '10.15.43.111' could not be resolved: Name or service not known
+171003 11:45:58 [Warning] IP address '10.15.35.112' could not be resolved: Name or service not known
+171003 11:46:05 [Warning] IP address '10.15.32.253' could not be resolved: Name or service not known
+171003 11:46:13 [Warning] IP address '10.15.50.163' could not be resolved: Name or service not known
+171003 11:46:17 [Warning] IP address '10.15.60.150' could not be resolved: Name or service not known
+171003 11:46:56 [Warning] IP address '10.201.17.217' could not be resolved: Name or service not known
+171003 11:46:58 [Warning] Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. INSERT... ON DUPLICATE KEY UPDATE  on a table with more than one UNIQUE KEY is unsafe Statement: INSERT INTO issue_entitlements(`user_id`,`device_id`,`issue_id`,`publication_id`,`order_id`,`label_id`,`project_id`,`type`,`status`,`created_at`,`modified_at`) VALUES(1596531073351680070,0,370668,6998,803653,306801,99,1,1,'2017-10-03 11:46:58','2017-10-03 11:46:58') ON DUPLICATE KEY UPDATE `status` = 1
+171003 11:49:23 [Warning] Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. INSERT... ON DUPLICATE KEY UPDATE  on a table with more than one UNIQUE KEY is unsafe Statement: INSERT INTO issue_entitlements(`user_id`,`device_id`,`issue_id`,`publication_id`,`order_id`,`label_id`,`project_id`,`type`,`status`,`created_at`,`modified_at`) VALUES(1597018308870144076,0,361127,7322,803655,306802,99,1,1,'2017-10-03 11:49:23','2017-10-03 11:49:23') ON DUPLICATE KEY UPDATE `status` = 1
+171003 11:49:35 [Warning] IP address '10.128.160.244' could not be resolved: Name or service not known
+171003 11:49:38 [Warning] Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. INSERT... ON DUPLICATE KEY UPDATE  on a table with more than one UNIQUE KEY is unsafe Statement: INSERT INTO issue_entitlements(`user_id`,`device_id`,`issue_id`,`publication_id`,`order_id`,`label_id`,`project_id`,`type`,`status`,`created_at`,`modified_at`) VALUES(1617321298755584293,0,386922,6194,803656,306803,99,1,1,'2017-10-03 11:49:38','2017-10-03 11:49:38') ON DUPLICATE KEY UPDATE `status` = 1
+171003 11:49:38 [Warning] Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. INSERT... ON DUPLICATE KEY UPDATE  on a table with more than one UNIQUE KEY is unsafe Statement: INSERT INTO issue_entitlements(`user_id`,`device_id`,`issue_id`,`publication_id`,`order_id`,`label_id`,`project_id`,`type`,`status`,`created_at`,`modified_at`) VALUES(1596531073351680070,0,370667,6998,803657,306804,99,1,1,'2017-10-03 11:49:38','2017-10-03 11:49:38') ON DUPLICATE KEY UPDATE `status` = 1
+171003 11:49:48 [Warning] Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. INSERT... ON DUPLICATE KEY UPDATE  on a table with more than one UNIQUE KEY is unsafe Statement: INSERT INTO issue_entitlements(`user_id`,`device_id`,`issue_id`,`publication_id`,`order_id`,`label_id`,`project_id`,`type`,`status`,`created_at`,`modified_at`) VALUES(1597018308870144076,0,364734,2009,803658,306805,99,1,1,'2017-10-03 11:49:48','2017-10-03 11:49:48') ON DUPLICATE KEY UPDATE `status` = 1
+171003 11:50:48 [Warning] Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. INSERT... ON DUPLICATE KEY UPDATE  on a table with more than one UNIQUE KEY is unsafe Statement: INSERT INTO issue_entitlements(`user_id`,`device_id`,`issue_id`,`publication_id`,`order_id`,`label_id`,`project_id`,`type`,`status`,`created_at`,`modified_at`) VALUES(1596531073351680070,0,391041,2375,803659,306806,99,1,1,'2017-10-03 11:50:48','2017-10-03 11:50:48') ON DUPLICATE KEY UPDATE `status` = 1
+171003 11:53:44 [Warning] Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. INSERT... ON DUPLICATE KEY UPDATE  on a table with more than one UNIQUE KEY is unsafe Statement: INSERT INTO issue_entitlements(`user_id`,`device_id`,`issue_id`,`publication_id`,`order_id`,`label_id`,`project_id`,`type`,`status`,`created_at`,`modified_at`) VALUES(1371784452505600066,0,5443,7111,803661,306807,99,1,1,'2017-10-03 11:53:44','2017-10-03 11:53:44') ON DUPLICATE KEY UPDATE `status` = 1
+171003 11:55:14 [Warning] Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. INSERT... ON DUPLICATE KEY UPDATE  on a table with more than one UNIQUE KEY is unsafe Statement: INSERT INTO issue_entitlements(`user_id`,`device_id`,`issue_id`,`publication_id`,`order_id`,`label_id`,`project_id`,`type`,`status`,`created_at`,`modified_at`) VALUES(1597018308870144076,0,375674,8642,803664,306808,99,1,1,'2017-10-03 11:55:14','2017-10-03 11:55:14') ON DUPLICATE KEY UPDATE `status` = 1
+171003 11:55:29 [Warning] Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. INSERT... ON DUPLICATE KEY UPDATE  on a table with more than one UNIQUE KEY is unsafe Statement: INSERT INTO issue_entitlements(`user_id`,`device_id`,`issue_id`,`publication_id`,`order_id`,`label_id`,`project_id`,`type`,`status`,`created_at`,`modified_at`) VALUES(1371784452505600066,0,48501,7111,803665,306809,99,1,1,'2017-10-03 11:55:29','2017-10-03 11:55:29') ON DUPLICATE KEY UPDATE `status` = 1
+171003 11:58:02 [Warning] IP address '10.15.11.175' could not be resolved: Name or service not known
