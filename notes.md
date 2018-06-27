@@ -102,3 +102,15 @@ LOAD MYSQL SERVERS TO RUNTIME;
 SAVE MYSQL SERVERS TO DISK;
 
 root@127.0.0.1:proxysql_stats> SELECT * FROM servers WHERE (proxysql_id, hostgroup_id, hostname, port) NOT IN ((1, 1, '192.168.1.35', 3306), (1,1, '192.168.1.100', 3306));
+
+
+  // -collect-mysql {status,variables,slave status}
+  // check is open port from any
+  // -output-prometheus
+  // -output-influxdb
+  // -percona-skip-replication-error
+  // -percona-eta-catchup
+  // -collect-os {network,swap,disk,iops}
+  // -collect-pgbouncer ?
+  // -collect-postgresql ?
+  // -collect-mongodb ?

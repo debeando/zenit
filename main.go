@@ -13,20 +13,10 @@ import (
 const USAGE = "zenit (%s) written by Nicola Strappazzon C. <swapbyt3s@gmail.com>\nUsage: %s <command>\n"
 
 func main() {
-  fHelp    := flag.Bool("help",      false, "Show this help.")
-  fVersion := flag.Bool("version",   false, "Show version.")
-  fCollect := flag.String("collect",    "", "List of metrics to collect.")
-  fRun     := flag.String("run",        "", "Run bash command and wait to finish to notify via slack.")
-  // -collect-mysql {status,variables,slave status}
-  // check is open port from any
-  // -output-prometheus
-  // -output-influxdb
-  // -percona-skip-replication-error
-  // -percona-eta-catchup
-  // -collect-os {network,swap,disk,iops}
-  // -collect-pgbouncer ?
-  // -collect-postgresql ?
-  // -collect-mongodb ?
+  fHelp    := flag.Bool("help", false, "Show this help.")
+  fVersion := flag.Bool("version", false, "Show version.")
+  fCollect := flag.String("collect", "", "List of metrics to collect.")
+  fRun     := flag.String("run", "", "Run bash command and wait to finish to notify via slack.")
 
   flag.Parse()
 
