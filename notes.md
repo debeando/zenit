@@ -114,3 +114,45 @@ root@127.0.0.1:proxysql_stats> SELECT * FROM servers WHERE (proxysql_id, hostgro
   // -collect-pgbouncer ?
   // -collect-postgresql ?
   // -collect-mongodb ?
+
+
+  CREATE TABLE IF NOT EXISTS zenit.demo (
+    _time DateTime,
+    _date Date default toDate(_time),
+    value String
+  ) ENGINE = MergeTree(_date, (_time), 8192);
+
+  INSERT INTO zenit.demo (value) VALUES ('A')
+
+  SELECT * FROM zenit.demo\G
+
+curl -s -d 'SELECT 1' http://10.201.17.217:8123/?database=zenit
+
+curl -s -X POST -d "INSERT INTO demo (value) VALUES ('A')" http://10.201.17.217:8123/?database=zenit
+
+cat schema/mysql.sql | clickhouse-client --multiline
+
+
+# Todo:
+- @@log_error
+  mysql_errors_on_log
+# Check if running audit plugin?
+# Check if running general log?
+# Check if running slow log?
+# Check SQL safe:
+# - SELECT @@SQL_SAFE_UPDATES;
+# - SELECT @@SQL_SELECT_LIMIT;
+# - SELECT @@MAX_JOIN_SIZE;
+- have log rotation file? for
+  > audit log
+  > general log
+  > error log
+  > slow log
+- To ClickHouse
+  > audit log
+  > general log
+  > error log
+  > slow log
+  > binarylogs
+
+https://hub.docker.com/r/yandex/clickhouse-server/
