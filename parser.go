@@ -29,8 +29,6 @@ const (
 )
 
 func main() {
-  fmt.Printf("Parser...\n")
-
   audit_log := `
 <AUDIT_RECORD
   NAME="Connect"
@@ -66,7 +64,11 @@ func main() {
   for i := range line {
     reAttributes := common.ExtRegexp{regexp.MustCompile(REGEX_AUDIT_ATT)}
     if attributes := reAttributes.FindStringSubmatchMap(line[i]); attributes != nil {
-      fmt.Printf("%#v\n", attributes["user"])
+      for k, v := range attributes {
+        fmt.Printf("-- > %s = %s\n", k, v)
+      }
+      // fmt.Printf("%#v\n", attributes["user"])
     }
+    fmt.Println("--> ----")
   }
 }

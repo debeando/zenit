@@ -51,25 +51,3 @@ docker exec -i -t d1c86f2f36ff /root/zenit -collect-os
 ```
 
 You only need update the ID container from last command.
-
-# Todo:
-- @@log_error
-  mysql_errors_on_log
-# Check if running audit plugin?
-# Check if running general log?
-# Check if running slow log?
-# Check SQL safe:
-# - SELECT @@SQL_SAFE_UPDATES;
-# - SELECT @@SQL_SELECT_LIMIT;
-# - SELECT @@MAX_JOIN_SIZE;
-- have log rotation file? for
-  > audit log
-  > general log
-  > error log
-  > slow log
-- To ClickHouse
-  > audit log
-  > general log
-  > error log
-  > slow log
-  > binarylogs
