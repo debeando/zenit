@@ -52,5 +52,11 @@ func Run(services []string) {
     proxysql.GatherQueries()
   }
 
+  // Output
+  // switch out {
+  // case  "prometheus":
   output.Prometheus()
+  //case  "clickhouse":
+
+  //}
 }

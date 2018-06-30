@@ -52,3 +52,16 @@
   IP=""
   DB=""
 />
+<AUDIT_RECORD
+  NAME="Query"
+  RECORD="81_2017-11-27T13:25:59"
+  TIMESTAMP="2017-11-27T13:26:00 UTC"
+  COMMAND_CLASS="error"
+  CONNECTION_ID="3529526"
+  STATUS="0"
+  SQLTEXT="SELECT 1"
+  USER="foo[foo] @  [127.0.0.1]"
+  HOST=""
+  OS_USER=""
+  IP="127.0.0.1"
+/>

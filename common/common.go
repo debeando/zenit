@@ -8,6 +8,7 @@ import (
   "strconv"
   "strings"
   "syscall"
+  "time"
 )
 
 func PGrep(cmd string) int {
@@ -89,4 +90,19 @@ func IpAddress() string {
   }
 
   return ""
+}
+
+// The timestamp is represent in ISO 8601 (UTC) -> RFC 3339
+func ToDateTime(timestamp string) string {
+  layout := "2006-01-02T15:04:05 UTC"
+  t, err := time.Parse(layout, timestamp)
+  if err != nil {
+    return ""
+  }
+  return t.Format("2006-01-02 15:04:05")
+}
+
+// Adding slash by quotes in strings:
+func Escape(text string) string {
+  return strings.Replace(text, "'", "\\'", -1)
 }

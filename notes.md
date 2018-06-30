@@ -122,11 +122,11 @@ root@127.0.0.1:proxysql_stats> SELECT * FROM servers WHERE (proxysql_id, hostgro
     value String
   ) ENGINE = MergeTree(_date, (_time), 8192);
 
-  INSERT INTO zenit.demo (value) VALUES ('A')
+  INSERT INTO zenit.demo (value) VALUES ('A');
 
   SELECT * FROM zenit.demo\G
 
-curl -s -d 'SELECT 1' http://10.201.17.217:8123/?database=zenit
+curl -s -d 'SELECT 1' http://172.17.0.3:8123/?database=zenit
 
 curl -s -X POST -d "INSERT INTO demo (value) VALUES ('A')" http://10.201.17.217:8123/?database=zenit
 
@@ -156,3 +156,8 @@ cat schema/mysql.sql | clickhouse-client --multiline
   > binarylogs
 
 https://hub.docker.com/r/yandex/clickhouse-server/
+
+docker run -d --name some-clickhouse-server --ulimit nofile=262144:262144 yandex/clickhouse-server
+docker run -it --rm --link some-clickhouse-server:clickhouse-server yandex/clickhouse-client --host clickhouse-server
+
+GOOS=linux go build -ldflags "-s -w" -o zenit main.go && docker cp zenit d1c86f2f36ff:/root && docker exec -i -t d1c86f2f36ff /root/zenit -parser=auditlog-xml -parser-file=/root/test_audit.log
