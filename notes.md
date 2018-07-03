@@ -161,3 +161,5 @@ docker run -d --name some-clickhouse-server --ulimit nofile=262144:262144 yandex
 docker run -it --rm --link some-clickhouse-server:clickhouse-server yandex/clickhouse-client --host clickhouse-server
 
 GOOS=linux go build -ldflags "-s -w" -o zenit main.go && docker cp zenit d1c86f2f36ff:/root && docker exec -i -t d1c86f2f36ff /root/zenit -parser=auditlog-xml -parser-file=/root/test_audit.log
+
+export DSN_CLICKHOUSE="tcp://10.201.17.217:9000?database=zenit"

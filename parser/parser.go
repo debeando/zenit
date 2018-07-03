@@ -1,18 +1,23 @@
 package parser
 
 import (
-  "fmt"
   "gitlab.com/swapbyt3s/zenit/collect/mysql/audit"
   "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/config"
+  "gitlab.com/swapbyt3s/zenit/output/clickhouse"
 )
 
 func Run(parse string, path string) {
   if parse == "auditlog-xml" {
-    for record := range audit.Parse(path) {
-      sql := audit.ToSQL(record)
-      fmt.Printf("%s\n", sql)
-      common.HTTPPost(config.CLICKHOUSE_API, sql)
+    channel_tail   := make(chan string)
+    channel_parser := make(chan map[string]string)
+    channel_event  := make(chan map[string]string)
+
+    go common.Tail(path, channel_tail)
+    go audit.Parser(path, channel_tail, channel_parser)
+    go clickhouse.SendMySQLAuditLog(channel_event)
+
+    for event := range channel_parser {
+      channel_event <- event
     }
   }
 }

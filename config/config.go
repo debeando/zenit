@@ -5,7 +5,7 @@ import (
 )
 
 var(
-  CLICKHOUSE_API string = ""
+  DSN_CLICKHOUSE string = "http://127.0.0.1:8123/?database=zenit"
   DSN_MYSQL      string = "root@tcp(127.0.0.1:3306)/"
   DSN_PROXYSQL   string = "radminuser:radminpass@tcp(127.0.0.1:6032)/"
   SLACK_CHANNEL  string = "alerts"
@@ -14,7 +14,7 @@ var(
 )
 
 func init() {
-  CLICKHOUSE_API = common.GetEnv("CLICKHOUSE_API", CLICKHOUSE_API)
+  DSN_CLICKHOUSE = common.GetEnv("DSN_CLICKHOUSE", DSN_CLICKHOUSE)
   SLACK_CHANNEL  = common.GetEnv("SLACK_CHANNEL", SLACK_CHANNEL)
   SLACK_TOKEN    = common.GetEnv("SLACK_TOKEN", "")
   DSN_MYSQL      = common.GetEnv("DSN_MYSQL", DSN_MYSQL)

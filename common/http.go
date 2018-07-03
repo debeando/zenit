@@ -3,23 +3,25 @@ package common
 import (
   "net/http"
   "strings"
-  "time"
 )
 
-func HTTPPost(uri string, data string) {
+func HTTPPost(uri string, data string) bool {
   req, err := http.NewRequest(
     "POST",
     uri,
     strings.NewReader(data),
   )
 
-  timeout := time.Duration(1 * time.Second)
-  client := &http.Client{
-    Timeout: timeout,
-  }
+  client := &http.Client{}
   resp, err := client.Do(req)
-  defer resp.Body.Close()
   if err != nil {
-    panic(err)
+    return false
   }
+  defer resp.Body.Close()
+
+  if resp.StatusCode != http.StatusOK {
+    return false
+  }
+
+  return true
 }
