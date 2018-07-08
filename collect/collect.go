@@ -28,8 +28,12 @@ func Run(services []string) {
 
   // MySQL
   if common.StringInArray("mysql", services) {
+    mysql.GatherOverflow()
     mysql.GatherStatus()
     mysql.GatherTables()
+    mysql.GatherVariables()
+  }
+  if common.StringInArray("mysql-overflow", services) {
     mysql.GatherOverflow()
   }
   if common.StringInArray("mysql-status", services) {
@@ -38,8 +42,8 @@ func Run(services []string) {
   if common.StringInArray("mysql-tables", services) {
     mysql.GatherTables()
   }
-  if common.StringInArray("mysql-overflow", services) {
-    mysql.GatherOverflow()
+  if common.StringInArray("mysql-variables", services) {
+    mysql.GatherVariables()
   }
 
   // Percona
