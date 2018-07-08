@@ -8,7 +8,6 @@ import (
   "gitlab.com/swapbyt3s/zenit/collect"
   "gitlab.com/swapbyt3s/zenit/command"
   "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/parser"
 )
 
 const USAGE = "zenit (%s) written by Nicola Strappazzon C. <swapbyt3s@gmail.com>\nUsage: %s <command>\n"
@@ -33,7 +32,7 @@ func main() {
     } else if len(*fCollect) > 0 {
       collect.Run(strings.Split(*fCollect, ","))
     } else if len(*fParser) > 0 && len(*fParserFile) > 0 {
-      parser.Run(*fParser, *fParserFile)
+      collect.Parser(*fParser, *fParserFile)
     } else if len(*fRun) > 0 {
       command.Run(*fRun)
     } else {

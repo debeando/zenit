@@ -1,4 +1,4 @@
-package parser
+package collect
 
 import (
   "gitlab.com/swapbyt3s/zenit/collect/mysql/audit"
@@ -6,7 +6,7 @@ import (
   "gitlab.com/swapbyt3s/zenit/output/clickhouse"
 )
 
-func Run(parse string, path string) {
+func Parser(parse string, path string) {
   if parse == "auditlog-xml" {
     channel_tail   := make(chan string)
     channel_parser := make(chan map[string]string)
