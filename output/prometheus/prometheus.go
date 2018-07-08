@@ -11,7 +11,7 @@ func Run() {
 
   for _, m := range *a {
     switch m.Values.(type) {
-    case uint, uint64, float64:
+    case int, uint, uint64, float64:
       fmt.Printf("%s{%s} %s\n", m.Key, getTags(m.Tags), getValue(m.Values))
     case []accumulator.Value:
       for _, i := range m.Values.([]accumulator.Value) {
@@ -33,7 +33,7 @@ func getTags(tags []accumulator.Tag) string {
 
 func getValue(value interface{}) string {
   switch v := value.(type) {
-  case uint, uint64:
+  case int, uint, uint64:
     return fmt.Sprintf("%d", v)
   case float64:
     return fmt.Sprintf("%.2f", v)

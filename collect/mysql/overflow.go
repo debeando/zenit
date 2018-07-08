@@ -105,10 +105,10 @@ func GatherOverflow() {
     a.AddItem(accumulator.Metric{
       Key: "mysql_stats_overflow",
       Tags: []accumulator.Tag{accumulator.Tag{"schema", c.schema},
-                         accumulator.Tag{"table", c.table},
-                         accumulator.Tag{"type", "overflow"},
-                         accumulator.Tag{"data_type", c.data_type},
-                         accumulator.Tag{"unsigned", strconv.FormatBool(c.unsigned)}},
+                              accumulator.Tag{"table", c.table},
+                              accumulator.Tag{"type", "overflow"},
+                              accumulator.Tag{"data_type", c.data_type},
+                              accumulator.Tag{"unsigned", strconv.FormatBool(c.unsigned)}},
       Values: c.percent,
     })
   }

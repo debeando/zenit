@@ -53,10 +53,10 @@ func GatherTables() {
     a.AddItem(accumulator.Metric{
       Key:   "mysql_stats_tables",
       Tags:  []accumulator.Tag{accumulator.Tag{"schema", t.schema},
-                          accumulator.Tag{"table", t.table}},
+                               accumulator.Tag{"table", t.table}},
       Values: []accumulator.Value{accumulator.Value{"size", t.size},
-                             accumulator.Value{"rows", t.rows},
-                             accumulator.Value{"increment", t.increment}},
+                                  accumulator.Value{"rows", t.rows},
+                                  accumulator.Value{"increment", t.increment}},
     })
   }
 }

@@ -27,7 +27,7 @@ func GatherCPU() {
     accumulator.Load().AddItem(accumulator.Metric{
       Key: "os",
       Tags: []accumulator.Tag{accumulator.Tag{"system", "linux"},
-                         accumulator.Tag{"hardware", "cpu"}},
+                              accumulator.Tag{"hardware", "cpu"}},
       Values: []accumulator.Value{accumulator.Value{"used_percent", percentage}},
     })
   }

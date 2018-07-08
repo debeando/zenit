@@ -68,11 +68,11 @@ func GatherQueries() {
       accumulator.Load().AddItem(accumulator.Metric{
         Key: "mysql_stats_overflow",
         Tags: []accumulator.Tag{accumulator.Tag{"group", q.group},
-                           accumulator.Tag{"schema", q.schema},
-                           accumulator.Tag{"table", table},
-                           accumulator.Tag{"command", command}},
+                                accumulator.Tag{"schema", q.schema},
+                                accumulator.Tag{"table", table},
+                                accumulator.Tag{"command", command}},
         Values: []accumulator.Value{accumulator.Value{"count", q.count},
-                               accumulator.Value{"sum", q.sum}},
+                                    accumulator.Value{"sum", q.sum}},
       })
     }
   }

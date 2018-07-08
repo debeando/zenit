@@ -54,13 +54,13 @@ func GatherMem() {
   accumulator.Load().AddItem(accumulator.Metric{
     Key: "os",
     Tags: []accumulator.Tag{accumulator.Tag{"system", "linux"},
-                       accumulator.Tag{"hardware", "mem"}},
+                            accumulator.Tag{"hardware", "mem"}},
     Values: []accumulator.Value{accumulator.Value{"total", mem.total},
-                           accumulator.Value{"free", mem.free},
-                           accumulator.Value{"available", mem.available},
-                           accumulator.Value{"buffers", mem.buffers},
-                           accumulator.Value{"cached", mem.cached},
-                           accumulator.Value{"used", mem.used},
-                           accumulator.Value{"used_percent", mem.percent}},
+                                accumulator.Value{"free", mem.free},
+                                accumulator.Value{"available", mem.available},
+                                accumulator.Value{"buffers", mem.buffers},
+                                accumulator.Value{"cached", mem.cached},
+                                accumulator.Value{"used", mem.used},
+                                accumulator.Value{"used_percent", mem.percent}},
   })
 }

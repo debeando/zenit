@@ -13,12 +13,12 @@ import (
 const USAGE = "zenit (%s) written by Nicola Strappazzon C. <swapbyt3s@gmail.com>\nUsage: %s <command>\n"
 
 func main() {
-  fHelp       := flag.Bool("help", false, "Show this help.")
-  fVersion    := flag.Bool("version", false, "Show version.")
-  fCollect    := flag.String("collect", "", "List of metrics to collect.")
-  fParser     := flag.String("parser", "", "Parser log rule.")
-  fParserFile := flag.String("parser-file", "", "Fail path to to parse.")
-  fRun        := flag.String("run", "", "Run bash command and wait to finish to notify via slack.")
+  fHelp         := flag.Bool("help", false, "Show this help.")
+  fVersion      := flag.Bool("version", false, "Show version.")
+  fCollect      := flag.String("collect", "", "List of metrics to collect.")
+  fParserFormat := flag.String("parser-format", "", "Parser log format.")
+  fParserFile   := flag.String("parser-file", "", "Fail path to to parse.")
+  fRun          := flag.String("run", "", "Run bash command and wait to finish to notify via slack.")
 
   flag.Parse()
 
@@ -31,8 +31,8 @@ func main() {
       fmt.Printf("%s\n", config.VERSION)
     } else if len(*fCollect) > 0 {
       collect.Run(strings.Split(*fCollect, ","))
-    } else if len(*fParser) > 0 && len(*fParserFile) > 0 {
-      collect.Parser(*fParser, *fParserFile)
+    } else if len(*fParserFormat) > 0 && len(*fParserFile) > 0 {
+      collect.Parser(*fParserFormat, *fParserFile)
     } else if len(*fRun) > 0 {
       command.Run(*fRun)
     } else {

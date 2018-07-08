@@ -12,18 +12,22 @@ import (
 func Run(services []string) {
   // OS
   if common.StringInArray("os", services) {
-    os.GatherSysLimits()
+    os.GatherCPU()
+    os.GatherDisk()
     os.GatherMem()
+    os.GatherSysLimits()
+  }
+  if common.StringInArray("os-cpu", services) {
     os.GatherCPU()
   }
-  if common.StringInArray("os-limits", services) {
-    os.GatherSysLimits()
+  if common.StringInArray("os-disk", services) {
+    os.GatherDisk()
   }
   if common.StringInArray("os-mem", services) {
     os.GatherMem()
   }
-  if common.StringInArray("os-cpu", services) {
-    os.GatherCPU()
+  if common.StringInArray("os-limits", services) {
+    os.GatherSysLimits()
   }
 
   // MySQL

@@ -3,9 +3,7 @@ package command
 import (
   "fmt"
   "os"
-  "os/exec"
   "strings"
-  "syscall"
   "time"
   "gitlab.com/swapbyt3s/zenit/common"
   "gitlab.com/swapbyt3s/zenit/config"
@@ -32,7 +30,7 @@ func Run(cmd string) {
   start := current_timestamp()
   fmt.Printf("--> Start at: %s\n", start)
   fmt.Printf("--> Wait to finish command: %s\n", cmd)
-  stdout, exitcode := exec_command(cmd)
+  stdout, exitcode := common.ExecCommand(cmd)
   stdout = clear_stdout(stdout)
   fmt.Printf("--> Stdout: %s", stdout)
   fmt.Printf("--> Exit code: %d\n", exitcode)
@@ -63,18 +61,6 @@ func duration(start string, end string) int {
   parsed_end   , _ := time.Parse("2006-01-02 15:04:05", end);
 
   return int(parsed_end.Sub(parsed_start).Seconds())
-}
-
-func exec_command(cmd string) (stdout string, exitcode int) {
-  out, err := exec.Command("/bin/bash", "-c", cmd).Output()
-  if err != nil {
-    if exitError, ok := err.(*exec.ExitError); ok {
-      ws := exitError.Sys().(syscall.WaitStatus)
-      exitcode = ws.ExitStatus()
-    }
-  }
-  stdout = string(out[:])
-  return
 }
 
 func clear_stdout(stdout string) string {
