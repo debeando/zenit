@@ -16,7 +16,7 @@ func GatherVariables() {
     panic(err)
   }
 
-  rows, err := conn.Query(QUERY_SQL_STATUS)
+  rows, err := conn.Query(QUERY_SQL_VARIABLES)
   defer rows.Close()
   if err != nil {
     panic(err)

@@ -29,12 +29,16 @@ func Run(services []string) {
   // MySQL
   if common.StringInArray("mysql", services) {
     mysql.GatherOverflow()
+    mysql.GatherSlave()
     mysql.GatherStatus()
     mysql.GatherTables()
     mysql.GatherVariables()
   }
   if common.StringInArray("mysql-overflow", services) {
     mysql.GatherOverflow()
+  }
+  if common.StringInArray("mysql-slave", services) {
+    mysql.GatherSlave()
   }
   if common.StringInArray("mysql-status", services) {
     mysql.GatherStatus()
