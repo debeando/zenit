@@ -53,10 +53,5 @@ func Run(services []string) {
   }
 
   // Output
-  // switch out {
-  // case  "prometheus":
   output.Prometheus()
-  //case  "clickhouse":
-
-  //}
 }

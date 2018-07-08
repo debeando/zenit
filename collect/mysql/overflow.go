@@ -6,7 +6,7 @@ import (
   "strconv"
   "gitlab.com/swapbyt3s/zenit/common"
   "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/output"
+  "gitlab.com/swapbyt3s/zenit/accumulator"
 )
 
 type Column struct {
@@ -53,7 +53,7 @@ func GatherOverflow() {
     panic(err)
   }
 
-  var a = output.Load()
+  var a = accumulator.Load()
 
   for rows.Next() {
     var c Column
@@ -102,13 +102,13 @@ func GatherOverflow() {
       }
     }
 
-    a.AddItem(output.Metric{
+    a.AddItem(accumulator.Metric{
       Key: "mysql_stats_overflow",
-      Tags: []output.Tag{output.Tag{"schema", c.schema},
-                         output.Tag{"table", c.table},
-                         output.Tag{"type", "overflow"},
-                         output.Tag{"data_type", c.data_type},
-                         output.Tag{"unsigned", strconv.FormatBool(c.unsigned)}},
+      Tags: []accumulator.Tag{accumulator.Tag{"schema", c.schema},
+                         accumulator.Tag{"table", c.table},
+                         accumulator.Tag{"type", "overflow"},
+                         accumulator.Tag{"data_type", c.data_type},
+                         accumulator.Tag{"unsigned", strconv.FormatBool(c.unsigned)}},
       Values: c.percent,
     })
   }

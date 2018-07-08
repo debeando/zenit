@@ -4,7 +4,7 @@ import (
   "database/sql"
   "gitlab.com/swapbyt3s/zenit/common"
   "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/output"
+  "gitlab.com/swapbyt3s/zenit/accumulator"
 )
 
 const QUERY_SQL_STATUS = "SHOW GLOBAL STATUS"
@@ -22,16 +22,16 @@ func GatherStatus() {
     panic(err)
   }
 
-  var a = output.Load()
+  var a = accumulator.Load()
   var k string
   var v sql.RawBytes
 
   for rows.Next() {
     rows.Scan(&k, &v)
     if value, ok := common.MySQLParseValue(v); ok {
-      a.AddItem(output.Metric{
+      a.AddItem(accumulator.Metric{
         Key: "mysql_status",
-        Tags: []output.Tag{output.Tag{"name", k}},
+        Tags: []accumulator.Tag{accumulator.Tag{"name", k}},
         Values: value,
       })
     }

@@ -4,7 +4,7 @@ import (
   "math"
   "strings"
   "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/output"
+  "gitlab.com/swapbyt3s/zenit/accumulator"
 )
 
 type Mem struct {
@@ -51,16 +51,16 @@ func GatherMem() {
     mem.percent = 0
   }
 
-  output.Load().AddItem(output.Metric{
+  accumulator.Load().AddItem(accumulator.Metric{
     Key: "os",
-    Tags: []output.Tag{output.Tag{"system", "linux"},
-                       output.Tag{"hardware", "mem"}},
-    Values: []output.Value{output.Value{"total", mem.total},
-                           output.Value{"free", mem.free},
-                           output.Value{"available", mem.available},
-                           output.Value{"buffers", mem.buffers},
-                           output.Value{"cached", mem.cached},
-                           output.Value{"used", mem.used},
-                           output.Value{"used_percent", mem.percent}},
+    Tags: []accumulator.Tag{accumulator.Tag{"system", "linux"},
+                       accumulator.Tag{"hardware", "mem"}},
+    Values: []accumulator.Value{accumulator.Value{"total", mem.total},
+                           accumulator.Value{"free", mem.free},
+                           accumulator.Value{"available", mem.available},
+                           accumulator.Value{"buffers", mem.buffers},
+                           accumulator.Value{"cached", mem.cached},
+                           accumulator.Value{"used", mem.used},
+                           accumulator.Value{"used_percent", mem.percent}},
   })
 }

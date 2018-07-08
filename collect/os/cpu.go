@@ -4,7 +4,7 @@ import (
   "strings"
   "time"
   "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/output"
+  "gitlab.com/swapbyt3s/zenit/accumulator"
 )
 
 type CPU struct {
@@ -24,11 +24,11 @@ func GatherCPU() {
     idle  := c[1].idle  - c[0].idle
     percentage := (float64(total) - float64(idle)) / float64(total) * 100.0
 
-    output.Load().AddItem(output.Metric{
+    accumulator.Load().AddItem(accumulator.Metric{
       Key: "os",
-      Tags: []output.Tag{output.Tag{"system", "linux"},
-                         output.Tag{"hardware", "cpu"}},
-      Values: []output.Value{output.Value{"used_percent", percentage}},
+      Tags: []accumulator.Tag{accumulator.Tag{"system", "linux"},
+                         accumulator.Tag{"hardware", "cpu"}},
+      Values: []accumulator.Value{accumulator.Value{"used_percent", percentage}},
     })
   }
 }

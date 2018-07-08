@@ -1,4 +1,4 @@
-package output
+package accumulator
 
 type Tag struct {
   Name  string

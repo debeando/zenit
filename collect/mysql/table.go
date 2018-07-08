@@ -3,7 +3,7 @@ package mysql
 import (
   "gitlab.com/swapbyt3s/zenit/common"
   "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/output"
+  "gitlab.com/swapbyt3s/zenit/accumulator"
 )
 
 type Table struct {
@@ -38,7 +38,7 @@ func GatherTables() {
     panic(err)
   }
 
-  var a = output.Load()
+  var a = accumulator.Load()
 
   for rows.Next() {
     var t Table
@@ -50,13 +50,13 @@ func GatherTables() {
       &t.rows,
       &t.increment)
 
-    a.AddItem(output.Metric{
+    a.AddItem(accumulator.Metric{
       Key:   "mysql_stats_tables",
-      Tags:  []output.Tag{output.Tag{"schema", t.schema},
-                          output.Tag{"table", t.table}},
-      Values: []output.Value{output.Value{"size", t.size},
-                             output.Value{"rows", t.rows},
-                             output.Value{"increment", t.increment}},
+      Tags:  []accumulator.Tag{accumulator.Tag{"schema", t.schema},
+                          accumulator.Tag{"table", t.table}},
+      Values: []accumulator.Value{accumulator.Value{"size", t.size},
+                             accumulator.Value{"rows", t.rows},
+                             accumulator.Value{"increment", t.increment}},
     })
   }
 }

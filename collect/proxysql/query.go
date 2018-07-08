@@ -5,7 +5,7 @@ import (
   "strings"
   "gitlab.com/swapbyt3s/zenit/common"
   "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/output"
+  "gitlab.com/swapbyt3s/zenit/accumulator"
 )
 
 type Query struct {
@@ -65,14 +65,14 @@ func GatherQueries() {
     if len(q.digest) > 0 {
       table, command := Match(q.digest)
 
-      output.Load().AddItem(output.Metric{
+      accumulator.Load().AddItem(accumulator.Metric{
         Key: "mysql_stats_overflow",
-        Tags: []output.Tag{output.Tag{"group", q.group},
-                           output.Tag{"schema", q.schema},
-                           output.Tag{"table", table},
-                           output.Tag{"command", command}},
-        Values: []output.Value{output.Value{"count", q.count},
-                               output.Value{"sum", q.sum}},
+        Tags: []accumulator.Tag{accumulator.Tag{"group", q.group},
+                           accumulator.Tag{"schema", q.schema},
+                           accumulator.Tag{"table", table},
+                           accumulator.Tag{"command", command}},
+        Values: []accumulator.Value{accumulator.Value{"count", q.count},
+                               accumulator.Value{"sum", q.sum}},
       })
     }
   }
