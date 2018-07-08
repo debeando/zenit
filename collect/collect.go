@@ -15,6 +15,7 @@ func Run(services []string) {
     os.GatherCPU()
     os.GatherDisk()
     os.GatherMem()
+    os.GatherNet()
     os.GatherSysLimits()
   }
   if common.StringInArray("os-cpu", services) {
@@ -25,6 +26,9 @@ func Run(services []string) {
   }
   if common.StringInArray("os-mem", services) {
     os.GatherMem()
+  }
+  if common.StringInArray("os-net", services) {
+    os.GatherNet()
   }
   if common.StringInArray("os-limits", services) {
     os.GatherSysLimits()

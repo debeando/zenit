@@ -2,6 +2,7 @@
 // https://dev.mysql.com/doc/refman/5.5/en/audit-log-file-formats.html
 // Todo:
 // - Tener un mecanismo usando el random para obtener un % de muestra.
+// - Tener un filtro para ignorar o pasar solo lo que nos interesa.
 // - Tener un check para el logrotate en algun lado: /etc/logrotate.d/mysql.conf
 
 package audit
