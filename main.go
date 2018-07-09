@@ -8,6 +8,7 @@ import (
   "gitlab.com/swapbyt3s/zenit/collect"
   "gitlab.com/swapbyt3s/zenit/command"
   "gitlab.com/swapbyt3s/zenit/config"
+  "gitlab.com/swapbyt3s/zenit/daemonize"
 )
 
 const USAGE = "zenit (%s) written by Nicola Strappazzon C. <swapbyt3s@gmail.com>\nUsage: %s <command>\n"
@@ -15,6 +16,7 @@ const USAGE = "zenit (%s) written by Nicola Strappazzon C. <swapbyt3s@gmail.com>
 func main() {
   fHelp         := flag.Bool("help", false, "Show this help.")
   fVersion      := flag.Bool("version", false, "Show version.")
+  fDaemonize    := flag.Bool("daemonize", false, "Fork to the background and detach from the shell.")
   fCollect      := flag.String("collect", "", "List of metrics to collect.")
   fParserFormat := flag.String("parser-format", "", "Parser log format.")
   fParserFile   := flag.String("parser-file", "", "Fail path to to parse.")
@@ -27,7 +29,13 @@ func main() {
   } else if len(os.Args) >= 2 {
     if *fHelp {
       help()
-    } else if *fVersion {
+    }
+
+    if *fDaemonize {
+      daemonize.Start()
+    }
+
+    if *fVersion {
       fmt.Printf("%s\n", config.VERSION)
     } else if len(*fCollect) > 0 {
       collect.Run(strings.Split(*fCollect, ","))

@@ -5,13 +5,6 @@
 # Bytes_sent: 60
 SET timestamp=1529940303;
 SELECT count(*) AS total FROM publications p  INNER JOIN (SELECT distinct p1.publication_id, p1.created_at FROM catalogs_publications p1 WHERE p1.catalog_id = 132 AND p1.status = 1 AND EXISTS (SELECT * FROM issues i WHERE i.publication_id = p1.publication_id AND i.status = 1)) j ON p.id = j.publication_id WHERE p.id IN (2717) AND p.status = 1;
-# User@Host: zen_entitlement[zen_entitlement] @  [10.15.48.158]
-# Thread_id: 55883501  Schema: zen_entitlement  Last_errno: 0  Killed: 0
-# Query_time: 11.665498  Lock_time: 0.000135  Rows_sent: 1  Rows_examined: 2410  Rows_affected: 0  Rows_read: 2410
-# Bytes_sent: 1257
-use zen_entitlement;
-SET timestamp=1529940303;
-SELECT t0.id AS id_1, t0.user_id AS user_id_2, t0.device_id AS device_id_3, t0.issue_id AS issue_id_4, t0.publication_id AS publication_id_5, t0.project_id AS project_id_6, t0.order_id AS order_id_7, t0.delivery_id AS delivery_id_8, t0.label_id AS label_id_9, t0.legacy_identifier AS legacy_identifier_10, t0.type AS type_11, t0.status AS status_12, t0.created_at AS created_at_13, t0.modified_at AS modified_at_14 FROM issue_entitlements t0 WHERE t0.issue_id = '396460' AND t0.project_id = '1111' AND t0.order_id = '3939570' AND t0.status = 1 AND t0.user_id = '1371482781384704192' LIMIT 1;
 # Time: 180625 15:25:18
 # User@Host: zen_catalog[zen_catalog] @  [10.15.35.55]
 # Thread_id: 55884175  Schema: zen_catalog  Last_errno: 0  Killed: 0

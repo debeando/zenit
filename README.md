@@ -9,6 +9,11 @@ This tool collect stats data from:
 - Percona ToolKit
 - ProxySQL
 
+And this is ingested on:
+
+- Prometheus
+- ClickHouse
+
 The numeric values has represent time has in microseconds.
 
 ## ProxySQL
