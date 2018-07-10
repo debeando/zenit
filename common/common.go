@@ -102,6 +102,15 @@ func ToDateTime(timestamp string) string {
   return t.Format("2006-01-02 15:04:05")
 }
 
+func ISO8601V2toRFC3339(timestamp string) string {
+  layout := "20060102 15:04:05"
+  t, err := time.Parse(layout, "20" + timestamp)
+  if err != nil {
+    return ""
+  }
+  return t.Format("2006-01-02 15:04:05")
+}
+
 // Adding slash by quotes in strings:
 func Escape(text string) string {
   return strings.Replace(text, "'", "\\'", -1)

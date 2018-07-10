@@ -17,3 +17,21 @@ CREATE TABLE IF NOT EXISTS zenit.mysql_audit_log (
   ip String,
   db String
 ) ENGINE = MergeTree(_date,(_time,host,user), 8192);
+
+CREATE TABLE IF NOT EXISTS zenit.mysql_slow_log (
+  _time DateTime default now(),
+  _date Date default toDate(_time),
+  bytes_sent UInt64,
+  killed UInt64,
+  last_errno UInt64,
+  lock_time Float64,
+  query String,
+  query_time Float64,
+  rows_affected UInt64,
+  rows_examined UInt64,
+  rows_read UInt64,
+  rows_sent UInt64,
+  schema String,
+  thread_id UInt64,
+  user_host String
+) ENGINE = MergeTree(_date,(_time,user_host), 8192);

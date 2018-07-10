@@ -154,6 +154,7 @@ cat schema/mysql.sql | clickhouse-client --multiline
   > error log
   > slow log
   > binarylogs
+- collect every x time, interval?
 
 https://hub.docker.com/r/yandex/clickhouse-server/
 
