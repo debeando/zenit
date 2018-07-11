@@ -8,7 +8,7 @@ import (
 )
 
 func Tail(path string, channel chan<- string) {
-  cmd := exec.Command("/usr/bin/tail", "-f",  path)
+  cmd := exec.Command("/usr/bin/tail", "-n", "0", "-f", path)
 
   cmdReader, err := cmd.StdoutPipe()
   if err != nil {
