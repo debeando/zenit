@@ -29,8 +29,16 @@ func savePID(pid int) {
   file.Sync()
 }
 
-func getCommand() string {
-  cmd := strings.Join(os.Args[0:], " ")
+func getExecutable() string {
+  ex, err := os.Executable()
+  if err != nil {
+    panic(err)
+  }
+  return ex
+}
+
+func getArgs() string {
+  cmd := strings.Join(os.Args[1:], " ")
   cmd  = strings.Replace(cmd, "--daemonize", "", -1)
   cmd  = strings.Replace(cmd, "-daemonize", "", -1)
   cmd  = strings.TrimSpace(cmd)
@@ -38,9 +46,16 @@ func getCommand() string {
   return cmd
 }
 
+func getCommand(command string, args string) string {
+  return command + " " + args
+}
+
 func runCommand(command string) int {
   cmd := exec.Command("/bin/bash", "-c", command)
-  cmd.Start()
+  err := cmd.Start()
+  if err != nil {
+    panic(err)
+  }
 
   return cmd.Process.Pid
 }
@@ -52,8 +67,10 @@ func Start() {
     os.Exit(1)
   }
 
-  cmd := getCommand()
-  pid := runCommand(cmd)
+  exec := getExecutable()
+  args := getArgs()
+  cmd  := getCommand(exec, args)
+  pid  := runCommand(cmd)
 
   fmt.Println("Daemon process ID is: ", pid)
 
