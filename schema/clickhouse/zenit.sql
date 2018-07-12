@@ -3,6 +3,7 @@ CREATE DATABASE IF NOT EXISTS zenit;
 CREATE TABLE IF NOT EXISTS zenit.mysql_audit_log (
   _time DateTime default now(),
   _date Date default toDate(_time),
+  host_ip UInt32,
   name String,
   command_class String,
   connection_id UInt64,
@@ -21,6 +22,7 @@ CREATE TABLE IF NOT EXISTS zenit.mysql_audit_log (
 CREATE TABLE IF NOT EXISTS zenit.mysql_slow_log (
   _time DateTime default now(),
   _date Date default toDate(_time),
+  host_ip UInt32,
   bytes_sent UInt64,
   killed UInt64,
   last_errno UInt64,

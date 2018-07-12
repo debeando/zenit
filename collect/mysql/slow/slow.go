@@ -7,8 +7,8 @@ import (
 
 func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
   var buffer string
-  reRecord := regexp.MustCompile(`# Time:.+SET.+(SELECT|INSERT|UPDATE|DELETE).+;$`)
-  reKeyVal := regexp.MustCompile(`\W+Time:\W+(?P<time>\d{6}\W\d{2}:\d{2}:\d{2})`+
+  reRecord := regexp.MustCompile(`#\W(Time|User\@Host):.+SET.+(SELECT|INSERT|UPDATE|DELETE).+;`)
+  reKeyVal := regexp.MustCompile(`(\W+Time:\W+(?P<time>\d{6}\W\d{2}:\d{2}:\d{2}))?`+
                                  `\W+User@Host:\W+(?P<user_host>\w+\[\w+\]\W+@\W+\[\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}\])`+
                                  `\W+Thread_id:\W+(?P<thread_id>\d+)`+
                                  `\W+Schema:\W+(?P<schema>\w+)`+
@@ -29,7 +29,7 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
     defer close(parser)
 
     for line := range tail {
-      buffer += " " + line
+      buffer += line + " "
       record := reRecord.FindString(buffer)
 
       if len(record) > 0 {

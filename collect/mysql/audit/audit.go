@@ -33,6 +33,11 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
           value = trim(value)
           result[key] = value
         }
+
+        if user, ok := result["user"]; ok {
+          result["user"] = clearUser(user)
+        }
+
         parser <- result
       }
     }
@@ -41,11 +46,19 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
 
 func getKeyAndValue(s string) (key string, value string) {
   kv := strings.SplitN(s, "=", 2)
-  return kv[0], kv[1]
+  return strings.ToLower(kv[0]), kv[1]
 }
 
 func trim(value string) string {
   value = strings.TrimRight(value, "\"")
   value = strings.TrimLeft(value, "\"")
   return value
+}
+
+func clearUser(u string) string {
+  index := strings.Index(u, "[")
+  if index > 0 {
+    return u[0:index]
+  }
+  return u
 }
