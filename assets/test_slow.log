@@ -40,3 +40,14 @@ SET timestamp=1531316409;
 (SELECT issue_id,publication_id,project_id,1 as access_type,IF(status=1,TRUE, FALSE) as is_allow,id as access_id,status as access_status,DATE_FORMAT(created_at, '%Y-%m-%dT%T+0000') as added_at,DATE_FORMAT(IFNULL(`modified_at`, `created_at`), '%Y-%m-%dT%T+0000') as modified_at
                 FROM issue_entitlements WHERE (user_id = 1371619473752064998 AND project_id = 99 AND device_id = 0)) UNION (SELECT issue_id,publication_id,project_id,2 as access_type,IF(access_validation_status = 1, IF(access_validation_end_date >= now(), TRUE, FALSE), FALSE) as is_allow,id as access_id,status as access_status,DATE_FORMAT(created_at, '%Y-%m-%dT%T+0000') as added_at,DATE_FORMAT(IFNULL(`modified_at`, `created_at`), '%Y-%m-%dT%T+0000') as modified_at
                 FROM issue_checkouts WHERE (user_id = 1371619473752064998 AND project_id = 99 AND device_id = 0)) ORDER BY added_at DESC LIMIT 10 OFFSET 0;
+# Time: 180712  7:58:15
+# User@Host: zen_identity[zen_identity] @  [10.15.39.210]
+# Thread_id: 78245926  Schema: zen_identity  Last_errno: 0  Killed: 0
+# Query_time: 0.000426  Lock_time: 0.000099  Rows_sent: 10  Rows_examined: 30  Rows_affected: 0  Rows_read: 30
+# Bytes_sent: 4564
+use zen_identity;
+SET timestamp=1531382295;
+SELECT u.*
+                FROM (
+                SELECT id FROM users tu  WHERE 1  ORDER BY tu.created_at desc LIMIT 10  OFFSET 0
+                ) AS uid JOIN users u ON u.id = uid.id;
