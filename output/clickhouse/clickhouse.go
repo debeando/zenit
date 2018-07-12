@@ -18,17 +18,17 @@ func SendMySQLAuditLog(event <-chan map[string]string) {
       sql := fmt.Sprintf("INSERT INTO zenit.mysql_audit_log " +
                          "(_time,host_ip,name,command_class,connection_id,status,sqltext,user,host,os_user,ip) " +
                          "VALUES ('%s',IPv4StringToNum('%s'),'%s','%s',%s,%s,'%s','%s','%s','%s','%s')",
-                          common.ToDateTime(e["TIMESTAMP"]),
+                          common.ToDateTime(e["timestamp"]),
                           ip_address,
-                          e["NAME"],
-                          e["COMMAND_CLASS"],
-                          e["CONNECTION_ID"],
-                          e["STATUS"],
-                          common.Escape(e["SQLTEXT"]),
-                          e["USER"],
-                          e["HOST"],
-                          e["OS_USER"],
-                          e["IP"])
+                          e["name"],
+                          e["command_class"],
+                          e["connection_id"],
+                          e["status"],
+                          common.Escape(e["sqltext"]),
+                          e["user"],
+                          e["host"],
+                          e["os_user"],
+                          e["ip"])
 
       common.HTTPPost(config.DSN_CLICKHOUSE, sql)
     }
