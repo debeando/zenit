@@ -27,6 +27,10 @@ func Load() *Items {
   return items
 }
 
+func (l *Items) Count() int {
+  return len(*l)
+}
+
 func (l *Items) AddItem(m Metric) {
   if ! items.Unique(m) {
     *l = append(*l, m)
