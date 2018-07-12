@@ -6,13 +6,20 @@ import (
   "gitlab.com/swapbyt3s/zenit/config"
 )
 
+var ip_address string
+
+func init() {
+  ip_address = common.IpAddress()
+}
+
 func SendMySQLAuditLog(event <-chan map[string]string) {
   go func() {
     for e := range event {
       sql := fmt.Sprintf("INSERT INTO zenit.mysql_audit_log " +
-                             "(_time,name,command_class,connection_id,status,sqltext,user,host,os_user,ip) " +
-                             "VALUES ('%s','%s','%s',%s,%s,'%s','%s','%s','%s','%s')",
+                             "(_time,host_ip,name,command_class,connection_id,status,sqltext,user,host,os_user,ip) " +
+                             "VALUES ('%s',IPv4StringToNum('%s'),'%s',%s,%s,'%s','%s','%s','%s','%s')",
                               common.ToDateTime(e["TIMESTAMP"]),
+                              ip_address,
                               e["NAME"],
                               e["COMMAND_CLASS"],
                               e["CONNECTION_ID"],
@@ -32,9 +39,10 @@ func SendMySQLSlowLog(event <-chan map[string]string) {
   go func() {
     for e := range event {
       sql := fmt.Sprintf("INSERT INTO zenit.mysql_slow_log " +
-                             "(_time,bytes_sent,killed,last_errno,lock_time,query,query_time,rows_affected,rows_examined,rows_read,rows_sent,schema,thread_id,user_host) " +
-                             "VALUES ('%s',%s,%s,%s,%s,'%s',%s,%s,%s,%s,%s,'%s',%s,'%s')",
-                              common.ISO8601V2toRFC3339(e["time"]),
+                             "(_time,host_ip,bytes_sent,killed,last_errno,lock_time,query,query_time,rows_affected,rows_examined,rows_read,rows_sent,schema,thread_id,user_host) " +
+                             "VALUES (toDateTime(%s),IPv4StringToNum('%s'),%s,%s,%s,%s,'%s',%s,%s,%s,%s,%s,'%s',%s,'%s')",
+                              e["timestamp"],
+                              ip_address,
                               e["bytes_sent"],
                               e["killed"],
                               e["last_errno"],
