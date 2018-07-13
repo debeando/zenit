@@ -2,34 +2,34 @@ package daemonize
 
 import (
   "fmt"
-  "log"
   "os"
   "os/exec"
   "strconv"
   "strings"
+  "gitlab.com/swapbyt3s/zenit/common"
 )
 
-var PIDFile = "/tmp/zenit.pid"
+const PIDFile = "/tmp/zenit-%s.pid"
 
-func savePID(pid int) {
-  file, err := os.Create(PIDFile)
+func SavePID(filename string, pid int) bool {
+  file, err := os.Create(filename)
   if err != nil {
-    log.Printf("Unable to create pid file : %v\n", err)
-    os.Exit(1)
+    return false
   }
 
   defer file.Close()
 
   _, err = file.WriteString(strconv.Itoa(pid))
   if err != nil {
-    log.Printf("Unable to create pid file : %v\n", err)
-    os.Exit(1)
+    return false
   }
 
   file.Sync()
+
+  return true
 }
 
-func getExecutable() string {
+func Executable() string {
   ex, err := os.Executable()
   if err != nil {
     panic(err)
@@ -37,20 +37,20 @@ func getExecutable() string {
   return ex
 }
 
-func getArgs() string {
-  cmd := strings.Join(os.Args[1:], " ")
-  cmd  = strings.Replace(cmd, "--daemonize", "", -1)
-  cmd  = strings.Replace(cmd, "-daemonize", "", -1)
-  cmd  = strings.TrimSpace(cmd)
+func Args(args []string) string {
+  a := strings.Join(args[1:], " ")
+  a  = strings.Replace(a, "--daemonize", "", -1)
+  a  = strings.Replace(a, "-daemonize", "", -1)
+  a  = strings.TrimSpace(a)
 
-  return cmd
+  return a
 }
 
-func getCommand(command string, args string) string {
-  return command + " " + args
+func Build(command string, args string) string {
+  return fmt.Sprintf("%s %s", command, args)
 }
 
-func runCommand(command string) int {
+func Run(command string) int {
   cmd := exec.Command("/bin/bash", "-c", command)
   err := cmd.Start()
   if err != nil {
@@ -60,21 +60,35 @@ func runCommand(command string) int {
   return cmd.Process.Pid
 }
 
+func GetPIDFileName(args string) string {
+  return fmt.Sprintf(PIDFile, common.MD5(args))
+}
+
 func Start() {
-  // Check if daemon already running.
-  if _, err := os.Stat(PIDFile); err == nil {
-    fmt.Printf("Already running or %s file exist.\n", PIDFile)
+  exec := Executable()
+  args := Args(os.Args)
+  file := GetPIDFileName(args)
+
+  if ! PIDFileExist(file) {
+    cmd := Build(exec, args)
+    pid := Run(cmd)
+
+    if ! SavePID(file, pid) {
+      fmt.Printf("Unable to create PID file: %s\n", file)
+      os.Exit(1)
+    }
+
+    fmt.Printf("Zenit daemon process ID (PID) is %d and is saved in %s\n", pid, file)
+    os.Exit(0)
+  } else {
+    fmt.Printf("Zenit already running or %s file exist.\n", file)
     os.Exit(1)
   }
+}
 
-  exec := getExecutable()
-  args := getArgs()
-  cmd  := getCommand(exec, args)
-  pid  := runCommand(cmd)
-
-  fmt.Println("Daemon process ID is: ", pid)
-
-  savePID(pid)
-
-  os.Exit(0)
+func PIDFileExist(file string) bool {
+  if _, err := os.Stat(file); err == nil {
+    return true
+  }
+  return false
 }

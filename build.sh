@@ -2,5 +2,5 @@
 
 set -e
 
-go test -v ./...
+go test -cover ./...
 go build -ldflags "-s -w" -o zenit main.go

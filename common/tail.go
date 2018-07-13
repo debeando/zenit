@@ -17,6 +17,7 @@ func Tail(path string, channel chan<- string) {
   }
 
   scanner := bufio.NewScanner(cmdReader)
+
   go func() {
     defer close(channel)
 

@@ -1,6 +1,8 @@
 package common
 
 import (
+  "crypto/md5"
+  "encoding/hex"
   "io/ioutil"
   "net"
   "os"
@@ -11,6 +13,8 @@ import (
   "time"
 )
 
+// Puede que el .Output() este de más.
+// Se podria reutilizar la funcion ExecCommand
 func PGrep(cmd string) int {
   _, err := exec.Command("/bin/bash", "-c", "/usr/bin/pgrep -x '" + cmd +"' > /dev/null").Output()
   if err != nil {
@@ -34,6 +38,7 @@ func ReadFile(path string) (lines []string) {
   return
 }
 
+// Se puede renombrar por: GetUInt64FromFile
 func ValueFromFile(path string) uint64 {
   lines := ReadFile(path)
   if len(lines) > 0 {
@@ -69,6 +74,7 @@ func GetEnv(key string, default_value string) string {
   return val
 }
 
+// Retorna "" si hay err.
 func Hostname() string {
   host, err := os.Hostname()
   if err != nil {
@@ -102,6 +108,7 @@ func ToDateTime(timestamp string) string {
   return t.Format("2006-01-02 15:04:05")
 }
 
+// Creo que esta ya no se usa.
 func ISO8601V2toRFC3339(timestamp string) string {
   layout := "20060102 15:04:05"
   t, err := time.Parse(layout, "20" + timestamp)
@@ -126,4 +133,9 @@ func ExecCommand(cmd string) (stdout string, exitcode int) {
   }
   stdout = string(out[:])
   return
+}
+
+func MD5(s string) string {
+  hash := md5.Sum([]byte(s))
+  return hex.EncodeToString(hash[:])
 }
