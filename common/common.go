@@ -13,24 +13,17 @@ import (
   "time"
 )
 
-// Puede que el .Output() este de más.
-// Se podria reutilizar la funcion ExecCommand
 func PGrep(cmd string) int {
-  _, err := exec.Command("/bin/bash", "-c", "/usr/bin/pgrep -x '" + cmd +"' > /dev/null").Output()
-  if err != nil {
-    if exitError, ok := err.(*exec.ExitError); ok {
-      ws := exitError.Sys().(syscall.WaitStatus)
-      return ws.ExitStatus()
-    }
-  }
-  return 0
+  _, exitcode := ExecCommand("/usr/bin/pgrep -x '" + cmd +"' > /dev/null")
+
+  return exitcode
 }
 
 func ReadFile(path string) (lines []string) {
   if _, err := os.Stat(path); err == nil {
     contents, err := ioutil.ReadFile(path)
     if err != nil {
-      panic(err)
+      return
     }
 
     lines = strings.Split(string(contents), "\n")
@@ -49,7 +42,7 @@ func GetUInt64FromFile(path string) uint64 {
 func StringToUInt64(value string) uint64 {
   i, err := strconv.ParseUint(strings.TrimSpace(value), 10, 64)
   if err != nil {
-    panic(err)
+    return 0
   }
   return i
 }
@@ -73,11 +66,10 @@ func GetEnv(key string, default_value string) string {
   return val
 }
 
-// Retorna "" si hay err.
 func Hostname() string {
   host, err := os.Hostname()
   if err != nil {
-    panic(err)
+    return ""
   }
 
   return host
@@ -98,6 +90,7 @@ func IpAddress() string {
 }
 
 // The timestamp is represent in ISO 8601 (UTC) -> RFC 3339
+// Rename to: ParseDateTime(layout, timestamp)
 func ToDateTime(timestamp string) string {
   layout := "2006-01-02T15:04:05 UTC"
   t, err := time.Parse(layout, timestamp)
