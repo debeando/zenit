@@ -38,8 +38,7 @@ func ReadFile(path string) (lines []string) {
   return
 }
 
-// Se puede renombrar por: GetUInt64FromFile
-func ValueFromFile(path string) uint64 {
+func GetUInt64FromFile(path string) uint64 {
   lines := ReadFile(path)
   if len(lines) > 0 {
     return StringToUInt64(lines[0])
