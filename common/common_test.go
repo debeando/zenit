@@ -16,13 +16,13 @@ func TestStringToUInt64(t *testing.T) {
   result = common.StringToUInt64("abc")
 
   if result != 0 {
-    t.Error("Expected: uint64(1234)")
+    t.Error("Expected: 0")
   }
 
   result = common.StringToUInt64("")
 
   if result != 0 {
-    t.Error("Expected: uint64(1234)")
+    t.Error("Expected: 0")
   }
 }
 
@@ -34,3 +34,29 @@ func TestMD5(t *testing.T) {
     t.Error("Expected: 098f6bcd4621d373cade4e832627b4f6")
   }
 }
+
+func TestStringInArray(t *testing.T) {
+  list   := []string{"foo", "bar"}
+  result := common.StringInArray("bar", list)
+
+  if ! result {
+    t.Error("Expected: false")
+  }
+
+  result = common.StringInArray("test", list)
+
+  if result {
+    t.Error("Expected: true")
+  }
+
+  result = common.StringInArray("", list)
+
+  if result {
+    t.Error("Expected: false")
+  }
+}
+
+//ParseDateTime
+//GetEnv
+//Hostname
+//IpAddress: usar regex
