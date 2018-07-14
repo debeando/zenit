@@ -10,6 +10,8 @@ package audit
 import (
   "strings"
   "regexp"
+  "gitlab.com/swapbyt3s/zenit/collect/mysql"
+  "gitlab.com/swapbyt3s/zenit/common"
 )
 
 func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
@@ -34,8 +36,8 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
           result[key] = value
         }
 
-        if user, ok := result["user"]; ok {
-          result["user"] = clearUser(user)
+        if common.KeyInMap("user", result) {
+          result["user"] = mysql.ClearUser(result["user"])
         }
 
         parser <- result
@@ -53,12 +55,4 @@ func trim(value string) string {
   value = strings.TrimRight(value, "\"")
   value = strings.TrimLeft(value, "\"")
   return value
-}
-
-func clearUser(u string) string {
-  index := strings.Index(u, "[")
-  if index > 0 {
-    return u[0:index]
-  }
-  return u
 }
