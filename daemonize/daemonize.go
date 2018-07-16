@@ -86,9 +86,31 @@ func Start() {
   }
 }
 
+func Stop() {
+  exec := Executable()
+  args := Args(os.Args)
+  file := GetPIDFileName(args)
+
+  if PIDFileExist(file) {
+
+  }
+}
+
 func PIDFileExist(file string) bool {
   if _, err := os.Stat(file); err == nil {
     return true
   }
   return false
+}
+
+func GetPIDFromFile() {
+
+}
+
+func KillProcess() {
+
+}
+
+func RemovePIDFile{
+
 }
