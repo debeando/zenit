@@ -5,6 +5,15 @@ import (
   "strings"
 )
 
+var (
+  reRemoveCommentCase1 = regexp.MustCompile(`\/\*(.|[\r\n])*\*\/`)
+  reRemoveCommentCase2 = regexp.MustCompile(`\#.*\n`)
+  reRemoveCommentCase3 = regexp.MustCompile(`--.*\n`)
+  reClearWhiteSpaces   = regexp.MustCompile(`\s+`)
+  reClearString        = regexp.MustCompile(`=\s?'([^']*)'`)
+  reClearNumber        = regexp.MustCompile(`=\s?([\d.]+)`)
+)
+
 func QueryNormalizer(s string) string {
   s = RemoveComments(s)
   s = ClearWhiteSpaces(s)
@@ -14,33 +23,27 @@ func QueryNormalizer(s string) string {
 }
 
 func RemoveComments(s string) string {
-  re := regexp.MustCompile(`\/\*(.|[\r\n])*\*\/`)
-  s   = re.ReplaceAllString(s, "")
-  re  = regexp.MustCompile(`\#.*\n`)
-  s   = re.ReplaceAllString(s, "")
-  re  = regexp.MustCompile(`--.*\n`)
-  s   = re.ReplaceAllString(s, "")
+  s = reRemoveCommentCase1.ReplaceAllString(s, "")
+  s = reRemoveCommentCase2.ReplaceAllString(s, "")
+  s = reRemoveCommentCase3.ReplaceAllString(s, "")
   return s
 }
 
 func ClearWhiteSpaces(s string) string {
-  re := regexp.MustCompile(`\s+`)
-  s   = re.ReplaceAllString(s, " ")
+  s = reClearWhiteSpaces.ReplaceAllString(s, " ")
   return strings.Trim(s, " ")
 }
 
 func ClearString(s string) string {
-  re := regexp.MustCompile(`=\s?'([^']*)'`)
   s = strings.Replace(s, "\"", "'", -1)
   s = strings.Replace(s, "`", "", -1)
-  s = re.ReplaceAllString(s, "= '?'")
+  s = reClearString.ReplaceAllString(s, "= '?'")
 
   return s
 }
 
 func ClearNumber(s string) string {
-  re := regexp.MustCompile(`=\s?([\d.]+)`)
-  s = re.ReplaceAllString(s, "= ?")
+  s = reClearNumber.ReplaceAllString(s, "= ?")
 
   return s
 }
