@@ -39,6 +39,22 @@ func GetUInt64FromFile(path string) uint64 {
   return 0
 }
 
+func GetIntFromFile(path string) int {
+  lines := ReadFile(path)
+  if len(lines) > 0 {
+    return StringToInt(lines[0])
+  }
+  return 0
+}
+
+func StringToInt(value string) int {
+  i, err := strconv.Atoi(strings.TrimSpace(value))
+  if err != nil {
+    return 0
+  }
+  return i
+}
+
 func StringToUInt64(value string) uint64 {
   i, err := strconv.ParseUint(strings.TrimSpace(value), 10, 64)
   if err != nil {

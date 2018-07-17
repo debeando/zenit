@@ -20,7 +20,7 @@ func main() {
   fCollect      := flag.String("collect", "", "List of metrics to collect.")
   fParserFormat := flag.String("parser-format", "", "Parser log format.")
   fParserFile   := flag.String("parser-file", "", "Fail path to to parse.")
-  fStop         := flag.String("stop", "", "Stop daemon.")
+  fStop         := flag.Bool("stop", false, "Stop daemon.")
   fRun          := flag.String("run", "", "Run bash command and wait to finish to notify via slack.")
 
   flag.Parse()
@@ -32,12 +32,10 @@ func main() {
       help()
     }
 
-    if *fStop {
-      daemonize.Stop()
-    }
-
     if *fDaemonize {
       daemonize.Start()
+    } else if *fStop {
+      daemonize.Stop()
     }
 
     if *fVersion {

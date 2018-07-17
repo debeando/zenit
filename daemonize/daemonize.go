@@ -6,6 +6,7 @@ import (
   "os/exec"
   "strconv"
   "strings"
+  "syscall"
   "gitlab.com/swapbyt3s/zenit/common"
 )
 
@@ -41,6 +42,8 @@ func Args(args []string) string {
   a := strings.Join(args[1:], " ")
   a  = strings.Replace(a, "--daemonize", "", -1)
   a  = strings.Replace(a, "-daemonize", "", -1)
+  a  = strings.Replace(a, "--stop", "", -1)
+  a  = strings.Replace(a, "-stop", "", -1)
   a  = strings.TrimSpace(a)
 
   return a
@@ -87,30 +90,40 @@ func Start() {
 }
 
 func Stop() {
-  exec := Executable()
   args := Args(os.Args)
   file := GetPIDFileName(args)
-
   if PIDFileExist(file) {
-
+    pid := GetPIDFromFile(file)
+    if KillProcess(pid) {
+      if RemovePIDFile(file) {
+        os.Exit(0)
+      }
+    }
   }
+  os.Exit(1)
 }
 
 func PIDFileExist(file string) bool {
-  if _, err := os.Stat(file); err == nil {
-    return true
+  if _, err := os.Stat(file); err != nil {
+    return false
   }
-  return false
+  return true
 }
 
-func GetPIDFromFile() {
-
+func GetPIDFromFile(file string) int {
+  return common.GetIntFromFile(file)
 }
 
-func KillProcess() {
-
+func KillProcess(pid int) bool {
+  if err := syscall.Kill(pid, syscall.SIGKILL); err != nil {
+    return false
+  }
+  return true
 }
 
-func RemovePIDFile{
-
+func RemovePIDFile(file string) bool {
+  if err := os.Remove(file); err != nil {
+    return false
+  }
+  return true
 }
