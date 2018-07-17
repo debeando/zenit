@@ -1,6 +1,7 @@
 package collect
 
 import (
+  "fmt"
   "gitlab.com/swapbyt3s/zenit/collect/mysql/audit"
   "gitlab.com/swapbyt3s/zenit/collect/mysql/slow"
   "gitlab.com/swapbyt3s/zenit/common"
@@ -8,7 +9,8 @@ import (
 )
 
 func Parser(parse string, path string) {
-  if parse == "auditlog-xml" {
+  switch parse {
+  case "auditlog-xml":
     channel_tail   := make(chan string)
     channel_parser := make(chan map[string]string)
     channel_event  := make(chan map[string]string)
@@ -20,9 +22,7 @@ func Parser(parse string, path string) {
     for event := range channel_parser {
       channel_event <- event
     }
-  }
-
-  if parse == "slowlog" {
+  case "slowlog":
     channel_tail   := make(chan string)
     channel_parser := make(chan map[string]string)
     channel_event  := make(chan map[string]string)
@@ -34,5 +34,9 @@ func Parser(parse string, path string) {
     for event := range channel_parser {
       channel_event <- event
     }
+  default:
+    fmt.Println("Valid parser options:")
+    fmt.Println("- auditlog-xml")
+    fmt.Println("- slowlog")
   }
 }
