@@ -1,5 +1,6 @@
 CREATE DATABASE IF NOT EXISTS zenit;
 
+DROP TABLE IF EXISTS zenit.mysql_audit_log;
 CREATE TABLE IF NOT EXISTS zenit.mysql_audit_log (
   _time DateTime default now(),
   _date Date default toDate(_time),
@@ -9,6 +10,7 @@ CREATE TABLE IF NOT EXISTS zenit.mysql_audit_log (
   connection_id UInt64,
   status UInt64,
   sqltext String,
+  sqltext_digest String,
   user String,
   priv_user String,
   os_login String,
@@ -19,6 +21,7 @@ CREATE TABLE IF NOT EXISTS zenit.mysql_audit_log (
   db String
 ) ENGINE = MergeTree(_date,(_time,host,user), 8192);
 
+DROP TABLE IF EXISTS zenit.mysql_slow_log;
 CREATE TABLE IF NOT EXISTS zenit.mysql_slow_log (
   _time DateTime default now(),
   _date Date default toDate(_time),
@@ -29,6 +32,7 @@ CREATE TABLE IF NOT EXISTS zenit.mysql_slow_log (
   lock_time Float64,
   query String,
   query_time Float64,
+  query_digest String,
   rows_affected UInt64,
   rows_examined UInt64,
   rows_read UInt64,

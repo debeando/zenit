@@ -40,6 +40,10 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
           result["user"] = mysql.ClearUser(result["user"])
         }
 
+        if common.KeyInMap("sqltext", result) {
+          result["sqltext_digest"] = common.QueryNormalizer(result["sqltext"])
+        }
+
         parser <- result
       }
     }

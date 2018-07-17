@@ -14,7 +14,7 @@ func Row(s string) string {
 
 func KeysAndValues(s string) map[string]string {
   re := regexp.MustCompile(`(\W+Time:\W+(?P<time>\d{6}\W\d{2}:\d{2}:\d{2}))?`+
-                           `\W+User@Host:\W+(?P<user_host>\w+\[\w+\]\W+@\W+\[\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}\])`+
+                           `\W+User@Host:\W+(?P<user_host>\w+\[\w+\]\W+@.*\[(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})?\])`+
                            `\W+Thread_id:\W+(?P<thread_id>\d+)`+
                            `\W+Schema:\W+(?P<schema>\w+)`+
                            `\W+Last_errno:\W+(?P<last_errno>\d+)`+
@@ -49,6 +49,10 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
 
         if common.KeyInMap("user_host", result) {
           result["user_host"] = mysql.ClearUser(result["user_host"])
+        }
+
+        if common.KeyInMap("query", result) {
+          result["query_digest"] = common.QueryNormalizer(result["query"])
         }
 
         parser <- result
