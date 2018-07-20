@@ -14,10 +14,13 @@ import (
   "gitlab.com/swapbyt3s/zenit/common"
 )
 
+var (
+  reRecord = regexp.MustCompile(`<AUDIT_RECORD(.*?)/>`)
+  reKeyVal = regexp.MustCompile(`(\w+)=("[^"]*")`)
+)
+
 func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
   var buffer string
-  reRecord := regexp.MustCompile(`<AUDIT_RECORD(.*?)/>`)
-  reKeyVal := regexp.MustCompile(`(\w+)=("[^"]*")`)
 
   go func() {
     defer close(parser)
@@ -41,7 +44,7 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
         }
 
         if common.KeyInMap("sqltext", result) {
-          result["sqltext_digest"] = common.QueryNormalizer(result["sqltext"])
+          result["sqltext_digest"] = common.NormalizeQuery(result["sqltext"])
         }
 
         parser <- result

@@ -1,49 +1,106 @@
+// NOTES:
+// - This a test version for normalize SQL without regex, because is very slowly
+// to parse.
+// - NormalizeQuery converts an SQL statement into a normalized version (with all
+// string/numeric literals replaced with ?).
+// - It most definitely does not validate that a query is syntactically correct.
+
 package common
 
-import (
-  "regexp"
-  "strings"
-)
+func NormalizeQuery(s string) string {
+  whitespace := false
+  quote      := rune(0)
+  comment    := false
+  multiline  := false
+  number     := false
+  result     := []rune("")
+  sql        := []rune(s)
 
-var (
-  reRemoveCommentCase1 = regexp.MustCompile(`\/\*(.|[\r\n])*\*\/`)
-  reRemoveCommentCase2 = regexp.MustCompile(`\#.*\n`)
-  reRemoveCommentCase3 = regexp.MustCompile(`--.*\n`)
-  reClearWhiteSpaces   = regexp.MustCompile(`\s+`)
-  reClearString        = regexp.MustCompile(`=\s?'([^']*)'`)
-  reClearNumber        = regexp.MustCompile(`=\s?([\d.]+)`)
-)
+  for i := 0; i < len(sql); i++ {
+    // Remove comments:
+    if ! comment && ! multiline && sql[i] == '#' {
+      comment = true
+    } else if comment && ! multiline && sql[i] == '\n' {
+      comment = false
+      continue
+    }
 
-func QueryNormalizer(s string) string {
-  s = RemoveComments(s)
-  s = ClearWhiteSpaces(s)
-  s = ClearString(s)
-  s = ClearNumber(s)
-  return s
-}
+    if ! comment && ! multiline && sql[i] == '-' && sql[i + 1] == '-' {
+      comment = true
+    } else if comment && ! multiline && sql[i] == '\n' {
+      comment = false
+      continue
+    }
 
-func RemoveComments(s string) string {
-  s = reRemoveCommentCase1.ReplaceAllString(s, "")
-  s = reRemoveCommentCase2.ReplaceAllString(s, "")
-  s = reRemoveCommentCase3.ReplaceAllString(s, "")
-  return s
-}
+    if ! comment && sql[i] == '/' && sql[i + 1] == '*' {
+      comment = true
+      multiline = true
+      // continue
+    } else if comment && multiline && sql[i - 1] == '*' && sql[i] == '/' {
+      comment = false
+      multiline = false
+      continue
+    }
 
-func ClearWhiteSpaces(s string) string {
-  s = reClearWhiteSpaces.ReplaceAllString(s, " ")
-  return strings.Trim(s, " ")
-}
+    if comment {
+      continue
+    }
 
-func ClearString(s string) string {
-  s = strings.Replace(s, "\"", "'", -1)
-  s = strings.Replace(s, "`", "", -1)
-  s = reClearString.ReplaceAllString(s, "= '?'")
+    // Remove new lines:
+    if sql[i] == '\n' || sql[i] == '\r' {
+      sql[i] = ' '
+      whitespace = true
+      number     = false
+      continue
+    }
 
-  return s
-}
+    // Remove whitespaces:
+    if quote == 0 && sql[i] == ' ' {
+      whitespace = true
+      number     = false
+      continue
+    } else if quote == 0 {
+      if whitespace {
+        whitespace = false
+        result = append(result, ' ')
+      }
+    }
 
-func ClearNumber(s string) string {
-  s = reClearNumber.ReplaceAllString(s, "= ?")
+    // Remove string between quotes:
+    if quote == 0 && ( sql[i] == '"' || sql[i] == '\'' ) {
+      quote = sql[i]
+      result = append(result, '\'')
+    } else if quote > 0 && sql[i] == '\\' && sql[i + 1] == quote {
+      i += 1
+    } else if sql[i] == quote {
+      quote = 0
+      result = append(result, '?')
+      result = append(result, '\'')
+      continue
+    }
 
-  return s
+    if quote > 0 {
+      continue
+    }
+
+    // Remove numbers:
+    if number {
+      if (sql[i] < '0' || sql[i] > '9') && sql[i] != '.' {
+        number = false
+        result = append(result, sql[i])
+      }
+      continue
+    }
+
+    if ((sql[i] >= '0' && sql[i] <= '9') || sql[i] == '.') {
+      number = true
+      result = append(result, '?')
+      continue
+    }
+
+    // Add character:
+    result = append(result, sql[i])
+  }
+
+  return string(result)
 }

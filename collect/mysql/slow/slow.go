@@ -52,7 +52,7 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
         }
 
         if common.KeyInMap("query", result) {
-          result["query_digest"] = common.QueryNormalizer(result["query"])
+          result["query_digest"] = common.NormalizeQuery(result["query"])
         }
 
         parser <- result
