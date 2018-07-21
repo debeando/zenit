@@ -49,6 +49,7 @@ func Run(cmd string) {
   })
 
   fmt.Printf("--> Slack response code: %d\n", slack.Send(msg))
+  os.Exit(exitcode)
 }
 
 func current_timestamp() string {

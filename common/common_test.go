@@ -1,7 +1,6 @@
 package common_test
 
 import (
-  // "fmt"
   "os"
   "reflect"
   "testing"

@@ -5,6 +5,7 @@ import (
 )
 
 var(
+  AUTHOR         string = "Nicola Strappazzon C. <swapbyt3s@gmail.com>"
   DSN_CLICKHOUSE string = "http://127.0.0.1:8123/?database=zenit"
   DSN_MYSQL      string = "root@tcp(127.0.0.1:3306)/"
   DSN_PROXYSQL   string = "radminuser:radminpass@tcp(127.0.0.1:6032)/"
