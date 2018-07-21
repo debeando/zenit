@@ -112,10 +112,7 @@ func IpAddress() string {
   return ""
 }
 
-// The timestamp is represent in ISO 8601 (UTC) -> RFC 3339
-// Rename to: ParseDateTime(layout, timestamp)
-func ToDateTime(timestamp string) string {
-  layout := "2006-01-02T15:04:05 UTC"
+func ToDateTime(timestamp string, layout string) string {
   t, err := time.Parse(layout, timestamp)
   if err != nil {
     return ""
@@ -123,17 +120,6 @@ func ToDateTime(timestamp string) string {
   return t.Format("2006-01-02 15:04:05")
 }
 
-// Creo que esta ya no se usa.
-func ISO8601V2toRFC3339(timestamp string) string {
-  layout := "20060102 15:04:05"
-  t, err := time.Parse(layout, "20" + timestamp)
-  if err != nil {
-    return ""
-  }
-  return t.Format("2006-01-02 15:04:05")
-}
-
-// Adding slash by quotes in strings:
 func Escape(text string) string {
   return strings.Replace(text, "'", "\\'", -1)
 }

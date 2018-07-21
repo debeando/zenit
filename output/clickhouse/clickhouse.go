@@ -18,7 +18,8 @@ func SendMySQLAuditLog(event <-chan map[string]string) {
       sql := fmt.Sprintf("INSERT INTO zenit.mysql_audit_log " +
                          "(_time,host_ip,name,command_class,connection_id,status,sqltext,sqltext_digest,user,host,os_user,ip) " +
                          "VALUES ('%s',IPv4StringToNum('%s'),'%s','%s',%s,%s,'%s','%s','%s','%s','%s','%s')",
-                          common.ToDateTime(e["timestamp"]),
+                         // Convert timestamp ISO 8601 (UTC) to RFC 3339:
+                          common.ToDateTime(e["timestamp"], "2006-01-02T15:04:05 UTC"),
                           ip_address,
                           e["name"],
                           e["command_class"],
