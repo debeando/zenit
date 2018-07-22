@@ -16,8 +16,8 @@ var(
 
 func init() {
   DSN_CLICKHOUSE = common.GetEnv("DSN_CLICKHOUSE", DSN_CLICKHOUSE)
-  SLACK_CHANNEL  = common.GetEnv("SLACK_CHANNEL", SLACK_CHANNEL)
-  SLACK_TOKEN    = common.GetEnv("SLACK_TOKEN", "")
   DSN_MYSQL      = common.GetEnv("DSN_MYSQL", DSN_MYSQL)
   DSN_PROXYSQL   = common.GetEnv("DSN_PROXYSQL", DSN_PROXYSQL)
+  SLACK_CHANNEL  = common.GetEnv("SLACK_CHANNEL", SLACK_CHANNEL)
+  SLACK_TOKEN    = common.GetEnv("SLACK_TOKEN", "")
 }

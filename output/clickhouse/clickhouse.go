@@ -15,6 +15,8 @@ func init() {
 func SendMySQLAuditLog(event <-chan map[string]string) {
   go func() {
     for e := range event {
+      // For debug:
+      // fmt.Printf("--(e)> %#v\n", e)
       sql := fmt.Sprintf("INSERT INTO zenit.mysql_audit_log " +
                          "(_time,host_ip,name,command_class,connection_id,status,sqltext,sqltext_digest,user,host,os_user,ip) " +
                          "VALUES ('%s',IPv4StringToNum('%s'),'%s','%s',%s,%s,'%s','%s','%s','%s','%s','%s')",
@@ -31,6 +33,9 @@ func SendMySQLAuditLog(event <-chan map[string]string) {
                           e["host"],
                           e["os_user"],
                           e["ip"])
+
+      // For debug:
+      // fmt.Printf("--(sql)> %s\n", sql)
 
       common.HTTPPost(config.DSN_CLICKHOUSE, sql)
     }
