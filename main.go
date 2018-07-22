@@ -98,12 +98,12 @@ func main() {
       daemonize.Stop()
     }
 
-    if len(*fCollect) > 0 {
+    if len(*fCollect) > 0 && len(*fParserFormat) == 0 && len(*fParserFile) == 0 {
       collect.Run(strings.Split(*fCollect, ","))
       os.Exit(0)
     }
 
-    if len(*fParserFormat) > 0 && len(*fParserFile) > 0 {
+    if len(*fCollect) == 0 && len(*fParserFormat) > 0 && len(*fParserFile) > 0 {
       collect.Parser(*fParserFormat, *fParserFile)
     }
   } else {

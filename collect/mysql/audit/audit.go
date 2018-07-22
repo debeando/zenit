@@ -25,8 +25,8 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
         result := make(map[string]string)
 
         for _, kv := range buffer {
-          key, value := getKeyAndValue(kv)
-          result[key] = Trim(value)
+          key, value := ParseKeyAndValue(&kv)
+          result[key] = Trim(&value)
         }
 
         buffer = buffer[:0]
@@ -50,17 +50,17 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
   }()
 }
 
-func getKeyAndValue(s string) (key string, value string) {
-  kv := strings.SplitN(s, "=", 2)
+func ParseKeyAndValue(s *string) (key string, value string) {
+  kv := strings.SplitN(*s, "=", 2)
   if len(kv) == 2 {
     return strings.TrimSpace(strings.ToLower(kv[0])), kv[1]
   }
   return "", ""
 }
 
-func Trim(value string) string {
-  value = strings.TrimSpace(value)
-  value = strings.TrimRight(value, "\"")
-  value = strings.TrimLeft(value, "\"")
-  return value
+func Trim(value *string) string {
+  *value = strings.TrimSpace(*value)
+  *value = strings.TrimRight(*value, "\"")
+  *value = strings.TrimLeft(*value, "\"")
+  return *value
 }
