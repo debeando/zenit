@@ -25,14 +25,14 @@ func NormalizeQuery(s string) string {
       continue
     }
 
-    if ! comment && ! multiline && sql[i] == '-' && sql[i + 1] == '-' {
+    if ! comment && ! multiline && i + 1 < len(sql) && sql[i] == '-' && sql[i + 1] == '-' {
       comment = true
     } else if comment && ! multiline && sql[i] == '\n' {
       comment = false
       continue
     }
 
-    if ! comment && sql[i] == '/' && sql[i + 1] == '*' {
+    if ! comment && sql[i] == '/' && i + 1 < len(sql) && sql[i + 1] == '*' {
       comment = true
       multiline = true
       // continue
@@ -70,7 +70,7 @@ func NormalizeQuery(s string) string {
     if quote == 0 && ( sql[i] == '"' || sql[i] == '\'' ) {
       quote = sql[i]
       result = append(result, '\'')
-    } else if quote > 0 && sql[i] == '\\' && sql[i + 1] == quote {
+    } else if quote > 0 && sql[i] == '\\' && i + 1 < len(sql) && sql[i + 1] == quote {
       i += 1
     } else if sql[i] == quote {
       quote = 0
