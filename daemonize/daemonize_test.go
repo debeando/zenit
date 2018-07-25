@@ -38,20 +38,20 @@ func TestRun(t *testing.T) {
 
 func TestGetPIDFileName(t *testing.T) {
   args     := "-collect=mysql"
-  expected := "/tmp/zenit-8791b0340bf9d02e19aa92a1ea6d07bc.pid"
+  expected := "/var/run/zenit-8791b0340bf9d02e19aa92a1ea6d07bc.pid"
   result   := daemonize.GetPIDFileName(args)
 
   if result != expected {
-    t.Error("Expected: /tmp/zenit-8791b0340bf9d02e19aa92a1ea6d07bc.pid")
+    t.Error("Expected: /var/run/zenit-8791b0340bf9d02e19aa92a1ea6d07bc.pid")
   }
 }
 
 func TestPIDFileExist(t *testing.T) {
-  file     := "/tmp/zenit-098f6bcd4621d373cade4e832627b4f6.pid"
+  file     := "/var/run/zenit-098f6bcd4621d373cade4e832627b4f6.pid"
   expected := false
   result   := daemonize.PIDFileExist(file)
 
   if ! result == expected {
-    t.Error("Expected: /tmp/zenit-098f6bcd4621d373cade4e832627b4f6.pid")
+    t.Error("Expected: /var/run/zenit-098f6bcd4621d373cade4e832627b4f6.pid")
   }
 }

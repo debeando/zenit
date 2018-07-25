@@ -66,7 +66,7 @@ func GatherQueries() {
       table, command := Match(q.digest)
 
       accumulator.Load().AddItem(accumulator.Metric{
-        Key: "mysql_stats_overflow",
+        Key: "proxysql_queries",
         Tags: []accumulator.Tag{accumulator.Tag{"group", q.group},
                                 accumulator.Tag{"schema", q.schema},
                                 accumulator.Tag{"table", table},

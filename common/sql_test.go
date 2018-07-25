@@ -84,6 +84,9 @@ var sql = []struct{ ID, Input, Expected string }{
   {"strange_case_1",
    "-",
    "-"},
+  {"strange_case_2",
+   "",
+   ""},
 }
 
 func TestNormalizeQuery(t *testing.T) {

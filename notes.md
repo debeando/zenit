@@ -164,3 +164,11 @@ docker run -it --rm --link some-clickhouse-server:clickhouse-server yandex/click
 GOOS=linux go build -ldflags "-s -w" -o zenit main.go && docker cp zenit d1c86f2f36ff:/root && docker exec -i -t d1c86f2f36ff /root/zenit -parser=auditlog-xml -parser-file=/root/test_audit.log
 
 export DSN_CLICKHOUSE="tcp://10.201.17.217:9000?database=zenit"
+
+http://dba.ziniopro.com:8123
+
+curl -s -d 'SELECT 1' http://dba.ziniopro.com:8123/?database=zenit
+
+
+
+  curl -s -d 'SELECT count(*) FROM zenit.mysql_audit_log' "http://dba.ziniopro.com:8123/?user=zenit&password=zenit&database=zenit"

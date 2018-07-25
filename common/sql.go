@@ -16,6 +16,11 @@ func NormalizeQuery(s string) string {
   result     := []rune("")
   sql        := []rune(s)
 
+//IsEqChars('-', '-')
+//IsEqChars('/', '*')
+//IsEqChars('*', '/')
+//i + 1 < len(sql) && sql[i + 1] == '-'
+
   for i := 0; i < len(sql); i++ {
     // Remove comments:
     if ! comment && ! multiline && sql[i] == '#' {
@@ -25,7 +30,7 @@ func NormalizeQuery(s string) string {
       continue
     }
 
-    if ! comment && ! multiline && i + 1 < len(sql) && sql[i] == '-' && sql[i + 1] == '-' {
+    if ! comment && ! multiline && sql[i] == '-' && i + 1 < len(sql) && sql[i + 1] == '-' {
       comment = true
     } else if comment && ! multiline && sql[i] == '\n' {
       comment = false
@@ -36,7 +41,8 @@ func NormalizeQuery(s string) string {
       comment = true
       multiline = true
       // continue
-    } else if comment && multiline && sql[i - 1] == '*' && sql[i] == '/' {
+    } else if comment && multiline && sql[i] == '*' && i + 1 < len(sql) && sql[i + 1] == '/' {
+      i += 1
       comment = false
       multiline = false
       continue

@@ -10,7 +10,7 @@ import (
   "gitlab.com/swapbyt3s/zenit/common"
 )
 
-const PIDFile = "/tmp/zenit-%s.pid"
+const PIDFile = "/var/run/zenit-%s.pid"
 
 func SavePID(filename string, pid int) bool {
   file, err := os.Create(filename)
