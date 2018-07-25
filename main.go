@@ -65,6 +65,7 @@ func main() {
   fDaemonize    := flag.Bool("daemonize", false, "Fork to the background and detach from the shell.")
   fParserFile   := flag.String("parser-file", "", "File path to Tail to parse.")
   fParserFormat := flag.String("parser-format", "", "Parser log format.")
+  fHostname     := flag.String("hostname", "", "Rename the hostname.")
   fRun          := flag.String("run", "", "Run bash command and wait to finish to notify via slack.")
   fStatus       := flag.Bool("status", false, "Status for each environment variable and own process.")
   fStop         := flag.Bool("stop", false, "Stop daemon.")
@@ -96,6 +97,10 @@ func main() {
       daemonize.Start()
     } else if *fStop {
       daemonize.Stop()
+    }
+
+    if len(*fHostname) > 0 {
+      config.HOSTNAME = *fHostname
     }
 
     if len(*fCollect) > 0 && len(*fParserFormat) == 0 && len(*fParserFile) == 0 {

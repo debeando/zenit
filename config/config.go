@@ -12,6 +12,8 @@ var(
   SLACK_CHANNEL  string = "alerts"
   SLACK_TOKEN    string = ""
   VERSION        string = "0.1.4"
+  HOSTNAME       string = ""
+  IPADDRESS      string = ""
 )
 
 func init() {
@@ -20,4 +22,6 @@ func init() {
   DSN_PROXYSQL   = common.GetEnv("DSN_PROXYSQL", DSN_PROXYSQL)
   SLACK_CHANNEL  = common.GetEnv("SLACK_CHANNEL", SLACK_CHANNEL)
   SLACK_TOKEN    = common.GetEnv("SLACK_TOKEN", "")
+  IPADDRESS      = common.IpAddress()
+  HOSTNAME       = common.Hostname()
 }

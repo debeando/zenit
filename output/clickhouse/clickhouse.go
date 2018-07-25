@@ -6,12 +6,6 @@ import (
   "gitlab.com/swapbyt3s/zenit/config"
 )
 
-var ip_address string
-
-func init() {
-  ip_address = common.IpAddress()
-}
-
 func SendMySQLAuditLog(event <-chan map[string]string) {
   go func() {
     for e := range event {
@@ -19,10 +13,11 @@ func SendMySQLAuditLog(event <-chan map[string]string) {
       // fmt.Printf("--(e)> %#v\n", e)
       sql := fmt.Sprintf("INSERT INTO zenit.mysql_audit_log " +
                          "(_time,host_ip,name,command_class,connection_id,status,sqltext,sqltext_digest,user,host,os_user,ip) " +
-                         "VALUES ('%s',IPv4StringToNum('%s'),'%s','%s',%s,%s,'%s','%s','%s','%s','%s','%s')",
+                         "VALUES ('%s',IPv4StringToNum('%s'),'%s','%s','%s',%s,%s,'%s','%s','%s','%s','%s','%s')",
                          // Convert timestamp ISO 8601 (UTC) to RFC 3339:
                           common.ToDateTime(e["timestamp"], "2006-01-02T15:04:05 UTC"),
-                          ip_address,
+                          config.IPADDRESS,
+                          config.HOSTNAME,
                           e["name"],
                           e["command_class"],
                           e["connection_id"],
@@ -47,9 +42,10 @@ func SendMySQLSlowLog(event <-chan map[string]string) {
     for e := range event {
       sql := fmt.Sprintf("INSERT INTO zenit.mysql_slow_log " +
                          "(_time,host_ip,bytes_sent,killed,last_errno,lock_time,query,query_time,query_digest,rows_affected,rows_examined,rows_read,rows_sent,schema,thread_id,user_host) " +
-                         "VALUES (toDateTime(%s),IPv4StringToNum('%s'),%s,%s,%s,%s,'%s',%s,'%s',%s,%s,%s,%s,'%s',%s,'%s')",
+                         "VALUES (toDateTime(%s),IPv4StringToNum('%s'),'%s',%s,%s,%s,%s,'%s',%s,'%s',%s,%s,%s,%s,'%s',%s,'%s')",
                           e["timestamp"],
-                          ip_address,
+                          config.IPADDRESS,
+                          config.HOSTNAME,
                           e["bytes_sent"],
                           e["killed"],
                           e["last_errno"],

@@ -40,7 +40,7 @@ func Run(cmd string) {
   fmt.Printf("--> Duration: %d\n", diff)
 
   msg := &slack.Message{
-    Text: fmt.Sprintf(MESSAGE_TEXT, common.Hostname(), common.IpAddress()),
+    Text: fmt.Sprintf(MESSAGE_TEXT, config.HOSTNAME, config.IPADDRESS),
     Channel: config.SLACK_CHANNEL,
   }
   msg.AddAttachment(&slack.Attachment{
