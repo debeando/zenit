@@ -8,32 +8,36 @@ import (
 )
 
 func SendMySQLAuditLog(event <-chan map[string]string) {
+  values := []string{}
+
   go func() {
     for e := range event {
-      // For debug:
-      // fmt.Printf("--(e)> %#v\n", e)
-      sql := fmt.Sprintf("INSERT INTO zenit.mysql_audit_log " +
-                         "(_time,host_ip,host_name,name,command_class,connection_id,status,sqltext,sqltext_digest,user,host,os_user,ip) " +
-                         "VALUES ('%s',IPv4StringToNum('%s'),'%s','%s','%s',%s,%s,'%s','%s','%s','%s','%s','%s')",
-                         // Convert timestamp ISO 8601 (UTC) to RFC 3339:
-                          common.ToDateTime(e["timestamp"], "2006-01-02T15:04:05 UTC"),
-                          config.IPADDRESS,
-                          config.HOSTNAME,
-                          e["name"],
-                          e["command_class"],
-                          e["connection_id"],
-                          e["status"],
-                          common.Escape(e["sqltext"]),
-                          common.Escape(e["sqltext_digest"]),
-                          e["user"],
-                          e["host"],
-                          e["os_user"],
-                          e["ip"])
+      value := fmt.Sprintf("('%s',IPv4StringToNum('%s'),'%s','%s','%s',%s,%s,'%s','%s','%s','%s','%s','%s')",
+                           // Convert timestamp ISO 8601 (UTC) to RFC 3339:
+                           common.ToDateTime(e["timestamp"], "2006-01-02T15:04:05 UTC"),
+                           config.IPADDRESS,
+                           config.HOSTNAME,
+                           e["name"],
+                           e["command_class"],
+                           e["connection_id"],
+                           e["status"],
+                           common.Escape(e["sqltext"]),
+                           common.Escape(e["sqltext_digest"]),
+                           e["user"],
+                           e["host"],
+                           e["os_user"],
+                           e["ip"])
 
-      // For debug:
-      // fmt.Printf("--(sql)> %s\n", sql)
+      values = append(values, value)
 
-      common.HTTPPost(config.DSN_CLICKHOUSE, sql)
+      if len(values) == 1000 {
+        sql := fmt.Sprintf("INSERT INTO zenit.mysql_audit_log " +
+                           "(_time,host_ip,host_name,name,command_class,connection_id,status,sqltext,sqltext_digest,user,host,os_user,ip) " +
+                           "VALUES %s;", strings.Join(values,","))
+        // fmt.Printf("--(sql)> %s\n", sql)
+        values = []string{}
+        common.HTTPPost(config.DSN_CLICKHOUSE, sql)
+      }
     }
   }()
 }
