@@ -1,7 +1,9 @@
 package slow_test
 
 import (
+  "regexp"
   "testing"
+  "gitlab.com/swapbyt3s/zenit/common"
   "gitlab.com/swapbyt3s/zenit/collect/mysql/slow"
 )
 
@@ -17,7 +19,8 @@ func TestRow(t *testing.T) {
          "# Time: 180625 15:25:03 "
 
   expected := "# Time: 180625 15:25:03 # User@Host: test[test] @ [127.0.0.1] # Thread_id: 123456  Schema: test  Last_errno: 0  Killed: 0 # Query_time: 0.792864  Lock_time: 0.000160  Rows_sent: 1  Rows_examined: 100  Rows_affected: 0  Rows_read: 100 # Bytes_sent: 60 SET timestamp=1529940303; SELECT count(*) AS total FROM foo;"
-  result   := slow.Row(row)
+  reRow    := regexp.MustCompile(slow.ROW)
+  result   := reRow.FindString(row)
 
   if result != expected {
     t.Error("Expected: " + expected)
@@ -33,7 +36,8 @@ func TestRow(t *testing.T) {
         "# Time: 180625 15:25:03 "
 
   expected = "# User@Host: test[test] @ [127.0.0.1] # Thread_id: 123456  Schema: test  Last_errno: 0  Killed: 0 # Query_time: 0.792864  Lock_time: 0.000160  Rows_sent: 1  Rows_examined: 100  Rows_affected: 0  Rows_read: 100 # Bytes_sent: 60 SET timestamp=1529940303; UPDATE foo SET bar = NOW() WHERE id = 1;"
-  result   = slow.Row(row)
+  reRow    = regexp.MustCompile(slow.ROW)
+  result   = reRow.FindString(row)
 
   if result != expected {
     t.Error("Expected: " + expected)
@@ -46,7 +50,8 @@ func TestRow(t *testing.T) {
         "UPDATE foo SET bar = NOW() WHERE id = 1; " +
         "# Time: 000000 00:00:00 "
 
-  result = slow.Row(row)
+  reRow  = regexp.MustCompile(slow.ROW)
+  result = reRow.FindString(row)
 
   if result != "" {
     t.Error("Expected nothing.")
@@ -61,7 +66,9 @@ func TestKeysAndValues(t *testing.T) {
          "# Bytes_sent: 60 " +
          "SET timestamp=1529940303; " +
          "SELECT count(*) AS total FROM foo; "
-  result := slow.KeysAndValues(row)
+
+  reKV    := regexp.MustCompile(slow.KV)
+  result  := common.RegexpGetGroups(reKV, row)
 
   if value, ok := result["time"]; ok {
     if value != "180625 15:25:03" {
