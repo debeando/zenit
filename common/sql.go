@@ -7,6 +7,10 @@
 
 package common
 
+import (
+  "unicode"
+)
+
 func NormalizeQuery(s string) string {
   whitespace := false
   quote      := rune(0)
@@ -15,34 +19,47 @@ func NormalizeQuery(s string) string {
   number     := false
   result     := []rune("")
   sql        := []rune(s)
+  length     := len(sql)
+  endnumber  := []rune{' ',',','+','-','*','/','^','%'}
 
-//IsEqChars('-', '-')
-//IsEqChars('/', '*')
-//IsEqChars('*', '/')
-//i + 1 < len(sql) && sql[i + 1] == '-'
+  IsNumber := func(r rune) bool {
+    if unicode.IsNumber(r) || r == '.' {
+      return true
+    }
+    return false
+  }
 
-  for i := 0; i < len(sql); i++ {
+  IsEndNumber := func(r rune) bool {
+    for z := 0; z < len(endnumber); z++ {
+      if r == endnumber[z] {
+        return true
+      }
+    }
+    return false
+  }
+
+  for x := 0; x < length; x++ {
     // Remove comments:
-    if ! comment && ! multiline && sql[i] == '#' {
+    if ! comment && ! multiline && sql[x] == '#' {
       comment = true
-    } else if comment && ! multiline && sql[i] == '\n' {
+    } else if comment && ! multiline && sql[x] == '\n' {
       comment = false
       continue
     }
 
-    if ! comment && ! multiline && sql[i] == '-' && i + 1 < len(sql) && sql[i + 1] == '-' {
+    if ! comment && ! multiline && sql[x] == '-' && x + 1 < length && sql[x + 1] == '-' {
       comment = true
-    } else if comment && ! multiline && sql[i] == '\n' {
+    } else if comment && ! multiline && sql[x] == '\n' {
       comment = false
       continue
     }
 
-    if ! comment && sql[i] == '/' && i + 1 < len(sql) && sql[i + 1] == '*' {
+    if ! comment && sql[x] == '/' && x + 1 < length && sql[x + 1] == '*' {
       comment = true
       multiline = true
       // continue
-    } else if comment && multiline && sql[i] == '*' && i + 1 < len(sql) && sql[i + 1] == '/' {
-      i += 1
+    } else if comment && multiline && sql[x] == '*' && x + 1 < length && sql[x + 1] == '/' {
+      x += 1
       comment = false
       multiline = false
       continue
@@ -53,18 +70,18 @@ func NormalizeQuery(s string) string {
     }
 
     // Remove new lines:
-    if sql[i] == '\n' || sql[i] == '\r' {
-      sql[i] = ' '
+    if sql[x] == '\n' || sql[x] == '\r' {
+      sql[x] = ' '
       whitespace = true
-      number     = false
-      continue
+      number = false
+      // continue
     }
 
     // Remove whitespaces:
-    if quote == 0 && sql[i] == ' ' {
+    if quote == 0 && sql[x] == ' ' {
       whitespace = true
-      number     = false
-      continue
+      number = false
+      // continue
     } else if quote == 0 {
       if whitespace {
         whitespace = false
@@ -72,13 +89,22 @@ func NormalizeQuery(s string) string {
       }
     }
 
+    if whitespace {
+      continue
+    }
+
+    // Remove backtick
+    if quote == 0 && sql[x] == '`' {
+      continue
+    }
+
     // Remove string between quotes:
-    if quote == 0 && ( sql[i] == '"' || sql[i] == '\'' ) {
-      quote = sql[i]
+    if quote == 0 && ( sql[x] == '"' || sql[x] == '\'' ) {
+      quote = sql[x]
       result = append(result, '\'')
-    } else if quote > 0 && sql[i] == '\\' && i + 1 < len(sql) && sql[i + 1] == quote {
-      i += 1
-    } else if sql[i] == quote {
+    } else if quote > 0 && sql[x] == '\\' && x + 1 < length && sql[x + 1] == quote {
+      x += 1
+    } else if sql[x] == quote {
       quote = 0
       result = append(result, '?')
       result = append(result, '\'')
@@ -90,22 +116,46 @@ func NormalizeQuery(s string) string {
     }
 
     // Remove numbers:
-    if number {
-      if (sql[i] < '0' || sql[i] > '9') && sql[i] != '.' {
-        number = false
-        result = append(result, sql[i])
+    if ! number && IsNumber(sql[x]) {
+      number = true
+
+      // Check to skip word composed with number and letter:
+      for y := x; y >= 0; y-- {
+        if IsEndNumber(sql[y]) {
+          break
+        } else {
+          if unicode.IsLetter(sql[y]) {
+            number = false
+          }
+        }
       }
-      continue
+
+      for y := 0; y < (length - x); y++ {
+        if IsEndNumber(sql[x + y]) {
+          break
+        } else {
+          if unicode.IsLetter(sql[x + y]) {
+            number = false
+          }
+        }
+      }
+
+      // Add ? symbol to remove nombre:
+      if number {
+        result = append(result, '?')
+      }
     }
 
-    if ((sql[i] >= '0' && sql[i] <= '9') || sql[i] == '.') {
-      number = true
-      result = append(result, '?')
+    if number && ! IsNumber(sql[x]) {
+      number = false
+    }
+
+    if number {
       continue
     }
 
     // Add character:
-    result = append(result, sql[i])
+    result = append(result, sql[x])
   }
 
   return string(result)
