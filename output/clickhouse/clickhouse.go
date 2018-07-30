@@ -13,16 +13,15 @@ func SendMySQLAuditLog(event <-chan map[string]string) {
   go func() {
     for e := range event {
       value := fmt.Sprintf("('%s',IPv4StringToNum('%s'),'%s','%s','%s',%s,%s,'%s','%s','%s','%s','%s','%s')",
-                           // Convert timestamp ISO 8601 (UTC) to RFC 3339:
-                           common.ToDateTime(e["timestamp"], "2006-01-02T15:04:05 UTC"),
-                           config.IPADDRESS,
-                           config.HOSTNAME,
+                           e["timestamp"],
+                           e["host_ip"],
+                           e["host_name"],
                            e["name"],
                            e["command_class"],
                            e["connection_id"],
                            e["status"],
-                           common.Escape(e["sqltext"]),
-                           common.Escape(e["sqltext_digest"]),
+                           e["sqltext"],
+                           e["sqltext_digest"],
                            e["user"],
                            e["host"],
                            e["os_user"],

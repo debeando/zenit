@@ -8,6 +8,7 @@ import (
   "strings"
   "gitlab.com/swapbyt3s/zenit/collect/mysql"
   "gitlab.com/swapbyt3s/zenit/common"
+  "gitlab.com/swapbyt3s/zenit/config"
 )
 
 var buffer []string
@@ -34,6 +35,13 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
         if common.KeyInMap("sqltext", result) {
           result["sqltext_digest"] = common.NormalizeQuery(result["sqltext"])
         }
+
+        // Convert timestamp ISO 8601 (UTC) to RFC 3339:
+        result["timestamp"]      = common.ToDateTime(result["timestamp"], "2006-01-02T15:04:05 UTC")
+        result["host_ip"]        = config.IPADDRESS
+        result["host_name"]      = config.HOSTNAME
+        result["sqltext"]        = common.Escape(result["sqltext"])
+        result["sqltext_digest"] = common.Escape(result["sqltext_digest"])
 
         // For debug:
         // fmt.Printf("--(map)> %#v\n", result)
