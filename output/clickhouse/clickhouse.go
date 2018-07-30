@@ -30,13 +30,13 @@ func SendMySQLAuditLog(event <-chan map[string]string) {
 
       values = append(values, value)
 
-      if len(values) == 1000 {
+      if len(values) == 100 {
         sql := fmt.Sprintf("INSERT INTO zenit.mysql_audit_log " +
                            "(_time,host_ip,host_name,name,command_class,connection_id,status,sqltext,sqltext_digest,user,host,os_user,ip) " +
                            "VALUES %s;", strings.Join(values,","))
         // fmt.Printf("--(sql)> %s\n", sql)
         values = []string{}
-        common.HTTPPost(config.DSN_CLICKHOUSE, sql)
+        go common.HTTPPost(config.DSN_CLICKHOUSE, sql)
       }
     }
   }()
@@ -68,13 +68,13 @@ func SendMySQLSlowLog(event <-chan map[string]string) {
       )
       values = append(values, value)
 
-      if len(values) == 1000 {
+      if len(values) == 100 {
         sql := fmt.Sprintf("INSERT INTO zenit.mysql_slow_log " +
                            "(_time,host_ip,host_name,bytes_sent,killed,last_errno,lock_time,query,query_time,query_digest,rows_affected,rows_examined,rows_read,rows_sent,schema,thread_id,user_host) " +
                            "VALUES %s;", strings.Join(values,","))
         // fmt.Printf("--(sql)> %s\n", sql)
         values = []string{}
-        common.HTTPPost(config.DSN_CLICKHOUSE, sql)
+        go common.HTTPPost(config.DSN_CLICKHOUSE, sql)
       }
     }
   }()
