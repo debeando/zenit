@@ -11,9 +11,9 @@ import (
   "gitlab.com/swapbyt3s/zenit/config"
 )
 
-var buffer []string
-
 func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
+  var buffer []string
+
   go func() {
     defer close(parser)
 
