@@ -2,8 +2,9 @@ package slow
 
 import (
   "regexp"
-  "gitlab.com/swapbyt3s/zenit/common"
   "gitlab.com/swapbyt3s/zenit/collect/mysql"
+  "gitlab.com/swapbyt3s/zenit/common"
+  "gitlab.com/swapbyt3s/zenit/config"
 )
 
 const (
@@ -49,6 +50,11 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
         if common.KeyInMap("query", result) {
           result["query_digest"] = common.NormalizeQuery(result["query"])
         }
+
+        result["host_ip"]      = config.IPADDRESS
+        result["host_name"]    = config.HOSTNAME
+        result["query"]        = common.Escape(result["query"])
+        result["query_digest"] = common.Escape(result["query_digest"])
 
         parser <- result
       }
