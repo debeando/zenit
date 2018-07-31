@@ -5,9 +5,10 @@ import (
   "os"
   "strings"
   "time"
+
   "gitlab.com/swapbyt3s/zenit/common"
   "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/slack"
+  "gitlab.com/swapbyt3s/zenit/plugins/outputs/slack"
 )
 
 const (

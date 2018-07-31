@@ -1,7 +1,6 @@
 # Todo List
 
 Ideas or issues to work:
-
 - In collect/mysql/audit.go:
   > Define percentage level to collect data, us a good way to optimize parser
     performance.

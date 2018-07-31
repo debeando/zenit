@@ -2,6 +2,7 @@ package daemonize_test
 
 import (
   "testing"
+
   "gitlab.com/swapbyt3s/zenit/daemonize"
 )
 

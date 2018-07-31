@@ -4,6 +4,7 @@ import (
   "os"
   "reflect"
   "testing"
+
   "gitlab.com/swapbyt3s/zenit/common"
 )
 
@@ -19,7 +20,7 @@ func TestPGrep(t *testing.T) {
 
 func TestReadFile(t *testing.T) {
   expected := []string{"1234567890"}
-  result   := common.ReadFile(wd + "/../assets/test_uint64.txt")
+  result   := common.ReadFile(wd + "/../assets/tests/uint64.txt")
 
   if ! reflect.DeepEqual(expected, result) {
     t.Error("Expected: []string{\"1234567890\"}")
@@ -28,14 +29,14 @@ func TestReadFile(t *testing.T) {
 
 func TestGetUInt64FromFile(t *testing.T) {
   expected := uint64(1234567890)
-  result   := common.GetUInt64FromFile(wd + "/../assets/test_uint64.txt")
+  result   := common.GetUInt64FromFile(wd + "/../assets/tests/uint64.txt")
 
   if result != expected {
     t.Error("Expected: uint64(1234567890)")
   }
 
   expected = uint64(0)
-  result   = common.GetUInt64FromFile(wd + "/../assets/test_uint64.log")
+  result   = common.GetUInt64FromFile(wd + "/../assets/tests/uint64.log")
 
   if result != expected {
     t.Error("Expected: uint64(0)")
@@ -65,7 +66,7 @@ func TestStringToUInt64(t *testing.T) {
 
 func TestGetIntFromFile(t *testing.T) {
   expected := 1234567890
-  result   := common.GetIntFromFile(wd + "/../assets/test_int.txt")
+  result   := common.GetIntFromFile(wd + "/../assets/tests/int.txt")
 
   if result != expected {
     t.Error("Expected: 1234567890")

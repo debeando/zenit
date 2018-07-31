@@ -4,6 +4,7 @@ import (
   "net/http"
   "net/http/httptest"
   "testing"
+
   "gitlab.com/swapbyt3s/zenit/common"
 )
 

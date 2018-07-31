@@ -5,10 +5,11 @@ import (
   "fmt"
   "os"
   "strings"
-  "gitlab.com/swapbyt3s/zenit/collect"
+
   "gitlab.com/swapbyt3s/zenit/command"
   "gitlab.com/swapbyt3s/zenit/config"
   "gitlab.com/swapbyt3s/zenit/daemonize"
+  "gitlab.com/swapbyt3s/zenit/plugins/inputs"
   "gitlab.com/swapbyt3s/zenit/status"
 )
 
@@ -19,7 +20,7 @@ Options:
 `
 
 const HELP = `
-Available arguments for collect:
+Available arguments for input:
   - mysql
   - mysql-overflow
   - mysql-slave
@@ -104,12 +105,12 @@ func main() {
     }
 
     if len(*fCollect) > 0 && len(*fParserFormat) == 0 && len(*fParserFile) == 0 {
-      collect.Run(strings.Split(*fCollect, ","))
+      inputs.Run(strings.Split(*fCollect, ","))
       os.Exit(0)
     }
 
     if len(*fCollect) == 0 && len(*fParserFormat) > 0 && len(*fParserFile) > 0 {
-      collect.Parser(*fParserFormat, *fParserFile)
+      inputs.Parser(*fParserFormat, *fParserFile)
     }
   } else {
     help()

@@ -168,6 +168,7 @@ export DSN_CLICKHOUSE="tcp://10.201.17.217:9000?database=zenit"
 http://dba.ziniopro.com:8123
 
 curl -s -d 'SELECT 1' http://dba.ziniopro.com:8123/?database=zenit
+curl -s -d 'SELECT 1' http://172.17.0.3:8123/?database=zenit
 
 
 

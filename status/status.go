@@ -2,6 +2,7 @@ package status
 
 import (
   "fmt"
+
   "gitlab.com/swapbyt3s/zenit/config"
   "gitlab.com/swapbyt3s/zenit/common"
 )

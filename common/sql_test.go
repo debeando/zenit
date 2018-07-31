@@ -2,6 +2,7 @@ package common_test
 
 import (
   "testing"
+
   "gitlab.com/swapbyt3s/zenit/common"
 )
 

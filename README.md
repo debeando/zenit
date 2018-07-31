@@ -16,6 +16,20 @@ And this is ingested on:
 
 The numeric values has represent time has in microseconds.
 
+## CAUTION!
+
+The parse file ... genera mucho consumo de la CPU y puede comprometer el rendimiento del servidor.
+Pruebe primero en un entorno de desarrollo y luego en producción.
+
+
+## MySQL
+
+Configure slow log:
+
+SET GLOBAL long_query_time = 100;
+
+
+
 ## ProxySQL
 
 ### Configure
