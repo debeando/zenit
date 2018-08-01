@@ -5,16 +5,14 @@ import (
   "os"
   "os/exec"
   "strconv"
-  "strings"
   "syscall"
 
   "gitlab.com/swapbyt3s/zenit/common"
+  "gitlab.com/swapbyt3s/zenit/config"
 )
 
-const PIDFile = "/var/run/zenit-%s.pid"
-
-func SavePID(filename string, pid int) bool {
-  file, err := os.Create(filename)
+func SavePID(pid int) bool {
+  file, err := os.Create(config.General.PIDFile)
   if err != nil {
     return false
   }
@@ -39,19 +37,8 @@ func Executable() string {
   return ex
 }
 
-func Args(args []string) string {
-  a := strings.Join(args[1:], " ")
-  a  = strings.Replace(a, "--daemonize", "", -1)
-  a  = strings.Replace(a, "-daemonize", "", -1)
-  a  = strings.Replace(a, "--stop", "", -1)
-  a  = strings.Replace(a, "-stop", "", -1)
-  a  = strings.TrimSpace(a)
-
-  return a
-}
-
-func Build(command string, args string) string {
-  return fmt.Sprintf("%s %s", command, args)
+func Build(command string) string {
+  return fmt.Sprintf("%s --quiet", command)
 }
 
 func Run(command string) int {
@@ -64,39 +51,31 @@ func Run(command string) int {
   return cmd.Process.Pid
 }
 
-func GetPIDFileName(args string) string {
-  return fmt.Sprintf(PIDFile, common.MD5(args))
-}
-
 func Start() {
   exec := Executable()
-  args := Args(os.Args)
-  file := GetPIDFileName(args)
 
-  if ! PIDFileExist(file) {
-    cmd := Build(exec, args)
+  if ! PIDFileExist() {
+    cmd := Build(exec)
     pid := Run(cmd)
 
-    if ! SavePID(file, pid) {
-      fmt.Printf("Unable to create PID file: %s\n", file)
+    if ! SavePID(pid) {
+      fmt.Printf("Unable to create PID file: %s\n", config.General.PIDFile)
       os.Exit(1)
     }
 
-    fmt.Printf("Zenit daemon process ID (PID) is %d and is saved in %s\n", pid, file)
+    fmt.Printf("Zenit daemon process ID (PID) is %d and is saved in %s\n", pid, config.General.PIDFile)
     os.Exit(0)
   } else {
-    fmt.Printf("Zenit already running or %s file exist.\n", file)
+    fmt.Printf("Zenit already running or %s file exist.\n", config.General.PIDFile)
     os.Exit(1)
   }
 }
 
 func Stop() {
-  args := Args(os.Args)
-  file := GetPIDFileName(args)
-  if PIDFileExist(file) {
-    pid := GetPIDFromFile(file)
+  if PIDFileExist() {
+    pid := GetPIDFromFile()
     if KillProcess(pid) {
-      if RemovePIDFile(file) {
+      if RemovePIDFile() {
         os.Exit(0)
       }
     }
@@ -104,15 +83,15 @@ func Stop() {
   os.Exit(1)
 }
 
-func PIDFileExist(file string) bool {
-  if _, err := os.Stat(file); err != nil {
+func PIDFileExist() bool {
+  if _, err := os.Stat(config.General.PIDFile); err != nil {
     return false
   }
   return true
 }
 
-func GetPIDFromFile(file string) int {
-  return common.GetIntFromFile(file)
+func GetPIDFromFile() int {
+  return common.GetIntFromFile(config.General.PIDFile)
 }
 
 func KillProcess(pid int) bool {
@@ -122,8 +101,8 @@ func KillProcess(pid int) bool {
   return true
 }
 
-func RemovePIDFile(file string) bool {
-  if err := os.Remove(file); err != nil {
+func RemovePIDFile() bool {
+  if err := os.Remove(config.General.PIDFile); err != nil {
     return false
   }
   return true

@@ -41,19 +41,21 @@ func init() {
   re, _ = regexp.Compile(REGEX_SQL)
 }
 
-func Check() {
-  log.Printf("ProxySQL - DSN: %s\n", config.DSN_PROXYSQL)
-  conn, err := common.MySQLConnect(config.DSN_PROXYSQL)
+func Check() bool {
+  log.Printf("I! - ProxySQL - DSN: %s\n", config.ProxySQL.DSN)
+  conn, err := common.MySQLConnect(config.ProxySQL.DSN)
   if err != nil {
-    log.Printf("ProxySQL - Imposible to connect: %s\n", err)
-  } else {
-    log.Println("ProxySQL - Connected successfully.")
-    conn.Close()
+    log.Printf("E! - ProxySQL - Imposible to connect: %s\n", err)
+    return false
   }
+
+  log.Println("I! - ProxySQL - Connected successfully.")
+  conn.Close()
+  return true
 }
 
-func GatherQueries() {
-  conn, err := common.MySQLConnect(config.DSN_PROXYSQL)
+func QueryDigest() {
+  conn, err := common.MySQLConnect(config.ProxySQL.DSN)
   defer conn.Close()
   if err != nil {
     panic(err)

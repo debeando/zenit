@@ -8,7 +8,7 @@ import (
   "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
-type Mem struct {
+type MemMetric struct {
   total     uint64
   free      uint64
   available uint64
@@ -18,9 +18,9 @@ type Mem struct {
   percent   float64
 }
 
-func GatherMem() {
+func Mem() {
   lines  := common.ReadFile("/proc/meminfo")
-  mem := Mem{}
+  mem := MemMetric{}
   for _, line := range(lines) {
     fields := strings.Split(line, ":")
 

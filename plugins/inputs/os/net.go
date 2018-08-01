@@ -8,7 +8,7 @@ import (
   "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
-func GatherNet() {
+func Net() {
   reGroups := regexp.MustCompile(`(\d+)`)
   lines  := common.ReadFile("/proc/net/dev")
 

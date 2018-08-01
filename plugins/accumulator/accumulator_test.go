@@ -1,3 +1,8 @@
+// TODO: Add more tests;
+// - example of process use.
+// - accumulator.Value by another data type.
+// - test for Reset().
+
 package accumulator_test
 
 import (

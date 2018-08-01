@@ -10,8 +10,8 @@ import (
 
 const QUERY_SQL_SLAVE = "SHOW SLAVE STATUS"
 
-func GatherSlave() {
-  conn, err := common.MySQLConnect(config.DSN_MYSQL)
+func Slave() {
+  conn, err := common.MySQLConnect(config.MySQL.DSN)
   defer conn.Close()
   if err != nil {
     panic(err)

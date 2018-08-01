@@ -1,80 +1,128 @@
+// TODO:
+// - Convert this into module/package called "collect" because use for inputs and parsers.
+// - Find any way to simplify this to make more dinamyc.
+
 package inputs
 
 import (
+  "log"
+  "time"
+  "sync"
+
   "gitlab.com/swapbyt3s/zenit/common"
+  "gitlab.com/swapbyt3s/zenit/config"
+  "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
   "gitlab.com/swapbyt3s/zenit/plugins/inputs/mysql"
+  "gitlab.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
+  "gitlab.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
   "gitlab.com/swapbyt3s/zenit/plugins/inputs/os"
-  "gitlab.com/swapbyt3s/zenit/plugins/inputs/percona"
+  "gitlab.com/swapbyt3s/zenit/plugins/inputs/process"
   "gitlab.com/swapbyt3s/zenit/plugins/inputs/proxysql"
-  "gitlab.com/swapbyt3s/zenit/plugins/outputs"
+  "gitlab.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
+  "gitlab.com/swapbyt3s/zenit/plugins/outputs/prometheus"
 )
 
-func Run(services []string) {
-  // OS
-  if common.StringInArray("os", services) {
-    os.GatherCPU()
-    os.GatherDisk()
-    os.GatherMem()
-    os.GatherNet()
-    os.GatherSysLimits()
+func Gather() {
+  var wg sync.WaitGroup
+
+  wg.Add(2)
+
+  go doCollectPlugins(&wg)
+  go doCollectParsers(&wg)
+
+  wg.Wait()
+}
+
+func doCollectPlugins(wg *sync.WaitGroup) {
+  defer wg.Done()
+
+  for {
+    if config.OS.CPU {
+      os.CPU()
+    }
+    if config.OS.Disk {
+      os.Disk()
+    }
+    if config.OS.Mem {
+      os.Mem()
+    }
+    if config.OS.Net {
+      os.Net()
+    }
+    if config.OS.Limits {
+      os.SysLimits()
+    }
+    if config.MySQL.Overflow && mysql.Check() {
+      mysql.Overflow()
+    }
+    if config.MySQL.Slave && mysql.Check() {
+      mysql.Slave()
+    }
+    if config.MySQL.Status && mysql.Check() {
+      mysql.Status()
+    }
+    if config.MySQL.Tables && mysql.Check() {
+      mysql.Tables()
+    }
+    if config.MySQL.Variables && mysql.Check() {
+      mysql.Variables()
+    }
+    if config.ProxySQL.QueryDigest && proxysql.Check() {
+      proxysql.QueryDigest()
+    }
+    if config.Process.PerconaToolKitKill {
+      process.PerconaToolKitKill()
+    }
+    if config.Process.PerconaToolKitDeadlockLogger {
+      process.PerconaToolKitDeadlockLogger()
+    }
+    if config.Process.PerconaToolKitSlaveDelay {
+      process.PerconaToolKitSlaveDelay()
+    }
+    prometheus.Run()
+    accumulator.Load().Reset()
+    time.Sleep(config.General.Interval * time.Second)
   }
-  if common.StringInArray("os-cpu", services) {
-    os.GatherCPU()
-  }
-  if common.StringInArray("os-disk", services) {
-    os.GatherDisk()
-  }
-  if common.StringInArray("os-mem", services) {
-    os.GatherMem()
-  }
-  if common.StringInArray("os-net", services) {
-    os.GatherNet()
-  }
-  if common.StringInArray("os-limits", services) {
-    os.GatherSysLimits()
+}
+
+func doCollectParsers(wg *sync.WaitGroup) {
+  defer wg.Done()
+
+  if config.MySQL.AuditLog {
+    if ! clickhouse.Check() {
+      log.Println("E! - AuditLog require active connection to ClickHouse.")
+    }
+
+    if config.MySQLAuditLog.Format == "xml-old" {
+      channel_tail   := make(chan string)
+      channel_parser := make(chan map[string]string)
+      channel_event  := make(chan map[string]string)
+
+      go common.Tail(config.MySQLAuditLog.LogPath, channel_tail)
+      go audit.Parser(config.MySQLAuditLog.LogPath, channel_tail, channel_parser)
+      go clickhouse.SendMySQLAuditLog(channel_event)
+
+      for event := range channel_parser {
+        channel_event <- event
+      }
+    }
   }
 
-  // MySQL
-  if common.StringInArray("mysql", services) {
-    mysql.Check()
-    mysql.GatherOverflow()
-    mysql.GatherSlave()
-    mysql.GatherStatus()
-    mysql.GatherTables()
-    mysql.GatherVariables()
-  }
-  if common.StringInArray("mysql-overflow", services) {
-    mysql.Check()
-    mysql.GatherOverflow()
-  }
-  if common.StringInArray("mysql-slave", services) {
-    mysql.Check()
-    mysql.GatherSlave()
-  }
-  if common.StringInArray("mysql-status", services) {
-    mysql.Check()
-    mysql.GatherStatus()
-  }
-  if common.StringInArray("mysql-tables", services) {
-    mysql.Check()
-    mysql.GatherTables()
-  }
-  if common.StringInArray("mysql-variables", services) {
-    mysql.Check()
-    mysql.GatherVariables()
-  }
+  if config.MySQL.SlowLog {
+    if ! clickhouse.Check() {
+      log.Println("E! - SlowLog require active connection to ClickHouse.")
+    }
 
-  // Percona
-  if common.StringInArray("percona-process", services) {
-    percona.GatherRunningProcess()
-  }
+    channel_tail   := make(chan string)
+    channel_parser := make(chan map[string]string)
+    channel_event  := make(chan map[string]string)
 
-  // ProxySQL
-  if common.StringInArray("proxysql", services) {
-    proxysql.Check()
-    proxysql.GatherQueries()
-  }
+    go common.Tail(config.MySQLSlowLog.LogPath, channel_tail)
+    go slow.Parser(config.MySQLSlowLog.LogPath, channel_tail, channel_parser)
+    go clickhouse.SendMySQLSlowLog(channel_event)
 
-  // Output
-  output.Prometheus()
+    for event := range channel_parser {
+      channel_event <- event
+    }
+  }
 }

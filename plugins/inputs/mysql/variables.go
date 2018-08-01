@@ -10,8 +10,8 @@ import (
 
 const QUERY_SQL_VARIABLES = "SHOW GLOBAL VARIABLES"
 
-func GatherVariables() {
-  conn, err := common.MySQLConnect(config.DSN_MYSQL)
+func Variables() {
+  conn, err := common.MySQLConnect(config.MySQL.DSN)
   defer conn.Close()
   if err != nil {
     panic(err)

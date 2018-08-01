@@ -8,13 +8,13 @@ import (
   "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
-type CPU struct {
+type CPUMetric struct {
   idle  uint64
   total uint64
 }
 
-func GatherCPU() {
-  c := [2]CPU{}
+func CPU() {
+  c := [2]CPUMetric{}
 
   c[0].idle, c[0].total = getCPUSample()
   time.Sleep(300 * time.Millisecond)

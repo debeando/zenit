@@ -25,8 +25,8 @@ WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schem
 ORDER BY table_schema, table_name;
 `
 
-func GatherTables() {
-  conn, err := common.MySQLConnect(config.DSN_MYSQL)
+func Tables() {
+  conn, err := common.MySQLConnect(config.MySQL.DSN)
   defer conn.Close()
   if err != nil {
     panic(err)
