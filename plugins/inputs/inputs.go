@@ -36,6 +36,7 @@ func Run(services []string) {
 
   // MySQL
   if common.StringInArray("mysql", services) {
+    mysql.Check()
     mysql.GatherOverflow()
     mysql.GatherSlave()
     mysql.GatherStatus()
@@ -43,18 +44,23 @@ func Run(services []string) {
     mysql.GatherVariables()
   }
   if common.StringInArray("mysql-overflow", services) {
+    mysql.Check()
     mysql.GatherOverflow()
   }
   if common.StringInArray("mysql-slave", services) {
+    mysql.Check()
     mysql.GatherSlave()
   }
   if common.StringInArray("mysql-status", services) {
+    mysql.Check()
     mysql.GatherStatus()
   }
   if common.StringInArray("mysql-tables", services) {
+    mysql.Check()
     mysql.GatherTables()
   }
   if common.StringInArray("mysql-variables", services) {
+    mysql.Check()
     mysql.GatherVariables()
   }
 
@@ -65,6 +71,7 @@ func Run(services []string) {
 
   // ProxySQL
   if common.StringInArray("proxysql", services) {
+    proxysql.Check()
     proxysql.GatherQueries()
   }
 

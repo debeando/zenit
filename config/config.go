@@ -9,11 +9,12 @@ var(
   DSN_CLICKHOUSE string = "http://127.0.0.1:8123/?database=zenit"
   DSN_MYSQL      string = "root@tcp(127.0.0.1:3306)/"
   DSN_PROXYSQL   string = "radminuser:radminpass@tcp(127.0.0.1:6032)/"
+  HOSTNAME       string = ""
+  IPADDRESS      string = ""
+  LOG_FILE       string = "/var/log/zenit.log"
   SLACK_CHANNEL  string = "alerts"
   SLACK_TOKEN    string = ""
   VERSION        string = "0.1.4"
-  HOSTNAME       string = ""
-  IPADDRESS      string = ""
 )
 
 func init() {

@@ -2,11 +2,21 @@ package clickhouse
 
 import (
   "fmt"
+  "log"
   "strings"
 
   "gitlab.com/swapbyt3s/zenit/common"
   "gitlab.com/swapbyt3s/zenit/config"
 )
+
+func Check() {
+  log.Printf("ClickHouse - DSN: %s\n", config.DSN_CLICKHOUSE)
+  if ! common.HTTPPost(config.DSN_CLICKHOUSE, "SELECT 1;") {
+    log.Println("ClickHouse - Imposible to connect.")
+  } else {
+    log.Println("ClickHouse - Connected successfully.")
+  }
+}
 
 func SendMySQLAuditLog(event <-chan map[string]string) {
   values := []string{}

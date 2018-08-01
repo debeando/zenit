@@ -10,6 +10,8 @@ import (
 )
 
 func Parser(parse string, path string) {
+  clickhouse.Check()
+
   switch parse {
   case "auditlog-xml":
     AuditLogXML(path)

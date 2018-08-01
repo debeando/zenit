@@ -10,7 +10,6 @@ import (
   "gitlab.com/swapbyt3s/zenit/config"
   "gitlab.com/swapbyt3s/zenit/daemonize"
   "gitlab.com/swapbyt3s/zenit/plugins/inputs"
-  "gitlab.com/swapbyt3s/zenit/status"
 )
 
 const USAGE = `zenit (%s) written by %s
@@ -44,7 +43,6 @@ Environment variables:
   - export SLACK_TOKEN="XXXXXXXXX/YYYYYYYYY/ZZZZZZZZZZZZZZZZZZZZZZZZ"
 
 Examples:
-  - zenit -status
   - zenit -run="mysqldump -h 127.0.0.1 -u root > /tmp/mysql.dump"
   - zenit -collect=os,mysql
   - zenit -parser-format=slowlog -parser-file=/tmp/slow.log
@@ -57,11 +55,11 @@ var cmd string
 
 func init() {
   cmd = os.Args[0]
+
+  common.LogInit(config.LOG_FILE)
 }
 
 func main() {
-  common.LogInit(config.LOG_FILE)
-
   fHelp         := flag.Bool("help", false, "Show this help.")
   fVersion      := flag.Bool("version", false, "Show version.")
   fCollect      := flag.String("collect", "", "List of metrics to collect.")
@@ -69,7 +67,6 @@ func main() {
   fParserFile   := flag.String("parser-file", "", "File path to Tail to parse.")
   fParserFormat := flag.String("parser-format", "", "Parser log format.")
   fHostname     := flag.String("hostname", "", "Rename the hostname.")
-  fStatus       := flag.Bool("status", false, "Status for each environment variable and own process.")
   fStop         := flag.Bool("stop", false, "Stop daemon.")
 
   flag.Parse()
@@ -83,11 +80,6 @@ func main() {
 
     if *fVersion {
       fmt.Printf("%s\n", config.VERSION)
-      os.Exit(0)
-    }
-
-    if *fStatus {
-      status.Run()
       os.Exit(0)
     }
 
