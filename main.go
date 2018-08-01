@@ -6,7 +6,7 @@ import (
   "os"
   "strings"
 
-  "gitlab.com/swapbyt3s/zenit/command"
+  "gitlab.com/swapbyt3s/zenit/common"
   "gitlab.com/swapbyt3s/zenit/config"
   "gitlab.com/swapbyt3s/zenit/daemonize"
   "gitlab.com/swapbyt3s/zenit/plugins/inputs"
@@ -60,6 +60,8 @@ func init() {
 }
 
 func main() {
+  common.LogInit(config.LOG_FILE)
+
   fHelp         := flag.Bool("help", false, "Show this help.")
   fVersion      := flag.Bool("version", false, "Show version.")
   fCollect      := flag.String("collect", "", "List of metrics to collect.")
@@ -67,7 +69,6 @@ func main() {
   fParserFile   := flag.String("parser-file", "", "File path to Tail to parse.")
   fParserFormat := flag.String("parser-format", "", "Parser log format.")
   fHostname     := flag.String("hostname", "", "Rename the hostname.")
-  fRun          := flag.String("run", "", "Run bash command and wait to finish to notify via slack.")
   fStatus       := flag.Bool("status", false, "Status for each environment variable and own process.")
   fStop         := flag.Bool("stop", false, "Stop daemon.")
 
@@ -88,10 +89,6 @@ func main() {
     if *fStatus {
       status.Run()
       os.Exit(0)
-    }
-
-    if len(*fRun) > 0 {
-      command.Run(*fRun)
     }
 
     if *fDaemonize {
