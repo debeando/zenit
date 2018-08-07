@@ -23,6 +23,7 @@ Options:
 
 func init() {
   config.Load()
+  config.SanityCheck()
   common.LogInit(config.General.LogFile)
 }
 

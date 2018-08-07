@@ -12,11 +12,9 @@ import (
   "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
-func init() {
-  CreateFile()
-}
-
 func Run() {
+  CreateFile()
+
   var a = accumulator.Load()
   var s string
 
@@ -48,6 +46,10 @@ func CreateFile() {
     if err != nil { return }
     defer file.Close()
   }
+}
+
+func Dump() {
+
 }
 
 func WriteFile(s string) {

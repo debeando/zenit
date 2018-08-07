@@ -1,6 +1,7 @@
 // TODO:
 // - Convert this into module/package called "collect" because use for inputs and parsers.
 // - Find any way to simplify this to make more dinamyc.
+// - If not set any option, ignore and no enter in infinite loop.
 
 package inputs
 

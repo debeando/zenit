@@ -15,6 +15,7 @@ const (
   VERSION string = "1.0.0"
 )
 
+// Struct to save in memory config settings from [general] section.
 type GeneralConfig struct {
   Hostname string        `ini:"hostname"`
   Interval time.Duration `ini:"interval"`
@@ -23,6 +24,7 @@ type GeneralConfig struct {
   Debug    bool          `ini:"debug"`
 }
 
+// Struct to save in memory config settings from [os] section.
 type OSConfig struct {
   CPU    bool `ini:"cpu"`
   Disk   bool `ini:"disk"`
@@ -31,6 +33,7 @@ type OSConfig struct {
   Net    bool `ini:"net"`
 }
 
+// Struct to save in memory config settings from [mysql] section.
 type MySQLConfig struct {
   DSN       string `ini:"dsn"`
   Overflow  bool   `ini:"overflow"`
@@ -42,36 +45,43 @@ type MySQLConfig struct {
   SlowLog   bool   `ini:"slowlog"`
 }
 
-type MySQLSlowLogConfig struct {
-  LogPath    string `ini:"log_path"`
-  BufferSize int    `ini:"buffer_size"`
-}
-
+// Struct to save in memory config settings from [mysql-audit] section.
 type MySQLAuditLogConfig struct {
   Format     string `ini:"format"`
   LogPath    string `ini:"log_path"`
   BufferSize int    `ini:"buffer_size"`
 }
 
+// Struct to save in memory config settings from [mysql-slowlog] section.
+type MySQLSlowLogConfig struct {
+  LogPath    string `ini:"log_path"`
+  BufferSize int    `ini:"buffer_size"`
+}
+
+// Struct to save in memory config settings from [proxysql] section.
 type ProxySQLConfig struct {
   DSN         string `ini:"dsn"`
   QueryDigest bool   `ini:"query_digest"`
 }
 
+// Struct to save in memory config settings from [clickhouse] section.
 type ClickHouseConfig struct {
   DSN string `ini:"dsn"`
 }
 
+// Struct to save in memory config settings from [prometheus] section.
 type PrometheusConfig struct {
   TextFile string `ini:"textfile"`
 }
 
+// Struct to save in memory config settings from [process] section.
 type ProcessConfig struct {
   PerconaToolKitKill           bool `ini:"pt_kill"`
   PerconaToolKitDeadlockLogger bool `ini:"pt_deadlock_logger"`
   PerconaToolKitSlaveDelay     bool `ini:"pt_slave_delay"`
 }
 
+// Define default variables and initialize structs.
 var (
   ConfigFile string = "/etc/zenit/zenit.ini"
   IpAddress  string = ""
@@ -87,10 +97,12 @@ var (
   ProxySQL      = new(ProxySQLConfig)
 )
 
+// Init does any initialization necessary for the module.
 func init() {
   IpAddress = common.IpAddress()
 }
 
+// Loading settings from config file and set into struct.
 func Load() {
   cfg, err := ini.Load(ConfigFile)
   if err != nil {
@@ -110,22 +122,28 @@ func Load() {
   cfg.Section("process").MapTo(Process)
   cfg.Section("prometheus").MapTo(Prometheus)
   cfg.Section("proxysql").MapTo(ProxySQL)
+}
 
-  // Validate interval variable
-  // > 5 && <= 86400 (24h)
+// Check minimun config settings and set default values to start.
+func SanityCheck() {
+  if General.Interval < 5 {
+    log.Println("W! Config - general.Interval: Use positive value, and minimun start from 5 seconds.")
+    log.Println("W! Config - general.Interval: Using default 30 seconds.")
+    General.Interval = 30
+  }
 
-  // TODO: Define default values:
-  //
-  //HOSTNAME = cfg.Section("general").Key("hostname").String()
-  //if len(HOSTNAME) == 0 {
-  //  HOSTNAME = common.Hostname()
-  //}
-  // LOG_FILE            string = "/var/log/zenit.log"
-  // PID_FILE            string = "/var/run/zenit.pid"
-  // PROMETHEUS_TEXTFILE string = "/var/tmp/zenit.prom"
-  // DSN_CLICKHOUSE      string = "http://127.0.0.1:8123/?database=zenit"
-  // DSN_MYSQL           string = "root@tcp(127.0.0.1:3306)/"
-  // DSN_PROXYSQL        string = "radminuser:radminpass@tcp(127.0.0.1:6032)/"
-  // HOSTNAME            string = ""
-  // INTERVAL            int    = 0
+  if len(General.Hostname) == 0 {
+    log.Println("W! Config - general.Hostname: Custom value is not set, using current.")
+    General.Hostname = common.Hostname()
+  }
+
+  if len(General.LogFile) == 0 {
+    log.Println("W! Config - general.LogFile: Custom value is not set, using default /var/log/zenit.log")
+    General.LogFile = "/var/log/zenit.log"
+  }
+
+  if len(General.PIDFile) == 0 {
+    log.Println("W! Config - general.PIDFile: Custom value is not set, using default /var/run/zenit.pid")
+    General.PIDFile = "/var/run/zenit.pid"
+  }
 }
