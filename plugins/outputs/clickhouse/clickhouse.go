@@ -1,3 +1,5 @@
+// TODO: Add check for every X time to force send to CH and purge the buffer.
+
 package clickhouse
 
 import (
@@ -25,6 +27,10 @@ func SendMySQLAuditLog(event <-chan map[string]string) {
 
   go func() {
     for e := range event {
+      if config.General.Debug {
+        log.Printf("D! - ClickHouse Audit Log Event - %#v\n", e)
+      }
+
       value := fmt.Sprintf("('%s',IPv4StringToNum('%s'),'%s','%s','%s',%s,%s,'%s','%s','%s','%s','%s','%s')",
                            e["timestamp"],
                            e["host_ip"],
@@ -48,7 +54,7 @@ func SendMySQLAuditLog(event <-chan map[string]string) {
                            "VALUES %s;", strings.Join(values,","))
 
         if config.General.Debug {
-          log.Printf("D! - ClickHouse Audit Log - %s", sql)
+          log.Printf("D! - ClickHouse Audit Log Insert - %s", sql)
         }
 
         values = []string{}
@@ -63,6 +69,10 @@ func SendMySQLSlowLog(event <-chan map[string]string) {
 
   go func() {
     for e := range event {
+      if config.General.Debug {
+        log.Printf("D! - ClickHouse Slow Log Event - %#v\n", e)
+      }
+
       value := fmt.Sprintf("(toDateTime(%s),IPv4StringToNum('%s'),'%s',%s,%s,%s,%s,'%s',%s,'%s',%s,%s,%s,%s,'%s',%s,'%s')",
         e["timestamp"],
         e["host_ip"],
@@ -90,7 +100,7 @@ func SendMySQLSlowLog(event <-chan map[string]string) {
                            "VALUES %s;", strings.Join(values,","))
 
         if config.General.Debug {
-          log.Printf("D! - ClickHouse Slow Log - %s\n", sql)
+          log.Printf("D! - ClickHouse Slow Log Insert - %s\n", sql)
         }
 
         values = []string{}
