@@ -10,7 +10,7 @@ The name [Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) is inspired a 
 This tool collect stats data from:
 
 - **Linux OS (CentOS):** Collect basic metrics of CPU, RAM, DISK, NET, and System Limits.
-- **MySQL:** Collect tipical Metrics; Variables, Status, Slave, Primary Key overflow, tables sizes. And parsers; SlowLog and AuditLog.
+- **MySQL:** Collect tipical metrics; variables, status, slave status, primary key overflow, tables sizes. And parser Slow and Audit Logs.
 - **Percona ToolKit:** Verify is running specific tools, for the moment only check follow tools; pt-kill, pt-deadlock-logger and pt-slave-delay.
 - **ProxySQL:** Collect for the moment query digest only.
 
@@ -26,8 +26,25 @@ The numeric values has represent time has in microseconds.
 Zenit is not mature, but all database tools can pose a risk to the system and the database server.
 Before using this tool, please:
 
+- Read the tool’s documentation.
+- Review the tool’s known “BUGS”
+- Test the tool on a non-production server.
+
+## Warnings
+
 - The parse files on very high QPS does big CPU consumption and compromise the server.
-- First test the tool on a non-production server.
+Asegurar que tiene un core disponible, la herramienta no ocupará mas de un core.
+- La activación del Audit y Slow Log compromete el rendimiento de escritura del disco,
+para no comprometer el disco de datos, use un disco aparte al de datos exclusivo para
+los logs. No olvide rotar los logs para evitar llenar el disco.
+
+## Beneficios
+
+- Centralización de todos los logs en un unico punto de consulta.
+- Mejoramos la seguridad evitando acceso de los usuarios a los servidores para
+analizar los Logs.
+- Ofrece información útil para todos desarrolladores para optimizar las consultas.
+
 
 ## Install
 
@@ -55,6 +72,12 @@ LOAD ADMIN VARIABLES TO RUNTIME;
 ```
 
 ### ClickHouse
+
+How to test connection?
+
+```bash
+curl -s -d 'SELECT 1' http://10.201.17.217:8123/?database=zenit
+```
 
 Create database and tables for clickhouse:
 

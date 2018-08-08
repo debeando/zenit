@@ -28,7 +28,6 @@ SELECT IPv4NumToString(host_ip) AS "IPAddress",
        host_name AS "HostName",
        COUNT() AS "Count"
 FROM zenit.mysql_slow_log
-WHERE _time >= (NOW() - (60 * 60 * 24))
 GROUP BY host_ip, host_name;
 
 -- Example 4:
