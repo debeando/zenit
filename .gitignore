@@ -3,7 +3,7 @@
 *.dll
 *.so
 *.dylib
-lucho
+zenit
 
 # Test binary, build with `go test -c`
 *.test
@@ -11,4 +11,5 @@ lucho
 # MAC OS X
 .DS_Store
 
-zenit
+# Build
+pkg/
