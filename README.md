@@ -7,12 +7,26 @@ The name [Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) is inspired by
 
 ## Description:
 
+This agent collect all basic metrics from the hardware and more details from MySQL or ProxySQL services.
+And read logs in real time, each event is parsed to analize later, the logs is send to [ClickHouse](https://github.com/yandex/ClickHouse/)
+because is very easy to analize with SQL and have great performance. And the metrics is send to [Prometheus](https://github.com/prometheus/prometheus)
+for the moment.
+
+### Advantage
+
+- Centralize all logs in a single point of view.
+- Each event on logs take the query and digest to help to identify bad queries.
+- Improve security to prevent user access into server.
+- Provider useful information for developers to help optimization queries.
+
+### Compatibility
+
 This tool collect stats data from:
 
 - **Linux OS (CentOS):** Collect basic metrics of CPU, RAM, DISK, NET, and System Limits.
-- **MySQL:** Collect tipical metrics; variables, status, slave status, primary key overflow, tables sizes. And parser Slow and Audit Logs.
+- **MySQL:** Collect tipical metrics; variables, status, slave status, primary key overflow, tables sizes. And parser Slow and Audit Logs. For the moment is tested on MySQL 5.5
 - **Percona ToolKit:** Verify is running specific tools, for the moment only check follow tools; pt-kill, pt-deadlock-logger and pt-slave-delay.
-- **ProxySQL:** Collect for the moment query digest only.
+- **ProxySQL:** Collect for the moment query digest only. For the moment is tested in ProxySQL 1.4
 
 And this is ingested on:
 
@@ -35,12 +49,6 @@ Before using this tool, please:
 - The parse files with very high QPS does big CPU consumption and compromise the server performance. Ensure that you have
 available core for this process.
 - The activation of the Audit and Slow Log compromise the writing performance on disk, use another disk for logs.
-
-## Advantage
-
-- Centralize all logs in a single point of view.
-- Improve security to prevent user access into server.
-- Provider useful information for developers to help optimization queries.
 
 ## Install
 
