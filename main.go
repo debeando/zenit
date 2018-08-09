@@ -4,7 +4,6 @@ import (
   "flag"
   "fmt"
   "os"
-  "strings"
 
   "gitlab.com/swapbyt3s/zenit/common"
   "gitlab.com/swapbyt3s/zenit/config"
@@ -13,102 +12,51 @@ import (
 )
 
 const USAGE = `zenit (%s) written by %s
-Usage: %s [-version] [-help] <options> [args]
+Usage: %s [--help | --quiet | --start | --stop | --version]
 Options:
-
+  --help        Show this help.
+  --quiet       Run in quiet mode.
+  --start       Start daemon.
+  --stop        Stop daemon.
+  --version     Print version numbers.
 `
-
-const HELP = `
-Available arguments for input:
-  - mysql
-  - mysql-overflow
-  - mysql-slave
-  - mysql-status
-  - mysql-table
-  - mysql-variables
-  - os
-  - os-cpu
-  - os-disk
-  - os-limits
-  - os-mem
-  - os-net
-  - percona-process
-  - proxysql
-
-Environment variables:
-  - export DSN_CLICKHOUSE="http://127.0.0.1:8123/?database=zenit"
-  - export DSN_MYSQL="root@tcp(127.0.0.1:3306)/"
-  - export DSN_PROXYSQL="radminuser:radminpass@tcp(127.0.0.1:6032)/"
-  - export SLACK_CHANNEL="alerts"
-  - export SLACK_TOKEN="XXXXXXXXX/YYYYYYYYY/ZZZZZZZZZZZZZZZZZZZZZZZZ"
-
-Examples:
-  - zenit -run="mysqldump -h 127.0.0.1 -u root > /tmp/mysql.dump"
-  - zenit -collect=os,mysql
-  - zenit -parser-format=slowlog -parser-file=/tmp/slow.log
-  - zenit -parser-format=slowlog -parser-file=/tmp/slow.log -daemonize
-  - zenit -parser-format=slowlog -parser-file=/tmp/slow.log -stop
-
-`
-
-var cmd string
 
 func init() {
-  cmd = os.Args[0]
-
-  common.LogInit(config.LOG_FILE)
+  config.Load()
+  config.SanityCheck()
+  common.LogInit(config.General.LogFile)
 }
 
 func main() {
-  fHelp         := flag.Bool("help", false, "Show this help.")
-  fVersion      := flag.Bool("version", false, "Show version.")
-  fCollect      := flag.String("collect", "", "List of metrics to collect.")
-  fDaemonize    := flag.Bool("daemonize", false, "Fork to the background and detach from the shell.")
-  fParserFile   := flag.String("parser-file", "", "File path to Tail to parse.")
-  fParserFormat := flag.String("parser-format", "", "Parser log format.")
-  fHostname     := flag.String("hostname", "", "Rename the hostname.")
-  fStop         := flag.Bool("stop", false, "Stop daemon.")
+  fHelp    := flag.Bool("help", false, "Show this help.")
+  fQuiet   := flag.Bool("quiet", false, "Run in quiet mode.")
+  fStart   := flag.Bool("start", false, "Fork to the background and detach from the shell.")
+  fStop    := flag.Bool("stop", false, "Stop daemon.")
+  fVersion := flag.Bool("version", false, "Show version.")
 
+  flag.Usage = func() { help(0) }
   flag.Parse()
 
   if len(os.Args) == 1 {
-    help()
-  } else if len(os.Args) >= 2 {
-    if *fHelp {
-      help()
-    }
+    help(0)
+  }
 
-    if *fVersion {
-      fmt.Printf("%s\n", config.VERSION)
-      os.Exit(0)
-    }
-
-    if *fDaemonize {
-      daemonize.Start()
-    } else if *fStop {
-      daemonize.Stop()
-    }
-
-    if len(*fHostname) > 0 {
-      config.HOSTNAME = *fHostname
-    }
-
-    if len(*fCollect) > 0 && len(*fParserFormat) == 0 && len(*fParserFile) == 0 {
-      inputs.Run(strings.Split(*fCollect, ","))
-      os.Exit(0)
-    }
-
-    if len(*fCollect) == 0 && len(*fParserFormat) > 0 && len(*fParserFile) > 0 {
-      inputs.Parser(*fParserFormat, *fParserFile)
-    }
-  } else {
-    help()
+  switch {
+  case *fVersion:
+    fmt.Printf("%s\n", config.VERSION)
+    return
+  case *fHelp:
+    help(0)
+  case *fStart:
+    daemonize.Start()
+  case *fStop:
+    daemonize.Stop()
+  case *fQuiet:
+    inputs.Gather()
   }
 }
 
-func help() {
-  fmt.Printf(USAGE, config.VERSION, config.AUTHOR, cmd)
-  flag.PrintDefaults()
-  fmt.Printf(HELP)
-  os.Exit(1)
+func help(rc int) {
+  fmt.Printf(USAGE, config.VERSION, config.AUTHOR, os.Args[0])
+  os.Exit(rc)
 }

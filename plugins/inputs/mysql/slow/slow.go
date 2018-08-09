@@ -1,3 +1,5 @@
+// TODO: Move this package to inputs/parsers/mysqlslowlog
+
 package slow
 
 import (
@@ -52,8 +54,8 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
           result["query_digest"] = common.NormalizeQuery(result["query"])
         }
 
-        result["host_ip"]      = config.IPADDRESS
-        result["host_name"]    = config.HOSTNAME
+        result["host_ip"]      = config.IpAddress
+        result["host_name"]    = config.General.Hostname
         result["query"]        = common.Escape(result["query"])
         result["query_digest"] = common.Escape(result["query_digest"])
 

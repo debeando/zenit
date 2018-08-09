@@ -8,7 +8,7 @@ import (
   "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
-func GatherDisk() {
+func Disk() {
   reGroups := regexp.MustCompile(`^(.+)\s+(\w+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+%)\s+(.+)$`)
   stdout, _ := common.ExecCommand("df -Tl")
   lines := strings.Split(stdout, "\n")

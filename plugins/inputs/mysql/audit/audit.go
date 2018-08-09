@@ -1,10 +1,10 @@
 // This parse OLD Style
 // https://dev.mysql.com/doc/refman/5.5/en/audit-log-file-formats.html
+// TODO: Move this package to inputs/parsers/mysqlauditlog
 
 package audit
 
 import (
-//  "fmt"
   "strings"
 
   "gitlab.com/swapbyt3s/zenit/plugins/inputs/mysql"
@@ -39,8 +39,8 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
 
         // Convert timestamp ISO 8601 (UTC) to RFC 3339:
         result["timestamp"]      = common.ToDateTime(result["timestamp"], "2006-01-02T15:04:05 UTC")
-        result["host_ip"]        = config.IPADDRESS
-        result["host_name"]      = config.HOSTNAME
+        result["host_ip"]        = config.IpAddress
+        result["host_name"]      = config.General.Hostname
         result["sqltext"]        = common.Escape(result["sqltext"])
         result["sqltext_digest"] = common.Escape(result["sqltext_digest"])
 

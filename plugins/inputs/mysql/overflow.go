@@ -41,8 +41,8 @@ WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schem
   QUERY_SQL_MAX_INT = "SELECT COALESCE(MAX(%s), 0) FROM %s.%s"
 )
 
-func GatherOverflow() {
-  conn, err := common.MySQLConnect(config.DSN_MYSQL)
+func Overflow() {
+  conn, err := common.MySQLConnect(config.MySQL.DSN)
   defer conn.Close()
   if err != nil {
     panic(err)

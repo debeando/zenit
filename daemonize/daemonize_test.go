@@ -3,27 +3,28 @@ package daemonize_test
 import (
   "testing"
 
+  "gitlab.com/swapbyt3s/zenit/config"
   "gitlab.com/swapbyt3s/zenit/daemonize"
 )
 
 func TestArgs(t *testing.T) {
-  args     := []string{"zenit", "-parser-format=slowlog", "-parser-file=/tmp/test_slow.log", "-daemonize"}
-  expected := "-parser-format=slowlog -parser-file=/tmp/test_slow.log"
+  args     := []string{"zenit", "-start"}
+  expected := ""
   result   := daemonize.Args(args)
 
   if result != expected {
-    t.Error("Expected: -parser-format=slowlog -parser-file=/tmp/test_slow.log")
+    t.Error("Expected.")
   }
 }
 
 func TestBuild(t *testing.T) {
-  args     := "-collect=mysql"
+  args     := "-start"
   cmd      := "/usr/local/bin/zenit"
-  expected := "/usr/local/bin/zenit -collect=mysql"
+  expected := "/usr/local/bin/zenit -start"
   result   := daemonize.Build(cmd, args)
 
   if result != expected {
-    t.Error("Expected: /usr/local/bin/zenit -collect=mysql")
+    t.Error("Expected: /usr/local/bin/zenit -start")
   }
 }
 
@@ -39,20 +40,20 @@ func TestRun(t *testing.T) {
 
 func TestGetPIDFileName(t *testing.T) {
   args     := "-collect=mysql"
-  expected := "/var/run/zenit-8791b0340bf9d02e19aa92a1ea6d07bc.pid"
-  result   := daemonize.GetPIDFileName(args)
+  expected := "/var/run/zenit.pid"
+  result   := config.General.PIDFile
 
   if result != expected {
-    t.Error("Expected: /var/run/zenit-8791b0340bf9d02e19aa92a1ea6d07bc.pid")
+    t.Error("Expected: /var/run/zenit.pid")
   }
 }
 
 func TestPIDFileExist(t *testing.T) {
-  file     := "/var/run/zenit-098f6bcd4621d373cade4e832627b4f6.pid"
+  file     := "/var/run/zenit.pid"
   expected := false
-  result   := daemonize.PIDFileExist(file)
+  result   := config.General.PIDFile
 
   if ! result == expected {
-    t.Error("Expected: /var/run/zenit-098f6bcd4621d373cade4e832627b4f6.pid")
+    t.Error("Expected: /var/run/zenit.pid")
   }
 }

@@ -27,6 +27,10 @@ func Load() *Items {
   return items
 }
 
+func (l *Items) Reset() {
+  *l = (*l)[:0]
+}
+
 func (l *Items) Count() int {
   return len(*l)
 }
