@@ -13,3 +13,6 @@ tests: ## Run tests
 
 build: ## Build binary
 	go build -ldflags "-s -w" -o zenit main.go
+
+release: ## Create release.
+	scripts/release.sh

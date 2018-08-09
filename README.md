@@ -41,3 +41,48 @@ available core for this process.
 - Centralize all logs in a single point of view.
 - Improve security to prevent user access into server.
 - Provider useful information for developers to help optimization queries.
+
+## Install
+
+Paste that at a Terminal prompt:
+
+```bash
+bash < <(curl -s https://raw.githubusercontent.com/swapbyt3s/zenit/master/scripts/install.sh)
+```
+
+## How to use it:
+
+See usage with:
+
+```
+./zenit --help
+```
+
+#### Run zenit in quiet mode:
+
+```
+./zenit --quiet
+```
+
+#### Run zenit in daemon mode:
+
+Runs in the background and detach from bash.
+
+```
+./zenit --start
+```
+
+#### Stop zenit in daemon mode:
+
+```
+./zenit --stop
+```
+
+
+## Configuration
+
+On most systems, the default locations are `/etc/zenit/zenit.ini` for the main configuration file.
+
+### Agent Configuration
+
+The configuration is very intuitive, please see the example [config file](https://github.com/swapbyt3s/zenit/blob/master/zenit.ini).
