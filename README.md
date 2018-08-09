@@ -1,9 +1,9 @@
 # Zenit
 
 Zenit is a daemon collector for metrics and log parsers for dedicated host for MySQL/Percona/Mariadb Servers and
-ProxySQL. Maybe no require many another agents for this propouse, with one does excellent tool for database administrator.
+ProxySQL. Maybe not requires many another agents for this purpose, but with this one you'll find an excellent tool for database administration
 
-The name [Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) is inspired a russian was spy satellite.
+The name [Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) is inspired by a russian spy satellite.
 
 ## Description:
 
