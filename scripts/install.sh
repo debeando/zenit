@@ -36,7 +36,7 @@ if [ -f /usr/local/bin/zenit ]; then
   ln -s /usr/local/bin/zenit /usr/bin/zenit
 fi
 
-if [ -f /etc/zenit/zenit.ini ]; then
+if [ ! -f /etc/zenit/zenit.ini ]; then
   mkdir -p /etc/zenit/
   curl -s https://raw.githubusercontent.com/swapbyt3s/zenit/master/zenit.ini > /etc/zenit/zenit.ini
 fi
