@@ -44,6 +44,10 @@ func StringToInt(value string) int {
   return i
 }
 
+func IntToString(value int) string {
+  return strconv.Itoa(value)
+}
+
 func StringToUInt64(value string) uint64 {
   i, err := strconv.ParseUint(strings.TrimSpace(value), 10, 64)
   if err != nil {

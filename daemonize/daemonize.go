@@ -4,7 +4,6 @@ import (
   "fmt"
   "os"
   "os/exec"
-  "strconv"
   "syscall"
 
   "github.com/swapbyt3s/zenit/common"
@@ -29,7 +28,7 @@ func Start() {
     pid  := Run(cmd)
 
     if file.Create(config.General.PIDFile) {
-      if file.Write(config.General.PIDFile, strconv.Itoa(pid)) {
+      if file.Write(config.General.PIDFile, common.IntToString(pid)) {
         fmt.Printf("Zenit daemon process ID (PID) is %d and is saved in %s\n", pid, config.General.PIDFile)
         os.Exit(0)
       }
