@@ -12,6 +12,11 @@ if ! [[ "${OSTYPE}" == "linux"* ]]; then
   exit
 fi
 
+if ! type "wget" > /dev/null; then
+  echo "The program 'wget' is currently not installed, please install it to continue."
+  exit
+fi
+
 FILE="zenit-linux_amd64.tar.gz"
 TAG=$(curl --silent "https://api.github.com/repos/swapbyt3s/zenit/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
