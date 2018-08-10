@@ -3,7 +3,7 @@ package common_test
 import (
   "testing"
 
-  "gitlab.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/common"
 )
 
 var sql = []struct{ ID, Input, Expected string }{

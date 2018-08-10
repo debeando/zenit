@@ -4,9 +4,9 @@ import (
   "strings"
   "time"
 
-  "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/common/file"
-  "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
+  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/common/file"
+  "github.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
 type CPUMetric struct {

@@ -5,9 +5,9 @@ package slow
 import (
   "regexp"
 
-  "gitlab.com/swapbyt3s/zenit/plugins/inputs/mysql"
-  "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/plugins/inputs/mysql"
+  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/config"
 )
 
 const (

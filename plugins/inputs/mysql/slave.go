@@ -3,9 +3,9 @@ package mysql
 import (
   "database/sql"
 
-  "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
+  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
 const QUERY_SQL_SLAVE = "SHOW SLAVE STATUS"

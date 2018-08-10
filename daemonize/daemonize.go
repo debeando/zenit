@@ -7,8 +7,8 @@ import (
   "strconv"
   "syscall"
 
-  "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/config"
 )
 
 func SavePID(pid int) bool {

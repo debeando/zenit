@@ -3,8 +3,8 @@ package daemonize_test
 import (
   "testing"
 
-  "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/daemonize"
+  "github.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/daemonize"
 )
 
 func TestArgs(t *testing.T) {

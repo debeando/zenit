@@ -3,7 +3,7 @@ package mysql_test
 import (
   "testing"
 
-  "gitlab.com/swapbyt3s/zenit/plugins/inputs/mysql"
+  "github.com/swapbyt3s/zenit/plugins/inputs/mysql"
 )
 
 func TestClearUser(t *testing.T) {

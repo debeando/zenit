@@ -5,10 +5,10 @@ import (
   "fmt"
   "os"
 
-  "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/daemonize"
-  "gitlab.com/swapbyt3s/zenit/plugins/inputs"
+  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/daemonize"
+  "github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
 const USAGE = `zenit (%s) written by %s

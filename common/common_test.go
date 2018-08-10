@@ -5,7 +5,7 @@ import (
   "reflect"
   "testing"
 
-  "gitlab.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/common"
 )
 
 var wd string
@@ -16,15 +16,6 @@ func init() {
 
 func TestPGrep(t *testing.T) {
 
-}
-
-func TestReadFile(t *testing.T) {
-  expected := []string{"1234567890"}
-  result   := common.ReadFile(wd + "/../assets/tests/uint64.txt")
-
-  if ! reflect.DeepEqual(expected, result) {
-    t.Error("Expected: []string{\"1234567890\"}")
-  }
 }
 
 func TestGetUInt64FromFile(t *testing.T) {

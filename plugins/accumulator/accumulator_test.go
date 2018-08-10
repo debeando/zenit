@@ -8,7 +8,7 @@ package accumulator_test
 import (
   "testing"
 
-  "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
+  "github.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
 var a = accumulator.Load()

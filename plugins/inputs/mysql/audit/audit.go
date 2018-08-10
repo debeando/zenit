@@ -7,9 +7,9 @@ package audit
 import (
   "strings"
 
-  "gitlab.com/swapbyt3s/zenit/plugins/inputs/mysql"
-  "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/plugins/inputs/mysql"
+  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/config"
 )
 
 func Parser(path string, tail <-chan string, parser chan<- map[string]string) {

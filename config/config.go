@@ -7,7 +7,7 @@ import (
 
   "github.com/go-ini/ini"
 
-  "gitlab.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/common"
 )
 
 const (

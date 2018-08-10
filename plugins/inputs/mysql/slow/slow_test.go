@@ -4,8 +4,8 @@ import (
   "regexp"
   "testing"
 
-  "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
+  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
 )
 
 func TestRow(t *testing.T) {

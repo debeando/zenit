@@ -4,8 +4,8 @@ import (
   "log"
   "strings"
 
-  "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/config"
 )
 
 func Check() bool {

@@ -5,7 +5,7 @@ import (
   "net/http/httptest"
   "testing"
 
-  "gitlab.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/common"
 )
 
 func TestHTTPPost(t *testing.T) {

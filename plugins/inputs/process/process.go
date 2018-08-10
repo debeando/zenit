@@ -2,8 +2,8 @@
 package process
 
 import (
-  "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
+  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
 func PerconaToolKitKill(){

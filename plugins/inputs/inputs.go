@@ -10,17 +10,17 @@ import (
   "time"
   "sync"
 
-  "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
-  "gitlab.com/swapbyt3s/zenit/plugins/inputs/mysql"
-  "gitlab.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
-  "gitlab.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
-  "gitlab.com/swapbyt3s/zenit/plugins/inputs/os"
-  "gitlab.com/swapbyt3s/zenit/plugins/inputs/process"
-  "gitlab.com/swapbyt3s/zenit/plugins/inputs/proxysql"
-  "gitlab.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
-  "gitlab.com/swapbyt3s/zenit/plugins/outputs/prometheus"
+  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/plugins/accumulator"
+  "github.com/swapbyt3s/zenit/plugins/inputs/mysql"
+  "github.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
+  "github.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
+  "github.com/swapbyt3s/zenit/plugins/inputs/os"
+  "github.com/swapbyt3s/zenit/plugins/inputs/process"
+  "github.com/swapbyt3s/zenit/plugins/inputs/proxysql"
+  "github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
+  "github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
 )
 
 func Gather() {

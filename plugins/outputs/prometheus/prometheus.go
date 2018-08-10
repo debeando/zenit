@@ -7,9 +7,9 @@ import (
   "fmt"
   "strings"
 
-  "gitlab.com/swapbyt3s/zenit/common/file"
-  "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
+  "github.com/swapbyt3s/zenit/common/file"
+  "github.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
 func Run() {

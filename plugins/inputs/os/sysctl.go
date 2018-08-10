@@ -1,8 +1,8 @@
 package os
 
 import (
-  "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
+  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
 const NR_OPEN string  = "/proc/sys/fs/nr_open"

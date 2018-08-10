@@ -11,7 +11,7 @@ import (
   "syscall"
   "time"
 
-  "gitlab.com/swapbyt3s/zenit/common/file"
+  "github.com/swapbyt3s/zenit/common/file"
 )
 
 func PGrep(cmd string) int {

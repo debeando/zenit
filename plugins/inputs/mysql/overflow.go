@@ -5,9 +5,9 @@ import (
   "strings"
   "strconv"
 
-  "gitlab.com/swapbyt3s/zenit/common"
-  "gitlab.com/swapbyt3s/zenit/config"
-  "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
+  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
 type Column struct {
