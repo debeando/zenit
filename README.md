@@ -35,7 +35,13 @@ And this is ingested on:
 
 The numeric values has represent time has in microseconds.
 
-## RISKS!
+## Warnings
+
+- The parse files with very high QPS does big CPU consumption and compromise the server performance. Ensure that you have
+available core for this process.
+- The activation of the Audit and Slow Log compromise the writing performance on disk, use another disk for logs.
+
+## Risks
 
 Zenit is not mature, but all database tools can pose a risk to the system and the database server.
 Before using this tool, please:
@@ -43,12 +49,6 @@ Before using this tool, please:
 - Read the tool's documentation.
 - Review the tool’s known "BUGS".
 - Test the tool on a non-production server.
-
-## Warnings
-
-- The parse files with very high QPS does big CPU consumption and compromise the server performance. Ensure that you have
-available core for this process.
-- The activation of the Audit and Slow Log compromise the writing performance on disk, use another disk for logs.
 
 ## Install
 
