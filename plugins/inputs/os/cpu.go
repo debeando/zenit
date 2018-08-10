@@ -5,6 +5,7 @@ import (
   "time"
 
   "gitlab.com/swapbyt3s/zenit/common"
+  "gitlab.com/swapbyt3s/zenit/common/file"
   "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
@@ -35,9 +36,9 @@ func CPU() {
 }
 
 func getCPUSample() (idle uint64, total uint64) {
-  lines := common.ReadFile("/proc/stat")
+  lines := file.Read("/proc/stat")
   if len(lines) > 0 {
-    fields := strings.Fields(lines[0])
+    fields := strings.Fields(lines)
 
       for i := 1; i < len(fields); i++ {
         total += common.StringToUInt64(fields[i])

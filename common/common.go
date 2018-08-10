@@ -3,7 +3,6 @@ package common
 import (
   "crypto/md5"
   "encoding/hex"
-  "io/ioutil"
   "net"
   "os"
   "os/exec"
@@ -11,6 +10,8 @@ import (
   "strings"
   "syscall"
   "time"
+
+  "gitlab.com/swapbyt3s/zenit/common/file"
 )
 
 func PGrep(cmd string) int {
@@ -19,30 +20,18 @@ func PGrep(cmd string) int {
   return exitcode
 }
 
-func ReadFile(path string) (lines []string) {
-  if _, err := os.Stat(path); err == nil {
-    contents, err := ioutil.ReadFile(path)
-    if err != nil {
-      return
-    }
-
-    lines = strings.Split(string(contents), "\n")
-  }
-  return
-}
-
 func GetUInt64FromFile(path string) uint64 {
-  lines := ReadFile(path)
+  lines := file.Read(path)
   if len(lines) > 0 {
-    return StringToUInt64(lines[0])
+    return StringToUInt64(lines)
   }
   return 0
 }
 
 func GetIntFromFile(path string) int {
-  lines := ReadFile(path)
+  lines := file.Read(path)
   if len(lines) > 0 {
-    return StringToInt(lines[0])
+    return StringToInt(lines)
   }
   return 0
 }
@@ -78,16 +67,6 @@ func StringInArray(key string, list []string) bool {
   }
   return false
 }
-
-//func GetEnv(key string, default_value string) string {
-//  val, ok := os.LookupEnv(key)
-//  if !ok {
-//    if len(default_value) > 0 {
-//      return default_value
-//    }
-//  }
-//  return val
-//}
 
 func Hostname() string {
   host, err := os.Hostname()

@@ -5,6 +5,7 @@ import (
   "strings"
 
   "gitlab.com/swapbyt3s/zenit/common"
+  "gitlab.com/swapbyt3s/zenit/common/file"
   "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
@@ -19,8 +20,10 @@ type MemMetric struct {
 }
 
 func Mem() {
-  lines  := common.ReadFile("/proc/meminfo")
-  mem := MemMetric{}
+  meminfo := file.Read("/proc/meminfo")
+  lines   := strings.Split(meminfo, "\n")
+  mem     := MemMetric{}
+
   for _, line := range(lines) {
     fields := strings.Split(line, ":")
 

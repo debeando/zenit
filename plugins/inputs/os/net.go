@@ -5,12 +5,14 @@ import (
   "strings"
 
   "gitlab.com/swapbyt3s/zenit/common"
+  "gitlab.com/swapbyt3s/zenit/common/file"
   "gitlab.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
 func Net() {
   reGroups := regexp.MustCompile(`(\d+)`)
-  lines  := common.ReadFile("/proc/net/dev")
+  net      := file.Read("/proc/net/dev")
+  lines    := strings.Split(net, "\n")
 
   for index, line := range(lines) {
     if index > 1 && len(line) > 0 {
