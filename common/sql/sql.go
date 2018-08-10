@@ -1,17 +1,17 @@
 // NOTES:
 // - This a test version for normalize SQL without regex, because is very slowly
 // to parse.
-// - NormalizeQuery converts an SQL statement into a normalized version (with all
+// - Digest converts an SQL statement into a normalized version (with all
 // string/numeric literals replaced with ?).
 // - It most definitely does not validate that a query is syntactically correct.
 
-package common
+package sql
 
 import (
   "unicode"
 )
 
-func NormalizeQuery(s string) string {
+func Digest(s string) string {
   whitespace := false
   quote      := rune(0)
   comment    := false

@@ -5,9 +5,10 @@ package slow
 import (
   "regexp"
 
-  "github.com/swapbyt3s/zenit/plugins/inputs/mysql"
   "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/common/sql"
   "github.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/plugins/inputs/mysql"
 )
 
 const (
@@ -51,7 +52,7 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
         }
 
         if common.KeyInMap("query", result) {
-          result["query_digest"] = common.NormalizeQuery(result["query"])
+          result["query_digest"] = sql.Digest(result["query"])
         }
 
         result["host_ip"]      = config.IpAddress

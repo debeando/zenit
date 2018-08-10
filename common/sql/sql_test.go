@@ -1,12 +1,12 @@
-package common_test
+package sql_test
 
 import (
   "testing"
 
-  "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/common/sql"
 )
 
-var sql = []struct{ ID, Input, Expected string }{
+var queries = []struct{ ID, Input, Expected string }{
   {"comment_case_1",
    "-- SELECT 1;",
    ""},
@@ -96,9 +96,9 @@ var sql = []struct{ ID, Input, Expected string }{
    ""},
 }
 
-func TestNormalizeQuery(t *testing.T) {
-  for _, test := range sql {
-    actual := common.NormalizeQuery(test.Input)
+func TestDigest(t *testing.T) {
+  for _, test := range queries {
+    actual := sql.Digest(test.Input)
 
     if test.Expected != actual {
       t.Error("test '" + test.ID + "' failed. actual = " + actual)

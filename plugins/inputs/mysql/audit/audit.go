@@ -7,9 +7,10 @@ package audit
 import (
   "strings"
 
-  "github.com/swapbyt3s/zenit/plugins/inputs/mysql"
   "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/common/sql"
   "github.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/plugins/inputs/mysql"
 )
 
 func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
@@ -34,7 +35,7 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
         }
 
         if common.KeyInMap("sqltext", result) {
-          result["sqltext_digest"] = common.NormalizeQuery(result["sqltext"])
+          result["sqltext_digest"] = sql.Digest(result["sqltext"])
         }
 
         // Convert timestamp ISO 8601 (UTC) to RFC 3339:
