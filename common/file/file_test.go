@@ -19,6 +19,12 @@ func init() {
   tf  = twd + "/zenit.txt"
 }
 
+func TestExist(t *testing.T) {
+  if file.Exist(tf) {
+    t.Error("The file exist, should be not.")
+  }
+}
+
 func TestCreate(t *testing.T) {
   if ! file.Create(tf) {
     t.Error("Problem to create file.")
@@ -51,5 +57,11 @@ func TestTruncate(t *testing.T) {
 
   if len(file.Read(tf)) != 0 {
     t.Error("Is not truncated file.")
+  }
+}
+
+func TestDelete(t *testing.T) {
+  if ! file.Delete(tf) {
+    t.Error("Problem to delete file.")
   }
 }

@@ -5,13 +5,16 @@ import (
   "io/ioutil"
 )
 
-func Create(s string) bool {
-  // detect if file exists
-  var _, err = os.Stat(s)
+func Exist(f string) bool {
+  if _, err := os.Stat(f); err != nil {
+    return false
+  }
+  return true
+}
 
-  // create file if not exists
-  if os.IsNotExist(err) {
-    var file, err = os.Create(s)
+func Create(f string) bool {
+  if ! Exist(f) {
+    var file, err = os.Create(f)
     if err != nil { return false }
     defer file.Close()
   }
@@ -24,7 +27,7 @@ func Write(f string, s string) bool {
   file, err := os.OpenFile(f, os.O_RDWR, 0644)
   defer file.Close()
   if err != nil { return false }
-  
+
   // write some text line-by-line to file
   _, err = file.WriteString(s)
   if err != nil { return false }
@@ -36,9 +39,9 @@ func Write(f string, s string) bool {
   return true
 }
 
-func Read(path string) (lines string) {
-  if _, err := os.Stat(path); err == nil {
-    contents, err := ioutil.ReadFile(path)
+func Read(f string) (lines string) {
+  if _, err := os.Stat(f); err == nil {
+    contents, err := ioutil.ReadFile(f)
     if err != nil {
       return
     }
@@ -53,10 +56,17 @@ func Truncate(f string) bool {
   file, err := os.OpenFile(f, os.O_RDWR, 0644)
   defer file.Close()
   if err != nil { return false }
-  
+
   file.Truncate(0)
   file.Seek(0,0)
   file.Sync()
 
+  return true
+}
+
+func Delete(f string) bool {
+  if err := os.Remove(f); err != nil {
+    return false
+  }
   return true
 }

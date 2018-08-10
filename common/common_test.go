@@ -2,7 +2,6 @@ package common_test
 
 import (
   "os"
-  "reflect"
   "testing"
 
   "github.com/swapbyt3s/zenit/common"
@@ -115,22 +114,6 @@ func TestKeyInMap(t *testing.T) {
     t.Error("Expected: false")
   }
 }
-
-//func TestGetEnv(t *testing.T) {
-//  expected := "en_US.UTF-8"
-//  result   := common.GetEnv("LANG", "")
-//
-//  if result != expected{
-//    t.Error("Expected: en_US.UTF-8")
-//  }
-//
-//  expected = "en_US.UTF-8"
-//  result   = common.GetEnv("LANG", "es_ES.UTF-8")
-//
-//  if result != expected{
-//    t.Error("Expected: es_ES.UTF-8")
-//  }
-//}
 
 func TestHostname(t *testing.T) {
 

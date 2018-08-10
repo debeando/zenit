@@ -8,38 +8,9 @@ import (
   "syscall"
 
   "github.com/swapbyt3s/zenit/common"
+  "github.com/swapbyt3s/zenit/common/file"
   "github.com/swapbyt3s/zenit/config"
 )
-
-func SavePID(pid int) bool {
-  file, err := os.Create(config.General.PIDFile)
-  if err != nil {
-    return false
-  }
-
-  defer file.Close()
-
-  _, err = file.WriteString(strconv.Itoa(pid))
-  if err != nil {
-    return false
-  }
-
-  file.Sync()
-
-  return true
-}
-
-func Executable() string {
-  ex, err := os.Executable()
-  if err != nil {
-    panic(err)
-  }
-  return ex
-}
-
-func Build(command string) string {
-  return fmt.Sprintf("%s --quiet", command)
-}
 
 func Run(command string) int {
   cmd := exec.Command("/bin/bash", "-c", command)
@@ -52,19 +23,20 @@ func Run(command string) int {
 }
 
 func Start() {
-  exec := Executable()
+  if ! file.Exist(config.General.PIDFile) {
+    exec, _ := os.Executable()
+    cmd  := fmt.Sprintf("%s --quiet", exec)
+    pid  := Run(cmd)
 
-  if ! PIDFileExist() {
-    cmd := Build(exec)
-    pid := Run(cmd)
-
-    if ! SavePID(pid) {
-      fmt.Printf("Unable to create PID file: %s\n", config.General.PIDFile)
-      os.Exit(1)
+    if file.Create(config.General.PIDFile) {
+      if file.Write(config.General.PIDFile, strconv.Itoa(pid)) {
+        fmt.Printf("Zenit daemon process ID (PID) is %d and is saved in %s\n", pid, config.General.PIDFile)
+        os.Exit(0)
+      }
     }
 
-    fmt.Printf("Zenit daemon process ID (PID) is %d and is saved in %s\n", pid, config.General.PIDFile)
-    os.Exit(0)
+    fmt.Printf("Unable to create PID file: %s\n", config.General.PIDFile)
+    os.Exit(1)
   } else {
     fmt.Printf("Zenit already running or %s file exist.\n", config.General.PIDFile)
     os.Exit(1)
@@ -72,10 +44,10 @@ func Start() {
 }
 
 func Stop() {
-  if PIDFileExist() {
-    pid := GetPIDFromFile()
-    if KillProcess(pid) {
-      if RemovePIDFile() {
+  if file.Exist(config.General.PIDFile) {
+    pid := common.GetIntFromFile(config.General.PIDFile)
+    if Kill(pid) {
+      if file.Delete(config.General.PIDFile) {
         os.Exit(0)
       }
     }
@@ -83,26 +55,8 @@ func Stop() {
   os.Exit(1)
 }
 
-func PIDFileExist() bool {
-  if _, err := os.Stat(config.General.PIDFile); err != nil {
-    return false
-  }
-  return true
-}
-
-func GetPIDFromFile() int {
-  return common.GetIntFromFile(config.General.PIDFile)
-}
-
-func KillProcess(pid int) bool {
+func Kill(pid int) bool {
   if err := syscall.Kill(pid, syscall.SIGKILL); err != nil {
-    return false
-  }
-  return true
-}
-
-func RemovePIDFile() bool {
-  if err := os.Remove(config.General.PIDFile); err != nil {
     return false
   }
   return true
