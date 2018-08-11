@@ -2,7 +2,6 @@ package common
 
 import (
   "bufio"
-  "fmt"
   "log"
   "os"
   "os/exec"
@@ -14,15 +13,9 @@ func Tail(path string, channel chan<- string) {
     os.Exit(1)
   }
 
-  cmd := exec.Command("/usr/bin/tail", "-n", "0", "-f", path)
-
-  cmdReader, err := cmd.StdoutPipe()
-  if err != nil {
-    fmt.Fprintln(os.Stderr, "Error creating StdoutPipe for Cmd", err)
-    os.Exit(1)
-  }
-
-  scanner := bufio.NewScanner(cmdReader)
+  cmd       := exec.Command("/usr/bin/tail", "-n", "0", "-f", path)
+  stdout, _ := cmd.StdoutPipe()
+  scanner   := bufio.NewScanner(stdout)
 
   go func() {
     defer close(channel)
@@ -32,15 +25,5 @@ func Tail(path string, channel chan<- string) {
     }
   }()
 
-  err = cmd.Start()
-  if err != nil {
-    fmt.Fprintln(os.Stderr, "Error starting Cmd", err)
-    os.Exit(1)
-  }
-
-  err = cmd.Wait()
-  if err != nil {
-    fmt.Fprintln(os.Stderr, "Error waiting for Cmd", err)
-    os.Exit(1)
-  }
+  cmd.Run()
 }
