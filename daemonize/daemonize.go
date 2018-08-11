@@ -55,8 +55,11 @@ func Stop() {
 }
 
 func Kill(pid int) bool {
-  if err := syscall.Kill(pid, syscall.SIGKILL); err != nil {
-    return false
+  pgid, err := syscall.Getpgid(pid)
+  if err == nil {
+    if err := syscall.Kill(-pgid, syscall.SIGKILL); err != nil {
+      return false
+    }
   }
   return true
 }
