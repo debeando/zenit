@@ -47,15 +47,17 @@ type MySQLConfig struct {
 
 // Struct to save in memory config settings from [mysql-audit] section.
 type MySQLAuditLogConfig struct {
-  Format     string `ini:"format"`
-  LogPath    string `ini:"log_path"`
-  BufferSize int    `ini:"buffer_size"`
+  Format        string `ini:"format"`
+  LogPath       string `ini:"log_path"`
+  BufferSize    int    `ini:"buffer_size"`
+  BufferTimeOut int    `ini:"buffer_timeout"`
 }
 
 // Struct to save in memory config settings from [mysql-slowlog] section.
 type MySQLSlowLogConfig struct {
-  LogPath    string `ini:"log_path"`
-  BufferSize int    `ini:"buffer_size"`
+  LogPath       string `ini:"log_path"`
+  BufferSize    int    `ini:"buffer_size"`
+  BufferTimeOut int    `ini:"buffer_timeout"`
 }
 
 // Struct to save in memory config settings from [proxysql] section.
