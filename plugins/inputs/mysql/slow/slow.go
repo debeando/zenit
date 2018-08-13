@@ -1,4 +1,7 @@
-// TODO: Move this package to inputs/parsers/mysqlslowlog
+// TODO:
+// - Move this package to inputs/parsers/mysqlslowlog
+// - To perform this parser, maybe is a good idea to try replace regexp to "custom" and old way or like style in this
+//   module in own project: common/sql/digest.go
 
 package slow
 
@@ -55,10 +58,15 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
           result["query_digest"] = sql.Digest(result["query"])
         }
 
+        result["_time"]        = result["timestamp"]
         result["host_ip"]      = config.IpAddress
         result["host_name"]    = config.General.Hostname
         result["query"]        = common.Escape(result["query"])
         result["query_digest"] = common.Escape(result["query_digest"])
+
+        // Remove unnused key:
+        delete(result, "time")
+        delete(result, "timestamp")
 
         parser <- result
       }

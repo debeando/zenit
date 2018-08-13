@@ -63,6 +63,15 @@ func KeyInMap(key string, list map[string]string) bool {
   return false
 }
 
+func KeyOfMaps(v []map[string]string) (keys []string) {
+  if len(v) > 0 {
+    for key, _ := range v[0] {
+      keys = append(keys, key)
+    }
+  }
+  return
+}
+
 func StringInArray(key string, list []string) bool {
   for _, l := range list {
     if l == key {
