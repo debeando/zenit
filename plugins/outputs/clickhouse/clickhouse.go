@@ -33,9 +33,9 @@ func Check() bool {
   return true
 }
 
-func Run(e Event, data <-chan map[string]string, t int) {
+func Run(e *Event, data <-chan map[string]string) {
   timeout := make(chan bool)
-  ticker  := time.NewTicker(time.Second * 5)
+  ticker  := time.NewTicker(time.Duration(e.Timeout) * time.Second)
 
   go func() {
     for range ticker.C {
