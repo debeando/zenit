@@ -4,6 +4,7 @@ package clickhouse
 
 import (
   "log"
+  "time"
 
   "github.com/swapbyt3s/zenit/common"
   "github.com/swapbyt3s/zenit/common/sql"
@@ -31,25 +32,47 @@ func Check() bool {
   return true
 }
 
-func Send(e Event, data <-chan map[string]string) {
+func Run(e Event, data <-chan map[string]string, t int) {
+  timeout := make(chan bool)
+  ticker  := time.NewTicker(time.Second * 5)
+
   go func() {
-    for d := range data {
+    for range ticker.C {
+      timeout <- true
+    }
+  }()
+
+  for {
+    select {
+    case <-timeout:
       if config.General.Debug {
-        log.Printf("D! - ClickHouse - Event Type: %s - %#v\n", e.Type, d)
+        log.Printf("D! - ClickHouse - Event timeout: %s - %#v\n", e.Type, e.Values)
       }
-
-      e.Values = append(e.Values, d)
-
-      if len(e.Values) == e.Size {
-        sql := sql.Insert(e.Schema, e.Table, e.Wildcard, e.Values)
+      if len(e.Values) > 0 {
+        sql      := sql.Insert(e.Schema, e.Table, e.Wildcard, e.Values)
+        e.Values = []map[string]string{}
 
         if config.General.Debug {
-          log.Printf("D! - ClickHouse - Event Type: %s - Insert - %s", e.Type, sql)
+          log.Printf("D! - ClickHouse - Event insert: %s - %s", e.Type, sql)
         }
 
+        go common.HTTPPost(config.ClickHouse.DSN, sql)
+      }
+    case d := <- data:
+      if config.General.Debug {
+        log.Printf("D! - ClickHouse - Event capture: %s - %#v\n", e.Type, d)
+      }
+      e.Values = append(e.Values, d)
+      if len(e.Values) == e.Size {
+        sql      := sql.Insert(e.Schema, e.Table, e.Wildcard, e.Values)
         e.Values = []map[string]string{}
+
+        if config.General.Debug {
+          log.Printf("D! - ClickHouse - Event insert: %s - %s", e.Type, sql)
+        }
+
         go common.HTTPPost(config.ClickHouse.DSN, sql)
       }
     }
-  }()
+  }
 }

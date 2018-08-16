@@ -134,7 +134,7 @@ func doCollectParsers(wg *sync.WaitGroup) {
 
       go common.Tail(config.MySQLAuditLog.LogPath, channel_tail)
       go audit.Parser(config.MySQLAuditLog.LogPath, channel_tail, channel_parser)
-      go clickhouse.Send(event, channel_data)
+      go clickhouse.Run(event, channel_data, config.MySQLSlowLog.BufferTimeOut)
 
       go func() {
         for event := range channel_parser {
@@ -187,7 +187,7 @@ func doCollectParsers(wg *sync.WaitGroup) {
 
     go common.Tail(config.MySQLSlowLog.LogPath, channel_tail)
     go slow.Parser(config.MySQLSlowLog.LogPath, channel_tail, channel_parser)
-    go clickhouse.Send(event, channel_data)
+    go clickhouse.Run(event, channel_data, config.MySQLSlowLog.BufferTimeOut)
 
     go func() {
       for event := range channel_parser {
