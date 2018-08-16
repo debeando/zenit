@@ -10,7 +10,7 @@ import (
 
 var wd string
 
-func init() {
+func TestMain(m *testing.M) {
   wd, _ = os.Getwd()
 }
 

@@ -2,20 +2,27 @@ package log
 
 import (
   "log"
+  "flag"
 
   "github.com/swapbyt3s/zenit/config"
 )
 
-func Info(m string, a ...interface{}) {
-  log.Printf("I! - %s\n", m, a)
+func Info(m string) {
+  if flag.Lookup("test.v") == nil {
+    log.Printf("I! - %s\n", m)
+  }
 }
 
-func Error(m string, a ...interface{}){
-  log.Printf("E! - %s\n", m, a)
+func Error(m string){
+  if flag.Lookup("test.v") == nil {
+    log.Printf("E! - %s\n", m)
+  }
 }
 
-func Debug(m string, a ...interface{}) {
+func Debug(m string) {
   if config.General.Debug {
-    log.Printf("D! - %s\n", m, a)
+    if flag.Lookup("test.v") == nil {
+      log.Printf("D! - %s\n", m)
+    }
   }
 }

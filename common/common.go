@@ -6,6 +6,7 @@ import (
   "net"
   "os"
   "os/exec"
+  "sort"
   "strconv"
   "strings"
   "syscall"
@@ -68,6 +69,7 @@ func KeyOfMaps(v []map[string]string) (keys []string) {
     for key, _ := range v[0] {
       keys = append(keys, key)
     }
+    sort.Strings(keys)
   }
   return
 }

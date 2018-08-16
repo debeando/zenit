@@ -103,6 +103,10 @@ func doCollectParsers(wg *sync.WaitGroup) {
       channel_parser := make(chan map[string]string)
       channel_data   := make(chan map[string]string)
 
+      defer close(channel_tail)
+      defer close(channel_parser)
+      defer close(channel_data)
+
       event := &clickhouse.Event{
         Type: "AuditLog",
         Schema: "zenit",
@@ -134,7 +138,7 @@ func doCollectParsers(wg *sync.WaitGroup) {
 
       go common.Tail(config.MySQLAuditLog.LogPath, channel_tail)
       go audit.Parser(config.MySQLAuditLog.LogPath, channel_tail, channel_parser)
-      go clickhouse.Run(event, channel_data)
+      go clickhouse.Send(event, channel_data)
 
       go func() {
         for channel_event := range channel_parser {
@@ -156,6 +160,10 @@ func doCollectParsers(wg *sync.WaitGroup) {
     channel_tail   := make(chan string)
     channel_parser := make(chan map[string]string)
     channel_data   := make(chan map[string]string)
+
+    defer close(channel_tail)
+    defer close(channel_parser)
+    defer close(channel_data)
 
     event := &clickhouse.Event{
       Type: "SlowLog",
@@ -187,7 +195,7 @@ func doCollectParsers(wg *sync.WaitGroup) {
 
     go common.Tail(config.MySQLSlowLog.LogPath, channel_tail)
     go slow.Parser(config.MySQLSlowLog.LogPath, channel_tail, channel_parser)
-    go clickhouse.Run(event, channel_data)
+    go clickhouse.Send(event, channel_data)
 
     go func() {
       for channel_event := range channel_parser {

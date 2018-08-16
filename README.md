@@ -52,7 +52,7 @@ Before using this tool, please:
 
 ## Install
 
-Paste that at a Terminal prompt:
+For the moment, this tool only run in any Linux distribution with 64 bits. Paste that at a Terminal prompt:
 
 ```bash
 bash < <(curl -s https://raw.githubusercontent.com/swapbyt3s/zenit/master/scripts/install.sh)
