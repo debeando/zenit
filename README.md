@@ -96,14 +96,14 @@ Runs in the background and detach from bash.
 
 ## Configure ClickHouse
 
-First, check you have connection to ClickHouse server, for this example the server it is in 127.0.0.1. try the follow command:
+First, check you have connection to ClickHouse server, for this example the server it is in `127.0.0.1`. Try the follow command:
 
 ```bash
 $ curl -s -d 'SELECT 1' http://127.0.0.1:8123/?database=system
 1
 ```
 
-If all is well, the server will respond with the value one (1).
+If all is well, the server will respond with the value one (1).If you have a problem, check the [ClickHouse settings](https://clickhouse.yandex/docs/en/operations/access_rights/).
 
 Second, you will need to create the database and the tables into ClickHouse using this [sql script](https://github.com/swapbyt3s/zenit/blob/master/assets/schema/clickhouse/zenit.sql).
 
