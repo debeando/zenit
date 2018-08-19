@@ -1,4 +1,4 @@
-# Zenit
+# Zenit [![Build Status](https://travis-ci.org/swapbyt3s/zenit.svg?branch=master)](https://travis-ci.org/swapbyt3s/zenit)
 
 Zenit is a daemon collector for metrics and log parsers for dedicated host for MySQL/Percona/Mariadb Servers and
 ProxySQL. Maybe not requires many another agents for this purpose, but with this one you'll find an excellent tool for database administration.
