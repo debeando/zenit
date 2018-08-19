@@ -1,6 +1,9 @@
+sudo: false
 language: go
 go:
   - "1.10"
+notifications:
+  email: false
 script:
   - make deps
   - make tests
