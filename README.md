@@ -15,7 +15,7 @@ for the moment.
 ### Advantage
 
 - Centralize all logs in a single point of view.
-- Each event on logs take the query and digest to help to identify bad queries.
+- Each event on logs take the query and digest to help to identify bad or malformed queries.
 - Improve security to prevent user access into server.
 - Provider useful information for developers to help optimization queries.
 
@@ -110,3 +110,10 @@ Second, you will need to create the database and the tables into ClickHouse usin
 ```bash
 cat assets/schema/clickhouse/zenit.sql | clickhouse-client --multiline
 ```
+
+## Exploring query problems
+
+In ClickHouse you can find bad or malformed queries, or access log, and group by similar queries digested to find the more long execution time. You are free and use your imagination to find problem, please see this examples:
+
+- [SlowLog](https://github.com/swapbyt3s/zenit/blob/master/assets/examples/slow.sql)
+- [AuditLog](https://github.com/swapbyt3s/zenit/blob/master/assets/examples/audit.sql)
