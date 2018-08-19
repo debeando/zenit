@@ -2,6 +2,7 @@ package common_test
 
 import (
   "os"
+  "reflect"
   "testing"
 
   "github.com/swapbyt3s/zenit/common"
@@ -9,7 +10,7 @@ import (
 
 var wd string
 
-func init() {
+func TestMain(m *testing.M) {
   wd, _ = os.Getwd()
 }
 
@@ -112,6 +113,15 @@ func TestKeyInMap(t *testing.T) {
 
   if common.KeyInMap("foo", expected) {
     t.Error("Expected: false")
+  }
+}
+
+func TestKeyOfMaps(t *testing.T) {
+  result   := common.KeyOfMaps([]map[string]string{{"foo": "a", "bar": "1"},{"foo": "b", "bar": "2"}})
+  expected := []string{"foo", "bar"}
+
+  if ! reflect.DeepEqual(result, expected) {
+    t.Error("Expected: []string{\"foo\", \"bar\"}")
   }
 }
 

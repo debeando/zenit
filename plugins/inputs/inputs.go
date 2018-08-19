@@ -90,6 +90,10 @@ func doCollectParsers(wg *sync.WaitGroup) {
   defer wg.Done()
 
   if config.MySQL.AuditLog {
+    if config.General.Debug {
+      log.Println("D! - Load MySQL AuditLog")
+    }
+
     if ! clickhouse.Check() {
       log.Println("E! - AuditLog require active connection to ClickHouse.")
     }
@@ -97,33 +101,106 @@ func doCollectParsers(wg *sync.WaitGroup) {
     if config.MySQLAuditLog.Format == "xml-old" {
       channel_tail   := make(chan string)
       channel_parser := make(chan map[string]string)
-      channel_event  := make(chan map[string]string)
+      channel_data   := make(chan map[string]string)
+
+      defer close(channel_tail)
+      defer close(channel_parser)
+      defer close(channel_data)
+
+      event := &clickhouse.Event{
+        Type: "AuditLog",
+        Schema: "zenit",
+        Table: "mysql_audit_log",
+        Size: config.MySQLAuditLog.BufferSize,
+        Timeout: config.MySQLAuditLog.BufferTimeOut,
+        Wildcard: map[string]string{
+          "_time":          "'%s'",
+          "command_class":  "'%s'",
+          "connection_id":  "%s",
+          "db":             "'%s'",
+          "host":           "'%s'",
+          "host_ip":        "IPv4StringToNum('%s')",
+          "host_name":      "'%s'",
+          "ip":             "'%s'",
+          "name":           "'%s'",
+          "os_login":       "'%s'",
+          "os_user":        "'%s'",
+          "priv_user":      "'%s'",
+          "proxy_user":     "'%s'",
+          "record":         "'%s'",
+          "sqltext":        "'%s'",
+          "sqltext_digest": "'%s'",
+          "status":         "%s",
+          "user":           "'%s'",
+        },
+        Values: []map[string]string{},
+      }
 
       go common.Tail(config.MySQLAuditLog.LogPath, channel_tail)
       go audit.Parser(config.MySQLAuditLog.LogPath, channel_tail, channel_parser)
-      go clickhouse.SendMySQLAuditLog(channel_event)
+      go clickhouse.Send(event, channel_data)
 
-      for event := range channel_parser {
-        channel_event <- event
-      }
+      go func() {
+        for channel_event := range channel_parser {
+          channel_data <- channel_event
+        }
+      }()
     }
   }
 
   if config.MySQL.SlowLog {
+    if config.General.Debug {
+      log.Println("D! - Load MySQL SlowLog")
+    }
+
     if ! clickhouse.Check() {
       log.Println("E! - SlowLog require active connection to ClickHouse.")
     }
 
     channel_tail   := make(chan string)
     channel_parser := make(chan map[string]string)
-    channel_event  := make(chan map[string]string)
+    channel_data   := make(chan map[string]string)
+
+    defer close(channel_tail)
+    defer close(channel_parser)
+    defer close(channel_data)
+
+    event := &clickhouse.Event{
+      Type: "SlowLog",
+      Schema: "zenit",
+      Table: "mysql_slow_log",
+      Size: config.MySQLSlowLog.BufferSize,
+      Timeout: config.MySQLSlowLog.BufferTimeOut,
+      Wildcard: map[string]string{
+        "_time":         "'%s'",
+        "bytes_sent":    "%s",
+        "host_ip":       "IPv4StringToNum('%s')",
+        "host_name":     "'%s'",
+        "killed":        "%s",
+        "last_errno":    "%s",
+        "lock_time":     "%s",
+        "query":         "'%s'",
+        "query_digest":  "'%s'",
+        "query_time":    "%s",
+        "rows_affected": "%s",
+        "rows_examined": "%s",
+        "rows_read":     "%s",
+        "rows_sent":     "%s",
+        "schema":        "'%s'",
+        "thread_id":     "%s",
+        "user_host":     "'%s'",
+      },
+      Values: []map[string]string{},
+    }
 
     go common.Tail(config.MySQLSlowLog.LogPath, channel_tail)
     go slow.Parser(config.MySQLSlowLog.LogPath, channel_tail, channel_parser)
-    go clickhouse.SendMySQLSlowLog(channel_event)
+    go clickhouse.Send(event, channel_data)
 
-    for event := range channel_parser {
-      channel_event <- event
-    }
+    go func() {
+      for channel_event := range channel_parser {
+        channel_data <- channel_event
+      }
+    }()
   }
 }

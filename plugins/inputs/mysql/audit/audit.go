@@ -21,7 +21,26 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
 
     for line := range tail {
       if line == "<AUDIT_RECORD" && len(buffer) > 0 {
-        result := make(map[string]string)
+        result := map[string]string{
+          "_time": "",
+          "command_class": "",
+          "connection_id": "",
+          "db": "",
+          "host": "",
+          "host_ip": "",
+          "host_name": "",
+          "ip": "",
+          "name": "",
+          "os_login": "",
+          "os_user": "",
+          "priv_user": "",
+          "proxy_user": "",
+          "record": "",
+          "sqltext": "",
+          "sqltext_digest": "",
+          "status": "",
+          "user": "",
+        }
 
         for _, kv := range buffer {
           key, value := ParseKeyAndValue(&kv)
@@ -39,14 +58,15 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
         }
 
         // Convert timestamp ISO 8601 (UTC) to RFC 3339:
-        result["timestamp"]      = common.ToDateTime(result["timestamp"], "2006-01-02T15:04:05 UTC")
+        result["_time"]          = common.ToDateTime(result["timestamp"], "2006-01-02T15:04:05 UTC")
         result["host_ip"]        = config.IpAddress
         result["host_name"]      = config.General.Hostname
         result["sqltext"]        = common.Escape(result["sqltext"])
         result["sqltext_digest"] = common.Escape(result["sqltext_digest"])
 
-        // For debug:
-        // fmt.Printf("--(map)> %#v\n", result)
+        // Remove unnused key:
+        delete(result, "timestamp")
+        delete(result, "record")
 
         parser <- result
       } else if line != "/>"{

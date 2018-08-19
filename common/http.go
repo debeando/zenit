@@ -5,8 +5,8 @@ import (
   "strings"
 )
 
-func HTTPPost(uri string, data string) bool {
-  req, err := http.NewRequest(
+func HTTPPost(uri string, data string) int {
+  req, _ := http.NewRequest(
     "POST",
     uri,
     strings.NewReader(data),
@@ -15,13 +15,10 @@ func HTTPPost(uri string, data string) bool {
   client := &http.Client{}
   resp, err := client.Do(req)
   if err != nil {
-    return false
+    // Status code 520 Unknown Error
+    return 520
   }
   defer resp.Body.Close()
 
-  if resp.StatusCode != http.StatusOK {
-    return false
-  }
-
-  return true
+  return resp.StatusCode
 }
