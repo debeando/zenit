@@ -50,13 +50,21 @@ Before using this tool, please:
 - Review the tool’s known "BUGS".
 - Test the tool on a non-production server.
 
-## Install
+## Install zenit agent
 
 For the moment, this tool only run in any Linux distribution with 64 bits. Paste that at a Terminal prompt:
 
 ```bash
 bash < <(curl -s https://raw.githubusercontent.com/swapbyt3s/zenit/master/scripts/install.sh)
 ```
+
+### Configure zenit agent
+
+On most systems, the default locations are `/etc/zenit/zenit.ini` for the main configuration file.
+
+#### Agent Configuration
+
+The configuration is very intuitive, please see the example [config file](https://github.com/swapbyt3s/zenit/blob/master/zenit.ini).
 
 ## How to use it:
 
@@ -86,11 +94,19 @@ Runs in the background and detach from bash.
 ./zenit --stop
 ```
 
+## Configure ClickHouse
 
-## Configuration
+First, check you have connection to ClickHouse server, for this example the server it is in 127.0.0.1. try the follow command:
 
-On most systems, the default locations are `/etc/zenit/zenit.ini` for the main configuration file.
+```bash
+$ curl -s -d 'SELECT 1' http://127.0.0.1:8123/?database=system
+1
+```
 
-### Agent Configuration
+If all is well, the server will respond with the value one (1).
 
-The configuration is very intuitive, please see the example [config file](https://github.com/swapbyt3s/zenit/blob/master/zenit.ini).
+Second, you will need to create the database and the tables into ClickHouse using this [sql script](https://github.com/swapbyt3s/zenit/blob/master/assets/schema/clickhouse/zenit.sql).
+
+```bash
+cat assets/schema/clickhouse/zenit.sql | clickhouse-client --multiline
+```
