@@ -23,7 +23,7 @@ func TestTagsEquals(t *testing.T) {
   result := accumulator.TagsEquals([]accumulator.Tag{accumulator.Tag{"baz", "foo"}},
                                    []accumulator.Tag{accumulator.Tag{"baz", "foo"}})
 
-  if ! result == true {
+  if !result {
     t.Error("Expected false")
   }
 
@@ -31,7 +31,7 @@ func TestTagsEquals(t *testing.T) {
                                   []accumulator.Tag{accumulator.Tag{"bar", "foo1"},
                                                     accumulator.Tag{"baz", "foo2"}})
 
-  if ! result == false {
+  if result {
     t.Error("Expected true")
   }
 }
@@ -59,7 +59,7 @@ func TestUnique(t *testing.T) {
     Values: 123,
   })
 
-  if result == false {
+  if !result {
     t.Error("Expected true")
   }
 
@@ -69,7 +69,7 @@ func TestUnique(t *testing.T) {
     Values: 123,
   })
 
-  if result == true {
+  if result {
     t.Error("Expected false")
   }
 }

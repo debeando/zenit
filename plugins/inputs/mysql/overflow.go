@@ -75,7 +75,7 @@ func Overflow() {
     c.data_type =c.data_type[0:strings.Index(c.data_type, "(")]
     c.current  = m
 
-    if c.unsigned == true {
+    if c.unsigned {
       switch c.data_type {
       case  "tinyint":
         c.percent  = (float64(c.current) / float64(dt_us_tinyint)) * 100
