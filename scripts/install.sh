@@ -24,7 +24,7 @@ if [ -f /usr/local/bin/zenit ]; then
   rm -f /usr/local/bin/zenit
 fi
 
-if [ -f /usr/bin/zenit ]; then
+if [ -L /usr/bin/zenit ]; then
   rm -f /usr/bin/zenit
 fi
 
