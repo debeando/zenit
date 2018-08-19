@@ -101,7 +101,7 @@ var (
 
 // Init does any initialization necessary for the module.
 func init() {
-  IpAddress = common.IpAddress()
+  IpAddress = common.IPAddress()
 }
 
 // Loading settings from config file and set into struct.

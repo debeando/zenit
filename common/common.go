@@ -66,7 +66,7 @@ func KeyInMap(key string, list map[string]string) bool {
 
 func KeyOfMaps(v []map[string]string) (keys []string) {
   if len(v) > 0 {
-    for key, _ := range v[0] {
+    for key := range v[0] {
       keys = append(keys, key)
     }
     sort.Strings(keys)
@@ -92,7 +92,7 @@ func Hostname() string {
   return host
 }
 
-func IpAddress() string {
+func IPAddress() string {
   addrs, _ := net.InterfaceAddrs()
 
   for _, a := range addrs {
