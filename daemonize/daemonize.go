@@ -24,7 +24,7 @@ func Run(command string) int {
 func Start() {
   if ! file.Exist(config.General.PIDFile) {
     exec, _ := os.Executable()
-    cmd  := fmt.Sprintf("%s --quiet", exec)
+    cmd  := fmt.Sprintf("/usr/bin/nohup %s --quiet >/dev/null 2>&1 &", exec)
     pid  := Run(cmd)
 
     if file.Create(config.General.PIDFile) {
