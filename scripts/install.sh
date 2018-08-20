@@ -40,3 +40,5 @@ if [ ! -f /etc/zenit/zenit.ini ]; then
   mkdir -p /etc/zenit/
   curl -s https://raw.githubusercontent.com/swapbyt3s/zenit/master/zenit.ini > /etc/zenit/zenit.ini
 fi
+
+exit 0
