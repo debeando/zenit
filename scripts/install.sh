@@ -18,7 +18,7 @@ if ! type "wget" > /dev/null; then
 fi
 
 FILE="zenit-linux_amd64.tar.gz"
-TAG=$(curl --silent "https://api.github.com/repos/swapbyt3s/zenit/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+TAG=$(wget -qO- "https://api.github.com/repos/swapbyt3s/zenit/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
 if [ -f /usr/local/bin/zenit ]; then
   rm -f /usr/local/bin/zenit
@@ -38,7 +38,7 @@ fi
 
 if [ ! -f /etc/zenit/zenit.ini ]; then
   mkdir -p /etc/zenit/
-  curl -s https://raw.githubusercontent.com/swapbyt3s/zenit/master/zenit.ini > /etc/zenit/zenit.ini
+  wget -qO- "https://raw.githubusercontent.com/swapbyt3s/zenit/master/zenit.ini" > /etc/zenit/zenit.ini
 fi
 
 exit 0
