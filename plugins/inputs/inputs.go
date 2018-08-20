@@ -103,10 +103,6 @@ func doCollectParsers(wg *sync.WaitGroup) {
       channel_parser := make(chan map[string]string)
       channel_data   := make(chan map[string]string)
 
-      defer close(channel_tail)
-      defer close(channel_parser)
-      defer close(channel_data)
-
       event := &clickhouse.Event{
         Type: "AuditLog",
         Schema: "zenit",
@@ -160,10 +156,6 @@ func doCollectParsers(wg *sync.WaitGroup) {
     channel_tail   := make(chan string)
     channel_parser := make(chan map[string]string)
     channel_data   := make(chan map[string]string)
-
-    defer close(channel_tail)
-    defer close(channel_parser)
-    defer close(channel_data)
 
     event := &clickhouse.Event{
       Type: "SlowLog",
