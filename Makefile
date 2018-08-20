@@ -8,6 +8,9 @@ deps: ## Install dependencies
 	go get -u github.com/go-sql-driver/mysql
 	go get -u github.com/go-ini/ini
 
+deps-devel:
+	brew install jq
+
 tests: ## Run tests
 	go test -cover ./...
 

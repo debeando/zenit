@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [ -z "$GITHUB_TOKEN" ]
+then
+  echo "Require environment variable: GITHUB_TOKEN"
+  exit 1
+fi
+
 TAG=$(cat config/config.go | grep VERSION | awk -F'"' '{$0=$2}1')
 
 git push --delete origin "v${TAG}"
