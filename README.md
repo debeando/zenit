@@ -60,7 +60,7 @@ bash < <(curl -s https://raw.githubusercontent.com/swapbyt3s/zenit/master/script
 
 ### Configure zenit agent
 
-On most systems, the default locations are `/etc/zenit/zenit.ini` for the main configuration file.
+By default configuration file are in `/etc/zenit/zenit.ini`.
 
 #### Agent Configuration
 
@@ -99,8 +99,13 @@ Runs in the background and detach from bash.
 First, check you have connection to ClickHouse server, for this example the server it is in `127.0.0.1`. Try the follow command:
 
 ```bash
-$ curl -s -d 'SELECT 1' http://127.0.0.1:8123/?database=system
-1
+$ curl -s -d 'SELECT 1' 'http://127.0.0.1:8123/?database=system'
+```
+
+With user and password:
+
+```bash
+$ curl -s -d 'SELECT 1' 'http://127.0.0.1:8123/?user=admin&password=admin&database=system'
 ```
 
 If all is well, the server will respond with the value one (1).If you have a problem, check the [ClickHouse settings](https://clickhouse.yandex/docs/en/operations/access_rights/).
