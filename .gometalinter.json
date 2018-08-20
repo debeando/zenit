@@ -1,4 +1,4 @@
 {
-  "Enable": ["golint", "errcheck", "vet", "structcheck", "gosimple"],
+  "Enable": ["golint"],
   "Exclude": [".* be unexported"]
 }
