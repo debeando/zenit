@@ -25,7 +25,7 @@ type Event struct {
 func Check() bool {
   log.Info(fmt.Sprintf("ClickHouse - DSN: %s", config.ClickHouse.DSN))
   if common.HTTPPost(config.ClickHouse.DSN, "SELECT 1;") != 200 {
-    log.Error("ClickHouse - Imposible to connect.")
+    log.Error("ClickHouse - Impossible to connect.")
     return false
   }
 

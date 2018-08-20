@@ -12,7 +12,7 @@ func Check() bool {
   log.Printf("I! - MySQL - DSN: %s\n", config.MySQL.DSN)
   conn, err := common.MySQLConnect(config.MySQL.DSN)
   if err != nil {
-    log.Printf("E! - MySQL - Imposible to connect: %s\n", err)
+    log.Printf("E! - MySQL - Impossible to connect: %s\n", err)
     return false
   }
 

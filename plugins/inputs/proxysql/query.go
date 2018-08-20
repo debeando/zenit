@@ -45,7 +45,7 @@ func Check() bool {
   log.Printf("I! - ProxySQL - DSN: %s\n", config.ProxySQL.DSN)
   conn, err := common.MySQLConnect(config.ProxySQL.DSN)
   if err != nil {
-    log.Printf("E! - ProxySQL - Imposible to connect: %s\n", err)
+    log.Printf("E! - ProxySQL - Impossible to connect: %s\n", err)
     return false
   }
 
