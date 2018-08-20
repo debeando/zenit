@@ -4,8 +4,6 @@ import (
   "bytes"
   "strconv"
   "database/sql"
-
-  _ "github.com/go-sql-driver/mysql"
 )
 
 func MySQLConnect(dsn string) (*sql.DB, error) {

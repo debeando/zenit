@@ -59,7 +59,7 @@ func Digest(s string) string {
       multiline = true
       // continue
     } else if comment && multiline && sql[x] == '*' && x + 1 < length && sql[x + 1] == '/' {
-      x += 1
+      x++
       comment = false
       multiline = false
       continue
@@ -103,7 +103,7 @@ func Digest(s string) string {
       quote = sql[x]
       result = append(result, '\'')
     } else if quote > 0 && sql[x] == '\\' && x + 1 < length && sql[x + 1] == quote {
-      x += 1
+      x++
     } else if sql[x] == quote {
       quote = 0
       result = append(result, '?')

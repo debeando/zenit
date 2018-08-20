@@ -6,4 +6,5 @@ notifications:
   email: false
 script:
   - make deps
+  - make lint
   - make tests

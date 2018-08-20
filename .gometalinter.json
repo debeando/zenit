@@ -1,0 +1,4 @@
+{
+  "Enable": ["golint"],
+  "Exclude": [".* be unexported"]
+}
