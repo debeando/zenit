@@ -1,11 +1,13 @@
 package slow_test
 
 import (
+  "reflect"
   "regexp"
   "testing"
 
   "github.com/swapbyt3s/zenit/common"
   "github.com/swapbyt3s/zenit/common/sql"
+  "github.com/swapbyt3s/zenit/config"
   "github.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
 )
 
@@ -83,5 +85,55 @@ func TestKeysValues(t *testing.T) {
         t.Error("test '" + test.Key + "' failed. actual = " + test.Value)
       }
     }
+  }
+}
+
+func TestParser(t *testing.T) {
+  channelTail   := make(chan string)
+  channelParser := make(chan map[string]string)
+
+  defer close(channelTail)
+  defer close(channelParser)
+
+  expected := map[string]string{
+    "rows_read":"100",
+    "query":"SELECT count(*) AS total FROM foo WHERE att = 'bar';",
+    "_time":"1529940303",
+    "host_ip":"192.168.1.41",
+    "killed":"0",
+    "query_time":"0.792864",
+    "query_digest":"SELECT count(*) AS total FROM foo WHERE att = '?';",
+    "user_host":"test",
+    "last_errno":"0",
+    "lock_time":"0.000160",
+    "rows_affected":"0",
+    "host_name":"",
+    "schema":"test",
+    "rows_examined":"100",
+    "bytes_sent":"6",
+    "thread_id":"123456",
+    "rows_sent":"1",
+  }
+
+  lines := []string{
+    "# Time: 180625 15:25:03",
+    "# User@Host: test[test] @ [127.0.0.1]",
+    "# Thread_id: 123456  Schema: test  Last_errno: 0  Killed: 0",
+    "# Query_time: 0.792864  Lock_time: 0.000160  Rows_sent: 1  Rows_examined: 100  Rows_affected: 0  Rows_read: 100",
+    "# Bytes_sent: 60",
+    "SET timestamp=1529940303;",
+    "SELECT count(*) AS total FROM foo WHERE att = 'bar';",
+  }
+
+  go slow.Parser(config.MySQLSlowLog.LogPath, channelTail, channelParser)
+
+  for _, line := range lines {
+    channelTail <- line
+  }
+
+  found := <-channelParser
+
+  if ! reflect.DeepEqual(found, expected) {
+    t.Errorf("Expected %s, found %s", expected, found)
   }
 }
