@@ -54,6 +54,8 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
           result["user_host"] = mysql.ClearUser(result["user_host"])
         }
 
+        result["query"] = result["query"] + ";"
+
         if common.KeyInMap("query", result) {
           result["query_digest"] = sql.Digest(result["query"])
         }

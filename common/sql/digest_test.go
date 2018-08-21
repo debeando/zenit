@@ -6,7 +6,7 @@ import (
   "github.com/swapbyt3s/zenit/common/sql"
 )
 
-var queries = []struct{ ID, Input, Expected string }{
+var queries = []struct{ID, Input, Expected string}{
   {"comment_case_1",
    "-- SELECT 1;",
    ""},
