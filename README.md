@@ -50,6 +50,11 @@ Before using this tool, please:
 - Review the tool’s known "BUGS".
 - Test the tool on a non-production server.
 
+## Limitations
+
+- The audit log cut long query.
+- ClickHouse no have retention policy for data storage.
+
 ## Install zenit agent
 
 For the moment, this tool only run in any Linux distribution with 64 bits. Paste that at a Terminal prompt:
