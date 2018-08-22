@@ -1,4 +1,4 @@
-# Zenit [![Build Status](https://travis-ci.org/swapbyt3s/zenit.svg?branch=master)](https://travis-ci.org/swapbyt3s/zenit) [![Gitter chat](https://badges.gitter.im/Zenit-Agent/Lobby.png)](https://gitter.im/Zenit-Agent/Lobby) [![codecov](https://codecov.io/gh/swapbyt3s/zenit/branch/master/graph/badge.svg)](https://codecov.io/gh/swapbyt3s/zenit)
+# Zenit [![Build Status](https://travis-ci.org/swapbyt3s/zenit.svg?branch=master)](https://travis-ci.org/swapbyt3s/zenit) [![Gitter chat](https://badges.gitter.im/Zenit-Agent/Lobby.png)](https://gitter.im/Zenit-Agent/Lobby) [![codecov](https://codecov.io/gh/swapbyt3s/zenit/branch/master/graph/badge.svg)](https://codecov.io/gh/swapbyt3s/zenit) [![Go Report Card](https://goreportcard.com/badge/github.com/swapbyt3s/zenit)](https://goreportcard.com/report/github.com/swapbyt3s/zenit)
 
 Zenit is a daemon collector for metrics and log parsers for dedicated host for MySQL/Percona/Mariadb Servers and
 ProxySQL. Maybe not requires many another agents for this purpose, but with this one you'll find an excellent tool for database administration.
