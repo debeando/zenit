@@ -58,9 +58,11 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
         }
 
         // Convert timestamp ISO 8601 (UTC) to RFC 3339:
-        result["_time"]     = common.ToDateTime(result["timestamp"], "2006-01-02T15:04:05 UTC")
-        result["host_ip"]   = config.IpAddress
-        result["host_name"] = config.General.Hostname
+        result["_time"]          = common.ToDateTime(result["timestamp"], "2006-01-02T15:04:05 UTC")
+        result["host_ip"]        = config.IpAddress
+        result["host_name"]      = config.General.Hostname
+        result["sqltext"]        = common.Escape(result["sqltext"])
+        result["sqltext_digest"] = common.Escape(result["sqltext_digest"])
 
         // Remove unnused key:
         delete(result, "timestamp")

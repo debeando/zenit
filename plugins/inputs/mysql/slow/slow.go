@@ -60,9 +60,11 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
           result["query_digest"] = sql.Digest(result["query"])
         }
 
-        result["_time"]     = result["timestamp"]
-        result["host_ip"]   = config.IpAddress
-        result["host_name"] = config.General.Hostname
+        result["_time"]        = result["timestamp"]
+        result["host_ip"]      = config.IpAddress
+        result["host_name"]    = config.General.Hostname
+        result["query"]        = common.Escape(result["query"])
+        result["query_digest"] = common.Escape(result["query_digest"])
 
         // Remove unnused key:
         delete(result, "time")

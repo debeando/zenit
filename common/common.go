@@ -124,7 +124,7 @@ func ToDateTime(timestamp string, layout string) string {
 }
 
 func Escape(text string) string {
-  return strings.Replace(text, "'", "\\'", -1)
+  return strings.Replace(text, "'", `\'`, -1)
 }
 
 func ExecCommand(cmd string) (stdout string, exitcode int) {
