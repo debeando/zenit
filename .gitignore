@@ -13,3 +13,6 @@ zenit
 
 # Build
 pkg/
+
+# codecov
+coverage.txt

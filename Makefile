@@ -12,7 +12,7 @@ deps-devel:
 	brew install jq
 
 tests: ## Run tests
-	go test -cover ./...
+	go test -cover -race -coverprofile=coverage.txt -covermode=atomic ./...
 
 build: ## Build binary
 	go build -ldflags "-s -w" -o zenit main.go
