@@ -121,7 +121,7 @@ Second, you will need to create the database and the tables into ClickHouse usin
 cat assets/schema/clickhouse/zenit.sql | clickhouse-client --multiline
 ```
 
-## Exploring query problems
+## Exploring logs in ClickHouse
 
 In ClickHouse you can find bad or malformed queries, or access log, and group by similar queries digested to find the more long execution time. You are free and use your imagination to find problem, please see this examples:
 
