@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if ! type "jq" > /dev/null; then
+  echo "Require command tool, please install: jq"
+  exit 1
+fi
+
 if [ -z "$GITHUB_TOKEN" ]
 then
   echo "Require environment variable: GITHUB_TOKEN"
