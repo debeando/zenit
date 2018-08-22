@@ -3,6 +3,7 @@ package common
 import (
   "crypto/md5"
   "encoding/hex"
+  "flag"
   "net"
   "os"
   "os/exec"
@@ -84,6 +85,10 @@ func StringInArray(key string, list []string) bool {
 }
 
 func Hostname() string {
+  if flag.Lookup("test.v") != nil {
+    return "localhost.test"
+  }
+
   host, err := os.Hostname()
   if err != nil {
     return ""
@@ -93,6 +98,10 @@ func Hostname() string {
 }
 
 func IpAddress() string {
+  if flag.Lookup("test.v") != nil {
+    return "127.0.0.1"
+  }
+
   addrs, _ := net.InterfaceAddrs()
 
   for _, a := range addrs {
@@ -115,7 +124,7 @@ func ToDateTime(timestamp string, layout string) string {
 }
 
 func Escape(text string) string {
-  return strings.Replace(text, "'", "\\'", -1)
+  return strings.Replace(text, "'", `\'`, -1)
 }
 
 func ExecCommand(cmd string) (stdout string, exitcode int) {

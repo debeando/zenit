@@ -72,9 +72,9 @@ func HandlerResponse() http.Handler {
                       "rows_affected,rows_examined,rows_read,rows_sent,schema,thread_id,user_host" +
                       ") VALUES (" +
                       "'1529940303',60,IPv4StringToNum('127.0.0.1'),'localhost',0,0,0.000160," +
-                      "'SELECT count(*) FROM tabletest WHERE deleted_at IS NULL;'," +
-                      "'SELECT count(*) FROM tabletest WHERE deleted_at IS NULL;',0.792864,0,27997,27997,1,'test'," +
-                      "55883795,'test');"
+                      "'SELECT count(*) FROM tabletest WHERE att = 'foo' AND deleted_at IS NULL;'," +
+                      "'SELECT count(*) FROM tabletest WHERE att = '?' AND deleted_at IS NULL;'," +
+                      "0.792864,0,27997,27997,1,'test',55883795,'test');"
 
         fmt.Printf("          > %s\n", query)
 
@@ -126,8 +126,8 @@ func TestSQLInsert(t *testing.T) {
     "killed":        "0",
     "last_errno":    "0",
     "lock_time":     "0.000160",
-    "query":         "SELECT count(*) FROM tabletest WHERE deleted_at IS NULL;",
-    "query_digest":  "SELECT count(*) FROM tabletest WHERE deleted_at IS NULL;",
+    "query":         "SELECT count(*) FROM tabletest WHERE att = 'foo' AND deleted_at IS NULL;",
+    "query_digest":  "SELECT count(*) FROM tabletest WHERE att = '?' AND deleted_at IS NULL;",
     "query_time":    "0.792864",
     "rows_affected": "0",
     "rows_examined": "27997",
@@ -168,8 +168,8 @@ func TestSendTimeout(t *testing.T) {
         "killed":        "0",
         "last_errno":    "0",
         "lock_time":     "0.000160",
-        "query":         "SELECT count(*) FROM tabletest WHERE deleted_at IS NULL;",
-        "query_digest":  "SELECT count(*) FROM tabletest WHERE deleted_at IS NULL;",
+        "query":         "SELECT count(*) FROM tabletest WHERE att = 'foo' AND deleted_at IS NULL;",
+        "query_digest":  "SELECT count(*) FROM tabletest WHERE att = '?' AND deleted_at IS NULL;",
         "query_time":    "0.792864",
         "rows_affected": "0",
         "rows_examined": "27997",
