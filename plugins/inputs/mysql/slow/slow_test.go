@@ -1,7 +1,6 @@
 package slow_test
 
 import (
-  "reflect"
   "regexp"
   "testing"
 
@@ -93,26 +92,25 @@ func TestParser(t *testing.T) {
   channelParser := make(chan map[string]string)
 
   defer close(channelTail)
-  defer close(channelParser)
 
   expected := map[string]string{
-    "rows_read":"100",
-    "query":"SELECT count(*) AS total FROM foo WHERE att = 'bar';",
     "_time":"1529940303",
-    "host_ip":"192.168.1.41",
+    "bytes_sent":"6",
+    "host_ip":"127.0.0.1",
+    "host_name":"",
     "killed":"0",
-    "query_time":"0.792864",
-    "query_digest":"SELECT count(*) AS total FROM foo WHERE att = '?';",
-    "user_host":"test",
     "last_errno":"0",
     "lock_time":"0.000160",
+    "query":"SELECT count(*) AS total FROM foo WHERE att = 'bar';",
+    "query_digest":"SELECT count(*) AS total FROM foo WHERE att = '?';",
+    "query_time":"0.792864",
     "rows_affected":"0",
-    "host_name":"",
-    "schema":"test",
     "rows_examined":"100",
-    "bytes_sent":"6",
-    "thread_id":"123456",
+    "rows_read":"100",
     "rows_sent":"1",
+    "schema":"test",
+    "thread_id":"123456",
+    "user_host":"test",
   }
 
   lines := []string{
@@ -133,7 +131,9 @@ func TestParser(t *testing.T) {
 
   found := <-channelParser
 
-  if ! reflect.DeepEqual(found, expected) {
-    t.Errorf("Expected %s, found %s", expected, found)
+  for key, value := range found {
+    if expected[key] != value {
+      t.Errorf("Expected key '%s' value %s, found %s", key, expected[key], value)
+    }
   }
 }
