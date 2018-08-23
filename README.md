@@ -14,7 +14,7 @@ for the moment.
 
 ### Advantage
 
-- Centralize all logs in a single point of view.
+- Centralize all logs in a single point of view. Ideal for security audit.
 - Each event on logs take the query and digest to help to identify bad or malformed queries.
 - Improve security to prevent user access into server.
 - Provider useful information for developers to help optimization queries.
