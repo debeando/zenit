@@ -12,7 +12,7 @@ import (
 
 const (
   AUTHOR  string = "Nicola Strappazzon C. <swapbyt3s@gmail.com>"
-  VERSION string = "1.1.3"
+  VERSION string = "1.1.4"
 )
 
 // Struct to save in memory config settings from [general] section.
