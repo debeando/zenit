@@ -8,8 +8,8 @@ The name [Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) is inspired by
 ## Description:
 
 This agent collect all basic metrics from the hardware and more details from MySQL or ProxySQL services.
-And read logs in real time, each event is parsed to analize later, the logs is send to [ClickHouse](https://github.com/yandex/ClickHouse/)
-because is very easy to analize with SQL and have great performance. And the metrics is send only to [Prometheus](https://github.com/prometheus/prometheus)
+And read logs in real time, each event is parsed to analyse later, the logs is send to [ClickHouse](https://github.com/yandex/ClickHouse/)
+because is very easy to analyse with SQL and have great performance. And the metrics is send only to [Prometheus](https://github.com/prometheus/prometheus)
 for the moment.
 
 ### Advantage
