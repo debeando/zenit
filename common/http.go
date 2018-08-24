@@ -1,24 +1,24 @@
 package common
 
 import (
-  "net/http"
-  "strings"
+	"net/http"
+	"strings"
 )
 
 func HTTPPost(uri string, data string) int {
-  req, _ := http.NewRequest(
-    "POST",
-    uri,
-    strings.NewReader(data),
-  )
+	req, _ := http.NewRequest(
+		"POST",
+		uri,
+		strings.NewReader(data),
+	)
 
-  client := &http.Client{}
-  resp, err := client.Do(req)
-  if err != nil {
-    // Status code 520 Unknown Error
-    return 520
-  }
-  defer resp.Body.Close()
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		// Status code 520 Unknown Error
+		return 520
+	}
+	defer resp.Body.Close()
 
-  return resp.StatusCode
+	return resp.StatusCode
 }

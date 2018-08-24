@@ -1,14 +1,14 @@
 package main
 
 import (
-  "flag"
-  "fmt"
-  "os"
+	"flag"
+	"fmt"
+	"os"
 
-  "github.com/swapbyt3s/zenit/common"
-  "github.com/swapbyt3s/zenit/config"
-  "github.com/swapbyt3s/zenit/daemonize"
-  "github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/daemonize"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
 const USAGE = `zenit (%s) written by %s
@@ -22,41 +22,41 @@ Options:
 `
 
 func init() {
-  config.Load()
-  config.SanityCheck()
-  common.LogInit(config.General.LogFile)
+	config.Load()
+	config.SanityCheck()
+	common.LogInit(config.General.LogFile)
 }
 
 func main() {
-  fHelp    := flag.Bool("help", false, "Show this help.")
-  fQuiet   := flag.Bool("quiet", false, "Run in quiet mode.")
-  fStart   := flag.Bool("start", false, "Fork to the background and detach from the shell.")
-  fStop    := flag.Bool("stop", false, "Stop daemon.")
-  fVersion := flag.Bool("version", false, "Show version.")
+	fHelp := flag.Bool("help", false, "Show this help.")
+	fQuiet := flag.Bool("quiet", false, "Run in quiet mode.")
+	fStart := flag.Bool("start", false, "Fork to the background and detach from the shell.")
+	fStop := flag.Bool("stop", false, "Stop daemon.")
+	fVersion := flag.Bool("version", false, "Show version.")
 
-  flag.Usage = func() { help(0) }
-  flag.Parse()
+	flag.Usage = func() { help(0) }
+	flag.Parse()
 
-  if len(os.Args) == 1 {
-    help(0)
-  }
+	if len(os.Args) == 1 {
+		help(0)
+	}
 
-  switch {
-  case *fVersion:
-    fmt.Printf("%s\n", config.VERSION)
-    return
-  case *fHelp:
-    help(0)
-  case *fStart:
-    daemonize.Start()
-  case *fStop:
-    daemonize.Stop()
-  case *fQuiet:
-    inputs.Gather()
-  }
+	switch {
+	case *fVersion:
+		fmt.Printf("%s\n", config.VERSION)
+		return
+	case *fHelp:
+		help(0)
+	case *fStart:
+		daemonize.Start()
+	case *fStop:
+		daemonize.Stop()
+	case *fQuiet:
+		inputs.Gather()
+	}
 }
 
 func help(rc int) {
-  fmt.Printf(USAGE, config.VERSION, config.AUTHOR, os.Args[0])
-  os.Exit(rc)
+	fmt.Printf(USAGE, config.VERSION, config.AUTHOR, os.Args[0])
+	os.Exit(rc)
 }
