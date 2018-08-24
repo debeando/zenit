@@ -14,8 +14,9 @@ for the moment.
 
 ### Advantage
 
-- Centralize all logs in a single point of view. Ideal for security audit.
-- Each event on logs take the query and digest to help to identify bad or malformed queries.
+- Centralize all logs in a single point of view.
+- Audit database access.
+- Have more details for debugging or performance analyses. For example; filter by user account, type of query, error, execution time, killed, etc.
 - Improve security to prevent user access into server.
 - Provider useful information for developers to help optimization queries.
 
@@ -37,9 +38,8 @@ The numeric values has represent time has in microseconds.
 
 ## Warnings
 
-- The parse files with very high QPS does big CPU consumption and compromise the server performance. Ensure that you have
-available core for this process.
-- The activation of the Audit and Slow Log compromise the writing performance on disk, use another disk for logs.
+- The activation of the Audit and Slow Log compromise the writing performance on disk, and another resources, use another disk for logs and have the necessary resources to support this process.
+- The parse files with very high QPS does big CPU consumption and compromise the server performance. Ensure that you have one available core for this process.
 
 ## Risks
 
@@ -120,6 +120,26 @@ Second, you will need to create the database and the tables into ClickHouse usin
 ```bash
 cat assets/schema/clickhouse/zenit.sql | clickhouse-client --multiline
 ```
+
+## Percona configuration:
+
+### Audit Log
+
+- audit_log_rotate_on_size=1G
+- audit_log_rotations=2
+- audit_log_exclude_accounts='monitor@%,monitor@localhost'
+
+### Slow Log
+
+- slow_query_log=on
+- long_query_time=0
+- log_slow_rate_limit=1
+- log_slow_rate_type=query
+- log_slow_verbosity=full
+- log_slow_admin_statements=on
+- log_slow_slave_statements=on
+- slow_query_log_always_write_time=1
+- slow_query_log_use_global_control=all
 
 ## Exploring logs in ClickHouse
 
