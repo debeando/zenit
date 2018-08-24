@@ -1,67 +1,67 @@
 package file_test
 
 import (
-  "os"
-  "path/filepath"
-  "testing"
+	"os"
+	"path/filepath"
+	"testing"
 
-  "github.com/swapbyt3s/zenit/common/file"
+	"github.com/swapbyt3s/zenit/common/file"
 )
 
 var (
- twd string
- tf  string
+	twd string
+	tf  string
 )
 
 func init() {
-  ex, _ := os.Executable()
-  twd = filepath.Dir(ex)
-  tf  = twd + "/zenit.txt"
+	ex, _ := os.Executable()
+	twd = filepath.Dir(ex)
+	tf = twd + "/zenit.txt"
 }
 
 func TestExist(t *testing.T) {
-  if file.Exist(tf) {
-    t.Error("The file exist, should be not.")
-  }
+	if file.Exist(tf) {
+		t.Error("The file exist, should be not.")
+	}
 }
 
 func TestCreate(t *testing.T) {
-  if ! file.Create(tf) {
-    t.Error("Problem to create file.")
-  }
+	if !file.Create(tf) {
+		t.Error("Problem to create file.")
+	}
 
-  if _, err := os.Stat(tf); os.IsNotExist(err) {
-    t.Error("File not exist in: zenit.txt")
-  }
+	if _, err := os.Stat(tf); os.IsNotExist(err) {
+		t.Error("File not exist in: zenit.txt")
+	}
 }
 
 func TestWrite(t *testing.T) {
-  if ! file.Write(tf, "Test 1\nTest 2") {
-    t.Error("Problem to write in file.")
-  }
+	if !file.Write(tf, "Test 1\nTest 2") {
+		t.Error("Problem to write in file.")
+	}
 }
 
 func TestRead(t *testing.T) {
-  result   := file.Read(tf)
-  expected := "Test 1\nTest 2"
+	result := file.Read(tf)
+	expected := "Test 1\nTest 2"
 
-  if result != expected {
-    t.Error("Expected: " + expected)
-  }
+	if result != expected {
+		t.Error("Expected: " + expected)
+	}
 }
 
 func TestTruncate(t *testing.T) {
-  if ! file.Truncate(tf) {
-    t.Error("Problem to truncate file.")
-  }
+	if !file.Truncate(tf) {
+		t.Error("Problem to truncate file.")
+	}
 
-  if len(file.Read(tf)) != 0 {
-    t.Error("Is not truncated file.")
-  }
+	if len(file.Read(tf)) != 0 {
+		t.Error("Is not truncated file.")
+	}
 }
 
 func TestDelete(t *testing.T) {
-  if ! file.Delete(tf) {
-    t.Error("Problem to delete file.")
-  }
+	if !file.Delete(tf) {
+		t.Error("Problem to delete file.")
+	}
 }

@@ -1,17 +1,17 @@
 package daemonize_test
 
 import (
-  "testing"
+	"testing"
 
-  "github.com/swapbyt3s/zenit/daemonize"
+	"github.com/swapbyt3s/zenit/daemonize"
 )
 
 func TestRun(t *testing.T) {
-  cmd      := "echo 'test'"
-  expected := 0
-  result   := daemonize.Run(cmd)
+	cmd := "echo 'test'"
+	expected := 0
+	result := daemonize.Run(cmd)
 
-  if result == expected {
-    t.Error("Expected: pid > 0")
-  }
+	if result == expected {
+		t.Error("Expected: pid > 0")
+	}
 }
