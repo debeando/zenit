@@ -15,11 +15,11 @@ services:
       default:
         ipv4_address: 172.20.1.2
 
-  zenit:
-    image: zenit
+  sandbox:
+    image: sandbox
     build:
       context: ../
-      dockerfile: docker/zenit/Dockerfile
+      dockerfile: docker/sandbox/Dockerfile
     networks:
       default:
         ipv4_address: 172.20.1.3

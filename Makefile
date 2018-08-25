@@ -35,9 +35,9 @@ docker-down: ## Down docker-compose
 docker-clickhouse: ## Enter into ClickHouse Client
 	docker exec -i -t -u root docker_clickhouse_1 /usr/bin/clickhouse-client
 
-docker-zenit-bash: ## Enter into zenit container
-	docker exec -i -t -u root docker_zenit_1 /bin/bash
+docker-sandbox-bash: ## Enter into sandbox container
+	docker exec -i -t -u root docker_sandbox_1 /bin/bash
 
-docker-zenit-build: ## Build binary and copy to container
+docker-sandbox-build: ## Build binary and copy to container
 	GOOS=linux go build -ldflags "-s -w" -o zenit main.go
-	docker cp zenit docker_zenit_1:/root
+	docker cp sandbox docker_sandbox_1:/root
