@@ -1,4 +1,6 @@
 #!/bin/bash
+# encoding: UTF-8
+set -e
 
 echo "This is a idle script (infinite loop) to keep container running."
 echo "Please replace this script."

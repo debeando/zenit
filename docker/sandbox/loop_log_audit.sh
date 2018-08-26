@@ -1,4 +1,6 @@
 #!/bin/bash
+# encoding: UTF-8
+set -e
 
 while :; do
   cat /root/test_audit.log >> /var/lib/mysql/audit.log
