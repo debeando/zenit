@@ -131,15 +131,18 @@ cat assets/schema/clickhouse/zenit.sql | clickhouse-client --multiline
 
 ### Slow Log
 
-- slow_query_log=on
-- long_query_time=0
-- log_slow_rate_limit=1
-- log_slow_rate_type=query
-- log_slow_verbosity=full
-- log_slow_admin_statements=on
-- log_slow_slave_statements=on
-- slow_query_log_always_write_time=1
-- slow_query_log_use_global_control=all
+| Variable                          | Value | MySQL | Percona | MariaDB |
+|-----------------------------------|-------|-------|---------|---------|
+| log_slow_admin_statements         | on    | No    | Yes     |         |
+| log_slow_rate_limit               | 1     | No    | Yes     |         |
+| log_slow_rate_type                | query | No    | Yes     |         |
+| log_slow_slave_statements         | on    | No    | Yes     |         |
+| log_slow_verbosity                | full  | No    | Yes     |         |
+| long_query_time                   | 0     | Yes   | Yes     | Yes     |
+| slow_query_log                    | on    | Yes   | Yes     | Yes     |
+| slow_query_log_always_write_time  | 1     | No    | Yes     |         |
+| slow_query_log_file               |       | Yes   | Yes     | Yes     |
+| slow_query_log_use_global_control | all   | No    | Yes     |         |
 
 ## Exploring logs in ClickHouse
 
