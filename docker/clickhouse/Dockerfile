@@ -69,7 +69,7 @@ ENV LC_ALL en_US.UTF-8
 # Define user
 USER clickhouse
 
-# Expose the default http port
+# Expose the default ClickHouse ports
 EXPOSE 9000 8123 9009
 
 # Set the working directory to /root

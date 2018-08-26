@@ -5,6 +5,7 @@ services:
   clickhouse:
     image: clickhouse
     build: clickhouse
+    container_name: zenit_clickhouse
     ulimits:
       nofile:
         soft: 262144
@@ -15,14 +16,32 @@ services:
       default:
         ipv4_address: 172.20.1.2
 
+  percona-server:
+    image: percona-server
+    build: percona-server
+    container_name: zenit_percona_server
+    volumes:
+      - data:/var/lib/mysql
+    networks:
+      default:
+        ipv4_address: 172.20.1.3
+
   sandbox:
     image: sandbox
     build:
       context: ../
       dockerfile: docker/sandbox/Dockerfile
+    container_name: zenit_sandbox
+    depends_on:
+      - percona-server
+    volumes:
+      - data:/root/mysql/data
     networks:
       default:
-        ipv4_address: 172.20.1.3
+        ipv4_address: 172.20.1.10
+
+volumes:
+  data:
 
 networks:
   default:
