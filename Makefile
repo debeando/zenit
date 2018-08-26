@@ -25,19 +25,19 @@ docker-build: ## Build docker images
 	docker-compose --file docker/docker-compose.yml build
 
 docker-up: ## Run docker-compose
-	docker-compose --file docker/docker-compose.yml up --detach
-	docker cp assets/schema/clickhouse/zenit.sql docker_clickhouse_1:/root
-	docker exec -i -t -u root docker_clickhouse_1 /bin/bash -c "cat /root/zenit.sql | /usr/bin/clickhouse-client --multiquery"
+	docker-compose --file docker/docker-compose.yml --project-name=zenit up --detach
+	docker cp assets/schema/clickhouse/zenit.sql zenit_clickhouse_1:/root
+	docker exec -i -t -u root zenit_clickhouse_1 /bin/bash -c "cat /root/zenit.sql | /usr/bin/clickhouse-client --multiquery"
 
 docker-down: ## Down docker-compose
-	docker-compose --file docker/docker-compose.yml down
+	docker-compose --file docker/docker-compose.yml --project-name=zenit down
 
 docker-clickhouse: ## Enter into ClickHouse Client
-	docker exec -i -t -u root docker_clickhouse_1 /usr/bin/clickhouse-client
+	docker exec -i -t -u root zenit_clickhouse_1 /usr/bin/clickhouse-client
 
 docker-sandbox-bash: ## Enter into sandbox container
-	docker exec -i -t -u root docker_sandbox_1 /bin/bash
+	docker exec -i -t -u root zenit_sandbox_1 /bin/bash
 
 docker-sandbox-build: ## Build binary and copy to container
 	GOOS=linux go build -ldflags "-s -w" -o zenit main.go
-	docker cp sandbox docker_sandbox_1:/root
+	docker cp sandbox zenit_sandbox_1:/root
