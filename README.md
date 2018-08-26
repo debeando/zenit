@@ -131,18 +131,24 @@ cat assets/schema/clickhouse/zenit.sql | clickhouse-client --multiline
 
 ### Slow Log
 
-| Variable                          | Value | MySQL | Percona | MariaDB |
-|-----------------------------------|-------|-------|---------|---------|
-| log_slow_admin_statements         | on    | No    | Yes     |         |
-| log_slow_rate_limit               | 1     | No    | Yes     |         |
-| log_slow_rate_type                | query | No    | Yes     |         |
-| log_slow_slave_statements         | on    | No    | Yes     |         |
-| log_slow_verbosity                | full  | No    | Yes     |         |
-| long_query_time                   | 0     | Yes   | Yes     | Yes     |
-| slow_query_log                    | on    | Yes   | Yes     | Yes     |
-| slow_query_log_always_write_time  | 1     | No    | Yes     |         |
-| slow_query_log_file               |       | Yes   | Yes     | Yes     |
-| slow_query_log_use_global_control | all   | No    | Yes     |         |
+List of related variables for the slow query log and light different between MySQL, Percona and MariaDB, please check the
+official documentation to more details and compatibility:
+
+| Variable                          | Value | MySQL | Percona | MariaDB | Description                                        |
+|-----------------------------------|-------|-------|---------|---------|----------------------------------------------------|
+| log_output                        | FILE  | Yes   | Yes     | Yes     | How the output will be written                     |
+| log_queries_not_using_indexes     | on    | Yes   | Yes     | Yes     | Whether to log queries that don't use indexes      |
+| log_slow_admin_statements         | on    | No    | Yes     | Yes     | Whether to log certain admin statements            |
+| log_slow_rate_limit               | 1     | No    | Yes     | Yes     | Permits a fraction of slow queries to be logged    |
+| log_slow_rate_type                | query | No    | Yes     |         |                                                    |
+| log_slow_slave_statements         | on    | No    | Yes     |         | Log slow statements executed by slave thread       |
+| log_slow_verbosity                | full  | No    | Yes     |         | Amount of detail in the log                        |
+| long_query_time                   | 0     | Yes   | Yes     | Yes     | Time in seconds/microseconds defining a slow query |
+| min_examined_row_limit            | on    | Yes   | Yes     | Yes     | Minimum rows a query must examine to be slow       |
+| slow_query_log                    | on    | Yes   | Yes     | Yes     | Enable/disable the slow query log                  |
+| slow_query_log_always_write_time  | 1     | No    | Yes     |         |                                                    |
+| slow_query_log_file               |       | Yes   | Yes     | Yes     | Name of the slow query log file                    |
+| slow_query_log_use_global_control | all   | No    | Yes     |         |                                                    |
 
 ## Exploring logs in ClickHouse
 
