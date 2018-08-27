@@ -6,6 +6,7 @@
 package slow
 
 import (
+	"fmt"
 	"regexp"
 
 	"github.com/swapbyt3s/zenit/common"
@@ -15,8 +16,8 @@ import (
 )
 
 const (
-	ROW = `#\W.+SET.+\;{1}.+;`
-	KV  = `(\W+Time:\W+(?P<time>\d{6}\W\d{2}:\d{2}:\d{2}))?` +
+	ROW =   `#\W.+SET.+\;{1}.+;`
+	KV  =   `(\W+Time:\W+(?P<time>\d{6}\W\d{2}:\d{2}:\d{2}))?` +
 		`\W+User@Host:\W+(?P<user_host>\w+\[\w+\]\W+@.*\[(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})?\])` +
 		`\W+Thread_id:\W+(?P<thread_id>\d+)` +
 		`\W+Schema:\W+(?P<schema>\w+)` +
@@ -50,6 +51,8 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
 				buffer = ""
 				result := common.RegexpGetGroups(reKV, record)
 
+				fmt.Printf("--> BUFFER: %s\n", result)
+
 				if common.KeyInMap("user_host", result) {
 					result["user_host"] = mysql.ClearUser(result["user_host"])
 				}
@@ -69,6 +72,8 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
 				// Remove unnused key:
 				delete(result, "time")
 				delete(result, "timestamp")
+
+				fmt.Printf("--> PRSER: %#v\n", result)
 
 				parser <- result
 			}
