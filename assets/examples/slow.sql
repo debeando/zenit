@@ -48,6 +48,15 @@ WHERE rows_sent > 1000
 order by rows_sent desc
 limit 10 by host_name;
 
+-- List all hosts and the last log inserted:
+SELECT
+    host_name,
+    MAX(_time),
+    count()
+FROM zenit.mysql_slow_log
+WHERE _time >= (NOW() - (60 * 60 * 24))
+GROUP BY host_name;
+
 -- Example 1:
 SELECT IPv4NumToString(host_ip) AS "IPAddress",
        host_name AS "HostName",

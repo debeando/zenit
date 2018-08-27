@@ -11,50 +11,61 @@ import (
 )
 
 var slowLog = []struct{ ID, Input, Expected string }{
-	{"row_case_1",
+	{
+		"row_case_1",
 		"SELECT * FROM foo; " +
-			"# Time: 180625 15:25:03 " +
-			"# User@Host: test[test] @ [127.0.0.1] " +
-			"# Thread_id: 123456  Schema: test  Last_errno: 0  Killed: 0 " +
-			"# Query_time: 0.792864  Lock_time: 0.000160  Rows_sent: 1  Rows_examined: 100  Rows_affected: 0  Rows_read: 100 " +
-			"# Bytes_sent: 60 " +
-			"SET timestamp=1529940303; " +
-			"SELECT count(*) AS total FROM foo WHERE att = 'bar'; " +
-			"# Time: 180625 15:25:03 ",
-		"# Time: 180625 15:25:03 # User@Host: test[test] @ [127.0.0.1] # Thread_id: 123456  Schema: test  Last_errno: 0  Killed: 0 # Query_time: 0.792864  Lock_time: 0.000160  Rows_sent: 1  Rows_examined: 100  Rows_affected: 0  Rows_read: 100 # Bytes_sent: 60 SET timestamp=1529940303; SELECT count(*) AS total FROM foo WHERE att = 'bar';"},
-	{"row_case_2",
-		"SELECT count(*) AS total FROM foo; " +
-			"# User@Host: test[test] @ [127.0.0.1] " +
-			"# Thread_id: 123456  Schema: test  Last_errno: 0  Killed: 0 " +
-			"# Query_time: 0.792864  Lock_time: 0.000160  Rows_sent: 1  Rows_examined: 100  Rows_affected: 0  Rows_read: 100 " +
-			"# Bytes_sent: 60 " +
-			"SET timestamp=1529940303; " +
-			"UPDATE foo SET bar = NOW() WHERE id = 1; " +
-			"# Time: 180625 15:25:03 ",
-		"# User@Host: test[test] @ [127.0.0.1] # Thread_id: 123456  Schema: test  Last_errno: 0  Killed: 0 # Query_time: 0.792864  Lock_time: 0.000160  Rows_sent: 1  Rows_examined: 100  Rows_affected: 0  Rows_read: 100 # Bytes_sent: 60 SET timestamp=1529940303; UPDATE foo SET bar = NOW() WHERE id = 1;"},
-	{"row_case_3",
+		"# Time: 180625 15:25:03 " +
 		"# User@Host: test[test] @ [127.0.0.1] " +
-			"# Thread_id: 0  Schema: test  Last_errno: 0  Killed: 0 " +
-			"# Query_time: 0.0  Lock_time: 0.0  Rows_sent: 1  Rows_examined: 0  Rows_affected: 0  Rows_read: 0 " +
-			"# Bytes_sent: 0 " +
-			"UPDATE foo SET bar = NOW() WHERE id = 1; " +
-			"# Time: 000000 00:00:00 ",
-		""},
+		"# Thread_id: 123456  Schema: test  Last_errno: 0  Killed: 0 " +
+		"# Query_time: 0.792864  Lock_time: 0.000160  Rows_sent: 1  Rows_examined: 100  Rows_affected: 0  Rows_read: 100 " +
+		"# Bytes_sent: 60 " +
+		"SET timestamp=1529940303; " +
+		"SELECT count(*) AS total FROM foo WHERE att = 'bar'; " +
+		"# Time: 180625 15:25:03 ",
+		"# Time: 180625 15:25:03 # User@Host: test[test] @ [127.0.0.1] # Thread_id: 123456  Schema: test  Last_errno: 0  Killed: 0 # Query_time: 0.792864  Lock_time: 0.000160  Rows_sent: 1  Rows_examined: 100  Rows_affected: 0  Rows_read: 100 # Bytes_sent: 60 SET timestamp=1529940303; SELECT count(*) AS total FROM foo WHERE att = 'bar';",
+	},{
+		"row_case_2",
+		"SELECT count(*) AS total FROM foo; " +
+		"# User@Host: test[test] @ [127.0.0.1] " +
+		"# Thread_id: 123456  Schema: test  Last_errno: 0  Killed: 0 " +
+		"# Query_time: 0.792864  Lock_time: 0.000160  Rows_sent: 1  Rows_examined: 100  Rows_affected: 0  Rows_read: 100 " +
+		"# Bytes_sent: 60 " +
+		"SET timestamp=1529940303; " +
+		"UPDATE foo SET bar = NOW() WHERE id = 1; " +
+		"# Time: 180625 15:25:03 ",
+		"# User@Host: test[test] @ [127.0.0.1] # Thread_id: 123456  Schema: test  Last_errno: 0  Killed: 0 # Query_time: 0.792864  Lock_time: 0.000160  Rows_sent: 1  Rows_examined: 100  Rows_affected: 0  Rows_read: 100 # Bytes_sent: 60 SET timestamp=1529940303; UPDATE foo SET bar = NOW() WHERE id = 1;",
+	},{
+		"row_case_3",
+		"# User@Host: test[test] @ [127.0.0.1] " +
+		"# Thread_id: 0  Schema: test  Last_errno: 0  Killed: 0 " +
+		"# Query_time: 0.0  Lock_time: 0.0  Rows_sent: 1  Rows_examined: 0  Rows_affected: 0  Rows_read: 0 " +
+		"# Bytes_sent: 0 " +
+		"UPDATE foo SET bar = NOW() WHERE id = 1; " +
+		"# Time: 000000 00:00:00 ",
+		"",
+	},
 }
 
 var keysValues = []struct{ Key, Value string }{
-	{"time",
-		"180625 15:25:03"},
-	{"user_host",
-		"test[test] @ [127.0.0.1]"},
-	{"Thread_id",
-		"123456"},
-	{"Query_time",
-		"0.792864"},
-	{"query",
-		"SELECT count(*) AS total FROM foo WHERE att = 'bar'"},
-	{"query_digest",
-		"SELECT count(*) AS total FROM foo WHERE att = '?'"},
+	{
+		"time",
+		"180625 15:25:03",
+	},{
+		"user_host",
+		"test[test] @ [127.0.0.1]",
+	},{
+		"Thread_id",
+		"123456",
+	},{
+		"Query_time",
+		"0.792864",
+	},{
+		"query",
+		"SELECT count(*) AS total FROM foo WHERE att = 'bar'",
+	},{
+		"query_digest",
+		"SELECT count(*) AS total FROM foo WHERE att = '?'",
+	},
 }
 
 func TestRow(t *testing.T) {

@@ -3,8 +3,10 @@
 -- Example 1: List all hosts and the last log inserted:
 SELECT
     host_name,
-    MAX(_time)
+    MAX(_time),
+    count()
 FROM zenit.mysql_audit_log
+WHERE _time >= (NOW() - (60 * 60 * 24))
 GROUP BY host_name;
 
 -- Example 2: List all hosts with audit log count:
