@@ -43,6 +43,16 @@ var slowLog = []struct{ ID, Input, Expected string }{
 		"UPDATE foo SET bar = NOW() WHERE id = 1; " +
 		"# Time: 000000 00:00:00 ",
 		"",
+	},{
+		"row_case_4",
+		"# administrator command: Ping; " +
+		"# User@Host: test[test] @ localhost [127.0.0.1] " +
+		"# Thread_id: 4371  Schema:   QC_hit: No " +
+		"# Query_time: 0.000001  Lock_time: 0.000000  Rows_sent: 0  Rows_examined: 0 " +
+		"# Rows_affected: 0 " +
+		"SET timestamp=1535364205; " +
+		"SHOW GLOBAL VARIABLES; ",
+		"# administrator command: Ping; # User@Host: test[test] @ localhost [127.0.0.1] # Thread_id: 4371  Schema:   QC_hit: No # Query_time: 0.000001  Lock_time: 0.000000  Rows_sent: 0  Rows_examined: 0 # Rows_affected: 0 SET timestamp=1535364205; SHOW GLOBAL VARIABLES;",
 	},
 }
 
