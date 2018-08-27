@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	ROW = `#\W(Time|User\@Host):.+SET.+(SELECT|INSERT|UPDATE|DELETE).+;`
+	ROW = `#\W.+SET.+\;{1}.+;`
 	KV  = `(\W+Time:\W+(?P<time>\d{6}\W\d{2}:\d{2}:\d{2}))?` +
 		`\W+User@Host:\W+(?P<user_host>\w+\[\w+\]\W+@.*\[(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})?\])` +
 		`\W+Thread_id:\W+(?P<thread_id>\d+)` +
