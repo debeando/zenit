@@ -18,11 +18,18 @@ RUN apt-get update
 # BEGIN INSTALLATION
 ###############################################################################
 # -----------------------------------------------------------------------------
+# Install additional packages
+# -----------------------------------------------------------------------------
+RUN apt-get install -y vim
+
+# -----------------------------------------------------------------------------
 # Copy script
 # -----------------------------------------------------------------------------
 RUN mkdir -p /etc/zenit/ && \
     mkdir -p /var/lib/mysql/
 
+COPY assets/tests/slow.log /root/slow.log
+COPY assets/tests/audit.log /root/audit.log
 COPY docker/sandbox/loop_log_audit.sh /root/loop_log_audit.sh
 COPY docker/sandbox/loop_log_slow.sh /root/loop_log_slow.sh
 COPY docker/sandbox/entrypoint.sh /root/entrypoint.sh
