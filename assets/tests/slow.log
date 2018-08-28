@@ -1,0 +1,165 @@
+# Time: 180827 10:21:22
+# User@Host: root[root] @ localhost []
+# Thread_id: 4217  Schema:   QC_hit: No
+# Query_time: 0.000041  Lock_time: 0.000000  Rows_sent: 0  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535365282;
+SET GLOBAL long_query_time=0.1;
+# Time: 180827 10:21:28
+# User@Host: root[root] @ localhost []
+# Thread_id: 4217  Schema:   QC_hit: No
+# Query_time: 1.000166  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535365288;
+select sleep (1);
+# Time: 180827 10:21:30
+# User@Host: root[root] @ localhost []
+# Thread_id: 4217  Schema:   QC_hit: No
+# Query_time: 1.000175  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535365290;
+select sleep (1);
+# Time: 180827 10:27:13
+# User@Host: clickuser[clickuser] @ localhost [127.0.0.1]
+# Thread_id: 4879  Schema:   QC_hit: No
+# Query_time: 0.335369  Lock_time: 0.000231  Rows_sent: 8  Rows_examined: 44
+# Rows_affected: 0
+SET timestamp=1535365633;
+SELECT table_schema, table_name, column_name, column_type
+FROM information_schema.columns
+WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schema','percona')
+  AND column_type LIKE '%int%'
+  AND column_key = 'PRI';
+# Time: 180827 10:27:14
+# User@Host: clickuser[clickuser] @ localhost [127.0.0.1]
+# Thread_id: 4884  Schema:   QC_hit: No
+# Query_time: 0.303736  Lock_time: 0.000029  Rows_sent: 570  Rows_examined: 570
+# Rows_affected: 0
+SET timestamp=1535365634;
+SHOW GLOBAL STATUS;
+# Time: 180827 10:29:21
+# User@Host: root[root] @ localhost []
+# Thread_id: 4217  Schema:   QC_hit: No
+# Query_time: 0.000001  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535365761;
+# administrator command: Quit;
+# Time: 180827 10:58:01
+# User@Host: root[root] @ localhost []
+# Thread_id: 5529  Schema:   QC_hit: No
+# Query_time: 1.000185  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367481;
+select sleep (1);
+# Time: 180827 10:58:03
+# User@Host: root[root] @ localhost []
+# Thread_id: 5529  Schema:   QC_hit: No
+# Query_time: 1.000123  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367483;
+select sleep (1);
+# Time: 180827 10:58:04
+# User@Host: root[root] @ localhost []
+# Thread_id: 5529  Schema:   QC_hit: No
+# Query_time: 1.000153  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367484;
+select sleep (1);
+# Time: 180827 10:58:07
+# User@Host: root[root] @ localhost []
+# Thread_id: 5529  Schema:   QC_hit: No
+# Query_time: 1.000173  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367487;
+select sleep (1);
+# Time: 180827 10:58:09
+# User@Host: root[root] @ localhost []
+# Thread_id: 5529  Schema:   QC_hit: No
+# Query_time: 1.000165  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367489;
+select sleep (1);
+# Time: 180827 10:58:11
+# User@Host: root[root] @ localhost []
+# Thread_id: 5529  Schema:   QC_hit: No
+# Query_time: 1.000170  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367491;
+select sleep (1);
+# Time: 180827 10:58:17
+# User@Host: root[root] @ localhost []
+# Thread_id: 5529  Schema:   QC_hit: No
+# Query_time: 1.000240  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367497;
+select sleep (1);
+# Time: 180827 10:58:19
+# User@Host: root[root] @ localhost []
+# Thread_id: 5529  Schema:   QC_hit: No
+# Query_time: 1.000182  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367499;
+select sleep (1);
+# Time: 180827 11:06:15
+# User@Host: root[root] @ localhost []
+# Thread_id: 5717  Schema:   QC_hit: No
+# Query_time: 1.000162  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367975;
+select sleep (1);
+# Time: 180827 11:06:17
+# User@Host: root[root] @ localhost []
+# Thread_id: 5717  Schema:   QC_hit: No
+# Query_time: 1.000183  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367977;
+select sleep (1);
+# Time: 180827 11:06:19
+# User@Host: root[root] @ localhost []
+# Thread_id: 5717  Schema:   QC_hit: No
+# Query_time: 1.000171  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367979;
+select sleep (1);
+# Time: 180827 11:06:25
+# User@Host: root[root] @ localhost []
+# Thread_id: 5717  Schema:   QC_hit: No
+# Query_time: 2.000196  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367985;
+select sleep (2);
+# Time: 180827 11:06:30
+# User@Host: root[root] @ localhost []
+# Thread_id: 5717  Schema:   QC_hit: No
+# Query_time: 1.000174  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367990;
+select sleep (1);
+# Time: 180827 11:06:33
+# User@Host: root[root] @ localhost []
+# Thread_id: 5717  Schema:   QC_hit: No
+# Query_time: 2.000174  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367993;
+select sleep (2);
+# Time: 180827 11:06:36
+# User@Host: root[root] @ localhost []
+# Thread_id: 5717  Schema:   QC_hit: No
+# Query_time: 1.000175  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535367996;
+select sleep (1);
+# Time: 180827 11:06:40
+# User@Host: root[root] @ localhost []
+# Thread_id: 5717  Schema:   QC_hit: No
+# Query_time: 2.000158  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535368000;
+select sleep (2);
+# Time: 180827 11:06:43
+# User@Host: root[root] @ localhost []
+# Thread_id: 5717  Schema:   QC_hit: No
+# Query_time: 1.000145  Lock_time: 0.000000  Rows_sent: 1  Rows_examined: 0
+# Rows_affected: 0
+SET timestamp=1535368003;
+select sleep (1);

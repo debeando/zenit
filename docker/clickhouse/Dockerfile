@@ -72,8 +72,5 @@ USER clickhouse
 # Expose the default ClickHouse ports
 EXPOSE 9000 8123 9009
 
-# Set the working directory to /root
-WORKDIR /root
-
 # Start service on run container
 ENTRYPOINT exec /usr/bin/clickhouse-server --config=/etc/clickhouse-server/config.xml

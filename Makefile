@@ -43,4 +43,4 @@ docker-sandbox-bash: ## Enter into sandbox container
 
 docker-sandbox-build: ## Build binary and copy to container
 	GOOS=linux go build -ldflags "-s -w" -o zenit main.go
-	docker cp sandbox zenit_sandbox:/root
+	docker cp zenit zenit_sandbox:/root
