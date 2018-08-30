@@ -39,6 +39,7 @@ RUN chmod +x /root/*.sh
 RUN touch /var/log/zenit.log
 RUN touch /var/lib/mysql/slow.log
 RUN touch /var/lib/mysql/audit.log
+RUN sed -i s/127.0.0.1:8123/172.20.1.2:8123/ /etc/zenit/zenit.ini
 
 # -----------------------------------------------------------------------------
 # Clear
