@@ -156,3 +156,21 @@ In ClickHouse you can find bad or malformed queries, or access log, and group by
 
 - [SlowLog](https://github.com/swapbyt3s/zenit/blob/master/assets/examples/slow.sql)
 - [AuditLog](https://github.com/swapbyt3s/zenit/blob/master/assets/examples/audit.sql)
+
+## Configure Prometheus
+
+To allow Zenit metric to Prometheus, you need [node_explorer](https://github.com/prometheus/node_exporter)
+to allow `textfile_collector` into specific folder, for example; maybe in your
+own settings collect from `/usr/local/prometheus/textfile_collector/`, is a good
+idea to make symbolic link for `/var/tmp/zenit.prom`:
+
+```bash
+ln -s /var/tmp/zenit.prom /usr/local/prometheus/textfile_collector/zenit.prom
+```
+
+Another option is change zenit config to save metric in new path:
+
+```ini
+[prometheus]
+textfile = /usr/local/prometheus/textfile_collector/zenit.prom
+```
