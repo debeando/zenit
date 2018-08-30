@@ -27,7 +27,7 @@ func Event(in <-chan string, out chan<- string) {
                         buffer += line + "\n"
 
                         if isQuery == true && e == ";" {
-                                out <- buffer
+                                out <- strings.TrimRight(buffer, "\n")
 
                                 buffer = line + "\n"
                                 isHeader = false
