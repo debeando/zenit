@@ -45,13 +45,19 @@ RUN env DEBIAN_FRONTEND=noninteractive \
     clickhouse-client=18.10.3 \
     clickhouse-common-static=18.10.3 \
     locales \
-    tzdata
+    tzdata \
+    curl
 
 # -----------------------------------------------------------------------------
 # Copy script
 # -----------------------------------------------------------------------------
-COPY config.xml /etc/clickhouse-server/config.d/
+COPY docker/clickhouse/entrypoint.sh /root/entrypoint.sh
+COPY docker/clickhouse/populate.sh /root/populate.sh
+COPY assets/schema/clickhouse/zenit.sql /root/zenit.sql
+COPY docker/clickhouse/config.xml /etc/clickhouse-server/config.d/
 RUN chown -R clickhouse /etc/clickhouse-server/
+RUN chmod a+x /root/entrypoint.sh
+RUN chmod a+x /root/populate.sh
 
 # -----------------------------------------------------------------------------
 # Clear
@@ -66,11 +72,11 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-# Define user
-USER clickhouse
+# Set the working directory to /root
+WORKDIR /root
 
 # Expose the default ClickHouse ports
 EXPOSE 9000 8123 9009
 
 # Start service on run container
-ENTRYPOINT exec /usr/bin/clickhouse-server --config=/etc/clickhouse-server/config.xml
+ENTRYPOINT ["/root/entrypoint.sh"]

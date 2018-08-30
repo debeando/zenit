@@ -4,7 +4,9 @@ version: '3'
 services:
   clickhouse:
     image: clickhouse
-    build: clickhouse
+    build:
+      context: ../
+      dockerfile: docker/clickhouse/Dockerfile
     container_name: zenit_clickhouse
     ulimits:
       nofile:

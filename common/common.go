@@ -143,3 +143,21 @@ func MD5(s string) string {
 	hash := md5.Sum([]byte(s))
 	return hex.EncodeToString(hash[:])
 }
+
+func ComparteMapString(a, b map[string]string) bool {
+    if (a == nil) != (b == nil) {
+        return false;
+    }
+
+    if len(a) != len(b) {
+        return false
+    }
+
+    for k := range a {
+        if a[k] != b[k] {
+            return false
+        }
+    }
+
+    return true
+}

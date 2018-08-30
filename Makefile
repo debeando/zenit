@@ -26,8 +26,6 @@ docker-build: ## Build docker images
 
 docker-up: ## Run docker-compose
 	docker-compose --file docker/docker-compose.yml --project-name=zenit up
-	docker cp assets/schema/clickhouse/zenit.sql zenit_clickhouse:/root
-	docker exec -i -t -u root zenit_clickhouse /bin/bash -c "cat /root/zenit.sql | /usr/bin/clickhouse-client --multiquery"
 
 docker-ps: ## Show status for all containers
 	docker-compose --file docker/docker-compose.yml --project-name=zenit ps

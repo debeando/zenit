@@ -37,8 +37,8 @@ RUN env DEBIAN_FRONTEND=noninteractive \
 # Copy script utility
 # -----------------------------------------------------------------------------
 COPY entrypoint.sh /root/entrypoint.sh
-RUN chmod a+x /root/entrypoint.sh
 COPY configure.sh /root/configure.sh
+RUN chmod a+x /root/entrypoint.sh
 RUN chmod a+x /root/configure.sh
 
 # -----------------------------------------------------------------------------
