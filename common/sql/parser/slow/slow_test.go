@@ -46,7 +46,7 @@ func TestProperty(t *testing.T) {
                 "thread_id": "123456",
                 "schema": "test",
                 "killed": "0",
-                "bytes_sent": "",
+                "bytes_sent": "60",
                 "timestamp": "1529940303",
                 "time": "180625 15:25:03",
                 "user_host": "test[test] _ [127.0.0.1]",

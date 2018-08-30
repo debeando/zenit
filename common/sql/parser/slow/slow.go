@@ -10,29 +10,36 @@ func Event(in <-chan string, out chan<- string) {
         var isQuery  bool
 
         for line := range in {
+                e := ""
+                l := len(line)
+
                 if isQuery == false && strings.HasPrefix(line, "# ") {
                         isHeader = true
                 }
 
-                if isHeader == true {
-                        l := len(line)
-                        a := string(line[0:6])
-                        a  = strings.ToUpper(a)
-                        e := string(line[l-1:l])
-
-                        if a == "SELECT" || a == "INSERT" || a == "UPDATE" || a == "DELETE" {
-                                isQuery = true
-                        }
-
+                if isHeader == true && l >= 6 {
                         buffer += line + "\n"
 
-                        if isQuery == true && e == ";" {
-                                out <- strings.TrimRight(buffer, "\n")
+                        s := string(line[0:6])
+                        s  = strings.ToUpper(s)
 
-                                buffer = line + "\n"
-                                isHeader = false
-                                isQuery = false
+                        if s == "SELECT" || s == "INSERT" || s == "UPDATE" || s == "DELETE" {
+                                isQuery = true
                         }
+                }
+
+                if l > 1 {
+                        e = string(line[l-1:])
+                } else {
+                        e = string(line)
+                }
+
+                if isQuery == true && e == ";" {
+                        out <- strings.TrimRight(buffer, "\n")
+
+                        buffer = line + "\n"
+                        isHeader = false
+                        isQuery = false
                 }
         }
 }
@@ -57,6 +64,7 @@ func Properties(event string) map[string]string {
                         for y := x + 1; y < l; y++ {
                                 // Stop when is finished header and start SQL:
                                 if p[y] == '\n' && p[y + 1] != '#' {
+                                        whiteSpaceEnd = y
                                         break
                                 }
 
@@ -89,6 +97,7 @@ func Properties(event string) map[string]string {
 
                         property[key] = value
                 }
+
                 // Find timestamp value:
                 if (x+24) <= l && string(p[x:x+14]) == "SET timestamp=" {
                         property["timestamp"] = string(p[x+14:x+24])
