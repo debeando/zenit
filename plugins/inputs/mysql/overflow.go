@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/accumulator"
 )
@@ -42,7 +42,7 @@ WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schem
 )
 
 func Overflow() {
-	conn, err := common.MySQLConnect(config.MySQL.DSN)
+	conn, err := mysql.Connect(config.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
 		panic(err)

@@ -1,11 +1,11 @@
-package common
+package http
 
 import (
 	"net/http"
 	"strings"
 )
 
-func HTTPPost(uri string, data string) int {
+func Post(uri string, data string) int {
 	req, _ := http.NewRequest(
 		"POST",
 		uri,

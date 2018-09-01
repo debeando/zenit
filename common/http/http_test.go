@@ -1,4 +1,4 @@
-package common_test
+package http_test
 
 import (
 	"io/ioutil"
@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/swapbyt3s/zenit/common"
+	test "github.com/swapbyt3s/zenit/common/http"
 )
 
 func TestPost(t *testing.T) {
@@ -25,7 +25,7 @@ func TestPost(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	response := common.HTTPPost(ts.URL, "foo")
+	response := test.Post(ts.URL, "foo")
 
 	if response != 200 {
 		t.Errorf("Expecting status to be 200 got %v", response)

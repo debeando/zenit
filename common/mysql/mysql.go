@@ -1,4 +1,4 @@
-package common
+package mysql
 
 import (
 	"bytes"
@@ -8,7 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func MySQLConnect(dsn string) (*sql.DB, error) {
+func Connect(dsn string) (*sql.DB, error) {
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ func MySQLConnect(dsn string) (*sql.DB, error) {
 	return db, err
 }
 
-func MySQLParseValue(value sql.RawBytes) (uint64, bool) {
+func ParseValue(value sql.RawBytes) (uint64, bool) {
 	if bytes.EqualFold(value, []byte("YES")) || bytes.Compare(value, []byte("ON")) == 0 {
 		return 1, true
 	}

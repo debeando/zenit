@@ -9,10 +9,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/sql"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
+
+	test "github.com/swapbyt3s/zenit/common/http"
 )
 
 var ts *httptest.Server
@@ -139,7 +140,7 @@ func TestSQLInsert(t *testing.T) {
 	})
 
 	sql_insert := sql.Insert(event.Schema, event.Table, event.Wildcard, event.Values)
-	status_code := common.HTTPPost(config.ClickHouse.DSN, sql_insert)
+	status_code := test.Post(config.ClickHouse.DSN, sql_insert)
 
 	if status_code != 200 {
 		t.Errorf("Expected response status to be 200 got %v.", status_code)

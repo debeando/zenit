@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/accumulator"
 )
@@ -43,7 +43,7 @@ func init() {
 
 func Check() bool {
 	log.Printf("I! - ProxySQL - DSN: %s\n", config.ProxySQL.DSN)
-	conn, err := common.MySQLConnect(config.ProxySQL.DSN)
+	conn, err := mysql.Connect(config.ProxySQL.DSN)
 	if err != nil {
 		log.Printf("E! - ProxySQL - Impossible to connect: %s\n", err)
 		return false
@@ -55,7 +55,7 @@ func Check() bool {
 }
 
 func QueryDigest() {
-	conn, err := common.MySQLConnect(config.ProxySQL.DSN)
+	conn, err := mysql.Connect(config.ProxySQL.DSN)
 	defer conn.Close()
 	if err != nil {
 		panic(err)

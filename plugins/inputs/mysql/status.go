@@ -3,7 +3,7 @@ package mysql
 import (
 	"database/sql"
 
-	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/accumulator"
 )
@@ -11,7 +11,7 @@ import (
 const QUERY_SQL_STATUS = "SHOW GLOBAL STATUS"
 
 func Status() {
-	conn, err := common.MySQLConnect(config.MySQL.DSN)
+	conn, err := mysql.Connect(config.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
 		panic(err)
@@ -29,7 +29,7 @@ func Status() {
 
 	for rows.Next() {
 		rows.Scan(&k, &v)
-		if value, ok := common.MySQLParseValue(v); ok {
+		if value, ok := mysql.ParseValue(v); ok {
 			a.AddItem(accumulator.Metric{
 				Key:    "mysql_status",
 				Tags:   []accumulator.Tag{{"name", k}},

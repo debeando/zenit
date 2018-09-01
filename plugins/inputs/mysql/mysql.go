@@ -4,13 +4,13 @@ import (
 	"log"
 	"strings"
 
-	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
 )
 
 func Check() bool {
 	log.Printf("I! - MySQL - DSN: %s\n", config.MySQL.DSN)
-	conn, err := common.MySQLConnect(config.MySQL.DSN)
+	conn, err := mysql.Connect(config.MySQL.DSN)
 	if err != nil {
 		log.Printf("E! - MySQL - Impossible to connect: %s\n", err)
 		return false

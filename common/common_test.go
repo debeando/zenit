@@ -154,3 +154,6 @@ func TestEscape(t *testing.T) {
 		t.Error("Expected: <abc=\\'abc\\'>foo</abc>")
 	}
 }
+
+func TestComparteMapString(t *testing.T) {
+}
