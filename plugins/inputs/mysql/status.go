@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"database/sql"
+	"log"
 
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
@@ -14,13 +15,13 @@ func Status() {
 	conn, err := mysql.Connect(config.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
-		panic(err)
+		log.Printf("E! - MySQL:Status - Impossible to connect: %s\n", err)
 	}
 
 	rows, err := conn.Query(QUERY_SQL_STATUS)
 	defer rows.Close()
 	if err != nil {
-		panic(err)
+		log.Printf("E! - MySQL:Status - Impossible to execute query: %s\n", err)
 	}
 
 	var a = accumulator.Load()

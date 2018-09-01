@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -45,13 +46,13 @@ func Overflow() {
 	conn, err := mysql.Connect(config.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
-		panic(err)
+		log.Printf("E! - MySQL:Overflow - Impossible to connect: %s\n", err)
 	}
 
 	rows, err := conn.Query(QUERY_SQL_COLUMNS)
 	defer rows.Close()
 	if err != nil {
-		panic(err)
+		log.Printf("E! - MySQL:Overflow - Impossible to execute query: %s\n", err)
 	}
 
 	var a = accumulator.Load()

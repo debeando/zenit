@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"log"
+
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/accumulator"
@@ -29,13 +31,13 @@ func Tables() {
 	conn, err := mysql.Connect(config.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
-		panic(err)
+		log.Printf("E! - MySQL:Tables - Impossible to connect: %s\n", err)
 	}
 
 	rows, err := conn.Query(QUERY_SQL_TABLES)
 	defer rows.Close()
 	if err != nil {
-		panic(err)
+		log.Printf("E! - MySQL:Tables - Impossible to execute query: %s\n", err)
 	}
 
 	var a = accumulator.Load()

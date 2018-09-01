@@ -58,13 +58,13 @@ func QueryDigest() {
 	conn, err := mysql.Connect(config.ProxySQL.DSN)
 	defer conn.Close()
 	if err != nil {
-		panic(err)
+		log.Printf("E! - ProxySQL - Impossible to connect: %s\n", err)
 	}
 
 	rows, err := conn.Query(QUERY_SQL)
 	defer rows.Close()
 	if err != nil {
-		panic(err)
+		log.Printf("E! - ProxySQL - Impossible to execute query: %s\n", err)
 	}
 
 	for rows.Next() {
