@@ -78,4 +78,5 @@ GROUP BY host_ip, host_name;
 SELECT *
 FROM zenit.mysql_slow_log
 WHERE halfMD5(query_digest) = 11782761010365089099
+ORDER BY lock_time DESC
 LIMIT 10;
