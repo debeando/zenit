@@ -26,6 +26,8 @@ import (
 func Gather() {
 	var wg sync.WaitGroup
 
+	log.Printf("I! Starting Zenit %s\n", config.VERSION)
+
 	wg.Add(2)
 
 	go doCollectPlugins(&wg)
