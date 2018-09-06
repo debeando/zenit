@@ -1,6 +1,7 @@
 package sql
 
 import (
+	"strings"
 	"unicode"
 )
 
@@ -13,7 +14,7 @@ func Digest(s string) string {
 	number     := false
 	quote      := rune(0)
 	result     := []rune("")
-	sql        := []rune(s)
+	sql        := []rune(strings.ToLower(s))
 	whitespace := false
 	length     := len(sql)
 
@@ -73,7 +74,7 @@ func Digest(s string) string {
 		}
 
 		// Remove literals inside of list "IN":
-		if sql[x] == 'I' && x+1 < length && sql[x+1] == 'N' {
+		if sql[x] == 'i' && x+1 < length && sql[x+1] == 'n' {
 			// fmt.Printf("==> %t, %d\n", list, (length - x))
 
 			for y := 0; y < (length - x); y++ {
