@@ -9,7 +9,7 @@ func Digest(s string) string {
 	comment    := false
 	endnumber  := []rune{' ', ',', '+', '-', '*', '/', '^', '%', '(', ')'}
 	list       := false
-	listValues := false
+	values     := false
 	multiline  := false
 	number     := false
 	quote      := rune(0)
@@ -53,7 +53,6 @@ func Digest(s string) string {
 		if !comment && sql[x] == '/' && x+1 < length && sql[x+1] == '*' {
 			comment = true
 			multiline = true
-			// continue
 		} else if comment && multiline && sql[x] == '*' && x+1 < length && sql[x+1] == '/' {
 			x += 1
 			comment = false
@@ -70,44 +69,38 @@ func Digest(s string) string {
 			sql[x] = ' '
 			whitespace = true
 			number = false
-			// continue
 		}
 
-		// Remove literals inside of list "IN":
-		if sql[x] == 'i' && x+1 < length && sql[x+1] == 'n' {
-			// fmt.Printf("==> %t, %d\n", list, (length - x))
-
+		// Remove literals inside of list " IN (":
+		if x >= 1 && sql[x-1] == ' ' && sql[x] == 'i' && x+1 < length && sql[x+1] == 'n' {
 			for y := 0; y < (length - x); y++ {
 				if sql[x+y] == '(' {
-					// fmt.Printf("-- --> S %s, %d\n", string(sql[x+y]), x+y)
 					list = true
-					listValues = false
 					break
 				}
 			}
 		}
 
-		if list && ! listValues && sql[x] == '(' {
-			listValues = true
-		} else if list && listValues && sql[x] == ')' {
-			// fmt.Printf("-- --> E %s, %d\n", string(sql[x]), x)
-			list = false
-			listValues = false
-			result = append(result, '?')
-		} else if list && listValues {
-			continue
+		if list {
+			if ! values && sql[x] == '(' {
+				values = true
+			} else if values && sql[x] == ')' {
+				list = false
+				values = false
+				result = append(result, '?')
+			} else if values {
+				whitespace = false
+				continue
+			}
 		}
 
 		// Remove whitespaces:
 		if quote == 0 && sql[x] == ' ' {
 			whitespace = true
 			number = false
-			// continue
-		} else if quote == 0 {
-			if whitespace {
-				whitespace = false
-				result = append(result, ' ')
-			}
+		} else if quote == 0 && whitespace {
+			whitespace = false
+			result = append(result, ' ')
 		}
 
 		if whitespace {
