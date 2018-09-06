@@ -1,10 +1,3 @@
-// NOTES:
-// - This a test version for normalize SQL without regex, because is very slowly
-// to parse.
-// - Digest converts an SQL statement into a normalized version (with all
-// string/numeric literals replaced with ?).
-// - It most definitely does not validate that a query is syntactically correct.
-
 package sql
 
 import (
@@ -12,15 +5,17 @@ import (
 )
 
 func Digest(s string) string {
+	comment    := false
+	endnumber  := []rune{' ', ',', '+', '-', '*', '/', '^', '%', '(', ')'}
+	list       := false
+	listValues := false
+	multiline  := false
+	number     := false
+	quote      := rune(0)
+	result     := []rune("")
+	sql        := []rune(s)
 	whitespace := false
-	quote := rune(0)
-	comment := false
-	multiline := false
-	number := false
-	result := []rune("")
-	sql := []rune(s)
-	length := len(sql)
-	endnumber := []rune{' ', ',', '+', '-', '*', '/', '^', '%'}
+	length     := len(sql)
 
 	IsNumber := func(r rune) bool {
 		if unicode.IsNumber(r) || r == '.' {
@@ -75,6 +70,31 @@ func Digest(s string) string {
 			whitespace = true
 			number = false
 			// continue
+		}
+
+		// Remove literals inside of list "IN":
+		if sql[x] == 'I' && x+1 < length && sql[x+1] == 'N' {
+			// fmt.Printf("==> %t, %d\n", list, (length - x))
+
+			for y := 0; y < (length - x); y++ {
+				if sql[x+y] == '(' {
+					// fmt.Printf("-- --> S %s, %d\n", string(sql[x+y]), x+y)
+					list = true
+					listValues = false
+					break
+				}
+			}
+		}
+
+		if list && ! listValues && sql[x] == '(' {
+			listValues = true
+		} else if list && listValues && sql[x] == ')' {
+			// fmt.Printf("-- --> E %s, %d\n", string(sql[x]), x)
+			list = false
+			listValues = false
+			result = append(result, '?')
+		} else if list && listValues {
+			continue
 		}
 
 		// Remove whitespaces:
