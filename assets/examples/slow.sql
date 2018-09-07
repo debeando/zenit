@@ -16,16 +16,23 @@ ORDER BY host_name, load DESC
 LIMIT 10 BY host_name;
 
 -- Queries slow in the last 24h:
-SELECT concat(host_name, ' (', IPv4NumToString(host_ip), ')') AS "HostName",
-       halfMD5(query_digest) AS "HashQuery",
-       substring(query_digest, 1, 80) AS "QueryDigest",
-       COUNT() AS "Count",
-       AVG(query_time) AS "AvgExecTime"
+SELECT schema AS "Schema",
+       halfMD5(query_digest) AS "Fingerprint",
+       count() AS "Count",
+       MAX(query_time) AS "MaxTime",
+       AVG(query_time) AS "AvgTime", query_digest AS "QueryDigest",
+       ROUND(AVG(rows_examined), 0) AS "RowsExamined",
+       MAX(_time) AS "LastSeen"
 FROM zenit.mysql_slow_log
-WHERE _time >= (NOW() - (60 * 60 * 24))
-GROUP BY "HostName", query_digest
-ORDER BY AVG(query_time) DESC
-LIMIT 10 BY "HostName";
+WHERE schema LIKE 'zen\_%'
+  AND user_host LIKE 'zen\_%'
+  AND query_digest LIKE 'select%'
+  AND query_time > 0.1
+  AND host_name LIKE '%-prod-%'
+  AND _time >= (NOW() - (60 * 60 * 24))
+GROUP BY halfMD5(query_digest), query_digest, host_name, schema
+LIMIT 10 BY schema
+LIMIT 100;
 
 -- Slowest query:
 SELECT
