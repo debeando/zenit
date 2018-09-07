@@ -121,6 +121,9 @@ var queries = []struct{ ID, Input, Expected string }{
 	{"subquery_case_3",
 		"SELECT count(*) AS total FROM foo JOIN (SELECT DISTINCT * FROM bar WHERE fk = 1);",
 		"select count(*) as total from foo join (select distinct * from bar where fk = ?);"},
+	{"subquery_case_4",
+		"SELECT * FROM foo INNER JOIN (SELECT * FROM bar WHERE fk = 1);",
+		"select * from foo inner join (select * from bar where fk = ?);"},
 }
 
 func TestDigest(t *testing.T) {

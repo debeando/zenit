@@ -1,6 +1,8 @@
 package sql
 
 import (
+	// Uncomment only for debug:
+	// "fmt"
 	"strings"
 	"unicode"
 )
@@ -35,6 +37,9 @@ func Digest(s string) string {
 	}
 
 	for x := 0; x < length; x++ {
+		// Uncomment only for debug:
+		// fmt.Printf("--> %d %s %s\n", x, string(sql[x]), string(result))
+
 		// Remove comments:
 		if !comment && !multiline && sql[x] == '#' {
 			comment = true
@@ -73,9 +78,11 @@ func Digest(s string) string {
 
 		// Remove literals inside of list " IN (":
 		if x >= 1 && sql[x-1] == ' ' && sql[x] == 'i' && x+1 < length && sql[x+1] == 'n' {
-			for y := 0; y < (length - x); y++ {
+			for y := 2; y < (length - x); y++ {
 				if sql[x+y] == '(' {
 					list = true
+					break
+				} else if unicode.IsLetter(sql[x+y]) {
 					break
 				}
 			}
