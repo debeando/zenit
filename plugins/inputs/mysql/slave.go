@@ -12,7 +12,7 @@ import (
 const QUERY_SQL_SLAVE = "SHOW SLAVE STATUS"
 
 func Slave() {
-	conn, err := mysql.Connect(config.MySQL.DSN)
+	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
 		log.Printf("E! - MySQL:Slave - Impossible to connect: %s\n", err)

@@ -20,7 +20,7 @@ func Error(m string) {
 }
 
 func Debug(m string) {
-	if config.General.Debug {
+	if config.File.General.Debug {
 		if flag.Lookup("test.v") == nil {
 			log.Printf("D! - %s\n", m)
 		}

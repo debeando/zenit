@@ -12,7 +12,7 @@ import (
 const QUERY_SQL_STATUS = "SHOW GLOBAL STATUS"
 
 func Status() {
-	conn, err := mysql.Connect(config.MySQL.DSN)
+	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
 		log.Printf("E! - MySQL:Status - Impossible to connect: %s\n", err)

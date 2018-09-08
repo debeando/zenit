@@ -12,7 +12,7 @@ import (
 const QUERY_SQL_VARIABLES = "SHOW GLOBAL VARIABLES"
 
 func Variables() {
-	conn, err := mysql.Connect(config.MySQL.DSN)
+	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
 		log.Printf("E! - MySQL:Variables - Impossible to connect: %s\n", err)

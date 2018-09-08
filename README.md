@@ -65,11 +65,11 @@ bash < <(curl -s https://raw.githubusercontent.com/swapbyt3s/zenit/master/script
 
 ### Configure zenit agent
 
-By default configuration file are in `/etc/zenit/zenit.ini`.
+By default configuration file are in `/etc/zenit/zenit.yaml`.
 
 #### Agent Configuration
 
-The configuration is very intuitive, please see the example [config file](https://github.com/swapbyt3s/zenit/blob/master/zenit.ini).
+The configuration is very intuitive, please see the example [config file](https://github.com/swapbyt3s/zenit/blob/master/zenit.yaml).
 
 ## How to use it:
 
