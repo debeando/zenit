@@ -8,4 +8,4 @@ script:
   - make deps
   - make tests
 after_success:
-  - bash <(curl -s https://codecov.io/bash) c -F unittests
+  - bash <(curl -s https://codecov.io/bash) -c -F unittests

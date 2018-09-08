@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Apache License Version 2.0, January 2004
+# https://github.com/swapbyt3s/zenit/blob/master/LICENSE.md
+
 if ! type "jq" > /dev/null; then
   echo "Require command tool, please install: jq"
   exit 1
