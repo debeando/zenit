@@ -36,9 +36,9 @@ if [ -f /usr/local/bin/zenit ]; then
   ln -s /usr/local/bin/zenit /usr/bin/zenit
 fi
 
-if [ ! -f /etc/zenit/zenit.ini ]; then
+if [ ! -f /etc/zenit/zenit.yaml ]; then
   mkdir -p /etc/zenit/
-  wget -qO- "https://raw.githubusercontent.com/swapbyt3s/zenit/master/zenit.ini" > /etc/zenit/zenit.ini
+  wget -qO- "https://raw.githubusercontent.com/swapbyt3s/zenit/master/zenit.yaml" > /etc/zenit/zenit.yaml
 fi
 
 exit 0

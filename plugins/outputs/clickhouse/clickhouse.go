@@ -23,8 +23,8 @@ type Event struct {
 }
 
 func Check() bool {
-	log.Info(fmt.Sprintf("ClickHouse - DSN: %s", config.ClickHouse.DSN))
-	if http.Post(config.ClickHouse.DSN, "SELECT 1;") != 200 {
+	log.Info(fmt.Sprintf("ClickHouse - DSN: %s", config.File.ClickHouse.DSN))
+	if http.Post(config.File.ClickHouse.DSN, "SELECT 1;") != 200 {
 		log.Error("ClickHouse - Impossible to connect.")
 		return false
 	}
@@ -53,7 +53,7 @@ func Send(e *Event, data <-chan map[string]string) {
 
 				log.Debug(fmt.Sprintf("ClickHouse - Event insert: %s - %s", e.Type, sql))
 
-				go http.Post(config.ClickHouse.DSN, sql)
+				go http.Post(config.File.ClickHouse.DSN, sql)
 			}
 		case d := <-data:
 			log.Debug(fmt.Sprintf("ClickHouse - Event capture: %s - %#v", e.Type, d))
@@ -65,7 +65,7 @@ func Send(e *Event, data <-chan map[string]string) {
 
 				log.Debug(fmt.Sprintf("ClickHouse - Event insert: %s - %s", e.Type, sql))
 
-				go http.Post(config.ClickHouse.DSN, sql)
+				go http.Post(config.File.ClickHouse.DSN, sql)
 			}
 		}
 	}

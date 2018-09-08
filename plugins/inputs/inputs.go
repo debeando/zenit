@@ -40,59 +40,59 @@ func doCollectPlugins(wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for {
-		if config.OS.CPU {
+		if config.File.OS.CPU {
 			os.CPU()
 		}
-		if config.OS.Disk {
+		if config.File.OS.Disk {
 			os.Disk()
 		}
-		if config.OS.Mem {
+		if config.File.OS.Mem {
 			os.Mem()
 		}
-		if config.OS.Net {
+		if config.File.OS.Net {
 			os.Net()
 		}
-		if config.OS.Limits {
+		if config.File.OS.Limits {
 			os.SysLimits()
 		}
-		if config.MySQL.Overflow && mysql.Check() {
+		if config.File.MySQL.Overflow && mysql.Check() {
 			mysql.Overflow()
 		}
-		if config.MySQL.Slave && mysql.Check() {
+		if config.File.MySQL.Slave && mysql.Check() {
 			mysql.Slave()
 		}
-		if config.MySQL.Status && mysql.Check() {
+		if config.File.MySQL.Status && mysql.Check() {
 			mysql.Status()
 		}
-		if config.MySQL.Tables && mysql.Check() {
+		if config.File.MySQL.Tables && mysql.Check() {
 			mysql.Tables()
 		}
-		if config.MySQL.Variables && mysql.Check() {
+		if config.File.MySQL.Variables && mysql.Check() {
 			mysql.Variables()
 		}
-		if config.ProxySQL.QueryDigest && proxysql.Check() {
+		if config.File.ProxySQL.QueryDigest && proxysql.Check() {
 			proxysql.QueryDigest()
 		}
-		if config.Process.PerconaToolKitKill {
+		if config.File.Process.PerconaToolKitKill {
 			process.PerconaToolKitKill()
 		}
-		if config.Process.PerconaToolKitDeadlockLogger {
+		if config.File.Process.PerconaToolKitDeadlockLogger {
 			process.PerconaToolKitDeadlockLogger()
 		}
-		if config.Process.PerconaToolKitSlaveDelay {
+		if config.File.Process.PerconaToolKitSlaveDelay {
 			process.PerconaToolKitSlaveDelay()
 		}
 		prometheus.Run()
 		accumulator.Load().Reset()
-		time.Sleep(config.General.Interval * time.Second)
+		time.Sleep(config.File.General.Interval * time.Second)
 	}
 }
 
 func doCollectParsers(wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	if config.MySQL.AuditLog {
-		if config.General.Debug {
+	if config.File.MySQL.AuditLog.Enable {
+		if config.File.General.Debug {
 			log.Println("D! - Load MySQL AuditLog")
 		}
 
@@ -100,7 +100,7 @@ func doCollectParsers(wg *sync.WaitGroup) {
 			log.Println("E! - AuditLog require active connection to ClickHouse.")
 		}
 
-		if config.MySQLAuditLog.Format == "xml-old" {
+		if config.File.MySQL.AuditLog.Format == "xml-old" {
 			channel_tail := make(chan string)
 			channel_parser := make(chan map[string]string)
 			channel_data := make(chan map[string]string)
@@ -109,8 +109,8 @@ func doCollectParsers(wg *sync.WaitGroup) {
 				Type:    "AuditLog",
 				Schema:  "zenit",
 				Table:   "mysql_audit_log",
-				Size:    config.MySQLAuditLog.BufferSize,
-				Timeout: config.MySQLAuditLog.BufferTimeOut,
+				Size:    config.File.MySQL.AuditLog.BufferSize,
+				Timeout: config.File.MySQL.AuditLog.BufferTimeOut,
 				Wildcard: map[string]string{
 					"_time":          "'%s'",
 					"command_class":  "'%s'",
@@ -134,8 +134,8 @@ func doCollectParsers(wg *sync.WaitGroup) {
 				Values: []map[string]string{},
 			}
 
-			go common.Tail(config.MySQLAuditLog.LogPath, channel_tail)
-			go audit.Parser(config.MySQLAuditLog.LogPath, channel_tail, channel_parser)
+			go common.Tail(config.File.MySQL.AuditLog.LogPath, channel_tail)
+			go audit.Parser(config.File.MySQL.AuditLog.LogPath, channel_tail, channel_parser)
 			go clickhouse.Send(event, channel_data)
 
 			go func() {
@@ -146,8 +146,8 @@ func doCollectParsers(wg *sync.WaitGroup) {
 		}
 	}
 
-	if config.MySQL.SlowLog {
-		if config.General.Debug {
+	if config.File.MySQL.SlowLog.Enable {
+		if config.File.General.Debug {
 			log.Println("D! - Load MySQL SlowLog")
 		}
 
@@ -163,8 +163,8 @@ func doCollectParsers(wg *sync.WaitGroup) {
 			Type:    "SlowLog",
 			Schema:  "zenit",
 			Table:   "mysql_slow_log",
-			Size:    config.MySQLSlowLog.BufferSize,
-			Timeout: config.MySQLSlowLog.BufferTimeOut,
+			Size:    config.File.MySQL.SlowLog.BufferSize,
+			Timeout: config.File.MySQL.SlowLog.BufferTimeOut,
 			Wildcard: map[string]string{
 				"_time":         "'%s'",
 				"bytes_sent":    "%s",
@@ -187,8 +187,8 @@ func doCollectParsers(wg *sync.WaitGroup) {
 			Values: []map[string]string{},
 		}
 
-		go common.Tail(config.MySQLSlowLog.LogPath, channel_tail)
-		go slow.Parser(config.MySQLSlowLog.LogPath, channel_tail, channel_parser)
+		go common.Tail(config.File.MySQL.SlowLog.LogPath, channel_tail)
+		go slow.Parser(config.File.MySQL.SlowLog.LogPath, channel_tail, channel_parser)
 		go clickhouse.Send(event, channel_data)
 
 		go func() {

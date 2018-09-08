@@ -28,7 +28,7 @@ ORDER BY table_schema, table_name;
 `
 
 func Tables() {
-	conn, err := mysql.Connect(config.MySQL.DSN)
+	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
 		log.Printf("E! - MySQL:Tables - Impossible to connect: %s\n", err)

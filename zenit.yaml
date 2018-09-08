@@ -1,0 +1,52 @@
+---
+general:
+  hostname: localhost
+  interval: 30
+  log_file: /var/log/zenit.log
+  pid_file: /var/run/zenit.pid
+  debug: true
+
+mysql:
+  dsn: root@tcp(127.0.0.1:3306)/
+  overflow: true
+  slave: true
+  status: true
+  tables: true
+  variables: true
+  slowlog:
+    enable: true
+    log_path: /var/lib/mysql/slow.log
+    buffer_size: 100
+    buffer_timeout: 60
+  auditlog:
+    enable: true
+    format: xml-old
+    log_path: /var/lib/mysql/audit.log
+    buffer_size: 100
+    buffer_timeout: 60
+
+proxysql:
+  enable: true
+  dsn: radminuser:radminpass@tcp(127.0.0.1:6032)/
+  query_digest: true
+
+clickhouse:
+  enable: true
+  dsn: http://127.0.0.1:8123/?database=zenit
+# dsn: http://127.0.0.1:8123/?user=admin&password=admin&database=zenit
+
+prometheus:
+  enable: true
+  textfile: /var/tmp/zenit.prom
+
+os:
+  cpu: true
+  disk: true
+  limits: true
+  mem: true
+  net: true
+
+process:
+  pt_kill: true
+  pt_deadlock_logger: true
+  pt_slave_delay: true

@@ -33,13 +33,13 @@ COPY assets/tests/audit.log /root/audit.log
 COPY docker/sandbox/loop_log_audit.sh /root/loop_log_audit.sh
 COPY docker/sandbox/loop_log_slow.sh /root/loop_log_slow.sh
 COPY docker/sandbox/entrypoint.sh /root/entrypoint.sh
-COPY zenit.ini /etc/zenit/zenit.ini
+COPY zenit.yaml /etc/zenit/zenit.yaml
 
 RUN chmod +x /root/*.sh
 RUN touch /var/log/zenit.log
 RUN touch /var/lib/mysql/slow.log
 RUN touch /var/lib/mysql/audit.log
-RUN sed -i s/127.0.0.1:8123/172.20.1.2:8123/ /etc/zenit/zenit.ini
+RUN sed -i s/127.0.0.1:8123/172.20.1.2:8123/ /etc/zenit/zenit.yaml
 
 # -----------------------------------------------------------------------------
 # Clear
