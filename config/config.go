@@ -13,7 +13,7 @@ import (
 
 const (
 	AUTHOR  string = "Nicola Strappazzon C. <swapbyt3s@gmail.com>"
-	VERSION string = "1.1.6"
+	VERSION string = "1.1.7"
 )
 
 var File All
