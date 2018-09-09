@@ -44,4 +44,6 @@ if [ ! -f /etc/zenit/zenit.yaml ]; then
   wget -qO- "https://raw.githubusercontent.com/swapbyt3s/zenit/master/zenit.yaml" > /etc/zenit/zenit.yaml
 fi
 
+/usr/bin/zenit --install
+
 exit 0

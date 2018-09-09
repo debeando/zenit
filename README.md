@@ -1,4 +1,4 @@
-# Zenit [![Build Status](https://travis-ci.org/swapbyt3s/zenit.svg?branch=master)](https://travis-ci.org/swapbyt3s/zenit) [![codecov](https://codecov.io/gh/swapbyt3s/zenit/branch/master/graph/badge.svg)](https://codecov.io/gh/swapbyt3s/zenit) [![Go Report Card](https://goreportcard.com/badge/github.com/swapbyt3s/zenit)](https://goreportcard.com/report/github.com/swapbyt3s/zenit) [![Gitter chat](https://badges.gitter.im/Zenit-Agent/Lobby.png)](https://gitter.im/Zenit-Agent/Lobby)
+# Zenit [![Build Status](https://travis-ci.org/swapbyt3s/zenit.svg?branch=master)](https://travis-ci.org/swapbyt3s/zenit) [![Go Report Card](https://goreportcard.com/badge/github.com/swapbyt3s/zenit)](https://goreportcard.com/report/github.com/swapbyt3s/zenit) [![Gitter chat](https://badges.gitter.im/Zenit-Agent/Lobby.png)](https://gitter.im/Zenit-Agent/Lobby)
 
 Zenit is a daemon collector for metrics and log parsers for dedicated host for MySQL/Percona/Mariadb Servers and
 ProxySQL. Maybe not requires many another agents for this purpose, but with this one you'll find an excellent tool for database administration.
@@ -67,36 +67,30 @@ bash < <(curl -s https://raw.githubusercontent.com/swapbyt3s/zenit/master/script
 
 By default configuration file are in `/etc/zenit/zenit.yaml`.
 
-#### Agent Configuration
+The configuration file is very intuitive, please see the example [config file](https://github.com/swapbyt3s/zenit/blob/master/zenit.yaml).
 
-The configuration is very intuitive, please see the example [config file](https://github.com/swapbyt3s/zenit/blob/master/zenit.yaml).
+**Important:** The hostname for your server cannot be "localhost." The host name should be a unique name.
 
-## How to use it:
+However, you may need to manually restart the agent (for example, after changing your agent configuration). For Linux systems, the agent selects an init system depending on your operating system version.
 
-See usage with:
+For Linux systems, ensure you use the correct command for your init system. Select start, stop, restart, or status as appropriate:
 
-```
-./zenit --help
-```
-
-#### Run zenit in quiet mode:
+SystemD (SLES 12, CentOS 7, Debian 8, Debian 9, RHEL 7, Ubuntu 15.04 or higher):
 
 ```
-./zenit --quiet
+sudo systemctl <start|stop|restart|status> zenit
 ```
 
-#### Run zenit in daemon mode:
-
-Runs in the background and detach from bash.
+System V (Debian 7, SLES 11.4):
 
 ```
-./zenit --start
+sudo /etc/init.d/zenit <start|stop|restart|status>
 ```
 
-#### Stop zenit in daemon mode:
+Upstart (Amazon Linux, CentOS 6, RHEL 6, Ubuntu 14.04 or lower):
 
 ```
-./zenit --stop
+sudo initctl <start|stop|restart|status> zenit
 ```
 
 ## Configure ClickHouse

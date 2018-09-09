@@ -2,8 +2,6 @@
 general:
   hostname: localhost
   interval: 30
-  log_file: /var/log/zenit.log
-  pid_file: /var/run/zenit.pid
   debug: true
 
 mysql:
