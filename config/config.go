@@ -22,8 +22,6 @@ type All struct {
 	General struct {
 		Hostname string        `yaml:"hostname"`
 		Interval time.Duration `yaml:"interval"`
-		LogFile  string        `yaml:"log_file"`
-		PIDFile  string        `yaml:"pid_file"`
 		Debug    bool          `yaml:"debug"`
 	}
 	MySQL struct {
@@ -111,15 +109,5 @@ func SanityCheck() {
 	if len(File.General.Hostname) == 0 {
 		log.Println("W! Config - general.hostname: Custom value is not set, using current.")
 		File.General.Hostname = common.Hostname()
-	}
-
-	if len(File.General.LogFile) == 0 {
-		log.Println("W! Config - general.log_file: Custom value is not set, using default /var/log/zenit.log")
-		File.General.LogFile = "/var/log/zenit.log"
-	}
-
-	if len(File.General.PIDFile) == 0 {
-		log.Println("W! Config - general.pid_file: Custom value is not set, using default /var/run/zenit.pid")
-		File.General.PIDFile = "/var/run/zenit.pid"
 	}
 }
