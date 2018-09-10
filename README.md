@@ -107,7 +107,7 @@ With user and password:
 $ curl -s -d 'SELECT 1' 'http://127.0.0.1:8123/?user=admin&password=admin&database=system'
 ```
 
-If all is well, the server will respond with the value one (1).If you have a problem, check the [ClickHouse settings](https://clickhouse.yandex/docs/en/operations/access_rights/).
+If all is well, the server will respond with the value one (1). If you have a problem, check the [ClickHouse settings](https://clickhouse.yandex/docs/en/operations/access_rights/).
 
 Second, you will need to create the database and the tables into ClickHouse using this [sql script](https://github.com/swapbyt3s/zenit/blob/master/assets/schema/clickhouse/zenit.sql).
 

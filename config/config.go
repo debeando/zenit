@@ -46,6 +46,7 @@ type All struct {
 		}
 	}
 	ProxySQL struct {
+		Enable      bool   `yaml:"enable"`
 		DSN         string `yaml:"dsn"`
 		QueryDigest bool   `yaml:"query_digest"`
 	}
@@ -53,6 +54,7 @@ type All struct {
 		DSN string `yaml:"dsn"`
 	}
 	Prometheus struct {
+		Enable   bool   `yaml:"enable"`
 		TextFile string `yaml:"textfile"`
 	}
 	OS struct {

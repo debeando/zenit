@@ -70,7 +70,7 @@ func doCollectPlugins(wg *sync.WaitGroup) {
 		if config.File.MySQL.Variables && mysql.Check() {
 			mysql.Variables()
 		}
-		if config.File.ProxySQL.QueryDigest && proxysql.Check() {
+		if config.File.ProxySQL.Enable && proxysql.Check() {
 			proxysql.QueryDigest()
 		}
 		if config.File.Process.PerconaToolKitKill {
@@ -82,7 +82,9 @@ func doCollectPlugins(wg *sync.WaitGroup) {
 		if config.File.Process.PerconaToolKitSlaveDelay {
 			process.PerconaToolKitSlaveDelay()
 		}
-		prometheus.Run()
+		if config.File.Prometheus.Enable {
+			prometheus.Run()
+		}
 		accumulator.Load().Reset()
 		time.Sleep(config.File.General.Interval * time.Second)
 	}
@@ -94,6 +96,7 @@ func doCollectParsers(wg *sync.WaitGroup) {
 	if config.File.MySQL.AuditLog.Enable {
 		if config.File.General.Debug {
 			log.Println("D! - Load MySQL AuditLog")
+			log.Printf("D! - Read MySQL AuditLog: %s\n", config.File.MySQL.AuditLog.LogPath)
 		}
 
 		if !clickhouse.Check() {
@@ -149,6 +152,7 @@ func doCollectParsers(wg *sync.WaitGroup) {
 	if config.File.MySQL.SlowLog.Enable {
 		if config.File.General.Debug {
 			log.Println("D! - Load MySQL SlowLog")
+			log.Printf("D! - Read MySQL SlowLog: %s\n", config.File.MySQL.SlowLog.LogPath)
 		}
 
 		if !clickhouse.Check() {
