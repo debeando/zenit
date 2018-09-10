@@ -42,8 +42,8 @@ func init() {
 }
 
 func Check() bool {
-	log.Printf("I! - ProxySQL - DSN: %s\n", config.ProxySQL.DSN)
-	conn, err := mysql.Connect(config.ProxySQL.DSN)
+	log.Printf("I! - ProxySQL - DSN: %s\n", config.File.ProxySQL.DSN)
+	conn, err := mysql.Connect(config.File.ProxySQL.DSN)
 	if err != nil {
 		log.Printf("E! - ProxySQL - Impossible to connect: %s\n", err)
 		return false
@@ -55,7 +55,7 @@ func Check() bool {
 }
 
 func QueryDigest() {
-	conn, err := mysql.Connect(config.ProxySQL.DSN)
+	conn, err := mysql.Connect(config.File.ProxySQL.DSN)
 	defer conn.Close()
 	if err != nil {
 		log.Printf("E! - ProxySQL - Impossible to connect: %s\n", err)

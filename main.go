@@ -3,42 +3,71 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 
-	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/daemonize"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
+
+	"github.com/kardianos/service"
 )
 
 const USAGE = `zenit (%s) written by %s
-Usage: %s [--help | --quiet | --start | --stop | --version]
+Usage: %s [--help | --install | --uninstall | --version]
 Options:
   --help        Show this help.
-  --quiet       Run in quiet mode.
-  --start       Start daemon.
-  --stop        Stop daemon.
+  --install     Install service on system.
+  --uninstall   Uninstall service on system.
   --version     Print version numbers.
 `
+
+var logger service.Logger
+
+type program struct{}
+
+func (p *program) Start(s service.Service) error {
+	// Start should not block. Do the actual work async.
+	go p.run()
+	return nil
+}
+func (p *program) run() {
+	inputs.Gather()
+}
+func (p *program) Stop(s service.Service) error {
+	// Stop should not block. Return with a few seconds.
+	return nil
+}
 
 func init() {
 	config.Load()
 	config.SanityCheck()
-	common.LogInit(config.General.LogFile)
 }
 
 func main() {
+	svcConfig := &service.Config{
+		Name: "zenit",
+		DisplayName: "Zenit",
+		Description: "Zenit Agent",
+		Executable: "/usr/bin/zenit",
+	}
+
+	prg := &program{}
+
 	fHelp := flag.Bool("help", false, "Show this help.")
-	fQuiet := flag.Bool("quiet", false, "Run in quiet mode.")
-	fStart := flag.Bool("start", false, "Fork to the background and detach from the shell.")
-	fStop := flag.Bool("stop", false, "Stop daemon.")
+	fInstall := flag.Bool("install", false, "Install service on system.")
+	fUninstall := flag.Bool("uninstall", false, "Uninstall service on system.")
 	fVersion := flag.Bool("version", false, "Show version.")
 
 	flag.Usage = func() { help(0) }
 	flag.Parse()
 
-	if len(os.Args) == 1 {
-		help(0)
+	s, err := service.New(prg, svcConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
+	logger, err = s.Logger(nil)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	switch {
@@ -47,12 +76,17 @@ func main() {
 		return
 	case *fHelp:
 		help(0)
-	case *fStart:
-		daemonize.Start()
-	case *fStop:
-		daemonize.Stop()
-	case *fQuiet:
-		inputs.Gather()
+	case *fInstall:
+		s.Install()
+		os.Exit(0)
+	case *fUninstall:
+		s.Uninstall()
+		os.Exit(0)
+	}
+
+	err = s.Run()
+	if err != nil {
+		logger.Error(err)
 	}
 }
 

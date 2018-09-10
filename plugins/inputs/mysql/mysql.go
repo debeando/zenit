@@ -9,8 +9,8 @@ import (
 )
 
 func Check() bool {
-	log.Printf("I! - MySQL - DSN: %s\n", config.MySQL.DSN)
-	conn, err := mysql.Connect(config.MySQL.DSN)
+	log.Printf("I! - MySQL - DSN: %s\n", config.File.MySQL.DSN)
+	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	if err != nil {
 		log.Printf("E! - MySQL - Impossible to connect: %s\n", err)
 		return false

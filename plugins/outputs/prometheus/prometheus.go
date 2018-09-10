@@ -13,8 +13,8 @@ import (
 )
 
 func Run() {
-	file.Create(config.Prometheus.TextFile)
-	file.Truncate(config.Prometheus.TextFile)
+	file.Create(config.File.Prometheus.TextFile)
+	file.Truncate(config.File.Prometheus.TextFile)
 
 	var a = accumulator.Load()
 	var s string
@@ -30,14 +30,14 @@ func Run() {
 			}
 		}
 
-		if config.General.Debug {
+		if config.File.General.Debug {
 			log.Printf("D! - Prometheus - %s\n", s)
 		}
 
 		e = append(e, s)
 	}
 
-	file.Write(config.Prometheus.TextFile, strings.Join(e, "\n"))
+	file.Write(config.File.Prometheus.TextFile, strings.Join(e, "\n"))
 }
 
 func getTags(tags []accumulator.Tag) string {

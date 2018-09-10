@@ -1,102 +1,78 @@
 package config
 
 import (
+	"io/ioutil"
 	"log"
 	"os"
 	"time"
 
-	"github.com/go-ini/ini"
+	"github.com/go-yaml/yaml"
 
 	"github.com/swapbyt3s/zenit/common"
 )
 
 const (
 	AUTHOR  string = "Nicola Strappazzon C. <swapbyt3s@gmail.com>"
-	VERSION string = "1.1.6"
+	VERSION string = "1.1.7"
 )
 
-// Struct to save in memory config settings from [general] section.
-type GeneralConfig struct {
-	Hostname string        `ini:"hostname"`
-	Interval time.Duration `ini:"interval"`
-	LogFile  string        `ini:"log_file"`
-	PIDFile  string        `ini:"pid_file"`
-	Debug    bool          `ini:"debug"`
-}
+var File All
 
-// Struct to save in memory config settings from [os] section.
-type OSConfig struct {
-	CPU    bool `ini:"cpu"`
-	Disk   bool `ini:"disk"`
-	Limits bool `ini:"limits"`
-	Mem    bool `ini:"mem"`
-	Net    bool `ini:"net"`
-}
-
-// Struct to save in memory config settings from [mysql] section.
-type MySQLConfig struct {
-	DSN       string `ini:"dsn"`
-	Overflow  bool   `ini:"overflow"`
-	Slave     bool   `ini:"slave"`
-	Status    bool   `ini:"status"`
-	Tables    bool   `ini:"tables"`
-	Variables bool   `ini:"variables"`
-	AuditLog  bool   `ini:"auditlog"`
-	SlowLog   bool   `ini:"slowlog"`
-}
-
-// Struct to save in memory config settings from [mysql-audit] section.
-type MySQLAuditLogConfig struct {
-	Format        string `ini:"format"`
-	LogPath       string `ini:"log_path"`
-	BufferSize    int    `ini:"buffer_size"`
-	BufferTimeOut int    `ini:"buffer_timeout"`
-}
-
-// Struct to save in memory config settings from [mysql-slowlog] section.
-type MySQLSlowLogConfig struct {
-	LogPath       string `ini:"log_path"`
-	BufferSize    int    `ini:"buffer_size"`
-	BufferTimeOut int    `ini:"buffer_timeout"`
-}
-
-// Struct to save in memory config settings from [proxysql] section.
-type ProxySQLConfig struct {
-	DSN         string `ini:"dsn"`
-	QueryDigest bool   `ini:"query_digest"`
-}
-
-// Struct to save in memory config settings from [clickhouse] section.
-type ClickHouseConfig struct {
-	DSN string `ini:"dsn"`
-}
-
-// Struct to save in memory config settings from [prometheus] section.
-type PrometheusConfig struct {
-	TextFile string `ini:"textfile"`
-}
-
-// Struct to save in memory config settings from [process] section.
-type ProcessConfig struct {
-	PerconaToolKitKill           bool `ini:"pt_kill"`
-	PerconaToolKitDeadlockLogger bool `ini:"pt_deadlock_logger"`
-	PerconaToolKitSlaveDelay     bool `ini:"pt_slave_delay"`
+type All struct {
+	General struct {
+		Hostname string        `yaml:"hostname"`
+		Interval time.Duration `yaml:"interval"`
+		Debug    bool          `yaml:"debug"`
+	}
+	MySQL struct {
+		DSN       string `yaml:"dsn"`
+		Overflow  bool   `yaml:"overflow"`
+		Slave     bool   `yaml:"slave"`
+		Status    bool   `yaml:"status"`
+		Tables    bool   `yaml:"tables"`
+		Variables bool   `yaml:"variables"`
+		AuditLog struct {
+			Enable        bool   `yaml:"enable"`
+			Format        string `yaml:"format"`
+			LogPath       string `yaml:"log_path"`
+			BufferSize    int    `yaml:"buffer_size"`
+			BufferTimeOut int    `yaml:"buffer_timeout"`
+		}
+		SlowLog struct {
+			Enable        bool   `yaml:"enable"`
+			LogPath       string `yaml:"log_path"`
+			BufferSize    int    `yaml:"buffer_size"`
+			BufferTimeOut int    `yaml:"buffer_timeout"`
+		}
+	}
+	ProxySQL struct {
+		DSN         string `yaml:"dsn"`
+		QueryDigest bool   `yaml:"query_digest"`
+	}
+	ClickHouse struct {
+		DSN string `yaml:"dsn"`
+	}
+	Prometheus struct {
+		TextFile string `yaml:"textfile"`
+	}
+	OS struct {
+		CPU    bool `yaml:"cpu"`
+		Disk   bool `yaml:"disk"`
+		Limits bool `yaml:"limits"`
+		Mem    bool `yaml:"mem"`
+		Net    bool `yaml:"net"`
+	}
+	Process struct {
+		PerconaToolKitKill           bool `yaml:"pt_kill"`
+		PerconaToolKitDeadlockLogger bool `yaml:"pt_deadlock_logger"`
+		PerconaToolKitSlaveDelay     bool `yaml:"pt_slave_delay"`
+	}
 }
 
 // Define default variables and initialize structs.
 var (
-	ConfigFile string = "/etc/zenit/zenit.ini"
+	ConfigFile string = "/etc/zenit/zenit.yaml"
 	IpAddress  string = ""
-
-	ClickHouse    = new(ClickHouseConfig)
-	General       = new(GeneralConfig)
-	MySQL         = new(MySQLConfig)
-	MySQLAuditLog = new(MySQLAuditLogConfig)
-	MySQLSlowLog  = new(MySQLSlowLogConfig)
-	OS            = new(OSConfig)
-	Process       = new(ProcessConfig)
-	Prometheus    = new(PrometheusConfig)
-	ProxySQL      = new(ProxySQLConfig)
 )
 
 // Init does any initialization necessary for the module.
@@ -106,46 +82,32 @@ func init() {
 
 // Loading settings from config file and set into struct.
 func Load() {
-	cfg, err := ini.Load(ConfigFile)
+	source, err := ioutil.ReadFile(ConfigFile)
 	if err != nil {
-		cfg, err = ini.Load("zenit.ini")
+		source, err = ioutil.ReadFile("zenit.yaml")
 		if err != nil {
-			log.Printf("Fail to read config file: %s or %s", ConfigFile, "./zenit.ini")
+			log.Printf("Fail to read config file: %s or %s", ConfigFile, "./zenit.yaml")
 			os.Exit(1)
 		}
 	}
 
-	cfg.Section("clickhouse").MapTo(ClickHouse)
-	cfg.Section("general").MapTo(General)
-	cfg.Section("mysql").MapTo(MySQL)
-	cfg.Section("mysql-auditlog").MapTo(MySQLAuditLog)
-	cfg.Section("mysql-slowlog").MapTo(MySQLSlowLog)
-	cfg.Section("os").MapTo(OS)
-	cfg.Section("process").MapTo(Process)
-	cfg.Section("prometheus").MapTo(Prometheus)
-	cfg.Section("proxysql").MapTo(ProxySQL)
+	err = yaml.Unmarshal(source, &File)
+	if err != nil {
+		log.Printf("Imposible to parse config file - %s", err)
+		os.Exit(1)
+	}
 }
 
 // Check minimun config settings and set default values to start.
 func SanityCheck() {
-	if General.Interval < 5 {
-		log.Println("W! Config - general.Interval: Use positive value, and minimun start from 5 seconds.")
-		log.Println("W! Config - general.Interval: Using default 30 seconds.")
-		General.Interval = 30
+	if File.General.Interval < 5 {
+		log.Println("W! Config - general.interval: Use positive value, and minimun start from 5 seconds.")
+		log.Println("W! Config - general.interval: Using default 30 seconds.")
+		File.General.Interval = 30
 	}
 
-	if len(General.Hostname) == 0 {
-		log.Println("W! Config - general.Hostname: Custom value is not set, using current.")
-		General.Hostname = common.Hostname()
-	}
-
-	if len(General.LogFile) == 0 {
-		log.Println("W! Config - general.LogFile: Custom value is not set, using default /var/log/zenit.log")
-		General.LogFile = "/var/log/zenit.log"
-	}
-
-	if len(General.PIDFile) == 0 {
-		log.Println("W! Config - general.PIDFile: Custom value is not set, using default /var/run/zenit.pid")
-		General.PIDFile = "/var/run/zenit.pid"
+	if len(File.General.Hostname) == 0 {
+		log.Println("W! Config - general.hostname: Custom value is not set, using current.")
+		File.General.Hostname = common.Hostname()
 	}
 }

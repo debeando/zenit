@@ -1,4 +1,4 @@
-// TODO: Read from config.ini the list of process to check.
+// TODO: Read from zenit.yaml the list of process to check.
 package process
 
 import (

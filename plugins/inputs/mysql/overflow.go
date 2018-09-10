@@ -43,7 +43,7 @@ WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schem
 )
 
 func Overflow() {
-	conn, err := mysql.Connect(config.MySQL.DSN)
+	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
 		log.Printf("E! - MySQL:Overflow - Impossible to connect: %s\n", err)
