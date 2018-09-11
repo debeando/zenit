@@ -26,7 +26,6 @@ mysql:
 proxysql:
   enable: true
   dsn: radminuser:radminpass@tcp(127.0.0.1:6032)/
-  query_digest: true
 
 clickhouse:
   enable: true

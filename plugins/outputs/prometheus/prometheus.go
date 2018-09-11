@@ -27,14 +27,14 @@ func Run() {
 		case []accumulator.Value:
 			for _, i := range m.Values.([]accumulator.Value) {
 				s = fmt.Sprintf("%s{%s,type=\"%s\"} %s", m.Key, getTags(m.Tags), i.Key, getValue(i.Value))
+
+				if config.File.General.Debug {
+					log.Printf("D! - Prometheus - %s\n", s)
+				}
+
+				e = append(e, s)
 			}
 		}
-
-		if config.File.General.Debug {
-			log.Printf("D! - Prometheus - %s\n", s)
-		}
-
-		e = append(e, s)
 	}
 
 	file.Write(config.File.Prometheus.TextFile, strings.Join(e, "\n"))

@@ -40,6 +40,9 @@ docker-clickhouse: ## Enter into ClickHouse Client
 docker-mysql: ## Enter in MySQL Console
 	docker exec -i -t -u root zenit_percona_server /usr/bin/mysql
 
+docker-proxysql: ## Enter in ProxySQL Console
+	docker exec -i -t -u root zenit_proxysql /usr/bin/mysql --socket=/tmp/proxysql_admin.sock -u proxysql -padmin  --prompt='ProxySQLAdmin> '
+
 docker-sandbox-bash: ## Enter into sandbox container
 	docker exec -i -t -u root zenit_sandbox /bin/bash
 

@@ -54,9 +54,11 @@ func Tables() {
 
 		a.Add(accumulator.Metric{
 			Key: "mysql_stats_tables",
-			Tags: []accumulator.Tag{{"schema", t.schema},
+			Tags: []accumulator.Tag{
+				{"schema", t.schema},
 				{"table", t.table}},
-			Values: []accumulator.Value{{"size", t.size},
+			Values: []accumulator.Value{
+				{"size", t.size},
 				{"rows", t.rows},
 				{"increment", t.increment}},
 		})

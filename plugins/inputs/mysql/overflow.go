@@ -69,7 +69,8 @@ func Overflow() {
 
 		a.Add(accumulator.Metric{
 			Key: "mysql_stats_overflow",
-			Tags: []accumulator.Tag{{"schema", c.schema},
+			Tags: []accumulator.Tag{
+				{"schema", c.schema},
 				{"table", c.table},
 				{"type", "overflow"},
 				{"data_type", c.dataType},

@@ -1,5 +1,5 @@
 ###############################################################################
-# Dockerfile to build Percona Server 5.x container images
+# Dockerfile to build ProxySQL 1.4 container images
 # Based on Ubuntu 18.04
 ###############################################################################
 
@@ -9,8 +9,8 @@ FROM ubuntu:18.04
 # File Author / Maintainer
 MAINTAINER Swapbyt3s
 LABEL vendor="Swapbyt3s" \
-      description="Percona Server 5.x on Ubuntu 18.04" \
-      version="5.x"
+      description="ProxySQL on Ubuntu 18.04" \
+      version="1.4"
 
 # Update the repository sources list
 RUN apt-get update
@@ -29,23 +29,20 @@ RUN wget https://repo.percona.com/apt/percona-release_latest.bionic_all.deb >/de
     apt-get update
 
 RUN env DEBIAN_FRONTEND=noninteractive \
-    apt-get install -y percona-server-server-$PERCONA_VERSION && \
-    chown -R mysql:0 /var/lib/mysql /var/run/mysqld && \
-    chmod 777 /var/run/mysqld
+    apt-get install -y percona-server-client-$PERCONA_VERSION
+
+RUN env DEBIAN_FRONTEND=noninteractive \
+    apt-get install -y proxysql
 
 # -----------------------------------------------------------------------------
 # Copy script utility
 # -----------------------------------------------------------------------------
 COPY entrypoint.sh /root/entrypoint.sh
-COPY configure.sh /root/configure.sh
+COPY proxysql.cnf /etc/proxysql.cnf
 RUN chmod a+x /root/entrypoint.sh
-RUN chmod a+x /root/configure.sh
+RUN chown 0640 /etc/proxysql.cnf
+RUN chown root:proxysql /etc/proxysql.cnf
 
-# -----------------------------------------------------------------------------
-# Clear
-# -----------------------------------------------------------------------------
-RUN rm -rf /var/lib/apt/lists/* /var/cache/debconf && \
-    apt-get clean
 # -----------------------------------------------------------------------------
 # Clear
 # -----------------------------------------------------------------------------
@@ -54,7 +51,7 @@ RUN rm -rf /var/lib/apt/lists/* /var/cache/debconf && \
 ############################## INSTALLATION END ###############################
 
 # Expose the default MySQL port
-EXPOSE 3306
+EXPOSE 3306 6032
 
 # Set the working directory to /root
 WORKDIR /root

@@ -21,9 +21,8 @@ type Query struct {
 }
 
 const (
-	REGEX_SQL = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z0-9._]+)`
-	QUERY_SQL = `
-SELECT CASE
+	ReQuery = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z0-9._]+)`
+	SQLDigest = `SELECT CASE
          WHEN hostgroup IN (SELECT writer_hostgroup FROM main.mysql_replication_hostgroups) THEN 'writer'
          WHEN hostgroup IN (SELECT reader_hostgroup FROM main.mysql_replication_hostgroups) THEN 'reader'
        END AS 'group',
@@ -31,37 +30,21 @@ SELECT CASE
        digest_text,
        count_star,
        sum_time
-FROM stats.stats_mysql_query_digest;
-`
+FROM stats.stats_mysql_query_digest;`
 )
 
 var re *regexp.Regexp
 
-func init() {
-	re, _ = regexp.Compile(REGEX_SQL)
-}
-
-func Check() bool {
-	log.Printf("I! - ProxySQL - DSN: %s\n", config.File.ProxySQL.DSN)
-	conn, err := mysql.Connect(config.File.ProxySQL.DSN)
-	if err != nil {
-		log.Printf("E! - ProxySQL - Impossible to connect: %s\n", err)
-		return false
-	}
-
-	log.Println("I! - ProxySQL - Connected successfully.")
-	conn.Close()
-	return true
-}
-
 func QueryDigest() {
+	re, _ = regexp.Compile(ReQuery)
+
 	conn, err := mysql.Connect(config.File.ProxySQL.DSN)
 	defer conn.Close()
 	if err != nil {
 		log.Printf("E! - ProxySQL - Impossible to connect: %s\n", err)
 	}
 
-	rows, err := conn.Query(QUERY_SQL)
+	rows, err := conn.Query(SQLDigest)
 	defer rows.Close()
 	if err != nil {
 		log.Printf("E! - ProxySQL - Impossible to execute query: %s\n", err)
@@ -82,11 +65,13 @@ func QueryDigest() {
 
 			accumulator.Load().Add(accumulator.Metric{
 				Key: "proxysql_queries",
-				Tags: []accumulator.Tag{{"group", q.group},
+				Tags: []accumulator.Tag{
+					{"group", q.group},
 					{"schema", q.schema},
 					{"table", table},
 					{"command", command}},
-				Values: []accumulator.Value{{"count", q.count},
+				Values: []accumulator.Value{
+					{"count", q.count},
 					{"sum", q.sum}},
 			})
 		}

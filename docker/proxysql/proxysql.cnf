@@ -1,0 +1,71 @@
+datadir="/var/lib/proxysql"
+
+admin_variables=
+{
+  admin_credentials="proxysql:admin"
+  mysql_ifaces="0.0.0.0:6032;/tmp/proxysql_admin.sock"
+  refresh_interval=2000
+}
+
+mysql_variables=
+{
+  commands_stats=true
+  connect_retries_on_failure=3
+  connect_timeout_server=1000
+  connect_timeout_server_max=1000
+  default_query_delay=0
+  default_query_timeout=36000000
+  default_schema="information_schema"
+  have_compress=true
+  interfaces="0.0.0.0:3306;/tmp/proxysql_admin.sock"
+  max_connections=10
+  monitor_connect_interval=60000
+  monitor_history=600000
+  monitor_password="monitor"
+  monitor_ping_interval=10000
+  monitor_read_only_interval=1500
+  monitor_read_only_timeout=500
+  monitor_username="monitor"
+  ping_interval_server_msec=120000
+  ping_timeout_server=500
+  poll_timeout=2000
+  server_version="5.5.30"
+  sessions_sort=true
+  stacksize=1048576
+  threads=1
+}
+
+mysql_users =
+(
+  {
+    active                 = 1
+    default_hostgroup      = 0
+    max_connections        = 100
+    password               = "admin"
+    username               = "admin"
+    transaction_persistent = 1
+  }
+)
+
+mysql_servers =
+(
+  {
+    address = "172.20.1.3"
+    port = 3306
+    hostgroup = 0
+    status = "ONLINE"
+    weight = 1
+    compression = 0
+    max_connections=200
+    max_replication_lag = 10
+  }
+)
+
+mysql_replication_hostgroups =
+(
+  {
+    reader_hostgroup=1
+    writer_hostgroup=0
+    comment="Zenit Cluster"
+  }
+)

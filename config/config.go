@@ -51,7 +51,6 @@ type All struct {
 	ProxySQL struct {
 		Enable      bool   `yaml:"enable"`
 		DSN         string `yaml:"dsn"`
-		QueryDigest bool   `yaml:"query_digest"`
 	}
 	ClickHouse struct {
 		DSN string `yaml:"dsn"`

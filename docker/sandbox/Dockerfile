@@ -9,7 +9,7 @@ FROM ubuntu:18.04
 # File Author / Maintainer
 MAINTAINER Swapbyt3s
 LABEL vendor="Swapbyt3s" \
-      description="Sandbox on Centos 18.04"
+      description="Sandbox on Ubuntu 18.04"
 
 # Update the repository sources list
 RUN apt-get update
@@ -41,12 +41,8 @@ RUN touch /var/lib/mysql/audit.log
 RUN sed -i s/127.0.0.1:8123/172.20.1.2:8123/ /etc/zenit/zenit.yaml
 RUN sed -i s/127.0.0.1:3306/172.20.1.3:3306/ /etc/zenit/zenit.yaml
 RUN sed -i s/root@tcp/admin:admin@tcp/ /etc/zenit/zenit.yaml
+RUN sed -i s/radminuser:radminpass@tcp\(127.0.0.1:6032\)/proxysql:admin@tcp\(172.20.1.4:6032\)/ /etc/zenit/zenit.yaml
 
-# -----------------------------------------------------------------------------
-# Clear
-# -----------------------------------------------------------------------------
-RUN rm -rf /var/lib/apt/lists/* /var/cache/debconf && \
-    apt-get clean
 # -----------------------------------------------------------------------------
 # Clear
 # -----------------------------------------------------------------------------

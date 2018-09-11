@@ -3,6 +3,7 @@ package mysql
 import (
 	"bytes"
 	"database/sql"
+	"log"
 	"strconv"
 	"strings"
 
@@ -21,6 +22,19 @@ func Connect(dsn string) (*sql.DB, error) {
 	}
 
 	return db, err
+}
+
+func Check(dsn string, name string) bool {
+	log.Printf("I! - %s - DSN: %s\n", name, dsn)
+	conn, err := Connect(dsn)
+	if err != nil {
+		log.Printf("E! - %s - Impossible to connect: %s\n", name, err)
+		return false
+	}
+
+	log.Printf("I! - %s - Connected successfully.\n", name)
+	conn.Close()
+	return true
 }
 
 func ParseValue(value sql.RawBytes) (uint64, bool) {
