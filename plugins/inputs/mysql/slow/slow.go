@@ -5,10 +5,10 @@ package slow
 
 import (
 	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/common/sql"
 	"github.com/swapbyt3s/zenit/common/sql/parser/slow"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql"
 )
 
 func Parser(path string, in <-chan string, out chan<- map[string]string) {

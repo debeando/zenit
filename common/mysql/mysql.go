@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"database/sql"
 	"strconv"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -36,4 +37,12 @@ func ParseValue(value sql.RawBytes) (uint64, bool) {
 	}
 
 	return 0, false
+}
+
+func ClearUser(u string) string {
+	index := strings.Index(u, "[")
+	if index > 0 {
+		return u[0:index]
+	}
+	return u
 }

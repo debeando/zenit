@@ -5,12 +5,10 @@
 package audit
 
 import (
-	"strings"
-
 	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/common/sql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql"
 )
 
 func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
@@ -43,8 +41,8 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
 				}
 
 				for _, kv := range buffer {
-					key, value := ParseKeyAndValue(&kv)
-					result[key] = Trim(&value)
+					key, value := common.SplitKeyAndValue(&kv)
+					result[key] = common.Trim(&value)
 				}
 
 				buffer = buffer[:0]
@@ -74,19 +72,4 @@ func Parser(path string, tail <-chan string, parser chan<- map[string]string) {
 			}
 		}
 	}()
-}
-
-func ParseKeyAndValue(s *string) (key string, value string) {
-	kv := strings.SplitN(*s, "=", 2)
-	if len(kv) == 2 {
-		return strings.TrimSpace(strings.ToLower(kv[0])), kv[1]
-	}
-	return "", ""
-}
-
-func Trim(value *string) string {
-	*value = strings.TrimSpace(*value)
-	*value = strings.TrimRight(*value, "\"")
-	*value = strings.TrimLeft(*value, "\"")
-	return *value
 }

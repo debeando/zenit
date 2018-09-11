@@ -31,3 +31,13 @@ func TestParseValue(t *testing.T) {
 		t.Error("Expected: Found Parse and value = 1234567890.")
 	}
 }
+
+func TestClearUser(t *testing.T) {
+	user := "test[test] @ [127.0.0.1]"
+	expected := "test"
+	result := mysql.ClearUser(user)
+
+	if result != expected {
+		t.Error("Expected: " + expected)
+	}
+}
