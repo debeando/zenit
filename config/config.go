@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	// Author is a const with have autor for this code.
+	// Author is a const with have the name of creator and collaborators for this code.
 	Author string = "Nicola Strappazzon C. <swapbyt3s@gmail.com>"
 	// Version is a const to have the latest version number for this code.
 	Version string = "1.1.7"
