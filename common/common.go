@@ -176,3 +176,7 @@ func Trim(value *string) string {
 	*value = strings.TrimLeft(*value, "\"")
 	return *value
 }
+
+func Percentage(value uint64, max uint64) float64 {
+	return (float64(value) / float64(max)) * 100
+}

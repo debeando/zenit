@@ -37,6 +37,9 @@ docker-down: ## Down docker-compose
 docker-clickhouse: ## Enter into ClickHouse Client
 	docker exec -i -t -u root zenit_clickhouse /usr/bin/clickhouse-client
 
+docker-mysql: ## Enter in MySQL Console
+	docker exec -i -t -u root zenit_percona_server /usr/bin/mysql
+
 docker-sandbox-bash: ## Enter into sandbox container
 	docker exec -i -t -u root zenit_sandbox /bin/bash
 
