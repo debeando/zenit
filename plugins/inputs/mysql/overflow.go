@@ -21,6 +21,7 @@ type Column struct {
 	unsigned bool
 	current  uint64
 	percent  float64
+	maximum  uint64
 }
 
 const (
@@ -50,8 +51,6 @@ func Overflow() {
 
 	for rows.Next() {
 		var c Column
-		var m uint64
-		var v uint64
 
 		rows.Scan(
 			&c.schema,
@@ -59,21 +58,14 @@ func Overflow() {
 			&c.column,
 			&c.dataType)
 
-		err = conn.QueryRow(fmt.Sprintf(querySQLMaxInt, c.column, c.schema, c.table)).Scan(&m)
+		err = conn.QueryRow(fmt.Sprintf(querySQLMaxInt, c.column, c.schema, c.table)).Scan(&c.current)
 		if err != nil {
 			log.Printf("E! - MySQL:Overflow - Impossible to execute query: %s\n", err)
 		}
 
-		c.unsigned = strings.Contains(c.dataType, "unsigned")
-		c.current = m
-
-		if c.unsigned == true {
-			v = mysql.MaximumValueUnsigned(c.dataType)
-		} else {
-			v = mysql.MaximumValueSigned(c.dataType)
-		}
-
-		c.percent = common.Percentage(c.current, v)
+		c.Unsigned()
+		c.Maximum()
+		c.Percentage()
 
 		a.Add(accumulator.Metric{
 			Key: "mysql_stats_overflow",
@@ -85,4 +77,20 @@ func Overflow() {
 			Values: c.percent,
 		})
 	}
+}
+
+func (c *Column) Unsigned() {
+	c.unsigned = strings.Contains(c.dataType, "unsigned")
+}
+
+func (c *Column) Maximum() {
+	if c.unsigned == true {
+		c.maximum = mysql.MaximumValueUnsigned(c.dataType)
+	} else {
+		c.maximum = mysql.MaximumValueSigned(c.dataType)
+	}
+}
+
+func (c *Column) Percentage() {
+	c.percent = common.Percentage(c.current, c.maximum)
 }
