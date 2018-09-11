@@ -9,7 +9,7 @@ const NR_OPEN string = "/proc/sys/fs/nr_open"
 const FILE_MAX string = "/proc/sys/fs/file-max"
 
 func SysLimits() {
-	accumulator.Load().AddItem(accumulator.Metric{
+	accumulator.Load().Add(accumulator.Metric{
 		Key: "os",
 		Tags: []accumulator.Tag{{"system", "linux"},
 			{"setting", "sysctl"}},

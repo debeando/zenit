@@ -52,7 +52,7 @@ func Tables() {
 			&t.rows,
 			&t.increment)
 
-		a.AddItem(accumulator.Metric{
+		a.Add(accumulator.Metric{
 			Key: "mysql_stats_tables",
 			Tags: []accumulator.Tag{{"schema", t.schema},
 				{"table", t.table}},

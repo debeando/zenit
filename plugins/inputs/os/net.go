@@ -22,7 +22,7 @@ func Net() {
 			receive_bytes := common.StringToUInt64(match[0])
 			transmit_bytes := common.StringToUInt64(match[8])
 
-			accumulator.Load().AddItem(accumulator.Metric{
+			accumulator.Load().Add(accumulator.Metric{
 				Key: "os",
 				Tags: []accumulator.Tag{{"system", "linux"},
 					{"hardware", "net"},

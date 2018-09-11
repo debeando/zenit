@@ -31,7 +31,7 @@ func Status() {
 	for rows.Next() {
 		rows.Scan(&k, &v)
 		if value, ok := mysql.ParseValue(v); ok {
-			a.AddItem(accumulator.Metric{
+			a.Add(accumulator.Metric{
 				Key:    "mysql_status",
 				Tags:   []accumulator.Tag{{"name", k}},
 				Values: value,

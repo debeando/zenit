@@ -38,7 +38,7 @@ func Parser(path string, in <-chan string, out chan<- map[string]string) {
 			}
 
 			result["_time"] = result["timestamp"]
-			result["host_ip"] = config.IpAddress
+			result["host_ip"] = config.IPAddress
 			result["host_name"] = config.File.General.Hostname
 			result["query"] = common.Escape(result["query"])
 			result["query_digest"] = common.Escape(result["query_digest"])

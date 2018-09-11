@@ -36,8 +36,8 @@ func TestTagsEquals(t *testing.T) {
 	}
 }
 
-func TestAddItem(t *testing.T) {
-	a.AddItem(accumulator.Metric{
+func TestAdd(t *testing.T) {
+	a.Add(accumulator.Metric{
 		Key:    "test",
 		Tags:   []accumulator.Tag{{"foo", "bar"}},
 		Values: 123,
@@ -74,15 +74,15 @@ func TestUnique(t *testing.T) {
 	}
 }
 
-func TestSumValues(t *testing.T) {
-	a.AddItem(accumulator.Metric{
+func TestAccumulator(t *testing.T) {
+	a.Add(accumulator.Metric{
 		Key:  "test_sum_values",
 		Tags: []accumulator.Tag{{"foo", "bar"}},
 		Values: []accumulator.Value{{"a", uint(1)},
 			{"b", uint(1)}},
 	})
 
-	a.AddItem(accumulator.Metric{
+	a.Add(accumulator.Metric{
 		Key:  "test_sum_values",
 		Tags: []accumulator.Tag{{"foo", "bar"}},
 		Values: []accumulator.Value{{"a", uint(2)},

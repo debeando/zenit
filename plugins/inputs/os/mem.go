@@ -55,7 +55,7 @@ func Mem() {
 		mem.percent = 0
 	}
 
-	accumulator.Load().AddItem(accumulator.Metric{
+	accumulator.Load().Add(accumulator.Metric{
 		Key: "os",
 		Tags: []accumulator.Tag{{"system", "linux"},
 			{"hardware", "mem"}},

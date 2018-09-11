@@ -80,7 +80,7 @@ func QueryDigest() {
 		if len(q.digest) > 0 {
 			table, command := Match(q.digest)
 
-			accumulator.Load().AddItem(accumulator.Metric{
+			accumulator.Load().Add(accumulator.Metric{
 				Key: "proxysql_queries",
 				Tags: []accumulator.Tag{{"group", q.group},
 					{"schema", q.schema},

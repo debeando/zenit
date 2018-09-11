@@ -18,7 +18,7 @@ func Disk() {
 			match := reGroups.FindStringSubmatch(line)
 			percentage := common.StringToUInt64(strings.TrimRight(strings.TrimSpace(match[6]), "%"))
 
-			accumulator.Load().AddItem(accumulator.Metric{
+			accumulator.Load().Add(accumulator.Metric{
 				Key: "os",
 				Tags: []accumulator.Tag{{"system", "linux"},
 					{"hardware", "disk"},

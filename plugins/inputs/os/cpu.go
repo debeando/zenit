@@ -26,7 +26,7 @@ func CPU() {
 		idle := c[1].idle - c[0].idle
 		percentage := (float64(total) - float64(idle)) / float64(total) * 100.0
 
-		accumulator.Load().AddItem(accumulator.Metric{
+		accumulator.Load().Add(accumulator.Metric{
 			Key: "os",
 			Tags: []accumulator.Tag{{"system", "linux"},
 				{"hardware", "cpu"}},

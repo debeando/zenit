@@ -7,7 +7,7 @@ import (
 )
 
 func PerconaToolKitKill() {
-	accumulator.Load().AddItem(accumulator.Metric{
+	accumulator.Load().Add(accumulator.Metric{
 		Key: "os",
 		Tags: []accumulator.Tag{{"system", "linux"},
 			{"process", "pt_kill"}},
@@ -16,7 +16,7 @@ func PerconaToolKitKill() {
 }
 
 func PerconaToolKitDeadlockLogger() {
-	accumulator.Load().AddItem(accumulator.Metric{
+	accumulator.Load().Add(accumulator.Metric{
 		Key: "os",
 		Tags: []accumulator.Tag{{"system", "linux"},
 			{"process", "pt_deadlock_logger"}},
@@ -25,7 +25,7 @@ func PerconaToolKitDeadlockLogger() {
 }
 
 func PerconaToolKitSlaveDelay() {
-	accumulator.Load().AddItem(accumulator.Metric{
+	accumulator.Load().Add(accumulator.Metric{
 		Key: "os",
 		Tags: []accumulator.Tag{{"system", "linux"},
 			{"process", "pt_slave_delay"}},
