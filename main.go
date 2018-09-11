@@ -46,10 +46,10 @@ func init() {
 
 func main() {
 	svcConfig := &service.Config{
-		Name: "zenit",
+		Name:        "zenit",
 		DisplayName: "Zenit",
 		Description: "Zenit Agent",
-		Executable: "/usr/bin/zenit",
+		Executable:  "/usr/bin/zenit",
 	}
 
 	prg := &program{}

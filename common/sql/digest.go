@@ -8,17 +8,17 @@ import (
 )
 
 func Digest(s string) string {
-	comment    := false
-	endnumber  := []rune{' ', ',', '+', '-', '*', '/', '^', '%', '(', ')'}
-	list       := false
-	values     := false
-	multiline  := false
-	number     := false
-	quote      := rune(0)
-	result     := []rune("")
-	sql        := []rune(strings.ToLower(s))
+	comment := false
+	endnumber := []rune{' ', ',', '+', '-', '*', '/', '^', '%', '(', ')'}
+	list := false
+	values := false
+	multiline := false
+	number := false
+	quote := rune(0)
+	result := []rune("")
+	sql := []rune(strings.ToLower(s))
 	whitespace := false
-	length     := len(sql)
+	length := len(sql)
 
 	IsNumber := func(r rune) bool {
 		if unicode.IsNumber(r) || r == '.' {
@@ -89,7 +89,7 @@ func Digest(s string) string {
 		}
 
 		if list {
-			if ! values && sql[x] == '(' {
+			if !values && sql[x] == '(' {
 				values = true
 			} else if values && sql[x] == ')' {
 				list = false

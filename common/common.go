@@ -145,19 +145,19 @@ func MD5(s string) string {
 }
 
 func ComparteMapString(a, b map[string]string) bool {
-    if (a == nil) != (b == nil) {
-        return false;
-    }
+	if (a == nil) != (b == nil) {
+		return false
+	}
 
-    if len(a) != len(b) {
-        return false
-    }
+	if len(a) != len(b) {
+		return false
+	}
 
-    for k := range a {
-        if a[k] != b[k] {
-            return false
-        }
-    }
+	for k := range a {
+		if a[k] != b[k] {
+			return false
+		}
+	}
 
-    return true
+	return true
 }

@@ -34,7 +34,7 @@ type All struct {
 		Status    bool   `yaml:"status"`
 		Tables    bool   `yaml:"tables"`
 		Variables bool   `yaml:"variables"`
-		AuditLog struct {
+		AuditLog  struct {
 			Enable        bool   `yaml:"enable"`
 			Format        string `yaml:"format"`
 			LogPath       string `yaml:"log_path"`
@@ -77,7 +77,7 @@ type All struct {
 // Define default variables and initialize structs.
 var (
 	IPAddress string
-	File All
+	File      All
 )
 
 // Init does any initialization necessary for the module.

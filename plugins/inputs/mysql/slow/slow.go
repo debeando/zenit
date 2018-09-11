@@ -12,10 +12,10 @@ import (
 )
 
 func Parser(path string, in <-chan string, out chan<- map[string]string) {
-       	channelTail := make(chan string)
-       	channelEvent := make(chan string)
+	channelTail := make(chan string)
+	channelEvent := make(chan string)
 
-        go slow.Event(channelTail, channelEvent)
+	go slow.Event(channelTail, channelEvent)
 
 	go func() {
 		defer close(channelTail)
@@ -43,10 +43,10 @@ func Parser(path string, in <-chan string, out chan<- map[string]string) {
 			result["query"] = common.Escape(result["query"])
 			result["query_digest"] = common.Escape(result["query_digest"])
 
-	 		// Remove unnused key:
-	 		delete(result, "time")
-	 		delete(result, "timestamp")
-	 		delete(result, "qc_hit")
+			// Remove unnused key:
+			delete(result, "time")
+			delete(result, "timestamp")
+			delete(result, "qc_hit")
 
 			out <- result
 		}
