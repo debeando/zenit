@@ -97,7 +97,7 @@ func Hostname() string {
 	return host
 }
 
-func IpAddress() string {
+func IPAddress() string {
 	if flag.Lookup("test.v") != nil {
 		return "127.0.0.1"
 	}

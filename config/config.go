@@ -12,12 +12,15 @@ import (
 )
 
 const (
-	AUTHOR  string = "Nicola Strappazzon C. <swapbyt3s@gmail.com>"
-	VERSION string = "1.1.7"
+	// Author is a const with have autor for this code.
+	Author string = "Nicola Strappazzon C. <swapbyt3s@gmail.com>"
+	// Version is a const to have the latest version number for this code.
+	Version string = "1.1.7"
+	// ConfigFile containt the path for configuration file.
+	ConfigFile string = "/etc/zenit/zenit.yaml"
 )
 
-var File All
-
+// All is a struct to contain all configuration imported or loaded from config file.
 type All struct {
 	General struct {
 		Hostname string        `yaml:"hostname"`
@@ -73,16 +76,16 @@ type All struct {
 
 // Define default variables and initialize structs.
 var (
-	ConfigFile string = "/etc/zenit/zenit.yaml"
-	IpAddress  string = ""
+	IPAddress string
+	File All
 )
 
 // Init does any initialization necessary for the module.
 func init() {
-	IpAddress = common.IpAddress()
+	IPAddress = common.IPAddress()
 }
 
-// Loading settings from config file and set into struct.
+// Load read settings from config file and set into struct.
 func Load() {
 	source, err := ioutil.ReadFile(ConfigFile)
 	if err != nil {
@@ -100,7 +103,7 @@ func Load() {
 	}
 }
 
-// Check minimun config settings and set default values to start.
+// SanityCheck verify the minimum config settings and set default values to start.
 func SanityCheck() {
 	if File.General.Interval < 5 {
 		log.Println("W! Config - general.interval: Use positive value, and minimun start from 5 seconds.")

@@ -73,8 +73,8 @@ func main() {
 
 	switch {
 	case *fVersion:
-		fmt.Printf("%s\n", config.VERSION)
-		return
+		fmt.Printf("%s\n", config.Version)
+
 	case *fHelp:
 		help(0)
 	case *fInstall:
@@ -92,6 +92,6 @@ func main() {
 }
 
 func help(rc int) {
-	fmt.Printf(USAGE, config.VERSION, config.AUTHOR, os.Args[0])
+	fmt.Printf(USAGE, config.Version, config.Author, os.Args[0])
 	os.Exit(rc)
 }

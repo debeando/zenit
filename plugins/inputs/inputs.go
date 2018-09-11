@@ -26,7 +26,7 @@ import (
 func Gather() {
 	var wg sync.WaitGroup
 
-	log.Printf("I! Starting Zenit %s\n", config.VERSION)
+	log.Printf("I! Starting Zenit %s\n", config.Version)
 
 	wg.Add(2)
 
