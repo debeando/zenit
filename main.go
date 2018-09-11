@@ -12,6 +12,7 @@ import (
 	"github.com/kardianos/service"
 )
 
+// USAGE is a const to have help description for CLI.
 const USAGE = `zenit (%s) written by %s
 Usage: %s [--help | --install | --uninstall | --version]
 Options:
