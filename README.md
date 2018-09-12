@@ -27,7 +27,7 @@ This tool collect stats data from:
 - **MySQL:** Collect tipical metrics; variables, status, slave status, primary key overflow, tables sizes. And parser Slow and Audit Logs. For the moment is tested on MySQL 5.5
 - **ProxySQL:** Collect for the moment query digest only. For the moment is tested in ProxySQL 1.4
 - **Percona ToolKit:** Verify is running specific tools, for the moment only check follow tools; pt-kill, pt-deadlock-logger and pt-slave-delay.
-- **Linux OS (CentOS):** Collect basic metrics of CPU, RAM, DISK, NET, and System Limits.
+- **Linux OS:** Collect basic metrics of CPU, RAM, DISK, NET, and System Limits.
 
 And this is ingested on:
 
@@ -74,6 +74,12 @@ The configuration file is very intuitive, please see the example [config file](h
 However, you may need to manually restart the agent (for example, after changing your agent configuration). For Linux systems, the agent selects an init system depending on your operating system version.
 
 For Linux systems, ensure you use the correct command for your init system. Select start, stop, restart, or status as appropriate:
+
+How do I find out what version of Linux I'm running?
+
+```
+cat /etc/*{release,version}
+```
 
 SystemD (SLES 12, CentOS 7, Debian 8, Debian 9, RHEL 7, Ubuntu 15.04 or higher):
 
