@@ -9,7 +9,7 @@ FROM ubuntu:18.04
 # File Author / Maintainer
 MAINTAINER Swapbyt3s
 LABEL vendor="Swapbyt3s" \
-      description="ClickHouse 18.10.3 on Centos 18.04" \
+      description="ClickHouse 18.10.3 on Ubuntu 18.04" \
       version="18.10.3"
 
 # Update the repository sources list

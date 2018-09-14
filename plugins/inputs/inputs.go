@@ -71,6 +71,7 @@ func doCollectPlugins(wg *sync.WaitGroup) {
 			mysql.Variables()
 		}
 		if config.File.ProxySQL.Enable && proxysql.Check() {
+			proxysql.ConnectionPool()
 			proxysql.QueryDigest()
 		}
 		if config.File.Process.PerconaToolKitKill {
