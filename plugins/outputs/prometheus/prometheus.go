@@ -17,6 +17,13 @@ func Run() {
 	file.Truncate(config.File.Prometheus.TextFile)
 
 	var a = accumulator.Load()
+	var e = Normalize(a)
+	var o = strings.Join(e, "\n")
+
+	file.Write(config.File.Prometheus.TextFile, o)
+}
+
+func Normalize(a *accumulator.Items) []string {
 	var s string
 	var e []string
 
@@ -37,7 +44,7 @@ func Run() {
 		}
 	}
 
-	file.Write(config.File.Prometheus.TextFile, strings.Join(e, "\n"))
+	return e
 }
 
 func getTags(tags []accumulator.Tag) string {
