@@ -1,7 +1,7 @@
 ---
 general:
   hostname: localhost
-  interval: 30
+  interval: 10
   debug: false
 
 mysql:
@@ -23,6 +23,20 @@ mysql:
     log_path: /var/lib/mysql/audit.log
     buffer_size: 100
     buffer_timeout: 60
+  alerts:
+    readonly:
+      enable: true
+      duration: 30
+    replication:
+      enable: false
+      warning: 10
+      critical: 60
+      duration: 30
+    connections:
+      enable: true
+      warning: 70
+      critical: 90
+      duration: 30
 
 proxysql:
   enable: true
@@ -36,6 +50,11 @@ clickhouse:
 prometheus:
   enable: true
   textfile: /var/tmp/zenit.prom
+
+slack:
+  enable: true
+  token: xxx/yyy/zzz
+  channel: alerts
 
 os:
   cpu: true

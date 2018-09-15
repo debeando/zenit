@@ -16,7 +16,7 @@ type Table struct {
 	increment float64
 }
 
-const QUERY_SQL_TABLES = `
+const QuerySQLTable = `
 SELECT table_schema AS 'schema',
        table_name AS 'table',
        data_length + index_length AS 'size',
@@ -34,7 +34,7 @@ func Tables() {
 		log.Printf("E! - MySQL:Tables - Impossible to connect: %s\n", err)
 	}
 
-	rows, err := conn.Query(QUERY_SQL_TABLES)
+	rows, err := conn.Query(QuerySQLTable)
 	defer rows.Close()
 	if err != nil {
 		log.Printf("E! - MySQL:Tables - Impossible to execute query: %s\n", err)

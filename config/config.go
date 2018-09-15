@@ -48,6 +48,24 @@ type All struct {
 			BufferSize    int    `yaml:"buffer_size"`
 			BufferTimeOut int    `yaml:"buffer_timeout"`
 		}
+		Alerts struct {
+			ReadOnly struct {
+				Enable   bool `yaml:"enable"`
+				Duration int  `yaml:"duration"`
+			}
+			Connections struct {
+				Enable   bool   `yaml:"enable"`
+				Warning  uint64 `yaml:"warning"`
+				Critical uint64 `yaml:"critical"`
+				Duration int    `yaml:"duration"`
+			}
+			Replication struct {
+				Enable   bool   `yaml:"enable"`
+				Warning  uint64 `yaml:"warning"`
+				Critical uint64 `yaml:"critical"`
+				Duration int    `yaml:"duration"`
+			}
+		}
 	}
 	ProxySQL struct {
 		Enable      bool   `yaml:"enable"`
@@ -59,6 +77,11 @@ type All struct {
 	Prometheus struct {
 		Enable   bool   `yaml:"enable"`
 		TextFile string `yaml:"textfile"`
+	}
+	Slack struct {
+		Enable  bool   `yaml:"enable"`
+		Token   string `yaml:"token"`
+		Channel string `yaml:"channel"`
 	}
 	OS struct {
 		CPU    bool `yaml:"cpu"`
@@ -107,8 +130,8 @@ func Load() {
 
 // SanityCheck verify the minimum config settings and set default values to start.
 func SanityCheck() {
-	if File.General.Interval < 5 {
-		log.Println("W! Config - general.interval: Use positive value, and minimun start from 5 seconds.")
+	if File.General.Interval < 3 {
+		log.Println("W! Config - general.interval: Use positive value, and minimun start from 3 seconds.")
 		log.Println("W! Config - general.interval: Using default 30 seconds.")
 		File.General.Interval = 30
 	}

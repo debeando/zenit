@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/alerts"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
 
 	"github.com/kardianos/service"
@@ -32,7 +34,17 @@ func (p *program) Start(s service.Service) error {
 	return nil
 }
 func (p *program) run() {
-	inputs.Gather()
+	log.Printf("I! - Starting Zenit %s\n", config.Version)
+
+	var wg sync.WaitGroup
+
+	wg.Add(3)
+
+	go inputs.Plugins(&wg)
+	go inputs.Parsers(&wg)
+	go alerts.Check(&wg)
+
+	wg.Wait()
 }
 func (p *program) Stop(s service.Service) error {
 	// Stop should not block. Return with a few seconds.

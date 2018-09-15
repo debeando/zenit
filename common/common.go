@@ -180,3 +180,11 @@ func Trim(value *string) string {
 func Percentage(value uint64, max uint64) float64 {
 	return (float64(value) / float64(max)) * 100
 }
+
+func FloatToUInt(value float64) uint64 {
+	v, err := strconv.Atoi(strconv.FormatFloat(value, 'f', 0, 64))
+	if err != nil {
+		return 0
+	}
+	return uint64(v)
+}

@@ -1,3 +1,7 @@
+// TODO:
+// - Rename accumulator to metrics.
+// - Move to list folder.
+
 package accumulator
 
 // Tag for metric.
@@ -49,6 +53,22 @@ func (l *Items) Add(m Metric) {
 	} else {
 		items.Accumulator(m)
 	}
+}
+
+// Find and return specific metric.
+func (l *Items) Find(key string, tag string) (uint64, bool) {
+	for itemIndex := 0; itemIndex < len(*l); itemIndex++ {
+		if (*l)[itemIndex].Key == key {
+			for _, metricTag := range (*l)[itemIndex].Tags {
+				if metricTag.Name == "name" && metricTag.Value == tag {
+					if value, ok := (*l)[itemIndex].Values.(uint64); ok {
+						return value, true
+					}
+				}
+			}
+		}
+	}
+	return 0, false
 }
 
 // Unique is a check to verify the metric key is one in the accumulator.

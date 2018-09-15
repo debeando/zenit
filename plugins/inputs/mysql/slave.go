@@ -1,7 +1,6 @@
 package mysql
 
 import (
-	"database/sql"
 	"log"
 
 	"github.com/swapbyt3s/zenit/common/mysql"
@@ -9,7 +8,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
-const QUERY_SQL_SLAVE = "SHOW SLAVE STATUS"
+const QuerySQLSlave = "SHOW SLAVE STATUS"
 
 func Slave() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
@@ -18,24 +17,39 @@ func Slave() {
 		log.Printf("E! - MySQL:Slave - Impossible to connect: %s\n", err)
 	}
 
-	rows, err := conn.Query(QUERY_SQL_SLAVE)
+	rows, err := conn.Query(QuerySQLSlave)
 	defer rows.Close()
 	if err != nil {
 		log.Printf("E! - MySQL:Slave - Impossible to execute query: %s\n", err)
 	}
 
-	var a = accumulator.Load()
-	var k string
-	var v sql.RawBytes
+	metrics := accumulator.Load()
+	columns, _ := rows.Columns()
+	count := len(columns)
+	status := make([]interface{}, count)
+	values := make([]interface{}, count)
 
 	for rows.Next() {
-		rows.Scan(&k, &v)
-		if value, ok := mysql.ParseValue(v); ok {
-			a.Add(accumulator.Metric{
-				Key:    "mysql_slave",
-				Tags:   []accumulator.Tag{{"name", k}},
-				Values: value,
-			})
+		for columnIndex, _ := range columns {
+			values[columnIndex] = &status[columnIndex]
+		}
+
+		err = rows.Scan(values...)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for columnIndex, columnName := range columns {
+			if state, ok := status[columnIndex].([]byte); ok {
+				if value, ok := mysql.ParseValue(state); ok {
+					// log.Printf("D! - Input:MySQL:Slave - %s=%d\n", columnName, value)
+					metrics.Add(accumulator.Metric{
+						Key:    "mysql_slave",
+						Tags:   []accumulator.Tag{{"name", columnName}},
+						Values: value,
+					})
+				}
+			}
 		}
 	}
 }

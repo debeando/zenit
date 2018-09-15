@@ -21,25 +21,15 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql"
 	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
 	"github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
+	"github.com/swapbyt3s/zenit/plugins/outputs/slack"
 )
 
-func Gather() {
-	var wg sync.WaitGroup
-
-	log.Printf("I! Starting Zenit %s\n", config.Version)
-
-	wg.Add(2)
-
-	go doCollectPlugins(&wg)
-	go doCollectParsers(&wg)
-
-	wg.Wait()
-}
-
-func doCollectPlugins(wg *sync.WaitGroup) {
+func Plugins(wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for {
+		accumulator.Load().Reset()
+
 		if config.File.OS.CPU {
 			os.CPU()
 		}
@@ -91,12 +81,14 @@ func doCollectPlugins(wg *sync.WaitGroup) {
 		if config.File.Prometheus.Enable {
 			prometheus.Run()
 		}
-		accumulator.Load().Reset()
+		if config.File.Slack.Enable {
+			slack.Run()
+		}
 		time.Sleep(config.File.General.Interval * time.Second)
 	}
 }
 
-func doCollectParsers(wg *sync.WaitGroup) {
+func Parsers(wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	if config.File.MySQL.AuditLog.Enable {
