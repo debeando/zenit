@@ -55,6 +55,9 @@ func doCollectPlugins(wg *sync.WaitGroup) {
 		if config.File.OS.Limits {
 			os.SysLimits()
 		}
+		if config.File.MySQL.Indexes && mysql.Check() {
+			mysql.Indexes()
+		}
 		if config.File.MySQL.Overflow && mysql.Check() {
 			mysql.Overflow()
 		}
