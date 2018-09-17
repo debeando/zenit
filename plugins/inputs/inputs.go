@@ -55,23 +55,25 @@ func doCollectPlugins(wg *sync.WaitGroup) {
 		if config.File.OS.Limits {
 			os.SysLimits()
 		}
-		if config.File.MySQL.Indexes && mysql.Check() {
-			mysql.Indexes()
-		}
-		if config.File.MySQL.Overflow && mysql.Check() {
-			mysql.Overflow()
-		}
-		if config.File.MySQL.Slave && mysql.Check() {
-			mysql.Slave()
-		}
-		if config.File.MySQL.Status && mysql.Check() {
-			mysql.Status()
-		}
-		if config.File.MySQL.Tables && mysql.Check() {
-			mysql.Tables()
-		}
-		if config.File.MySQL.Variables && mysql.Check() {
-			mysql.Variables()
+		if mysql.Check() {
+			if config.File.MySQL.Indexes {
+				mysql.Indexes()
+			}
+			if config.File.MySQL.Overflow {
+				mysql.Overflow()
+			}
+			if config.File.MySQL.Slave {
+				mysql.Slave()
+			}
+			if config.File.MySQL.Status {
+				mysql.Status()
+			}
+			if config.File.MySQL.Tables {
+				mysql.Tables()
+			}
+			if config.File.MySQL.Variables {
+				mysql.Variables()
+			}
 		}
 		if config.File.ProxySQL.Enable && proxysql.Check() {
 			proxysql.ConnectionPool()
