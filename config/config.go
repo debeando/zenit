@@ -83,6 +83,8 @@ var (
 // Init does any initialization necessary for the module.
 func init() {
 	IPAddress = common.IPAddress()
+
+	log.SetOutput(os.Stdout)
 }
 
 // Load read settings from config file and set into struct.
