@@ -2,7 +2,7 @@
 general:
   hostname: localhost
   interval: 30
-  debug: true
+  debug: false
 
 mysql:
   dsn: root@tcp(127.0.0.1:3306)/
