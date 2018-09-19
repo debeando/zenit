@@ -74,7 +74,7 @@ func main() {
 	switch {
 	case *fVersion:
 		fmt.Printf("%s\n", config.Version)
-
+		os.Exit(0)
 	case *fHelp:
 		help(0)
 	case *fInstall:
