@@ -44,6 +44,19 @@ if [ ! -f /etc/zenit/zenit.yaml ]; then
   wget -qO- "https://raw.githubusercontent.com/swapbyt3s/zenit/master/zenit.yaml" > /etc/zenit/zenit.yaml
 fi
 
-/usr/bin/zenit --install
+if [ -d "/etc/logrotate.d" ]; then
+  if [ ! -f /etc/logrotate.d/zenit ]; then
+    cat > /etc/logrotate.d/zenit <<EOL
+/var/log/zenit.* {
+    rotate 7
+    daily
+    missingok
+    notifempty
+    copytruncate
+    compress
+}
+EOL
+  fi
+fi
 
-exit 0
+/usr/bin/zenit --install
