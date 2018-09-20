@@ -20,7 +20,7 @@ func Run() {
 	var e = Normalize(a)
 	var o = strings.Join(e, "\n")
 
-	file.Write(config.File.Prometheus.TextFile, o)
+	file.Write(config.File.Prometheus.TextFile, o + "\n")
 }
 
 func Normalize(a *accumulator.Items) []string {
