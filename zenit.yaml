@@ -6,23 +6,24 @@ general:
 
 mysql:
   dsn: root@tcp(127.0.0.1:3306)/
-  indexes: true
-  overflow: true
-  slave: true
-  status: true
-  tables: true
-  variables: true
-  slowlog:
-    enable: true
-    log_path: /var/lib/mysql/slow.log
-    buffer_size: 100
-    buffer_timeout: 60
-  auditlog:
-    enable: true
-    format: xml-old
-    log_path: /var/lib/mysql/audit.log
-    buffer_size: 100
-    buffer_timeout: 60
+  inputs:
+    indexes: true
+    overflow: true
+    slave: true
+    status: true
+    tables: true
+    variables: true
+    slowlog:
+      enable: true
+      log_path: /var/lib/mysql/slow.log
+      buffer_size: 100
+      buffer_timeout: 60
+    auditlog:
+      enable: true
+      format: xml-old
+      log_path: /var/lib/mysql/audit.log
+      buffer_size: 100
+      buffer_timeout: 60
   alerts:
     readonly:
       enable: true
@@ -57,11 +58,12 @@ slack:
   channel: alerts
 
 os:
-  cpu: true
-  disk: true
-  limits: true
-  mem: true
-  net: true
+  inputs:
+    cpu: true
+    disk: true
+    limits: true
+    mem: true
+    net: true
   alerts:
     cpu:
       enable: true
@@ -80,6 +82,7 @@ os:
       duration: 30
 
 process:
-  pt_kill: true
-  pt_deadlock_logger: true
-  pt_slave_delay: true
+  inputs:
+    pt_kill: true
+    pt_deadlock_logger: true
+    pt_slave_delay: true

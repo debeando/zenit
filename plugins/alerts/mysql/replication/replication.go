@@ -10,7 +10,7 @@ import (
 )
 
 func Check() {
-	if ! config.File.MySQL.Slave {
+	if ! config.File.MySQL.Inputs.Slave {
 		log.Printf("W! - Require to enable MySQL Slave Status in config file.\n")
 		return
 	}

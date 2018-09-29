@@ -10,7 +10,7 @@ import (
 )
 
 func Check() {
-	if ! config.File.MySQL.Variables {
+	if ! config.File.MySQL.Inputs.Variables {
 		log.Printf("W! - Require to enable MySQL Variables in config file.\n")
 		return
 	}

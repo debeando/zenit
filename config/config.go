@@ -28,25 +28,27 @@ type All struct {
 		Debug    bool          `yaml:"debug"`
 	}
 	MySQL struct {
-		DSN       string `yaml:"dsn"`
-		Indexes   bool   `yaml:"indexes"`
-		Overflow  bool   `yaml:"overflow"`
-		Slave     bool   `yaml:"slave"`
-		Status    bool   `yaml:"status"`
-		Tables    bool   `yaml:"tables"`
-		Variables bool   `yaml:"variables"`
-		AuditLog  struct {
-			Enable        bool   `yaml:"enable"`
-			Format        string `yaml:"format"`
-			LogPath       string `yaml:"log_path"`
-			BufferSize    int    `yaml:"buffer_size"`
-			BufferTimeOut int    `yaml:"buffer_timeout"`
-		}
-		SlowLog struct {
-			Enable        bool   `yaml:"enable"`
-			LogPath       string `yaml:"log_path"`
-			BufferSize    int    `yaml:"buffer_size"`
-			BufferTimeOut int    `yaml:"buffer_timeout"`
+		DSN string `yaml:"dsn"`
+		Inputs struct {
+			Indexes   bool `yaml:"indexes"`
+			Overflow  bool `yaml:"overflow"`
+			Slave     bool `yaml:"slave"`
+			Status    bool `yaml:"status"`
+			Tables    bool `yaml:"tables"`
+			Variables bool `yaml:"variables"`
+			AuditLog struct {
+				Enable        bool   `yaml:"enable"`
+				Format        string `yaml:"format"`
+				LogPath       string `yaml:"log_path"`
+				BufferSize    int    `yaml:"buffer_size"`
+				BufferTimeOut int    `yaml:"buffer_timeout"`
+			}
+			SlowLog struct {
+				Enable        bool   `yaml:"enable"`
+				LogPath       string `yaml:"log_path"`
+				BufferSize    int    `yaml:"buffer_size"`
+				BufferTimeOut int    `yaml:"buffer_timeout"`
+			}
 		}
 		Alerts struct {
 			ReadOnly struct {
@@ -84,11 +86,13 @@ type All struct {
 		Channel string `yaml:"channel"`
 	}
 	OS struct {
-		CPU    bool `yaml:"cpu"`
-		Disk   bool `yaml:"disk"`
-		Limits bool `yaml:"limits"`
-		Mem    bool `yaml:"mem"`
-		Net    bool `yaml:"net"`
+		Inputs struct {
+			CPU    bool `yaml:"cpu"`
+			Disk   bool `yaml:"disk"`
+			Limits bool `yaml:"limits"`
+			Mem    bool `yaml:"mem"`
+			Net    bool `yaml:"net"`
+		}
 		Alerts struct {
 			CPU struct {
 				Enable   bool   `yaml:"enable"`
@@ -111,9 +115,11 @@ type All struct {
 		}
 	}
 	Process struct {
-		PerconaToolKitKill           bool `yaml:"pt_kill"`
-		PerconaToolKitDeadlockLogger bool `yaml:"pt_deadlock_logger"`
-		PerconaToolKitSlaveDelay     bool `yaml:"pt_slave_delay"`
+		Inputs struct {
+			PerconaToolKitKill           bool `yaml:"pt_kill"`
+			PerconaToolKitDeadlockLogger bool `yaml:"pt_deadlock_logger"`
+			PerconaToolKitSlaveDelay     bool `yaml:"pt_slave_delay"`
+		}
 	}
 }
 

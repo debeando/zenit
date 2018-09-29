@@ -11,12 +11,12 @@ import (
 )
 
 func Check() {
-	if ! config.File.MySQL.Variables {
+	if ! config.File.MySQL.Inputs.Variables {
 		log.Printf("W! - Require to enable MySQL Variables in config file.\n")
 		return
 	}
 
-	if ! config.File.MySQL.Status {
+	if ! config.File.MySQL.Inputs.Status {
 		log.Printf("W! - Require to enable MySQL Status in config file.\n")
 		return
 	}
