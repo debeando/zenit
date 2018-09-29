@@ -1,0 +1,4 @@
+package cpu
+
+func Check() {
+}

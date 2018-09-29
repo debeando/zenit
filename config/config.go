@@ -89,6 +89,26 @@ type All struct {
 		Limits bool `yaml:"limits"`
 		Mem    bool `yaml:"mem"`
 		Net    bool `yaml:"net"`
+		Alerts struct {
+			CPU struct {
+				Enable   bool   `yaml:"enable"`
+				Warning  uint64 `yaml:"warning"`
+				Critical uint64 `yaml:"critical"`
+				Duration int    `yaml:"duration"`
+			}
+			Disk struct {
+				Enable   bool   `yaml:"enable"`
+				Warning  uint64 `yaml:"warning"`
+				Critical uint64 `yaml:"critical"`
+				Duration int    `yaml:"duration"`
+			}
+			MEM struct {
+				Enable   bool   `yaml:"enable"`
+				Warning  uint64 `yaml:"warning"`
+				Critical uint64 `yaml:"critical"`
+				Duration int    `yaml:"duration"`
+			}
+		}
 	}
 	Process struct {
 		PerconaToolKitKill           bool `yaml:"pt_kill"`

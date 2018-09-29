@@ -1,0 +1,4 @@
+package disk
+
+func Check() {
+}

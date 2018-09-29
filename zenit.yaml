@@ -62,6 +62,22 @@ os:
   limits: true
   mem: true
   net: true
+  alerts:
+    cpu:
+      enable: true
+      warning: 30
+      critical: 60
+      duration: 30
+    disk:
+      enable: true
+      warning: 50
+      critical: 75
+      duration: 30
+    mem:
+      enable: true
+      warning: 80
+      critical: 95
+      duration: 30
 
 process:
   pt_kill: true
