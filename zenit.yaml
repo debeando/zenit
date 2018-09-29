@@ -1,7 +1,7 @@
 ---
 general:
   hostname: localhost
-  interval: 10
+  interval: 10 # Seconds
   debug: false
 
 mysql:
@@ -16,28 +16,28 @@ mysql:
     slowlog:
       enable: true
       log_path: /var/lib/mysql/slow.log
-      buffer_size: 100
-      buffer_timeout: 60
+      buffer_size: 100   # Number of events.
+      buffer_timeout: 60 # Seconds
     auditlog:
       enable: true
       format: xml-old
       log_path: /var/lib/mysql/audit.log
-      buffer_size: 100
-      buffer_timeout: 60
+      buffer_size: 100   # Number of events.
+      buffer_timeout: 60 # Seconds
   alerts:
     readonly:
       enable: true
-      duration: 30
+      duration: 30 # Seconds
     replication:
       enable: false
-      warning: 10
-      critical: 60
-      duration: 30
+      warning: 10  # Percentage
+      critical: 60 # Percentage
+      duration: 30 # Seconds
     connections:
       enable: true
-      warning: 70
-      critical: 90
-      duration: 30
+      warning: 70  # Percentage
+      critical: 90 # Percentage
+      duration: 30 # Seconds
 
 proxysql:
   enable: true
@@ -67,19 +67,19 @@ os:
   alerts:
     cpu:
       enable: true
-      warning: 30
-      critical: 60
-      duration: 30
+      warning: 30  # Percentage
+      critical: 60 # Percentage
+      duration: 30 # Seconds
     disk:
       enable: true
-      warning: 50
-      critical: 75
-      duration: 30
+      warning: 50  # Percentage
+      critical: 75 # Percentage
+      duration: 30 # Seconds
     mem:
       enable: true
-      warning: 80
-      critical: 95
-      duration: 30
+      warning: 80  # Percentage
+      critical: 95 # Percentage
+      duration: 30 # Seconds
 
 process:
   inputs:
