@@ -20,7 +20,7 @@ RUN apt-get update
 # -----------------------------------------------------------------------------
 # Install additional packages
 # -----------------------------------------------------------------------------
-RUN apt-get install -y vim curl wget
+RUN apt-get install -y vim curl wget htop stress
 
 # -----------------------------------------------------------------------------
 # Copy script
