@@ -42,11 +42,11 @@ func Check() {
 
 	// Check if replication is not running:
 	if ioRunning == 0 || sqlRunning == 0 {
-		message += fmt.Sprintf("*IO Running:* %d\n", ioRunning)
-		message += fmt.Sprintf("*SQL Running:* %d\n", sqlRunning)
+		message += fmt.Sprintf("*IO Running:* %s\n", YesOrNo(ioRunning))
+		message += fmt.Sprintf("*SQL Running:* %s\n", YesOrNo(sqlRunning))
 
 		if sqlError > 0 {
-			message += fmt.Sprintf("*SQL Running:* %d\n", sqlError)
+			message += fmt.Sprintf("*SQL Error:* %s\n", sqlError)
 		}
 	} else if delay > 0 {
 		message += fmt.Sprintf("*Lagging:* %d\n", delay)
@@ -70,4 +70,11 @@ func Check() {
 	} else {
 		check.Update(delay, message)
 	}
+}
+
+func YesOrNo(v uint64) string {
+	if v == 1 {
+		return "Yes"
+	}
+	return "No"
 }
