@@ -147,6 +147,8 @@ func Load() {
 		}
 	}
 
+	source = []byte(os.ExpandEnv(string(source)))
+
 	err = yaml.Unmarshal(source, &File)
 	if err != nil {
 		log.Printf("Imposible to parse config file - %s", err)
