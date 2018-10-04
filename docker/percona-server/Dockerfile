@@ -31,6 +31,7 @@ RUN apt-get install -y curl
 # -----------------------------------------------------------------------------
 COPY zenit.yaml /etc/zenit/zenit.yaml
 RUN mkdir -p /etc/zenit/
+RUN sed -i 's/localhost/${HOSTNAME}/' /etc/zenit/zenit.yaml
 RUN sed -i 's/debug: false/debug: true/' /etc/zenit/zenit.yaml
 RUN sed -i 's/root@tcp/admin:admin@tcp/' /etc/zenit/zenit.yaml
 RUN sed -i 's/127.0.0.1:8123/172.20.1.2:8123/' /etc/zenit/zenit.yaml
