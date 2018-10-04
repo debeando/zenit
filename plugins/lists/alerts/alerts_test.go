@@ -20,13 +20,14 @@ func TestCheck(t *testing.T) {
 		ExpectedStatus bool
 	}{
 		{1, 1537705900, 1537705910, alerts.Normal, 10, 3, 2, 1, true,  false},
-		{2, 1537705900, 1537705910, alerts.Normal, 10, 3, 2, 1, false, true},
+		{2, 1537705900, 1537705910, alerts.Normal, 10, 3, 2, 0, false, true},
 		{3, 1537705900, 1537705910, alerts.Normal, 10, 3, 2, 2, true,  true},
 		{4, 1537705900, 1537705910, alerts.Normal, 10, 3, 2, 3, true,  true},
 		{5, 1537705900, 1537705905, alerts.Normal, 10, 3, 2, 2, true,  false},
 		{6, 1537705900, 1537705905, alerts.Normal, 10, 3, 2, 3, true,  false},
 		{7, 1537705900, 1537705910, alerts.Normal, 10, 2, 2, 2, true,  true},
 		{8, 1537705900, 1537705905, alerts.Normal, 10, 2, 2, 2, true,  false},
+		// {9, 1537705900, 1537705915, alerts.Normal, 10, 3, 2, 0, false, false},
 	}
 
 	for _, check := range checks {

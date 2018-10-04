@@ -15,13 +15,13 @@ func Check() {
 		return
 	}
 
+	var value uint64
 	var ioRunning uint64
 	var message string = ""
 	var ok bool
-	var delay uint64
 	var sqlError uint64
 	var sqlRunning uint64
-	var decide bool
+	// var decide bool
 
 	var metrics = accumulator.Load()
 	var check = alerts.Load().Exist("replication")
@@ -38,37 +38,33 @@ func Check() {
 	if ! ok {
 		return
 	}
-	delay, _ = metrics.Find("mysql_slave", "Seconds_Behind_Master")
 
-	// Check if replication is not running:
-	if ioRunning == 0 || sqlRunning == 0 {
-		message += fmt.Sprintf("*IO Running:* %s\n", YesOrNo(ioRunning))
-		message += fmt.Sprintf("*SQL Running:* %s\n", YesOrNo(sqlRunning))
+	message += fmt.Sprintf("*IO Running:* %s\n", YesOrNo(ioRunning))
+	message += fmt.Sprintf("*SQL Running:* %s\n", YesOrNo(sqlRunning))
+	message += fmt.Sprintf("*SQL Error:* %d\n", sqlError)
 
-		if sqlError > 0 {
-			message += fmt.Sprintf("*SQL Error:* %s\n", sqlError)
-		}
-	} else if delay > 0 {
-		message += fmt.Sprintf("*Lagging:* %d\n", delay)
-		decide = true
-	}
+	value = 2 - (ioRunning + sqlRunning)
 
-	// log.Printf("D! - Alert:MySQL:Slave - Message=%s\n", message)
-	// log.Printf("D! - Alert:MySQL:Slave - Decide=%t\n", decide)
+	//log.Printf("D! - Alert:MySQL:Slave - Message=%s\n", message)
+	//log.Printf("D! - Alert:MySQL:Slave - IO Running=%d\n", ioRunning)
+	//log.Printf("D! - Alert:MySQL:Slave - SQL Running=%d\n", sqlRunning)
+	//log.Printf("D! - Alert:MySQL:Slave - Value=%d\n", value)
 
 	if check == nil {
+		log.Printf("D! - Alert:MySQL:Slave - Adding\n")
 		alerts.Load().Add(
 			"replication",
 			"MySQL Replication Status",
 			config.File.MySQL.Alerts.Replication.Duration,
-			config.File.MySQL.Alerts.Replication.Warning,
-			config.File.MySQL.Alerts.Replication.Critical,
-			delay,
+			1, // Warning
+			1, // Critical
+			value,
 			message,
-			decide,
+			true,
 		)
 	} else {
-		check.Update(delay, message)
+		log.Printf("D! - Alert:MySQL:Slave - Updateing\n")
+		check.Update(value, message)
 	}
 }
 

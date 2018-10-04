@@ -15,7 +15,7 @@ const (
 	// Author is a const with have the name of creator and collaborators for this code.
 	Author string = "Nicola Strappazzon C. <swapbyt3s@gmail.com>"
 	// Version is a const to have the latest version number for this code.
-	Version string = "1.1.9"
+	Version string = "1.1.10"
 	// ConfigFile containt the path for configuration file.
 	ConfigFile string = "/etc/zenit/zenit.yaml"
 )

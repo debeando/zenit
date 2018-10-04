@@ -35,7 +35,7 @@ func Check() {
 	var check = alerts.Load().Exist("readonly")
 
 	// Build one message with details for notification:
-	var message = fmt.Sprintf("*Current:* %b", (value ^ 1))
+	var message = fmt.Sprintf("*Current:* %s", YesOrNo(value ^ 1))
 
 	// Register new check and update last status:
 	if check == nil {
@@ -52,4 +52,11 @@ func Check() {
 	} else {
 		check.Update(value, message)
 	}
+}
+
+func YesOrNo(v uint64) string {
+	if v == 1 {
+		return "Yes"
+	}
+	return "No"
 }
