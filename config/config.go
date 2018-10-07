@@ -56,16 +56,16 @@ type All struct {
 				Duration int  `yaml:"duration"`
 			}
 			Connections struct {
-				Enable   bool   `yaml:"enable"`
-				Warning  uint64 `yaml:"warning"`
-				Critical uint64 `yaml:"critical"`
-				Duration int    `yaml:"duration"`
+				Enable   bool `yaml:"enable"`
+				Warning  int  `yaml:"warning"`
+				Critical int  `yaml:"critical"`
+				Duration int  `yaml:"duration"`
 			}
 			Replication struct {
-				Enable   bool   `yaml:"enable"`
-				Warning  uint64 `yaml:"warning"`
-				Critical uint64 `yaml:"critical"`
-				Duration int    `yaml:"duration"`
+				Enable   bool `yaml:"enable"`
+				Warning  int  `yaml:"warning"`
+				Critical int  `yaml:"critical"`
+				Duration int  `yaml:"duration"`
 			}
 		}
 	}
@@ -95,22 +95,22 @@ type All struct {
 		}
 		Alerts struct {
 			CPU struct {
-				Enable   bool   `yaml:"enable"`
-				Warning  uint64 `yaml:"warning"`
-				Critical uint64 `yaml:"critical"`
-				Duration int    `yaml:"duration"`
+				Enable   bool `yaml:"enable"`
+				Warning  int  `yaml:"warning"`
+				Critical int  `yaml:"critical"`
+				Duration int  `yaml:"duration"`
 			}
 			Disk struct {
-				Enable   bool   `yaml:"enable"`
-				Warning  uint64 `yaml:"warning"`
-				Critical uint64 `yaml:"critical"`
-				Duration int    `yaml:"duration"`
+				Enable   bool `yaml:"enable"`
+				Warning  int  `yaml:"warning"`
+				Critical int  `yaml:"critical"`
+				Duration int  `yaml:"duration"`
 			}
 			MEM struct {
-				Enable   bool   `yaml:"enable"`
-				Warning  uint64 `yaml:"warning"`
-				Critical uint64 `yaml:"critical"`
-				Duration int    `yaml:"duration"`
+				Enable   bool `yaml:"enable"`
+				Warning  int  `yaml:"warning"`
+				Critical int  `yaml:"critical"`
+				Duration int  `yaml:"duration"`
 			}
 		}
 	}

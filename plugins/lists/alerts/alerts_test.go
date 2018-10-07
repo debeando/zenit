@@ -13,9 +13,9 @@ func TestCheck(t *testing.T) {
 		LastSeen  int
 		Status    uint8
 		Duration  int
-		Critical  uint64
-		Warning   uint64
-		Value     uint64
+		Critical  int
+		Warning   int
+		Value     int
 		Decide    bool
 		ExpectedStatus bool
 	}{

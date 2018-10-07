@@ -6,7 +6,7 @@ import (
 
 // Check is a status for each alert.
 type Check struct {
-	Critical  uint64 // Critical value
+	Critical  int    // Critical value
 	Duration  int    // Duration limit between FirstSeen and LastSeen to alert.
 	FirstSeen int    // UnixTimeStamp when is register alert.
 	Key       string // Key to identify own check.
@@ -15,8 +15,8 @@ type Check struct {
 	Name      string // Name human own check.
 	Notified  uint8  // Has the same values from Status, and indicate what level is notificated.
 	Status    uint8  // Current status for the check: normal, warning, critical or resolved.
-	Value     uint64 // Value to evaluate.
-	Warning   uint64 // Warning value.
+	Value     int    // Value to evaluate.
+	Warning   int    // Warning value.
 	Decide    bool   // Use Evaluate function.
 }
 
@@ -46,7 +46,7 @@ func (l *Items) Count() int {
 }
 
 // Add new check.
-func (l *Items) Add(key string, name string, duration int, warning uint64, critical uint64, value uint64, message string, decide bool) {
+func (l *Items) Add(key string, name string, duration int, warning int, critical int, value int, message string, decide bool) {
 	if items.Exist(key) == nil {
 		c := Check{
 			Critical: critical,
@@ -93,7 +93,7 @@ func (l *Items) Exist(key string) *Check {
 	return nil
 }
 
-func (c *Check) SetLastSeen(value uint64) {
+func (c *Check) SetLastSeen(value int) {
 	if c == nil {
 		return
 	}
@@ -132,7 +132,7 @@ func (c *Check) Evaluate() {
 	}
 }
 
-func (c *Check) Update(value uint64, message string) {
+func (c *Check) Update(value int, message string) {
 	c.SetLastSeen(value)
 	c.Evaluate()
 	c.Message = message

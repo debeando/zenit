@@ -16,26 +16,22 @@ func Check() {
 	}
 
 	var metrics = accumulator.Load()
-	var value, ok = metrics.Find("mysql_variables", "read_only")
+	var value = metrics.Find("mysql_variables", "name", "read_only")
+	var status = Float64ToInt(value)
 
-	// Verify find match:
-	if ! ok {
+	// Verify status range is valid:
+	if ! (status == 0 || status == 1) {
 		return
 	}
 
-	// Verify value range is valid:
-	if ! (value == 0 || value == 1) {
-		return
-	}
-
-	// Invert value for compatibility alert evaluation:
-	value = (value ^ 1)
+	// Invert status for compatibility alert evaluation:
+	status = (status ^ 1)
 
 	// Find own check:
 	var check = alerts.Load().Exist("readonly")
 
 	// Build one message with details for notification:
-	var message = fmt.Sprintf("*Current:* %s", YesOrNo(value ^ 1))
+	var message = fmt.Sprintf("*Current:* %s", YesOrNo(status ^ 1))
 
 	// Register new check and update last status:
 	if check == nil {
@@ -45,18 +41,25 @@ func Check() {
 			config.File.MySQL.Alerts.ReadOnly.Duration,
 			1, // Warning
 			1, // Critical
-			value,
+			status,
 			message,
 			true,
 		)
 	} else {
-		check.Update(value, message)
+		check.Update(status, message)
 	}
 }
 
-func YesOrNo(v uint64) string {
+func YesOrNo(v int) string {
 	if v == 1 {
 		return "Yes"
 	}
 	return "No"
+}
+
+func Float64ToInt(value interface{}) int {
+	if v, ok := value.(float64); ok {
+		return int(v)
+	}
+	return -1
 }

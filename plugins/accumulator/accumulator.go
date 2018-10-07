@@ -1,6 +1,7 @@
 // TODO:
 // - Rename accumulator to metrics.
 // - Move to list folder.
+// - Rename Find to FetchOne
 
 package accumulator
 
@@ -56,19 +57,17 @@ func (l *Items) Add(m Metric) {
 }
 
 // Find and return specific metric.
-func (l *Items) Find(key string, tag string) (uint64, bool) {
+func (l *Items) Find(key string, tagName string, tagValue string) (interface{}) {
 	for itemIndex := 0; itemIndex < len(*l); itemIndex++ {
 		if (*l)[itemIndex].Key == key {
 			for _, metricTag := range (*l)[itemIndex].Tags {
-				if metricTag.Name == "name" && metricTag.Value == tag {
-					if value, ok := (*l)[itemIndex].Values.(uint64); ok {
-						return value, true
-					}
+				if metricTag.Name == tagName && metricTag.Value == tagValue {
+					return (*l)[itemIndex].Values
 				}
 			}
 		}
 	}
-	return 0, false
+	return -1
 }
 
 // Unique is a check to verify the metric key is one in the accumulator.

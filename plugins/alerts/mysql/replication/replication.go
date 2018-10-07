@@ -15,40 +15,30 @@ func Check() {
 		return
 	}
 
-	var value uint64
-	var ioRunning uint64
 	var message string = ""
-	var ok bool
-	var sqlError uint64
-	var sqlRunning uint64
-	// var decide bool
+	var running int
+	var value interface{}
 
 	var metrics = accumulator.Load()
 	var check = alerts.Load().Exist("replication")
 
-	ioRunning, ok = metrics.Find("mysql_slave", "Slave_IO_Running")
-	if ! ok {
-		return
-	}
-	sqlRunning, ok = metrics.Find("mysql_slave", "Slave_SQL_Running")
-	if ! ok {
-		return
-	}
-	sqlError, ok = metrics.Find("mysql_slave", "Last_SQL_Errno")
-	if ! ok {
-		return
-	}
+	value = metrics.Find("mysql_slave", "name", "Slave_IO_Running")
+	var ioRunning = Float64ToInt(value)
+	value = metrics.Find("mysql_slave", "name", "Slave_SQL_Running")
+	var sqlRunning = Float64ToInt(value)
+	value = metrics.Find("mysql_slave", "name", "Last_SQL_Errno")
+	var sqlError = Float64ToInt(value)
 
 	message += fmt.Sprintf("*IO Running:* %s\n", YesOrNo(ioRunning))
 	message += fmt.Sprintf("*SQL Running:* %s\n", YesOrNo(sqlRunning))
 	message += fmt.Sprintf("*SQL Error:* %d\n", sqlError)
 
-	value = 2 - (ioRunning + sqlRunning)
+	running = 2 - (ioRunning + sqlRunning)
 
 	//log.Printf("D! - Alert:MySQL:Slave - Message=%s\n", message)
 	//log.Printf("D! - Alert:MySQL:Slave - IO Running=%d\n", ioRunning)
 	//log.Printf("D! - Alert:MySQL:Slave - SQL Running=%d\n", sqlRunning)
-	//log.Printf("D! - Alert:MySQL:Slave - Value=%d\n", value)
+	//log.Printf("D! - Alert:MySQL:Slave - running=%d\n", running)
 
 	if check == nil {
 		log.Printf("D! - Alert:MySQL:Slave - Adding\n")
@@ -58,19 +48,26 @@ func Check() {
 			config.File.MySQL.Alerts.Replication.Duration,
 			1, // Warning
 			1, // Critical
-			value,
+			running,
 			message,
 			true,
 		)
 	} else {
 		log.Printf("D! - Alert:MySQL:Slave - Updateing\n")
-		check.Update(value, message)
+		check.Update(running, message)
 	}
 }
 
-func YesOrNo(v uint64) string {
+func YesOrNo(v int) string {
 	if v == 1 {
 		return "Yes"
 	}
 	return "No"
+}
+
+func Float64ToInt(value interface{}) int {
+	if v, ok := value.(float64); ok {
+		return int(v)
+	}
+	return -1
 }

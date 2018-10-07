@@ -9,6 +9,8 @@ deps: ## Install dependencies
 	go get -u github.com/go-yaml/yaml
 	go get -u github.com/hpcloud/tail
 	go get -u github.com/kardianos/service
+	go get -u github.com/shirou/gopsutil
+	go get -u golang.org/x/sys/unix
 
 deps-devel:
 	brew install jq

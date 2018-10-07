@@ -11,8 +11,9 @@ const FILE_MAX string = "/proc/sys/fs/file-max"
 func SysLimits() {
 	accumulator.Load().Add(accumulator.Metric{
 		Key: "os",
-		Tags: []accumulator.Tag{{"system", "linux"},
-			{"setting", "sysctl"}},
+		Tags: []accumulator.Tag{
+			{"name", "sysctl"},
+		},
 		Values: []accumulator.Value{{"nr_open", common.GetUInt64FromFile(NR_OPEN)},
 			{"file_max", common.GetUInt64FromFile(FILE_MAX)}},
 	})

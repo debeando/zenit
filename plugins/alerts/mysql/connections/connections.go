@@ -22,21 +22,12 @@ func Check() {
 	}
 
 	var metrics = accumulator.Load()
-	var max_connections uint64
-	var threads_connected uint64
-	var ok bool
-
-	max_connections, ok = metrics.Find("mysql_variables", "max_connections")
-	if ! ok {
-		return
-	}
-	threads_connected, ok = metrics.Find("mysql_status", "Threads_connected")
-	if ! ok {
-		return
-	}
-
-	var percentage = common.Percentage(threads_connected, max_connections)
-	var value = common.FloatToUInt(percentage)
+	var value interface{}
+	value = metrics.Find("mysql_variables", "name", "max_connections")
+	var MaxConnections = InterfaceToFloat64(value)
+	value = metrics.Find("mysql_status", "name", "Threads_connected")
+	var ThreadsConnected = InterfaceToFloat64(value)
+	var percentage = int(common.Percentage(ThreadsConnected, MaxConnections))
 	var check = alerts.Load().Exist("connections")
 
 	// Build one message with details for notification:
@@ -49,11 +40,18 @@ func Check() {
 			config.File.MySQL.Alerts.Connections.Duration,
 			config.File.MySQL.Alerts.Connections.Warning,
 			config.File.MySQL.Alerts.Connections.Critical,
-			value,
+			percentage,
 			message,
 			true,
 		)
 	} else {
-		check.Update(value, message)
+		check.Update(percentage, message)
 	}
+}
+
+func InterfaceToFloat64(value interface{}) float64 {
+	if v, ok := value.(float64); ok {
+		return v
+	}
+	return -1
 }

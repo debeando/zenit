@@ -16,18 +16,14 @@ func Check() {
 	}
 
 	var metrics = accumulator.Load()
-	var value, ok = metrics.Find("mysql_slave", "Seconds_Behind_Master")
-
-	// Verify find match:
-	if ! ok {
-		return
-	}
+	var value = metrics.Find("mysql_slave", "name", "Seconds_Behind_Master")
+	var lagging = Float64ToInt(value)
 
 	// Find own check:
 	var check = alerts.Load().Exist("lagging")
 
 	// Build one message with details for notification:
-	var message = fmt.Sprintf("*Lagging:* %d\n", value)
+	var message = fmt.Sprintf("*Lagging:* %d\n", lagging)
 
 	log.Printf("D! - Alert:MySQL:Slave - Message=%s\n", message)
 
@@ -39,12 +35,19 @@ func Check() {
 			config.File.MySQL.Alerts.Replication.Duration,
 			config.File.MySQL.Alerts.Replication.Warning,
 			config.File.MySQL.Alerts.Replication.Critical,
-			value,
+			lagging,
 			message,
 			true,
 		)
 	} else {
 		log.Printf("D! - Alert:MySQL:Slave - Updateing\n")
-		check.Update(value, message)
+		check.Update(lagging, message)
 	}
+}
+
+func Float64ToInt(value interface{}) int {
+	if v, ok := value.(float64); ok {
+		return int(v)
+	}
+	return -1
 }
