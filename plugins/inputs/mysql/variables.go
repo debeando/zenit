@@ -9,7 +9,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
-const QUERY_SQL_VARIABLES = "SHOW GLOBAL VARIABLES"
+const QuerySQLVariables = "SHOW GLOBAL VARIABLES"
 
 func Variables() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
@@ -18,7 +18,7 @@ func Variables() {
 		log.Printf("E! - MySQL:Variables - Impossible to connect: %s\n", err)
 	}
 
-	rows, err := conn.Query(QUERY_SQL_VARIABLES)
+	rows, err := conn.Query(QuerySQLVariables)
 	defer rows.Close()
 	if err != nil {
 		log.Printf("E! - MySQL:Variables - Impossible to execute query: %s\n", err)
@@ -31,6 +31,10 @@ func Variables() {
 	for rows.Next() {
 		rows.Scan(&k, &v)
 		if value, ok := mysql.ParseValue(v); ok {
+			if config.File.General.Debug {
+				// log.Printf("D! - MySQL:Variables - %s=%d\n", k, value)
+			}
+
 			a.Add(accumulator.Metric{
 				Key:    "mysql_variables",
 				Tags:   []accumulator.Tag{{"name", k}},

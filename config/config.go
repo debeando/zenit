@@ -15,7 +15,7 @@ const (
 	// Author is a const with have the name of creator and collaborators for this code.
 	Author string = "Nicola Strappazzon C. <swapbyt3s@gmail.com>"
 	// Version is a const to have the latest version number for this code.
-	Version string = "1.1.9"
+	Version string = "1.1.10"
 	// ConfigFile containt the path for configuration file.
 	ConfigFile string = "/etc/zenit/zenit.yaml"
 )
@@ -28,25 +28,45 @@ type All struct {
 		Debug    bool          `yaml:"debug"`
 	}
 	MySQL struct {
-		DSN       string `yaml:"dsn"`
-		Indexes   bool   `yaml:"indexes"`
-		Overflow  bool   `yaml:"overflow"`
-		Slave     bool   `yaml:"slave"`
-		Status    bool   `yaml:"status"`
-		Tables    bool   `yaml:"tables"`
-		Variables bool   `yaml:"variables"`
-		AuditLog  struct {
-			Enable        bool   `yaml:"enable"`
-			Format        string `yaml:"format"`
-			LogPath       string `yaml:"log_path"`
-			BufferSize    int    `yaml:"buffer_size"`
-			BufferTimeOut int    `yaml:"buffer_timeout"`
+		DSN string `yaml:"dsn"`
+		Inputs struct {
+			Indexes   bool `yaml:"indexes"`
+			Overflow  bool `yaml:"overflow"`
+			Slave     bool `yaml:"slave"`
+			Status    bool `yaml:"status"`
+			Tables    bool `yaml:"tables"`
+			Variables bool `yaml:"variables"`
+			AuditLog struct {
+				Enable        bool   `yaml:"enable"`
+				Format        string `yaml:"format"`
+				LogPath       string `yaml:"log_path"`
+				BufferSize    int    `yaml:"buffer_size"`
+				BufferTimeOut int    `yaml:"buffer_timeout"`
+			}
+			SlowLog struct {
+				Enable        bool   `yaml:"enable"`
+				LogPath       string `yaml:"log_path"`
+				BufferSize    int    `yaml:"buffer_size"`
+				BufferTimeOut int    `yaml:"buffer_timeout"`
+			}
 		}
-		SlowLog struct {
-			Enable        bool   `yaml:"enable"`
-			LogPath       string `yaml:"log_path"`
-			BufferSize    int    `yaml:"buffer_size"`
-			BufferTimeOut int    `yaml:"buffer_timeout"`
+		Alerts struct {
+			ReadOnly struct {
+				Enable   bool `yaml:"enable"`
+				Duration int  `yaml:"duration"`
+			}
+			Connections struct {
+				Enable   bool `yaml:"enable"`
+				Warning  int  `yaml:"warning"`
+				Critical int  `yaml:"critical"`
+				Duration int  `yaml:"duration"`
+			}
+			Replication struct {
+				Enable   bool `yaml:"enable"`
+				Warning  int  `yaml:"warning"`
+				Critical int  `yaml:"critical"`
+				Duration int  `yaml:"duration"`
+			}
 		}
 	}
 	ProxySQL struct {
@@ -60,17 +80,46 @@ type All struct {
 		Enable   bool   `yaml:"enable"`
 		TextFile string `yaml:"textfile"`
 	}
+	Slack struct {
+		Enable  bool   `yaml:"enable"`
+		Token   string `yaml:"token"`
+		Channel string `yaml:"channel"`
+	}
 	OS struct {
-		CPU    bool `yaml:"cpu"`
-		Disk   bool `yaml:"disk"`
-		Limits bool `yaml:"limits"`
-		Mem    bool `yaml:"mem"`
-		Net    bool `yaml:"net"`
+		Inputs struct {
+			CPU    bool `yaml:"cpu"`
+			Disk   bool `yaml:"disk"`
+			Limits bool `yaml:"limits"`
+			Mem    bool `yaml:"mem"`
+			Net    bool `yaml:"net"`
+		}
+		Alerts struct {
+			CPU struct {
+				Enable   bool `yaml:"enable"`
+				Warning  int  `yaml:"warning"`
+				Critical int  `yaml:"critical"`
+				Duration int  `yaml:"duration"`
+			}
+			Disk struct {
+				Enable   bool `yaml:"enable"`
+				Warning  int  `yaml:"warning"`
+				Critical int  `yaml:"critical"`
+				Duration int  `yaml:"duration"`
+			}
+			MEM struct {
+				Enable   bool `yaml:"enable"`
+				Warning  int  `yaml:"warning"`
+				Critical int  `yaml:"critical"`
+				Duration int  `yaml:"duration"`
+			}
+		}
 	}
 	Process struct {
-		PerconaToolKitKill           bool `yaml:"pt_kill"`
-		PerconaToolKitDeadlockLogger bool `yaml:"pt_deadlock_logger"`
-		PerconaToolKitSlaveDelay     bool `yaml:"pt_slave_delay"`
+		Inputs struct {
+			PerconaToolKitKill           bool `yaml:"pt_kill"`
+			PerconaToolKitDeadlockLogger bool `yaml:"pt_deadlock_logger"`
+			PerconaToolKitSlaveDelay     bool `yaml:"pt_slave_delay"`
+		}
 	}
 }
 
@@ -98,6 +147,8 @@ func Load() {
 		}
 	}
 
+	source = []byte(os.ExpandEnv(string(source)))
+
 	err = yaml.Unmarshal(source, &File)
 	if err != nil {
 		log.Printf("Imposible to parse config file - %s", err)
@@ -107,8 +158,8 @@ func Load() {
 
 // SanityCheck verify the minimum config settings and set default values to start.
 func SanityCheck() {
-	if File.General.Interval < 5 {
-		log.Println("W! Config - general.interval: Use positive value, and minimun start from 5 seconds.")
+	if File.General.Interval < 3 {
+		log.Println("W! Config - general.interval: Use positive value, and minimun start from 3 seconds.")
 		log.Println("W! Config - general.interval: Using default 30 seconds.")
 		File.General.Interval = 30
 	}

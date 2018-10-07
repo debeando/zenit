@@ -4,10 +4,10 @@ version: '3'
 services:
   clickhouse:
     image: clickhouse
+    container_name: zenit_clickhouse
     build:
       context: ../
       dockerfile: docker/clickhouse/Dockerfile
-    container_name: zenit_clickhouse
     ulimits:
       nofile:
         soft: 262144
@@ -18,40 +18,52 @@ services:
       default:
         ipv4_address: 172.20.1.2
 
-  percona-server:
-    image: percona-server
-    build: percona-server
-    container_name: zenit_percona_server
-    volumes:
-      - data:/var/lib/mysql
+  percona-server-primary:
+    image: percona-server-primary
+    container_name: zenit_percona_server_primary
+    build:
+      context: ../
+      dockerfile: docker/percona-server/Dockerfile
+    environment:
+      - SERVER_ID=1
+      - ZENIT_SLACK_TOKEN
+      - ZENIT_SLACK_CHANNEL
     networks:
       default:
         ipv4_address: 172.20.1.3
 
-  proxysql:
-    image: proxysql
-    build: proxysql
-    container_name: zenit_proxysql
+  percona-server-secondary:
+    image: percona-server-secondary
+    container_name: zenit_percona_server_secondary
+    build:
+      context: ../
+      dockerfile: docker/percona-server/Dockerfile
+    environment:
+      - SERVER_ID=2
+      - ZENIT_SLACK_TOKEN
+      - ZENIT_SLACK_CHANNEL
     networks:
       default:
         ipv4_address: 172.20.1.4
+    depends_on:
+      - percona-server-primary
 
-  sandbox:
-    image: sandbox
+  proxysql:
+    image: proxysql
+    container_name: zenit_proxysql
+    build: proxysql
     build:
       context: ../
-      dockerfile: docker/sandbox/Dockerfile
-    container_name: zenit_sandbox
-    depends_on:
-      - percona-server
-    volumes:
-      - data:/root/mysql/data
+      dockerfile: docker/proxysql/Dockerfile
     networks:
       default:
-        ipv4_address: 172.20.1.10
-
-volumes:
-  data:
+        ipv4_address: 172.20.1.5
+    environment:
+      - ZENIT_SLACK_TOKEN
+      - ZENIT_SLACK_CHANNEL
+    depends_on:
+      - percona-server-primary
+      - percona-server-secondary
 
 networks:
   default:

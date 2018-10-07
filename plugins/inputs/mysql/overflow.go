@@ -19,7 +19,7 @@ type Column struct {
 	column   string
 	dataType string
 	unsigned bool
-	current  uint64
+	current  float64
 	percent  float64
 	maximum  uint64
 }
@@ -93,5 +93,5 @@ func (c *Column) Maximum() {
 }
 
 func (c *Column) Percentage() {
-	c.percent = common.Percentage(c.current, c.maximum)
+	c.percent = common.Percentage(c.current, float64(c.maximum))
 }

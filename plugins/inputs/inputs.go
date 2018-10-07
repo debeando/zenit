@@ -21,57 +21,47 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql"
 	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
 	"github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
+	"github.com/swapbyt3s/zenit/plugins/outputs/slack"
 )
 
-func Gather() {
-	var wg sync.WaitGroup
-
-	log.Printf("I! Starting Zenit %s\n", config.Version)
-
-	wg.Add(2)
-
-	go doCollectPlugins(&wg)
-	go doCollectParsers(&wg)
-
-	wg.Wait()
-}
-
-func doCollectPlugins(wg *sync.WaitGroup) {
+func Plugins(wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for {
-		if config.File.OS.CPU {
+		accumulator.Load().Reset()
+
+		if config.File.OS.Inputs.CPU {
 			os.CPU()
 		}
-		if config.File.OS.Disk {
+		if config.File.OS.Inputs.Disk {
 			os.Disk()
 		}
-		if config.File.OS.Mem {
+		if config.File.OS.Inputs.Mem {
 			os.Mem()
 		}
-		if config.File.OS.Net {
+		if config.File.OS.Inputs.Net {
 			os.Net()
 		}
-		if config.File.OS.Limits {
+		if config.File.OS.Inputs.Limits {
 			os.SysLimits()
 		}
 		if mysql.Check() {
-			if config.File.MySQL.Indexes {
+			if config.File.MySQL.Inputs.Indexes {
 				mysql.Indexes()
 			}
-			if config.File.MySQL.Overflow {
+			if config.File.MySQL.Inputs.Overflow {
 				mysql.Overflow()
 			}
-			if config.File.MySQL.Slave {
+			if config.File.MySQL.Inputs.Slave {
 				mysql.Slave()
 			}
-			if config.File.MySQL.Status {
+			if config.File.MySQL.Inputs.Status {
 				mysql.Status()
 			}
-			if config.File.MySQL.Tables {
+			if config.File.MySQL.Inputs.Tables {
 				mysql.Tables()
 			}
-			if config.File.MySQL.Variables {
+			if config.File.MySQL.Inputs.Variables {
 				mysql.Variables()
 			}
 		}
@@ -79,37 +69,39 @@ func doCollectPlugins(wg *sync.WaitGroup) {
 			proxysql.ConnectionPool()
 			proxysql.QueryDigest()
 		}
-		if config.File.Process.PerconaToolKitKill {
+		if config.File.Process.Inputs.PerconaToolKitKill {
 			process.PerconaToolKitKill()
 		}
-		if config.File.Process.PerconaToolKitDeadlockLogger {
+		if config.File.Process.Inputs.PerconaToolKitDeadlockLogger {
 			process.PerconaToolKitDeadlockLogger()
 		}
-		if config.File.Process.PerconaToolKitSlaveDelay {
+		if config.File.Process.Inputs.PerconaToolKitSlaveDelay {
 			process.PerconaToolKitSlaveDelay()
 		}
 		if config.File.Prometheus.Enable {
 			prometheus.Run()
 		}
-		accumulator.Load().Reset()
+		if config.File.Slack.Enable {
+			slack.Run()
+		}
 		time.Sleep(config.File.General.Interval * time.Second)
 	}
 }
 
-func doCollectParsers(wg *sync.WaitGroup) {
+func Parsers(wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	if config.File.MySQL.AuditLog.Enable {
+	if config.File.MySQL.Inputs.AuditLog.Enable {
 		if config.File.General.Debug {
 			log.Println("D! - Load MySQL AuditLog")
-			log.Printf("D! - Read MySQL AuditLog: %s\n", config.File.MySQL.AuditLog.LogPath)
+			log.Printf("D! - Read MySQL AuditLog: %s\n", config.File.MySQL.Inputs.AuditLog.LogPath)
 		}
 
 		if !clickhouse.Check() {
 			log.Println("E! - AuditLog require active connection to ClickHouse.")
 		}
 
-		if config.File.MySQL.AuditLog.Format == "xml-old" {
+		if config.File.MySQL.Inputs.AuditLog.Format == "xml-old" {
 			channel_tail := make(chan string)
 			channel_parser := make(chan map[string]string)
 			channel_data := make(chan map[string]string)
@@ -118,8 +110,8 @@ func doCollectParsers(wg *sync.WaitGroup) {
 				Type:    "AuditLog",
 				Schema:  "zenit",
 				Table:   "mysql_audit_log",
-				Size:    config.File.MySQL.AuditLog.BufferSize,
-				Timeout: config.File.MySQL.AuditLog.BufferTimeOut,
+				Size:    config.File.MySQL.Inputs.AuditLog.BufferSize,
+				Timeout: config.File.MySQL.Inputs.AuditLog.BufferTimeOut,
 				Wildcard: map[string]string{
 					"_time":          "'%s'",
 					"command_class":  "'%s'",
@@ -143,8 +135,8 @@ func doCollectParsers(wg *sync.WaitGroup) {
 				Values: []map[string]string{},
 			}
 
-			go common.Tail(config.File.MySQL.AuditLog.LogPath, channel_tail)
-			go audit.Parser(config.File.MySQL.AuditLog.LogPath, channel_tail, channel_parser)
+			go common.Tail(config.File.MySQL.Inputs.AuditLog.LogPath, channel_tail)
+			go audit.Parser(config.File.MySQL.Inputs.AuditLog.LogPath, channel_tail, channel_parser)
 			go clickhouse.Send(event, channel_data)
 
 			go func() {
@@ -155,10 +147,10 @@ func doCollectParsers(wg *sync.WaitGroup) {
 		}
 	}
 
-	if config.File.MySQL.SlowLog.Enable {
+	if config.File.MySQL.Inputs.SlowLog.Enable {
 		if config.File.General.Debug {
 			log.Println("D! - Load MySQL SlowLog")
-			log.Printf("D! - Read MySQL SlowLog: %s\n", config.File.MySQL.SlowLog.LogPath)
+			log.Printf("D! - Read MySQL SlowLog: %s\n", config.File.MySQL.Inputs.SlowLog.LogPath)
 		}
 
 		if !clickhouse.Check() {
@@ -173,8 +165,8 @@ func doCollectParsers(wg *sync.WaitGroup) {
 			Type:    "SlowLog",
 			Schema:  "zenit",
 			Table:   "mysql_slow_log",
-			Size:    config.File.MySQL.SlowLog.BufferSize,
-			Timeout: config.File.MySQL.SlowLog.BufferTimeOut,
+			Size:    config.File.MySQL.Inputs.SlowLog.BufferSize,
+			Timeout: config.File.MySQL.Inputs.SlowLog.BufferTimeOut,
 			Wildcard: map[string]string{
 				"_time":         "'%s'",
 				"bytes_sent":    "%s",
@@ -197,8 +189,8 @@ func doCollectParsers(wg *sync.WaitGroup) {
 			Values: []map[string]string{},
 		}
 
-		go common.Tail(config.File.MySQL.SlowLog.LogPath, channel_tail)
-		go slow.Parser(config.File.MySQL.SlowLog.LogPath, channel_tail, channel_parser)
+		go common.Tail(config.File.MySQL.Inputs.SlowLog.LogPath, channel_tail)
+		go slow.Parser(config.File.MySQL.Inputs.SlowLog.LogPath, channel_tail, channel_parser)
 		go clickhouse.Send(event, channel_data)
 
 		go func() {

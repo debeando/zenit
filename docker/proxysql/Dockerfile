@@ -35,10 +35,20 @@ RUN env DEBIAN_FRONTEND=noninteractive \
     apt-get install -y proxysql
 
 # -----------------------------------------------------------------------------
+# Install Zenit
+# -----------------------------------------------------------------------------
+COPY zenit.yaml /etc/zenit/zenit.yaml
+RUN mkdir -p /etc/zenit/
+RUN sed -i 's/debug: false/debug: true/' /etc/zenit/zenit.yaml
+RUN sed -i 's/127.0.0.1:8123/172.20.1.2:8123/' /etc/zenit/zenit.yaml
+RUN sed -i 's/radminuser:radminpass@tcp\(127.0.0.1:6032\)/proxysql:admin@tcp\(172.20.1.4:6032\)/' /etc/zenit/zenit.yaml
+RUN sed -i 's/token: xxx\/yyy\/zzz/token: ${ZENIT_SLACK_TOKEN}/' /etc/zenit/zenit.yaml
+
+# -----------------------------------------------------------------------------
 # Copy script utility
 # -----------------------------------------------------------------------------
-COPY entrypoint.sh /root/entrypoint.sh
-COPY proxysql.cnf /etc/proxysql.cnf
+COPY docker/proxysql/entrypoint.sh /root/entrypoint.sh
+COPY docker/proxysql/proxysql.cnf /etc/proxysql.cnf
 RUN chmod a+x /root/entrypoint.sh
 RUN chown 0640 /etc/proxysql.cnf
 RUN chown root:proxysql /etc/proxysql.cnf

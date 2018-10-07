@@ -9,7 +9,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/accumulator"
 )
 
-const QUERY_SQL_STATUS = "SHOW GLOBAL STATUS"
+const QuerySQLStatus = "SHOW GLOBAL STATUS"
 
 func Status() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
@@ -18,7 +18,7 @@ func Status() {
 		log.Printf("E! - MySQL:Status - Impossible to connect: %s\n", err)
 	}
 
-	rows, err := conn.Query(QUERY_SQL_STATUS)
+	rows, err := conn.Query(QuerySQLStatus)
 	defer rows.Close()
 	if err != nil {
 		log.Printf("E! - MySQL:Status - Impossible to execute query: %s\n", err)
@@ -29,7 +29,11 @@ func Status() {
 	var v sql.RawBytes
 
 	for rows.Next() {
-		rows.Scan(&k, &v)
+		err = rows.Scan(&k, &v)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		if value, ok := mysql.ParseValue(v); ok {
 			a.Add(accumulator.Metric{
 				Key:    "mysql_status",

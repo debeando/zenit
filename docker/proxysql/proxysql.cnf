@@ -58,6 +58,16 @@ mysql_servers =
     compression = 0
     max_connections=200
     max_replication_lag = 10
+  },
+  {
+    address = "172.20.1.4"
+    port = 3306
+    hostgroup = 0
+    status = "ONLINE"
+    weight = 1
+    compression = 0
+    max_connections=200
+    max_replication_lag = 10
   }
 )
 

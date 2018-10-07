@@ -20,6 +20,7 @@ for the moment.
 - Have more details for debugging or performance analyses. For example; filter by user account, type of query, error, execution time, killed, etc.
 - Improve security to prevent user access into server.
 - Provider useful information for developers to help optimization queries.
+- Monitoring and alerting toolkit.
 
 ### Compatibility
 

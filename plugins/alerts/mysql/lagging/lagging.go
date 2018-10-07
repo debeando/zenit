@@ -1,0 +1,53 @@
+package lagging
+
+import (
+	"fmt"
+	"log"
+
+	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+)
+
+func Check() {
+	if ! config.File.MySQL.Inputs.Slave {
+		log.Printf("W! - Require to enable MySQL Slave Status in config file.\n")
+		return
+	}
+
+	var metrics = accumulator.Load()
+	var value = metrics.Find("mysql_slave", "name", "Seconds_Behind_Master")
+	var lagging = Float64ToInt(value)
+
+	// Find own check:
+	var check = alerts.Load().Exist("lagging")
+
+	// Build one message with details for notification:
+	var message = fmt.Sprintf("*Lagging:* %d\n", lagging)
+
+	log.Printf("D! - Alert:MySQL:Slave - Message=%s\n", message)
+
+	if check == nil {
+		log.Printf("D! - Alert:MySQL:Slave - Adding\n")
+		alerts.Load().Add(
+			"lagging",
+			"MySQL Replication Lagging",
+			config.File.MySQL.Alerts.Replication.Duration,
+			config.File.MySQL.Alerts.Replication.Warning,
+			config.File.MySQL.Alerts.Replication.Critical,
+			lagging,
+			message,
+			true,
+		)
+	} else {
+		log.Printf("D! - Alert:MySQL:Slave - Updateing\n")
+		check.Update(lagging, message)
+	}
+}
+
+func Float64ToInt(value interface{}) int {
+	if v, ok := value.(float64); ok {
+		return int(v)
+	}
+	return -1
+}

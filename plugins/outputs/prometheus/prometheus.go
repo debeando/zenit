@@ -31,6 +31,12 @@ func Normalize(a *accumulator.Items) []string {
 		switch m.Values.(type) {
 		case int, uint, uint64, float64:
 			s = fmt.Sprintf("%s{%s} %s", m.Key, getTags(m.Tags), getValue(m.Values))
+
+			if config.File.General.Debug {
+				log.Printf("D! - Prometheus - %s\n", s)
+			}
+
+			e = append(e, s)
 		case []accumulator.Value:
 			for _, i := range m.Values.([]accumulator.Value) {
 				s = fmt.Sprintf("%s{%s,type=\"%s\"} %s", m.Key, getTags(m.Tags), i.Key, getValue(i.Value))

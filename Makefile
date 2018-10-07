@@ -9,6 +9,8 @@ deps: ## Install dependencies
 	go get -u github.com/go-yaml/yaml
 	go get -u github.com/hpcloud/tail
 	go get -u github.com/kardianos/service
+	go get -u github.com/shirou/gopsutil
+	go get -u golang.org/x/sys/unix
 
 deps-devel:
 	brew install jq
@@ -37,15 +39,23 @@ docker-down: ## Down docker-compose
 docker-clickhouse: ## Enter into ClickHouse Client
 	docker exec -i -t -u root zenit_clickhouse /usr/bin/clickhouse-client
 
-docker-mysql: ## Enter in MySQL Console
-	docker exec -i -t -u root zenit_percona_server /usr/bin/mysql
+docker-mysql-primary: ## Enter in MySQL Primary Console
+	docker exec -i -t -u root zenit_percona_server_primary /usr/bin/mysql
+
+docker-mysql-primary-bash: ## Enter in MySQL Primary bash console
+	docker exec -i -t -u root zenit_percona_server_primary /bin/bash
+
+docker-mysql-secondary: ## Enter in MySQL Secondary Console
+	docker exec -i -t -u root zenit_percona_server_secondary /usr/bin/mysql
+
+docker-mysql-secondary-bash: ## Enter in MySQL Secondary bash console
+	docker exec -i -t -u root zenit_percona_server_secondary /bin/bash
 
 docker-proxysql: ## Enter in ProxySQL Console
 	docker exec -i -t -u root zenit_proxysql /usr/bin/mysql --socket=/tmp/proxysql_admin.sock -u proxysql -padmin  --prompt='ProxySQLAdmin> '
 
-docker-sandbox-bash: ## Enter into sandbox container
-	docker exec -i -t -u root zenit_sandbox /bin/bash
-
-docker-sandbox-build: ## Build binary and copy to container
+docker-zenit-build: ## Build binary and copy to container
 	GOOS=linux go build -ldflags "-s -w" -o zenit main.go
-	docker cp zenit zenit_sandbox:/usr/bin/
+	docker cp zenit zenit_percona_server_primary:/usr/bin/
+	docker cp zenit zenit_percona_server_secondary:/usr/bin/
+	docker cp zenit zenit_proxysql:/usr/bin/

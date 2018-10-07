@@ -1,28 +1,43 @@
 ---
 general:
   hostname: localhost
-  interval: 30
+  interval: 10 # Seconds
   debug: false
 
 mysql:
   dsn: root@tcp(127.0.0.1:3306)/
-  indexes: true
-  overflow: true
-  slave: true
-  status: true
-  tables: true
-  variables: true
-  slowlog:
-    enable: true
-    log_path: /var/lib/mysql/slow.log
-    buffer_size: 100
-    buffer_timeout: 60
-  auditlog:
-    enable: true
-    format: xml-old
-    log_path: /var/lib/mysql/audit.log
-    buffer_size: 100
-    buffer_timeout: 60
+  inputs:
+    indexes: true
+    overflow: true
+    slave: true
+    status: true
+    tables: true
+    variables: true
+    slowlog:
+      enable: true
+      log_path: /var/lib/mysql/slow.log
+      buffer_size: 100   # Number of events.
+      buffer_timeout: 60 # Seconds
+    auditlog:
+      enable: true
+      format: xml-old
+      log_path: /var/lib/mysql/audit.log
+      buffer_size: 100   # Number of events.
+      buffer_timeout: 60 # Seconds
+  alerts:
+    readonly:
+      enable: true
+      duration: 30 # Seconds
+    replication:
+      enable: true
+      warning: 10  # Percentage
+      critical: 60 # Percentage
+      duration: 30 # Seconds
+    connections:
+      enable: true
+      warning: 70  # Percentage
+      critical: 90 # Percentage
+      duration: 30 # Seconds
 
 proxysql:
   enable: true
@@ -37,14 +52,37 @@ prometheus:
   enable: true
   textfile: /var/tmp/zenit.prom
 
+slack:
+  enable: true
+  token: xxx/yyy/zzz
+  channel: alerts
+
 os:
-  cpu: true
-  disk: true
-  limits: true
-  mem: true
-  net: true
+  inputs:
+    cpu: true
+    disk: true
+    limits: true
+    mem: true
+    net: true
+  alerts:
+    cpu:
+      enable: true
+      warning: 30  # Percentage
+      critical: 60 # Percentage
+      duration: 30 # Seconds
+    disk:
+      enable: true
+      warning: 50  # Percentage
+      critical: 75 # Percentage
+      duration: 30 # Seconds
+    mem:
+      enable: true
+      warning: 80  # Percentage
+      critical: 95 # Percentage
+      duration: 30 # Seconds
 
 process:
-  pt_kill: true
-  pt_deadlock_logger: true
-  pt_slave_delay: true
+  inputs:
+    pt_kill: true
+    pt_deadlock_logger: true
+    pt_slave_delay: true

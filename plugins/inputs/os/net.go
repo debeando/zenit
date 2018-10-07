@@ -24,8 +24,8 @@ func Net() {
 
 			accumulator.Load().Add(accumulator.Metric{
 				Key: "os",
-				Tags: []accumulator.Tag{{"system", "linux"},
-					{"hardware", "net"},
+				Tags: []accumulator.Tag{
+					{"name", "net"},
 					{"device", dev}},
 				Values: []accumulator.Value{{"receive", receive_bytes},
 					{"transmit", transmit_bytes}},
