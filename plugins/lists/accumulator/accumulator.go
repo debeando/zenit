@@ -53,15 +53,16 @@ func (l *Items) Add(m Metric) {
 
 // FetchOne and return specific metric.
 func (l *Items) FetchOne(key string, tagName string, tagValue string) (interface{}) {
-	for itemIndex := 0; itemIndex < len(*l); itemIndex++ {
-		if (*l)[itemIndex].Key == key {
-			for _, metricTag := range (*l)[itemIndex].Tags {
-				if metricTag.Name == tagName && metricTag.Value == tagValue {
-					return (*l)[itemIndex].Values
+	for _, metric := range *l {
+		if metric.Key == key {
+			for _, tag := range metric.Tags {
+				if tag.Name == tagName && tag.Value == tagValue {
+					return metric.Values
 				}
 			}
 		}
 	}
+
 	return -1
 }
 
