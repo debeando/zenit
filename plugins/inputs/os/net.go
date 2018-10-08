@@ -6,7 +6,7 @@ import (
 
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/file"
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 )
 
 func Net() {

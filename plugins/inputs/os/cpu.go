@@ -1,7 +1,7 @@
 package os
 
 import (
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 
 	"github.com/shirou/gopsutil/cpu"
 )

@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
@@ -18,7 +18,7 @@ func Check() {
 	var metrics = accumulator.Load()
 	var check = alerts.Load().Exist("cpu")
 	var message string = ""
-	var percentage1 = metrics.Find("os", "name", "cpu")
+	var percentage1 = metrics.FetchOne("os", "name", "cpu")
 
 	if percentage2, ok2 := percentage1.(float64); ok2 {
 		if ! ok2 {

@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
@@ -16,7 +16,7 @@ func Check() {
 	}
 
 	var metrics = accumulator.Load()
-	var value = metrics.Find("mysql_variables", "name", "read_only")
+	var value = metrics.FetchOne("mysql_variables", "name", "read_only")
 	var status = Float64ToInt(value)
 
 	// Verify status range is valid:

@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
@@ -22,11 +22,11 @@ func Check() {
 	var metrics = accumulator.Load()
 	var check = alerts.Load().Exist("replication")
 
-	value = metrics.Find("mysql_slave", "name", "Slave_IO_Running")
+	value = metrics.FetchOne("mysql_slave", "name", "Slave_IO_Running")
 	var ioRunning = Float64ToInt(value)
-	value = metrics.Find("mysql_slave", "name", "Slave_SQL_Running")
+	value = metrics.FetchOne("mysql_slave", "name", "Slave_SQL_Running")
 	var sqlRunning = Float64ToInt(value)
-	value = metrics.Find("mysql_slave", "name", "Last_SQL_Errno")
+	value = metrics.FetchOne("mysql_slave", "name", "Last_SQL_Errno")
 	var sqlError = Float64ToInt(value)
 
 	message += fmt.Sprintf("*IO Running:* %s\n", YesOrNo(ioRunning))

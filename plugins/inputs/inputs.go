@@ -12,7 +12,7 @@ import (
 
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"

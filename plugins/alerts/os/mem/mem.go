@@ -5,7 +5,7 @@ import (
   "log"
 
   "github.com/swapbyt3s/zenit/config"
-  "github.com/swapbyt3s/zenit/plugins/accumulator"
+  "github.com/swapbyt3s/zenit/plugins/lists/accumulator"
   "github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
@@ -18,7 +18,7 @@ func Check() {
   var metrics = accumulator.Load()
   var check = alerts.Load().Exist("mem")
   var message string = ""
-  var value = metrics.Find("os", "name", "mem")
+  var value = metrics.FetchOne("os", "name", "mem")
   var percentage = Float64ToInt(value)
 
   message += fmt.Sprintf("*Memory:* %d\n", percentage)

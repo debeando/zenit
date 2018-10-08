@@ -3,7 +3,7 @@ package process
 
 import (
 	"github.com/swapbyt3s/zenit/common"
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 )
 
 func PerconaToolKitKill() {
