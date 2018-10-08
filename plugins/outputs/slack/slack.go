@@ -6,9 +6,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
@@ -34,22 +34,20 @@ func Run() {
 			var color  = ""
 			var status = ""
 
-			// log.Printf("D! - Output:Slack - check=%#v\n", check)
-
 			if check.Notify() {
 				switch check.Status {
 				case alerts.Warning:
-					log.Printf("D! - Slack:Send event notification - Warning.\n")
+					log.Debug("Slack:Send event notification - Warning.")
 					check.Status = alerts.Warning
 					color = "warning"
 					status = "Warning"
 				case alerts.Critical:
-					log.Printf("D! - Slack:Send event notification - Critical.\n")
+					log.Debug("Slack:Send event notification - Critical.")
 					check.Status = alerts.Critical
 					color = "danger"
 					status = "Critical"
 				case alerts.Resolved:
-					log.Printf("D! - Slack:Send event notification - Resolved.\n")
+					log.Debug("Slack:Send event notification - Resolved.")
 					alerts.Load().Delete(key)
 					color = "good"
 					status = "Resolved"
@@ -86,7 +84,7 @@ func Send(msg *Message) int {
 	)
 
 	if err != nil {
-		log.Print(err)
+		log.Error(err.Error())
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -94,8 +92,9 @@ func Send(msg *Message) int {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	defer resp.Body.Close()
+
 	if err != nil {
-		log.Print(err)
+		log.Error(err.Error())
 	}
 
 	return resp.StatusCode

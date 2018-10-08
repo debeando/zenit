@@ -2,8 +2,8 @@ package mysql
 
 import (
 	"database/sql"
-	"log"
 
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
@@ -15,13 +15,13 @@ func Variables() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
-		log.Printf("E! - MySQL:Variables - Impossible to connect: %s\n", err)
+		log.Error("MySQL:Variables - Impossible to connect: " + err.Error())
 	}
 
 	rows, err := conn.Query(QuerySQLVariables)
 	defer rows.Close()
 	if err != nil {
-		log.Printf("E! - MySQL:Variables - Impossible to execute query: %s\n", err)
+		log.Error("MySQL:Variables - Impossible to execute query: " + err.Error())
 	}
 
 	var a = accumulator.Load()

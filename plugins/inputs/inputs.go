@@ -6,19 +6,19 @@
 package inputs
 
 import (
-	"log"
 	"sync"
 	"time"
 
 	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
 	"github.com/swapbyt3s/zenit/plugins/inputs/os"
 	"github.com/swapbyt3s/zenit/plugins/inputs/process"
 	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
 	"github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
 	"github.com/swapbyt3s/zenit/plugins/outputs/slack"
@@ -93,12 +93,12 @@ func Parsers(wg *sync.WaitGroup) {
 
 	if config.File.MySQL.Inputs.AuditLog.Enable {
 		if config.File.General.Debug {
-			log.Println("D! - Load MySQL AuditLog")
-			log.Printf("D! - Read MySQL AuditLog: %s\n", config.File.MySQL.Inputs.AuditLog.LogPath)
+			log.Debug("Load MySQL AuditLog")
+			log.Debug("Read MySQL AuditLog: " + config.File.MySQL.Inputs.AuditLog.LogPath)
 		}
 
 		if !clickhouse.Check() {
-			log.Println("E! - AuditLog require active connection to ClickHouse.")
+			log.Error("AuditLog require active connection to ClickHouse.")
 		}
 
 		if config.File.MySQL.Inputs.AuditLog.Format == "xml-old" {
@@ -149,12 +149,12 @@ func Parsers(wg *sync.WaitGroup) {
 
 	if config.File.MySQL.Inputs.SlowLog.Enable {
 		if config.File.General.Debug {
-			log.Println("D! - Load MySQL SlowLog")
-			log.Printf("D! - Read MySQL SlowLog: %s\n", config.File.MySQL.Inputs.SlowLog.LogPath)
+			log.Debug("Load MySQL SlowLog")
+			log.Debug("Read MySQL SlowLog: " + config.File.MySQL.Inputs.SlowLog.LogPath)
 		}
 
 		if !clickhouse.Check() {
-			log.Println("E! - SlowLog require active connection to ClickHouse.")
+			log.Error("SlowLog require active connection to ClickHouse.")
 		}
 
 		channel_tail := make(chan string)

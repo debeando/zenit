@@ -2,11 +2,11 @@ package mysql
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
 	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
@@ -38,13 +38,13 @@ func Overflow() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
-		log.Printf("E! - MySQL:Overflow - Impossible to connect: %s\n", err)
+		log.Error("MySQL:Overflow - Impossible to connect: " + err.Error())
 	}
 
 	rows, err := conn.Query(querySQLColumns)
 	defer rows.Close()
 	if err != nil {
-		log.Printf("E! - MySQL:Overflow - Impossible to execute query: %s\n", err)
+		log.Error("MySQL:Overflow - Impossible to execute query: " + err.Error())
 	}
 
 	var a = accumulator.Load()
@@ -60,7 +60,7 @@ func Overflow() {
 
 		err = conn.QueryRow(fmt.Sprintf(querySQLMaxInt, c.column, c.schema, c.table)).Scan(&c.current)
 		if err != nil {
-			log.Printf("E! - MySQL:Overflow - Impossible to execute query: %s\n", err)
+			log.Error("MySQL:Overflow - Impossible to execute query: " + err.Error())
 		}
 
 		c.Unsigned()

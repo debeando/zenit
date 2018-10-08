@@ -2,18 +2,18 @@ package readonly
 
 import (
 	"fmt"
-	"log"
 
-	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
+	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
 func Check() {
 	if ! config.File.MySQL.Inputs.Variables {
-		log.Printf("W! - Require to enable MySQL Variables in config file.\n")
+		log.Info("Require to enable MySQL Variables in config file.")
 		return
 	}
 

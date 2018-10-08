@@ -2,18 +2,18 @@ package replication
 
 import (
 	"fmt"
-	"log"
 
-	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
+	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
 func Check() {
 	if ! config.File.MySQL.Inputs.Slave {
-		log.Printf("W! - Require to enable MySQL Slave Status in config file.\n")
+		log.Info("Require to enable MySQL Slave Status in config file.")
 		return
 	}
 
@@ -37,13 +37,7 @@ func Check() {
 
 	running = 2 - (ioRunning + sqlRunning)
 
-	//log.Printf("D! - Alert:MySQL:Slave - Message=%s\n", message)
-	//log.Printf("D! - Alert:MySQL:Slave - IO Running=%d\n", ioRunning)
-	//log.Printf("D! - Alert:MySQL:Slave - SQL Running=%d\n", sqlRunning)
-	//log.Printf("D! - Alert:MySQL:Slave - running=%d\n", running)
-
 	if check == nil {
-		log.Printf("D! - Alert:MySQL:Slave - Adding\n")
 		alerts.Load().Add(
 			"replication",
 			"MySQL Replication Status",
@@ -55,7 +49,6 @@ func Check() {
 			true,
 		)
 	} else {
-		log.Printf("D! - Alert:MySQL:Slave - Updateing\n")
 		check.Update(running, message)
 	}
 }

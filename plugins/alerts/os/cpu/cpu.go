@@ -2,17 +2,17 @@ package cpu
 
 import (
 	"fmt"
-	"log"
 
-	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/log"
+	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
 func Check() {
 	if ! config.File.OS.Alerts.CPU.Enable {
-		log.Printf("W! - Require to enable OS CPU in config file.\n")
+		log.Info("Require to enable OS CPU in config file.")
 		return
 	}
 
@@ -25,8 +25,6 @@ func Check() {
 	message += fmt.Sprintf("*CPU:* %d\n", percentage)
 
 	if check == nil {
-		log.Printf("D! - Alert:OS:CPU - Adding\n")
-		log.Printf("D! - Alert:OS:CPU - Message: %s\n", message)
 		alerts.Load().Add(
 			"cpu",
 			"CPU",
@@ -38,8 +36,6 @@ func Check() {
 			true,
 		)
 	} else {
-		log.Printf("D! - Alert:OS:CPU - Message: %s\n", message)
-		log.Printf("D! - Alert:OS:CPU - Updateing\n")
 		check.Update(percentage, message)
 	}
 }

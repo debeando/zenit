@@ -3,6 +3,7 @@ package log
 import (
 	"flag"
 	"log"
+	"strings"
 
 	"github.com/swapbyt3s/zenit/config"
 )
@@ -22,6 +23,7 @@ func Error(m string) {
 func Debug(m string) {
 	if config.File.General.Debug {
 		if flag.Lookup("test.v") == nil {
+			m = strings.Replace(m, "\n", ",", 0)
 			log.Printf("D! - %s\n", m)
 		}
 	}
