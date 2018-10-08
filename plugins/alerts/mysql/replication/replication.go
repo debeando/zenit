@@ -5,6 +5,8 @@ import (
 	"log"
 
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
@@ -23,14 +25,14 @@ func Check() {
 	var check = alerts.Load().Exist("replication")
 
 	value = metrics.FetchOne("mysql_slave", "name", "Slave_IO_Running")
-	var ioRunning = Float64ToInt(value)
+	var ioRunning = common.InterfaceToInt(value)
 	value = metrics.FetchOne("mysql_slave", "name", "Slave_SQL_Running")
-	var sqlRunning = Float64ToInt(value)
+	var sqlRunning = common.InterfaceToInt(value)
 	value = metrics.FetchOne("mysql_slave", "name", "Last_SQL_Errno")
-	var sqlError = Float64ToInt(value)
+	var sqlError = common.InterfaceToInt(value)
 
-	message += fmt.Sprintf("*IO Running:* %s\n", YesOrNo(ioRunning))
-	message += fmt.Sprintf("*SQL Running:* %s\n", YesOrNo(sqlRunning))
+	message += fmt.Sprintf("*IO Running:* %s\n", mysql.YesOrNo(ioRunning))
+	message += fmt.Sprintf("*SQL Running:* %s\n", mysql.YesOrNo(sqlRunning))
 	message += fmt.Sprintf("*SQL Error:* %d\n", sqlError)
 
 	running = 2 - (ioRunning + sqlRunning)
@@ -56,18 +58,4 @@ func Check() {
 		log.Printf("D! - Alert:MySQL:Slave - Updateing\n")
 		check.Update(running, message)
 	}
-}
-
-func YesOrNo(v int) string {
-	if v == 1 {
-		return "Yes"
-	}
-	return "No"
-}
-
-func Float64ToInt(value interface{}) int {
-	if v, ok := value.(float64); ok {
-		return int(v)
-	}
-	return -1
 }

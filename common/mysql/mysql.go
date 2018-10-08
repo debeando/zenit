@@ -92,3 +92,10 @@ func MaximumValueUnsigned(dataType string) uint64 {
 	}
 	return 0
 }
+
+func YesOrNo(v int) string {
+	if v == 1 {
+		return "Yes"
+	}
+	return "No"
+}

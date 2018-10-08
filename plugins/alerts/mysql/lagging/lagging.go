@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
@@ -17,7 +18,7 @@ func Check() {
 
 	var metrics = accumulator.Load()
 	var value = metrics.FetchOne("mysql_slave", "name", "Seconds_Behind_Master")
-	var lagging = Float64ToInt(value)
+	var lagging = common.InterfaceToInt(value)
 
 	// Find own check:
 	var check = alerts.Load().Exist("lagging")
@@ -43,11 +44,4 @@ func Check() {
 		log.Printf("D! - Alert:MySQL:Slave - Updateing\n")
 		check.Update(lagging, message)
 	}
-}
-
-func Float64ToInt(value interface{}) int {
-	if v, ok := value.(float64); ok {
-		return int(v)
-	}
-	return -1
 }

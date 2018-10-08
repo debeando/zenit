@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
@@ -32,7 +33,7 @@ func Check() {
 					}
 
 					var check = alerts.Load().Exist("disk_" + device)
-					var percentage = Float64ToInt(metric.Values)
+					var percentage = common.InterfaceToInt(metric.Values)
 
 					message += fmt.Sprintf("*Volume:* %s, *Usage:* %d%%\n", device, percentage)
 
@@ -58,11 +59,4 @@ func Check() {
 			}
 		}
 	}
-}
-
-func Float64ToInt(value interface{}) int {
-	if v, ok := value.(float64); ok {
-		return int(v)
-	}
-	return -1
 }

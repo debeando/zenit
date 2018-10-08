@@ -5,6 +5,8 @@ import (
 	"log"
 
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
@@ -17,7 +19,7 @@ func Check() {
 
 	var metrics = accumulator.Load()
 	var value = metrics.FetchOne("mysql_variables", "name", "read_only")
-	var status = Float64ToInt(value)
+	var status = common.InterfaceToInt(value)
 
 	// Verify status range is valid:
 	if ! (status == 0 || status == 1) {
@@ -31,7 +33,7 @@ func Check() {
 	var check = alerts.Load().Exist("readonly")
 
 	// Build one message with details for notification:
-	var message = fmt.Sprintf("*Current:* %s", YesOrNo(status ^ 1))
+	var message = fmt.Sprintf("*Current:* %s", mysql.YesOrNo(status ^ 1))
 
 	// Register new check and update last status:
 	if check == nil {
@@ -48,18 +50,4 @@ func Check() {
 	} else {
 		check.Update(status, message)
 	}
-}
-
-func YesOrNo(v int) string {
-	if v == 1 {
-		return "Yes"
-	}
-	return "No"
-}
-
-func Float64ToInt(value interface{}) int {
-	if v, ok := value.(float64); ok {
-		return int(v)
-	}
-	return -1
 }

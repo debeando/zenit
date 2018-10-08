@@ -5,6 +5,7 @@ import (
   "log"
 
   "github.com/swapbyt3s/zenit/config"
+  "github.com/swapbyt3s/zenit/common"
   "github.com/swapbyt3s/zenit/plugins/lists/accumulator"
   "github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
@@ -19,7 +20,7 @@ func Check() {
   var check = alerts.Load().Exist("mem")
   var message string = ""
   var value = metrics.FetchOne("os", "name", "mem")
-  var percentage = Float64ToInt(value)
+  var percentage = common.InterfaceToInt(value)
 
   message += fmt.Sprintf("*Memory:* %d\n", percentage)
 
@@ -41,11 +42,4 @@ func Check() {
     log.Printf("D! - Alert:OS:MEM - Updateing\n")
     check.Update(percentage, message)
   }
-}
-
-func Float64ToInt(value interface{}) int {
-  if v, ok := value.(float64); ok {
-    return int(v)
-  }
-  return -1
 }
