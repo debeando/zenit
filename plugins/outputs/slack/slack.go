@@ -48,7 +48,7 @@ func Run() {
 					status = "Critical"
 				case alerts.Resolved:
 					log.Debug("Slack:Send event notification - Resolved.")
-					alerts.Load().Delete(key)
+					check.Status = alerts.Resolved
 					color = "good"
 					status = "Resolved"
 				}

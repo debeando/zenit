@@ -74,16 +74,6 @@ func (l *Items) Keys() []string {
 	return keys
 }
 
-func (l *Items) Delete(key string) bool {
-	for i := 0; i < len(*l); i++ {
-		if (*l)[i].Key == key {
-			*l = (*l)[:i+copy((*l)[i:], (*l)[i+1:])]
-			return true
-		}
-	}
-	return false
-}
-
 func (l *Items) Exist(key string) *Check {
 	for i := 0; i < len(*l); i++ {
 		if (*l)[i].Key == key {
