@@ -8,7 +8,7 @@ package accumulator_test
 import (
 	"testing"
 
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 )
 
 var a = accumulator.Load()

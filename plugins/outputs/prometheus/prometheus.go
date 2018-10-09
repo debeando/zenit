@@ -4,12 +4,12 @@ package prometheus
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/swapbyt3s/zenit/common/file"
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 )
 
 func Run() {
@@ -33,7 +33,7 @@ func Normalize(a *accumulator.Items) []string {
 			s = fmt.Sprintf("%s{%s} %s", m.Key, getTags(m.Tags), getValue(m.Values))
 
 			if config.File.General.Debug {
-				log.Printf("D! - Prometheus - %s\n", s)
+				log.Debug("Prometheus - " + s)
 			}
 
 			e = append(e, s)
@@ -42,7 +42,7 @@ func Normalize(a *accumulator.Items) []string {
 				s = fmt.Sprintf("%s{%s,type=\"%s\"} %s", m.Key, getTags(m.Tags), i.Key, getValue(i.Value))
 
 				if config.File.General.Debug {
-					log.Printf("D! - Prometheus - %s\n", s)
+					log.Debug("Prometheus - " + s)
 				}
 
 				e = append(e, s)

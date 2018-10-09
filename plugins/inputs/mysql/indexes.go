@@ -1,12 +1,12 @@
 package mysql
 
 import (
-	"log"
 	"strings"
 
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 )
 
 // Index is a struct to save result of query.
@@ -33,13 +33,13 @@ func Indexes() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
-		log.Printf("E! - MySQL:Indexes - Impossible to connect: %s\n", err)
+		log.Error("MySQL:Indexes - Impossible to connect: " + err.Error())
 	}
 
 	rows, err := conn.Query(querySQLIndexes)
 	defer rows.Close()
 	if err != nil {
-		log.Printf("E! - MySQL:Indexes - Impossible to execute query: %s\n", err)
+		log.Error("MySQL:Indexes - Impossible to execute query: " + err.Error())
 	}
 
 	var a = accumulator.Load()

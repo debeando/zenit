@@ -1,8 +1,3 @@
-// TODO:
-// - Rename accumulator to metrics.
-// - Move to list folder.
-// - Rename Find to FetchOne
-
 package accumulator
 
 // Tag for metric.
@@ -37,40 +32,41 @@ func Load() *Items {
 	return items
 }
 
-// Reset the metric accumulator.
+// Reset the metric metrics.
 func (l *Items) Reset() {
 	*l = (*l)[:0]
 }
 
-// Count all metrics in accumulator.
+// Count all metrics in metrics.
 func (l *Items) Count() int {
 	return len(*l)
 }
 
-// Add is aggregator for metric in accumulator.
+// Add is aggregator for metric in metrics.
 func (l *Items) Add(m Metric) {
 	if !items.Unique(m) {
 		*l = append(*l, m)
 	} else {
-		items.Accumulator(m)
+		items.Metrics(m)
 	}
 }
 
-// Find and return specific metric.
-func (l *Items) Find(key string, tagName string, tagValue string) (interface{}) {
-	for itemIndex := 0; itemIndex < len(*l); itemIndex++ {
-		if (*l)[itemIndex].Key == key {
-			for _, metricTag := range (*l)[itemIndex].Tags {
-				if metricTag.Name == tagName && metricTag.Value == tagValue {
-					return (*l)[itemIndex].Values
+// FetchOne and return specific metric.
+func (l *Items) FetchOne(key string, tagName string, tagValue string) (interface{}) {
+	for _, metric := range *l {
+		if metric.Key == key {
+			for _, tag := range metric.Tags {
+				if tag.Name == tagName && tag.Value == tagValue {
+					return metric.Values
 				}
 			}
 		}
 	}
+
 	return -1
 }
 
-// Unique is a check to verify the metric key is one in the accumulator.
+// Unique is a check to verify the metric key is one in the metrics.
 func (l *Items) Unique(m Metric) bool {
 	for _, i := range *l {
 		if i.Key == m.Key && TagsEquals(i.Tags, m.Tags) {
@@ -80,8 +76,8 @@ func (l *Items) Unique(m Metric) bool {
 	return false
 }
 
-// Accumulator sum values when we have the same key.
-func (l *Items) Accumulator(m Metric) {
+// metrics sum values when we have the same key.
+func (l *Items) Metrics(m Metric) {
 	for itemIndex := 0; itemIndex < len(*l); itemIndex++ {
 		if (*l)[itemIndex].Key == m.Key && TagsEquals((*l)[itemIndex].Tags, m.Tags) == true {
 			for itemValueIndex, itemValue := range (*l)[itemIndex].Values.([]Value) {

@@ -1,13 +1,13 @@
 package proxysql
 
 import (
-	"log"
 	"regexp"
 	"strings"
 
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 )
 
 type Query struct {
@@ -41,13 +41,13 @@ func QueryDigest() {
 	conn, err := mysql.Connect(config.File.ProxySQL.DSN)
 	defer conn.Close()
 	if err != nil {
-		log.Printf("E! - ProxySQL - Impossible to connect: %s\n", err)
+		log.Error("ProxySQL - Impossible to connect: " + err.Error())
 	}
 
 	rows, err := conn.Query(SQLDigest)
 	defer rows.Close()
 	if err != nil {
-		log.Printf("E! - ProxySQL - Impossible to execute query: %s\n", err)
+		log.Error("ProxySQL - Impossible to execute query: " + err.Error())
 	}
 
 	for rows.Next() {

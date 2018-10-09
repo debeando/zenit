@@ -2,11 +2,11 @@ package mysql
 
 import (
 	"database/sql"
-	"log"
 
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 )
 
 const QuerySQLStatus = "SHOW GLOBAL STATUS"
@@ -15,13 +15,13 @@ func Status() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
-		log.Printf("E! - MySQL:Status - Impossible to connect: %s\n", err)
+		log.Error("MySQL:Status - Impossible to connect: " + err.Error())
 	}
 
 	rows, err := conn.Query(QuerySQLStatus)
 	defer rows.Close()
 	if err != nil {
-		log.Printf("E! - MySQL:Status - Impossible to execute query: %s\n", err)
+		log.Error("MySQL:Status - Impossible to execute query: " + err.Error())
 	}
 
 	var a = accumulator.Load()
@@ -31,7 +31,7 @@ func Status() {
 	for rows.Next() {
 		err = rows.Scan(&k, &v)
 		if err != nil {
-			log.Fatal(err)
+			log.Error("MySQL:Slave - Error: " + err.Error())
 		}
 
 		if value, ok := mysql.ParseValue(v); ok {

@@ -2,31 +2,31 @@ package connections
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
 func Check() {
 	if ! config.File.MySQL.Inputs.Variables {
-		log.Printf("W! - Require to enable MySQL Variables in config file.\n")
+		log.Info("Require to enable MySQL Variables in config file.")
 		return
 	}
 
 	if ! config.File.MySQL.Inputs.Status {
-		log.Printf("W! - Require to enable MySQL Status in config file.\n")
+		log.Info("Require to enable MySQL Status in config file.")
 		return
 	}
 
 	var metrics = accumulator.Load()
 	var value interface{}
-	value = metrics.Find("mysql_variables", "name", "max_connections")
-	var MaxConnections = InterfaceToFloat64(value)
-	value = metrics.Find("mysql_status", "name", "Threads_connected")
-	var ThreadsConnected = InterfaceToFloat64(value)
+	value = metrics.FetchOne("mysql_variables", "name", "max_connections")
+	var MaxConnections = common.InterfaceToFloat64(value)
+	value = metrics.FetchOne("mysql_status", "name", "Threads_connected")
+	var ThreadsConnected = common.InterfaceToFloat64(value)
 	var percentage = int(common.Percentage(ThreadsConnected, MaxConnections))
 	var check = alerts.Load().Exist("connections")
 
@@ -47,11 +47,4 @@ func Check() {
 	} else {
 		check.Update(percentage, message)
 	}
-}
-
-func InterfaceToFloat64(value interface{}) float64 {
-	if v, ok := value.(float64); ok {
-		return v
-	}
-	return -1
 }
