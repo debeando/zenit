@@ -31,6 +31,10 @@ func Check() {
 	value = metrics.FetchOne("mysql_slave", "name", "Last_SQL_Errno")
 	var sqlError = common.InterfaceToInt(value)
 
+	if sqlError == -1 {
+		return
+	}
+
 	message += fmt.Sprintf("*IO Running:* %s\n", mysql.YesOrNo(ioRunning))
 	message += fmt.Sprintf("*SQL Running:* %s\n", mysql.YesOrNo(sqlRunning))
 	message += fmt.Sprintf("*SQL Error:* %d\n", sqlError)

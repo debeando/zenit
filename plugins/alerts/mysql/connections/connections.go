@@ -28,10 +28,15 @@ func Check() {
 	value = metrics.FetchOne("mysql_status", "name", "Threads_connected")
 	var ThreadsConnected = common.InterfaceToFloat64(value)
 	var percentage = int(common.Percentage(ThreadsConnected, MaxConnections))
+
+	if percentage == -1 {
+		return
+	}
+
 	var check = alerts.Load().Exist("connections")
 
 	// Build one message with details for notification:
-	var message = fmt.Sprintf("*Current:* %d%%", value)
+	var message = fmt.Sprintf("*Current:* %d%%", percentage)
 
 	if check == nil {
 		alerts.Load().Add(

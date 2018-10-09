@@ -20,6 +20,10 @@ func Check() {
 	var value = metrics.FetchOne("mysql_slave", "name", "Seconds_Behind_Master")
 	var lagging = common.InterfaceToInt(value)
 
+	if lagging == -1 {
+		return
+	}
+
 	// Find own check:
 	var check = alerts.Load().Exist("lagging")
 

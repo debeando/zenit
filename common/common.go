@@ -178,19 +178,22 @@ func Trim(value *string) string {
 }
 
 func Percentage(value float64, max float64) float64 {
-	return (value / max) * 100
+	if value >= 0 && max > 0 {
+		return (value / max) * 100
+	}
+	return -1
 }
 
 func InterfaceToInt(value interface{}) int {
-	if v, ok := value.(float64); ok {
+	if v, ok := value.(uint64); ok {
 		return int(v)
 	}
 	return -1
 }
 
 func InterfaceToFloat64(value interface{}) float64 {
-	if v, ok := value.(float64); ok {
-		return v
+	if v, ok := value.(uint64); ok {
+		return float64(v)
 	}
 	return -1
 }

@@ -30,8 +30,8 @@ mysql:
       duration: 30 # Seconds
     replication:
       enable: true
-      warning: 10  # Percentage
-      critical: 60 # Percentage
+      warning: 10  # Seconds
+      critical: 60 # Seconds
       duration: 30 # Seconds
     connections:
       enable: true
