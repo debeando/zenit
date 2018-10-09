@@ -17,25 +17,19 @@ func Check() {
   }
 
   var metrics = accumulator.Load()
-  var check = alerts.Load().Exist("mem")
   var message string = ""
   var value = metrics.FetchOne("os", "name", "mem")
   var percentage = common.InterfaceToInt(value)
 
   message += fmt.Sprintf("*Memory:* %d\n", percentage)
 
-  if check == nil {
-    alerts.Load().Add(
-      "mem",
-      "MEM",
-      config.File.OS.Alerts.MEM.Duration,
-      config.File.OS.Alerts.MEM.Warning,
-      config.File.OS.Alerts.MEM.Critical,
-      percentage,
-      message,
-      true,
-    )
-  } else {
-    check.Update(percentage, message)
-  }
+  alerts.Load().Register(
+    "mem",
+    "MEM",
+    config.File.OS.Alerts.MEM.Duration,
+    config.File.OS.Alerts.MEM.Warning,
+    config.File.OS.Alerts.MEM.Critical,
+    percentage,
+    message,
+  )
 }

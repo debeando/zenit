@@ -32,25 +32,19 @@ func Check() {
 						}
 					}
 
-					var check = alerts.Load().Exist("disk_" + device)
 					var percentage = common.InterfaceToInt(metric.Values)
 
 					message += fmt.Sprintf("*Volume:* %s, *Usage:* %d%%\n", device, percentage)
 
-					if check == nil {
-						alerts.Load().Add(
-							"disk_" + device,
-							"Volumen",
-							config.File.OS.Alerts.Disk.Duration,
-							config.File.OS.Alerts.Disk.Warning,
-							config.File.OS.Alerts.Disk.Critical,
-							percentage,
-							message,
-							true,
-						)
-					} else {
-						check.Update(percentage, message)
-					}
+					alerts.Load().Register(
+						"disk_" + device,
+						"Volumen",
+						config.File.OS.Alerts.Disk.Duration,
+						config.File.OS.Alerts.Disk.Warning,
+						config.File.OS.Alerts.Disk.Critical,
+						percentage,
+						message,
+					)
 				}
 			}
 		}

@@ -29,25 +29,17 @@ func Check() {
 	// Invert status for compatibility alert evaluation:
 	status = (status ^ 1)
 
-	// Find own check:
-	var check = alerts.Load().Exist("readonly")
-
 	// Build one message with details for notification:
 	var message = fmt.Sprintf("*Current:* %s", mysql.YesOrNo(status ^ 1))
 
 	// Register new check and update last status:
-	if check == nil {
-		alerts.Load().Add(
-			"readonly",
-			"MySQL Read Only",
-			config.File.MySQL.Alerts.ReadOnly.Duration,
-			1, // Warning
-			1, // Critical
-			status,
-			message,
-			true,
-		)
-	} else {
-		check.Update(status, message)
-	}
+	alerts.Load().Register(
+		"readonly",
+		"MySQL Read Only",
+		config.File.MySQL.Alerts.ReadOnly.Duration,
+		1, // Warning
+		1, // Critical
+		status,
+		message,
+	)
 }

@@ -45,9 +45,10 @@ func (l *Items) Count() int {
 	return len(*l)
 }
 
-// Add new check.
-func (l *Items) Add(key string, name string, duration int, warning int, critical int, value int, message string, decide bool) {
-	if items.Exist(key) == nil {
+// Add new check or update last status from existed check.
+func (l *Items) Register(key string, name string, duration int, warning int, critical int, value int, message string) {
+	check := items.Exist(key)
+	if check == nil {
 		c := Check{
 			Critical: critical,
 			Duration: duration,
@@ -58,10 +59,14 @@ func (l *Items) Add(key string, name string, duration int, warning int, critical
 			Warning: warning,
 			Value: value,
 			Message: message,
-			Decide: decide,
+			Decide: true,
 		}
 
 		*l = append(*l, c)
+	} else {
+		check.SetLastSeen(value)
+		check.Evaluate()
+		check.Message = message
 	}
 }
 

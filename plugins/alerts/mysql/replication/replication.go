@@ -22,7 +22,6 @@ func Check() {
 	var value interface{}
 
 	var metrics = accumulator.Load()
-	var check = alerts.Load().Exist("replication")
 
 	value = metrics.FetchOne("mysql_slave", "name", "Slave_IO_Running")
 	var ioRunning = common.InterfaceToInt(value)
@@ -41,18 +40,13 @@ func Check() {
 
 	running = 2 - (ioRunning + sqlRunning)
 
-	if check == nil {
-		alerts.Load().Add(
-			"replication",
-			"MySQL Replication Status",
-			config.File.MySQL.Alerts.Replication.Duration,
-			1, // Warning
-			1, // Critical
-			running,
-			message,
-			true,
-		)
-	} else {
-		check.Update(running, message)
-	}
+	alerts.Load().Register(
+		"replication",
+		"MySQL Replication Status",
+		config.File.MySQL.Alerts.Replication.Duration,
+		1, // Warning
+		1, // Critical
+		running,
+		message,
+	)
 }

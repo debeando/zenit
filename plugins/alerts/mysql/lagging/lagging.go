@@ -24,24 +24,16 @@ func Check() {
 		return
 	}
 
-	// Find own check:
-	var check = alerts.Load().Exist("lagging")
-
 	// Build one message with details for notification:
 	var message = fmt.Sprintf("*Lagging:* %d\n", lagging)
 
-	if check == nil {
-		alerts.Load().Add(
-			"lagging",
-			"MySQL Replication Lagging",
-			config.File.MySQL.Alerts.Replication.Duration,
-			config.File.MySQL.Alerts.Replication.Warning,
-			config.File.MySQL.Alerts.Replication.Critical,
-			lagging,
-			message,
-			true,
-		)
-	} else {
-		check.Update(lagging, message)
-	}
+	alerts.Load().Register(
+		"lagging",
+		"MySQL Replication Lagging",
+		config.File.MySQL.Alerts.Replication.Duration,
+		config.File.MySQL.Alerts.Replication.Warning,
+		config.File.MySQL.Alerts.Replication.Critical,
+		lagging,
+		message,
+	)
 }

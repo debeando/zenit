@@ -1,5 +1,3 @@
-// TODO: Write in file.
-
 package slack
 
 import (

@@ -33,23 +33,16 @@ func Check() {
 		return
 	}
 
-	var check = alerts.Load().Exist("connections")
-
 	// Build one message with details for notification:
 	var message = fmt.Sprintf("*Current:* %d%%", percentage)
 
-	if check == nil {
-		alerts.Load().Add(
-			"connections",
-			"MySQL Connections",
-			config.File.MySQL.Alerts.Connections.Duration,
-			config.File.MySQL.Alerts.Connections.Warning,
-			config.File.MySQL.Alerts.Connections.Critical,
-			percentage,
-			message,
-			true,
-		)
-	} else {
-		check.Update(percentage, message)
-	}
+	alerts.Load().Register(
+		"connections",
+		"MySQL Connections",
+		config.File.MySQL.Alerts.Connections.Duration,
+		config.File.MySQL.Alerts.Connections.Warning,
+		config.File.MySQL.Alerts.Connections.Critical,
+		percentage,
+		message,
+	)
 }

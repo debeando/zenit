@@ -17,25 +17,19 @@ func Check() {
 	}
 
 	var metrics = accumulator.Load()
-	var check = alerts.Load().Exist("cpu")
 	var message string = ""
 	var value = metrics.FetchOne("os", "name", "cpu")
 	var percentage = common.InterfaceToInt(value)
 
 	message += fmt.Sprintf("*CPU:* %d\n", percentage)
 
-	if check == nil {
-		alerts.Load().Add(
-			"cpu",
-			"CPU",
-			config.File.OS.Alerts.CPU.Duration,
-			config.File.OS.Alerts.CPU.Warning,
-			config.File.OS.Alerts.CPU.Critical,
-			percentage,
-			message,
-			true,
-		)
-	} else {
-		check.Update(percentage, message)
-	}
+	alerts.Load().Register(
+		"cpu",
+		"CPU",
+		config.File.OS.Alerts.CPU.Duration,
+		config.File.OS.Alerts.CPU.Warning,
+		config.File.OS.Alerts.CPU.Critical,
+		percentage,
+		message,
+	)
 }
