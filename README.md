@@ -1,7 +1,7 @@
 # ![Zenit](https://raw.githubusercontent.com/swapbyt3s/zenit/master/assets/images/zenit_logo.png)
 [![Build Status](https://travis-ci.org/swapbyt3s/zenit.svg?branch=master)](https://travis-ci.org/swapbyt3s/zenit) [![Go Report Card](https://goreportcard.com/badge/github.com/swapbyt3s/zenit)](https://goreportcard.com/report/github.com/swapbyt3s/zenit) [![Gitter chat](https://badges.gitter.im/Zenit-Agent/Lobby.png)](https://gitter.im/Zenit-Agent/Lobby)
 
-Zenit is a daemon collector for metrics and log parsers for dedicated host for MySQL/Percona/Mariadb Servers and
+Zenit is a daemon collector for metrics and log parsers for dedicated host for MySQL/Percona/MariaDB Servers and
 ProxySQL. Maybe not requires many another agents for this purpose, but with this one you'll find an excellent tool for database administration.
 
 The name [Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) is inspired by a russian spy satellite.
