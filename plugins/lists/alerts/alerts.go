@@ -1,7 +1,10 @@
 package alerts
 
 import (
+	"fmt"
 	"time"
+
+	"github.com/swapbyt3s/zenit/common/log"
 )
 
 // Check is a status for each alert.
@@ -17,7 +20,6 @@ type Check struct {
 	Status    uint8  // Current status for the check: normal, warning, critical or resolved.
 	Value     int    // Value to evaluate.
 	Warning   int    // Warning value.
-	Decide    bool   // Use Evaluate function.
 }
 
 const (
@@ -40,14 +42,10 @@ func Load() *Items {
 	return items
 }
 
-// Count all checks in accumulator.
-func (l *Items) Count() int {
-	return len(*l)
-}
-
 // Add new check or update last status from existed check.
 func (l *Items) Register(key string, name string, duration int, warning int, critical int, value int, message string) {
 	check := items.Exist(key)
+
 	if check == nil {
 		c := Check{
 			Critical: critical,
@@ -59,22 +57,25 @@ func (l *Items) Register(key string, name string, duration int, warning int, cri
 			Warning: warning,
 			Value: value,
 			Message: message,
-			Decide: true,
 		}
 
 		*l = append(*l, c)
+
+		log.Debug(fmt.Sprintf("Alert - Insert: %#v", c))
 	} else {
-		check.SetLastSeen(value)
-		check.Evaluate()
+		check.LastSeen = int(time.Now().Unix())
+		check.Value = value
 		check.Message = message
+
+		log.Debug(fmt.Sprintf("Alert - Update: %#v", check))
 	}
 }
 
 func (l *Items) Keys() []string {
 	var keys = []string{}
 
-	for i := 0; i < len(*l); i++ {
-		keys = append(keys, (*l)[i].Key)
+	for _, i := range *l {
+		keys = append(keys, i.Key)
 	}
 	return keys
 }
@@ -88,64 +89,37 @@ func (l *Items) Exist(key string) *Check {
 	return nil
 }
 
-func (c *Check) SetLastSeen(value int) {
-	if c == nil {
-		return
-	}
-
-	c.LastSeen = int(time.Now().Unix())
-	c.Value = value
-}
-
 // IsAlert verify the last time and current time is a valid alert.
-func (c *Check) Evaluate() {
+func (c *Check) Evaluate() bool {
 	if c == nil {
-		return
+		return false
 	}
 
 	if ! ((c.LastSeen - c.FirstSeen) >= c.Duration) {
-		return
+		return false
 	}
 
-	if ! c.Decide {
-		c.Status = Critical
-		return
-	}
-
-	if c.Status == Warning || c.Status == Critical {
-		if c.Value < c.Warning {
-			c.Status = Resolved
-		}
+	if (c.Status == Warning || c.Status == Critical) && c.Value < c.Warning {
+		c.Status = Resolved
 	} else if c.Warning == c.Critical && c.Value >= c.Critical {
 		c.Status = Critical
-	} else if c.Value >= c.Warning {
-		if c.Value >= c.Critical {
-			c.Status = Critical
-		} else {
-			c.Status = Warning
-		}
+	} else if c.Value >= c.Warning && c.Value >= c.Critical {
+		c.Status = Critical
+	} else if c.Value >= c.Warning && c.Value < c.Critical {
+		c.Status = Warning
 	}
-}
 
-func (c *Check) Update(value int, message string) {
-	c.SetLastSeen(value)
-	c.Evaluate()
-	c.Message = message
-}
-
-func (c *Check) Notify() bool {
-	if c == nil {
+	if c.Notified == 0 && c.Status == Normal {
 		return false
 	}
 
-	if c.Status == Normal && c.Notified == 0 {
-		return false
-	}
-
-	if c.Status == c.Notified {
+	if c.Notified == c.Status {
 		return false
 	}
 
 	c.Notified = c.Status
+
+	log.Debug(fmt.Sprintf("Alert - Evaluated: %#v", c))
+
 	return true
 }

@@ -32,20 +32,17 @@ func Run() {
 			var color  = ""
 			var status = ""
 
-			if check.Notify() {
+			if check.Evaluate() {
 				switch check.Status {
 				case alerts.Warning:
-					log.Debug("Slack:Send event notification - Warning.")
 					check.Status = alerts.Warning
 					color = "warning"
 					status = "Warning"
 				case alerts.Critical:
-					log.Debug("Slack:Send event notification - Critical.")
 					check.Status = alerts.Critical
 					color = "danger"
 					status = "Critical"
 				case alerts.Resolved:
-					log.Debug("Slack:Send event notification - Resolved.")
 					check.Status = alerts.Resolved
 					color = "good"
 					status = "Resolved"
@@ -65,6 +62,8 @@ func Run() {
 						check.Message,
 					),
 				})
+
+				log.Debug(fmt.Sprintf("Slack - Send event notification for %s with status %s and value %d.", check.Name, status, check.Value))
 
 				Send(msg)
 			}

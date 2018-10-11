@@ -4,7 +4,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/alerts/mysql/connections"
 	"github.com/swapbyt3s/zenit/plugins/alerts/mysql/lagging"
@@ -16,8 +15,6 @@ import (
 )
 
 func Check(wg *sync.WaitGroup) {
-	log.Info("Starting plugin alerts.")
-
 	for {
 		if config.File.OS.Alerts.CPU.Enable {
 			cpu.Check()
