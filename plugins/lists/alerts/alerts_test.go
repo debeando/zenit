@@ -1,6 +1,7 @@
 package alerts_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
@@ -50,38 +51,37 @@ func TestEvaluate(t *testing.T) {
 	// Check live cicle:
 	t1 := alerts.Check {
 		FirstSeen: 1537705900,
-		LastSeen: 1537705910,
 		Status: alerts.Normal,
 		Duration: 10,
-		Value: 60,
 		Warning: 60,
 		Critical: 80,
 	}
 
-	t.Logf("Check Evaluate: %t\n", t1.Evaluate())
-	t.Logf("Check Status: %d\n", t1.Status)
+	var states = []struct{
+		Key      int
+		LastSeen int
+		Value    int
+		Status   uint8
+		Expected bool
+	}{
+		{1, 1537705910, 60, alerts.Warning , true},
+		{2, 1537705920, 80, alerts.Critical, true},
+		{3, 1537705925, 70, alerts.Critical, false},
+		{4, 1537705940, 75, alerts.Warning , true},
+		{5, 1537705945, 70, alerts.Warning , false},
+		{6, 1537705960, 10, alerts.Resolved, true},
+	}
 
-	t1.LastSeen = 1537705920
-	t1.Value = 80
+	for _, s := range states {
+		t1.LastSeen = s.LastSeen
+		t1.Value = s.Value
 
-	t.Logf("Check Evaluate: %t\n", t1.Evaluate())
-	t.Logf("Check Status: %d\n", t1.Status)
+		if t1.Evaluate() != s.Expected {
+			t.Error(fmt.Sprintf("Check %d: Expected evaluate %t", s.Key, s.Expected))
+		}
 
-	t1.LastSeen = 1537705930
-	t1.Value = 70
-
-	t.Logf("Check Evaluate: %t\n", t1.Evaluate())
-	t.Logf("Check Status: %d\n", t1.Status)
-
-	t1.LastSeen = 1537705940
-	t1.Value = 75
-
-	t.Logf("Check Evaluate: %t\n", t1.Evaluate())
-	t.Logf("Check Status: %d\n", t1.Status)
-
-	t1.LastSeen = 1537705950
-	t1.Value = 10
-
-	t.Logf("Check Evaluate: %t\n", t1.Evaluate())
-	t.Logf("Check Status: %d\n", t1.Status)
+		if t1.Status != s.Status {
+			t.Error(fmt.Sprintf("Check %d: Expected status %d", s.Key, s.Status))
+		}
+	}
 }

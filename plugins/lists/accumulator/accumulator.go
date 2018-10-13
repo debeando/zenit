@@ -1,3 +1,4 @@
+// Maybe rename to matrics
 package accumulator
 
 // Tag for metric.
@@ -77,6 +78,7 @@ func (l *Items) Unique(m Metric) bool {
 }
 
 // metrics sum values when we have the same key.
+// Maybe rename to accumulator.
 func (l *Items) Metrics(m Metric) {
 	for itemIndex := 0; itemIndex < len(*l); itemIndex++ {
 		if (*l)[itemIndex].Key == m.Key && TagsEquals((*l)[itemIndex].Tags, m.Tags) == true {

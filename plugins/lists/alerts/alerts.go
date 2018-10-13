@@ -97,6 +97,8 @@ func (c *Check) Evaluate() bool {
 
 	if ! ((c.LastSeen - c.FirstSeen) >= c.Duration) {
 		return false
+	} else {
+		c.FirstSeen = c.LastSeen
 	}
 
 	if (c.Status == Warning || c.Status == Critical) && c.Value < c.Warning {
