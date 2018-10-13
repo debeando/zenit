@@ -42,6 +42,10 @@ mysql:
 proxysql:
   enable: true
   dsn: radminuser:radminpass@tcp(127.0.0.1:6032)/
+  alerts:
+    errors:
+      enable: true
+      duration: 30 # Seconds
 
 clickhouse:
   enable: true

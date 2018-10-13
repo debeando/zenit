@@ -72,6 +72,12 @@ type All struct {
 	ProxySQL struct {
 		Enable      bool   `yaml:"enable"`
 		DSN         string `yaml:"dsn"`
+		Alerts struct {
+			Errors struct {
+				Enable   bool `yaml:"enable"`
+				Duration int  `yaml:"duration"`
+			}
+		}
 	}
 	ClickHouse struct {
 		DSN string `yaml:"dsn"`
