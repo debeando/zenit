@@ -192,7 +192,7 @@ func InterfaceToInt(value interface{}) int {
 }
 
 func InterfaceToFloat64(value interface{}) float64 {
-	if v, ok := value.(uint64); ok {
+	if v, ok := value.(float64); ok {
 		return float64(v)
 	}
 	return -1

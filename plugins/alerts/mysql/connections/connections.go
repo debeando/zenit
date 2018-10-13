@@ -24,9 +24,9 @@ func Check() {
 	var metrics = accumulator.Load()
 	var value interface{}
 	value = metrics.FetchOne("mysql_variables", "name", "max_connections")
-	var MaxConnections = common.InterfaceToFloat64(value)
+	var MaxConnections = float64(common.InterfaceToInt(value))
 	value = metrics.FetchOne("mysql_status", "name", "Threads_connected")
-	var ThreadsConnected = common.InterfaceToFloat64(value)
+	var ThreadsConnected = float64(common.InterfaceToInt(value))
 	var percentage = int(common.Percentage(ThreadsConnected, MaxConnections))
 
 	if percentage == -1 {
