@@ -78,6 +78,12 @@ func Plugins(wg *sync.WaitGroup) {
 		if config.File.Process.Inputs.PerconaToolKitSlaveDelay {
 			process.PerconaToolKitSlaveDelay()
 		}
+		if config.File.Process.Inputs.PerconaToolKitOnlineSchemaChange {
+			process.PerconaToolKitOnlineSchemaChange()
+		}
+		if config.File.Process.Inputs.PerconaXtraBackup {
+			process.PerconaXtraBackup()
+		}
 		if config.File.Prometheus.Enable {
 			prometheus.Run()
 		}

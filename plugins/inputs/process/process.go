@@ -32,3 +32,21 @@ func PerconaToolKitSlaveDelay() {
 		Values: common.PGrep("pt-slave-delay") ^ 1,
 	})
 }
+
+func PerconaToolKitOnlineSchemaChange() {
+	accumulator.Load().Add(accumulator.Metric{
+		Key: "os",
+		Tags: []accumulator.Tag{{"system", "linux"},
+			{"process", "pt_online_schema_change"}},
+		Values: common.PGrep("pt-online-schema-change") ^ 1,
+	})
+}
+
+func PerconaXtraBackup() {
+	accumulator.Load().Add(accumulator.Metric{
+		Key: "os",
+		Tags: []accumulator.Tag{{"system", "linux"},
+			{"process", "xtrabackup"}},
+		Values: common.PGrep("xtrabackup") ^ 1,
+	})
+}

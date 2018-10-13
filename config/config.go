@@ -122,9 +122,11 @@ type All struct {
 	}
 	Process struct {
 		Inputs struct {
-			PerconaToolKitKill           bool `yaml:"pt_kill"`
-			PerconaToolKitDeadlockLogger bool `yaml:"pt_deadlock_logger"`
-			PerconaToolKitSlaveDelay     bool `yaml:"pt_slave_delay"`
+			PerconaToolKitDeadlockLogger     bool `yaml:"pt_deadlock_logger"`
+			PerconaToolKitKill               bool `yaml:"pt_kill"`
+			PerconaToolKitOnlineSchemaChange bool `yaml:"pt_online_schema_change"`
+			PerconaToolKitSlaveDelay         bool `yaml:"pt_slave_delay"`
+			PerconaXtraBackup                bool `yaml:"xtrabackup"`
 		}
 	}
 }

@@ -87,6 +87,8 @@ os:
 
 process:
   inputs:
-    pt_kill: true
     pt_deadlock_logger: true
+    pt_kill: true
+    pt_online_schema_change: true
     pt_slave_delay: true
+    xtrabackup: true
