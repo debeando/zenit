@@ -32,9 +32,7 @@ func Check() {
 						}
 					}
 
-					// fmt.Printf("--> DEBUG! value before: %#v\n", metric.Values)
 					var percentage = int(common.InterfaceToFloat64(metric.Values))
-					// fmt.Printf("--> DEBUG! value after: %#v\n", percentage)
 
 					message += fmt.Sprintf("*Volume:* %s, *Usage:* %d%%\n", device, percentage)
 
