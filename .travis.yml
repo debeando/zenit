@@ -2,8 +2,11 @@ sudo: false
 language: go
 go:
   - "1.10"
+before_install:
+  - go get github.com/mattn/goveralls
 notifications:
   email: false
 script:
   - make deps
   - make tests
+  - $GOPATH/bin/goveralls -coverprofile=coverage.txt -service=travis-ci

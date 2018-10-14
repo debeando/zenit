@@ -16,6 +16,7 @@ deps-devel:
 	brew install jq
 
 tests: ## Run tests
+	go generate ./...
 	go test -cover -race -coverprofile=coverage.txt -covermode=atomic ./...
 
 build: ## Build binary
