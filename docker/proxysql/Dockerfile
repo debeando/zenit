@@ -20,6 +20,14 @@ ENV PERCONA_VERSION 5.5
 ###############################################################################
 # BEGIN INSTALLATION
 ###############################################################################
+# -----------------------------------------------------------------------------
+# Install additional packages
+# -----------------------------------------------------------------------------
+RUN apt-get install -y vim
+
+# -----------------------------------------------------------------------------
+# Install ProxySQL packages
+# -----------------------------------------------------------------------------
 RUN apt-get install -y --no-install-recommends \
     apt-transport-https dirmngr apt-utils apt-transport-https ca-certificates \
     libpwquality-tools cracklib-runtime gnupg wget
