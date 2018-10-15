@@ -19,9 +19,9 @@ func Check() {
   var metrics = accumulator.Load()
   var message string = ""
   var value = metrics.FetchOne("os", "name", "mem")
-  var percentage = common.InterfaceToInt(value)
+  var percentage = int(common.InterfaceToFloat64(value))
 
-  message += fmt.Sprintf("*Memory:* %d\n", percentage)
+  message += fmt.Sprintf("*Memory:* %d%%\n", percentage)
 
   alerts.Load().Register(
     "mem",

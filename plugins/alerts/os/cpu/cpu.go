@@ -21,7 +21,7 @@ func Check() {
 	var value = metrics.FetchOne("os", "name", "cpu")
 	var percentage = int(common.InterfaceToFloat64(value))
 
-	message += fmt.Sprintf("*CPU:* %d\n", percentage)
+	message += fmt.Sprintf("*CPU:* %d%%\n", percentage)
 
 	alerts.Load().Register(
 		"cpu",
