@@ -6,8 +6,23 @@ import (
 )
 
 func Check() bool {
-        // @TODO: Verify in all config in JSON to find values with any ENABLE
-        // attribute to continue for this check.
+	var enable = 0
 
-	return mysql.Check(config.File.MySQL.DSN, "MySQL")
+	if ( config.File.MySQL.Inputs.Indexes            ) { enable++ }
+	if ( config.File.MySQL.Inputs.Overflow           ) { enable++ }
+	if ( config.File.MySQL.Inputs.Slave              ) { enable++ }
+	if ( config.File.MySQL.Inputs.Status             ) { enable++ }
+	if ( config.File.MySQL.Inputs.Tables             ) { enable++ }
+	if ( config.File.MySQL.Inputs.Variables          ) { enable++ }
+	if ( config.File.MySQL.Inputs.AuditLog.Enable    ) { enable++ }
+	if ( config.File.MySQL.Inputs.SlowLog.Enable     ) { enable++ }
+	if ( config.File.MySQL.Alerts.ReadOnly.Enable    ) { enable++ }
+	if ( config.File.MySQL.Alerts.Connections.Enable ) { enable++ }
+	if ( config.File.MySQL.Alerts.Replication.Enable ) { enable++ }
+
+	if enable > 0 {
+		return mysql.Check(config.File.MySQL.DSN, "MySQL")
+	}
+
+	return false
 }
