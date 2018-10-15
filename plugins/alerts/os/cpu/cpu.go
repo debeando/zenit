@@ -19,7 +19,7 @@ func Check() {
 	var metrics = accumulator.Load()
 	var message string = ""
 	var value = metrics.FetchOne("os", "name", "cpu")
-	var percentage = common.InterfaceToInt(value)
+	var percentage = int(common.InterfaceToFloat64(value))
 
 	message += fmt.Sprintf("*CPU:* %d\n", percentage)
 
