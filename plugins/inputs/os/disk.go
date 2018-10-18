@@ -7,14 +7,14 @@ import (
 )
 
 func Disk() {
-	parts, err := disk.Partitions(false)
+	devices, err := disk.Partitions(false)
 
 	if err != nil {
 		return
 	}
 
-	for _, part := range parts {
-		u, err := disk.Usage(part.Mountpoint)
+	for _, device := range devices {
+		u, err := disk.Usage(device.Mountpoint)
 
 		if err != nil {
 			return
@@ -24,9 +24,7 @@ func Disk() {
 			Key: "os",
 			Tags: []accumulator.Tag{
 				{"name", "disk"},
-				{"filesystem", part.Fstype},
-				{"device", part.Device},
-				{"mount", part.Mountpoint},
+				{"device", device.Device},
 			},
 			Values: u.UsedPercent,
 		})

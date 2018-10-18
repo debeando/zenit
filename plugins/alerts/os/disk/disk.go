@@ -38,7 +38,7 @@ func Check() {
 
 					alerts.Load().Register(
 						"disk_" + device,
-						"Volumen",
+						fmt.Sprintf("Volumen (%s)", device),
 						config.File.OS.Alerts.Disk.Duration,
 						config.File.OS.Alerts.Disk.Warning,
 						config.File.OS.Alerts.Disk.Critical,
