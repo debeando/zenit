@@ -6,7 +6,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 const QuerySQLVariables = "SHOW GLOBAL VARIABLES"
@@ -24,7 +24,7 @@ func Variables() {
 		log.Error("MySQL:Variables - Impossible to execute query: " + err.Error())
 	}
 
-	var a = accumulator.Load()
+	var a = metrics.Load()
 	var k string
 	var v sql.RawBytes
 
@@ -35,9 +35,9 @@ func Variables() {
 				// log.Printf("D! - MySQL:Variables - %s=%d\n", k, value)
 			}
 
-			a.Add(accumulator.Metric{
+			a.Add(metrics.Metric{
 				Key:    "mysql_variables",
-				Tags:   []accumulator.Tag{{"name", k}},
+				Tags:   []metrics.Tag{{"name", k}},
 				Values: value,
 			})
 		}

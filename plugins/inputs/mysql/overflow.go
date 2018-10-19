@@ -9,7 +9,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 // Column is a struct to save result of query.
@@ -47,7 +47,7 @@ func Overflow() {
 		log.Error("MySQL:Overflow - Impossible to execute query: " + err.Error())
 	}
 
-	var a = accumulator.Load()
+	var a = metrics.Load()
 
 	for rows.Next() {
 		var c Column
@@ -67,9 +67,9 @@ func Overflow() {
 		c.Maximum()
 		c.Percentage()
 
-		a.Add(accumulator.Metric{
+		a.Add(metrics.Metric{
 			Key: "mysql_stats_overflow",
-			Tags: []accumulator.Tag{
+			Tags: []metrics.Tag{
 				{"schema", c.schema},
 				{"table", c.table},
 				{"type", "overflow"},

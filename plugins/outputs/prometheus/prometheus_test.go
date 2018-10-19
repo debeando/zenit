@@ -4,19 +4,19 @@ import (
   "strings"
   "testing"
 
-  "github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+  "github.com/swapbyt3s/zenit/plugins/lists/metrics"
   "github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
 )
 
-var a = accumulator.Load()
+var a = metrics.Load()
 
 func TestNormalize(t *testing.T) {
-  a.Add(accumulator.Metric{
+  a.Add(metrics.Metric{
     Key:  "test_metric",
-    Tags: []accumulator.Tag{
+    Tags: []metrics.Tag{
       {"foo", "bar"},
     },
-    Values: []accumulator.Value{
+    Values: []metrics.Value{
       {"a", uint(2)},
       {"b", uint(2)},
     },

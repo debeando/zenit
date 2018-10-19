@@ -4,7 +4,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 type Table struct {
@@ -39,7 +39,7 @@ func Tables() {
 		log.Error("MySQL:Tables - Impossible to execute query: " + err.Error())
 	}
 
-	var a = accumulator.Load()
+	var a = metrics.Load()
 
 	for rows.Next() {
 		var t Table
@@ -51,12 +51,12 @@ func Tables() {
 			&t.rows,
 			&t.increment)
 
-		a.Add(accumulator.Metric{
+		a.Add(metrics.Metric{
 			Key: "mysql_stats_tables",
-			Tags: []accumulator.Tag{
+			Tags: []metrics.Tag{
 				{"schema", t.schema},
 				{"table", t.table}},
-			Values: []accumulator.Value{
+			Values: []metrics.Value{
 				{"size", t.size},
 				{"rows", t.rows},
 				{"increment", t.increment}},

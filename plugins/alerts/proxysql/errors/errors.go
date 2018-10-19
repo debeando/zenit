@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
@@ -15,12 +15,12 @@ type Server struct {
 }
 
 func Check() {
-	var metrics = accumulator.Load()
+	var m = metrics.Load()
 	var s Server
 
-	for _, metric := range *metrics {
-		if metric.Key == "proxysql_connection_pool" {
-			for _, metricTag := range metric.Tags {
+	for _, m := range *m {
+		if m.Key == "proxysql_connection_pool" {
+			for _, metricTag := range m.Tags {
 				if metricTag.Name == "host" {
 					s.Host = metricTag.Value
 				} else if metricTag.Name == "group" {
@@ -28,7 +28,7 @@ func Check() {
 				}
 			}
 
-			for _, value := range metric.Values.([]accumulator.Value) {
+			for _, value := range m.Values.([]metrics.Value) {
 				if value.Key == "errors" {
 					if v, ok := value.Value.(uint); ok {
 						s.Errors = int(v)

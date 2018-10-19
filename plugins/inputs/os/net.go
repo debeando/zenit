@@ -6,7 +6,7 @@ import (
 
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/file"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 func Net() {
@@ -22,12 +22,12 @@ func Net() {
 			receive_bytes := common.StringToUInt64(match[0])
 			transmit_bytes := common.StringToUInt64(match[8])
 
-			accumulator.Load().Add(accumulator.Metric{
+			metrics.Load().Add(metrics.Metric{
 				Key: "os",
-				Tags: []accumulator.Tag{
+				Tags: []metrics.Tag{
 					{"name", "net"},
 					{"device", dev}},
-				Values: []accumulator.Value{{"receive", receive_bytes},
+				Values: []metrics.Value{{"receive", receive_bytes},
 					{"transmit", transmit_bytes}},
 			})
 		}

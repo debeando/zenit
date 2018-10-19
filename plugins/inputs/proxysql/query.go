@@ -7,7 +7,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 type Query struct {
@@ -63,14 +63,14 @@ func QueryDigest() {
 		if len(q.digest) > 0 {
 			table, command := Match(q.digest)
 
-			accumulator.Load().Add(accumulator.Metric{
+			metrics.Load().Add(metrics.Metric{
 				Key: "proxysql_queries",
-				Tags: []accumulator.Tag{
+				Tags: []metrics.Tag{
 					{"group", q.group},
 					{"schema", q.schema},
 					{"table", table},
 					{"command", command}},
-				Values: []accumulator.Value{
+				Values: []metrics.Value{
 					{"count", q.count},
 					{"sum", q.sum}},
 			})

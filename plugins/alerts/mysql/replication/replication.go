@@ -7,7 +7,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
@@ -21,7 +21,7 @@ func Check() {
 	var running int
 	var value interface{}
 
-	var metrics = accumulator.Load()
+	var metrics = metrics.Load()
 
 	value = metrics.FetchOne("mysql_slave", "name", "Slave_IO_Running")
 	var ioRunning = common.InterfaceToInt(value)

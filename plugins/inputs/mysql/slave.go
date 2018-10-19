@@ -4,7 +4,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 const QuerySQLSlave = "SHOW SLAVE STATUS"
@@ -22,7 +22,7 @@ func Slave() {
 		log.Error("MySQL:Slave - Impossible to execute query: " + err.Error())
 	}
 
-	metrics := accumulator.Load()
+	m := metrics.Load()
 	columns, _ := rows.Columns()
 	count := len(columns)
 	status := make([]interface{}, count)
@@ -41,9 +41,9 @@ func Slave() {
 		for columnIndex, columnName := range columns {
 			if state, ok := status[columnIndex].([]byte); ok {
 				if value, ok := mysql.ParseValue(state); ok {
-					metrics.Add(accumulator.Metric{
+					m.Add(metrics.Metric{
 						Key:    "mysql_slave",
-						Tags:   []accumulator.Tag{{"name", columnName}},
+						Tags:   []metrics.Tag{{"name", columnName}},
 						Values: value,
 					})
 				}

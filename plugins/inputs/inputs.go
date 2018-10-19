@@ -18,7 +18,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/inputs/os"
 	"github.com/swapbyt3s/zenit/plugins/inputs/process"
 	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
 	"github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
 	"github.com/swapbyt3s/zenit/plugins/outputs/slack"
@@ -28,7 +28,7 @@ func Plugins(wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for {
-		accumulator.Load().Reset()
+		metrics.Load().Reset()
 
 		if config.File.OS.Inputs.CPU {
 			os.CPU()

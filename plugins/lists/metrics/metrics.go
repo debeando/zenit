@@ -1,5 +1,4 @@
-// Maybe rename to matrics
-package accumulator
+package metrics
 
 import (
 	"reflect"
@@ -52,7 +51,7 @@ func (l *Items) Add(m Metric) {
 	if !items.Unique(m) {
 		*l = append(*l, m)
 	} else {
-		items.Metrics(m)
+		items.Update(m)
 	}
 }
 
@@ -82,8 +81,7 @@ func (l *Items) Unique(m Metric) bool {
 }
 
 // metrics sum values when we have the same key.
-// Maybe rename to accumulator.
-func (l *Items) Metrics(m Metric) {
+func (l *Items) Update(m Metric) {
 	for itemIndex := 0; itemIndex < len(*l); itemIndex++ {
 		if (*l)[itemIndex].Key == m.Key && TagsEquals((*l)[itemIndex].Tags, m.Tags) == true {
 			if reflect.TypeOf((*l)[itemIndex].Values) == reflect.TypeOf([]Value{}) {

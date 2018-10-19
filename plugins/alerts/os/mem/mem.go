@@ -6,7 +6,7 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
@@ -16,7 +16,7 @@ func Check() {
 		return
 	}
 
-	var metrics = accumulator.Load()
+	var metrics = metrics.Load()
 	var message string = ""
 	var value = metrics.FetchOne("os", "name", "mem")
 	var percentage = int(common.InterfaceToFloat64(value))

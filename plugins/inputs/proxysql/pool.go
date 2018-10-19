@@ -4,7 +4,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 type Pool struct {
@@ -71,13 +71,13 @@ func ConnectionPool() {
 			&q.bytesDataRecv,
 			&q.latency)
 
-		accumulator.Load().Add(accumulator.Metric{
+		metrics.Load().Add(metrics.Metric{
 			Key: "proxysql_connection_pool",
-			Tags: []accumulator.Tag{
+			Tags: []metrics.Tag{
 				{"group", q.group},
 				{"host", q.serverHost},
 			},
-			Values: []accumulator.Value{
+			Values: []metrics.Value{
 				{"status", q.status},
 				{"used", q.connUsed},
 				{"free", q.connFree},

@@ -6,7 +6,7 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
@@ -21,11 +21,11 @@ func Check() {
 		return
 	}
 
-	var metrics = accumulator.Load()
+	var m = metrics.Load()
 	var value interface{}
-	value = metrics.FetchOne("mysql_variables", "name", "max_connections")
+	value = m.FetchOne("mysql_variables", "name", "max_connections")
 	var MaxConnections = float64(common.InterfaceToInt(value))
-	value = metrics.FetchOne("mysql_status", "name", "Threads_connected")
+	value = m.FetchOne("mysql_status", "name", "Threads_connected")
 	var ThreadsConnected = float64(common.InterfaceToInt(value))
 	var percentage = int(common.Percentage(ThreadsConnected, MaxConnections))
 

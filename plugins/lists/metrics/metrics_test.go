@@ -1,17 +1,17 @@
 // TODO: Add more tests;
 // - example of process use.
-// - accumulator.Value by another data type.
+// - metrics.Value by another data type.
 // - test for Reset().
 
-package accumulator_test
+package metrics_test
 
 import (
 	"testing"
 
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-var a = accumulator.Load()
+var a = metrics.Load()
 
 func TestCount(t *testing.T) {
 	if a.Count() != 0 {
@@ -20,15 +20,15 @@ func TestCount(t *testing.T) {
 }
 
 func TestTagsEquals(t *testing.T) {
-	result := accumulator.TagsEquals([]accumulator.Tag{{"baz", "foo"}},
-		[]accumulator.Tag{{"baz", "foo"}})
+	result := metrics.TagsEquals([]metrics.Tag{{"baz", "foo"}},
+		[]metrics.Tag{{"baz", "foo"}})
 
 	if !result == true {
 		t.Error("Expected false")
 	}
 
-	result = accumulator.TagsEquals([]accumulator.Tag{{"bar", "foo1"}},
-		[]accumulator.Tag{{"bar", "foo1"},
+	result = metrics.TagsEquals([]metrics.Tag{{"bar", "foo1"}},
+		[]metrics.Tag{{"bar", "foo1"},
 			{"baz", "foo2"}})
 
 	if !result == false {
@@ -37,9 +37,9 @@ func TestTagsEquals(t *testing.T) {
 }
 
 func TestAdd(t *testing.T) {
-	a.Add(accumulator.Metric{
+	a.Add(metrics.Metric{
 		Key:    "test",
-		Tags:   []accumulator.Tag{{"foo", "bar"}},
+		Tags:   []metrics.Tag{{"foo", "bar"}},
 		Values: 123,
 	})
 
@@ -53,9 +53,9 @@ func TestUnique(t *testing.T) {
 		t.Error("Expected > 0")
 	}
 
-	result := a.Unique(accumulator.Metric{
+	result := a.Unique(metrics.Metric{
 		Key:    "test",
-		Tags:   []accumulator.Tag{{"foo", "bar"}},
+		Tags:   []metrics.Tag{{"foo", "bar"}},
 		Values: 123,
 	})
 
@@ -63,9 +63,9 @@ func TestUnique(t *testing.T) {
 		t.Error("Expected true")
 	}
 
-	result = a.Unique(accumulator.Metric{
+	result = a.Unique(metrics.Metric{
 		Key:    "test",
-		Tags:   []accumulator.Tag{{"foo", "baz"}},
+		Tags:   []metrics.Tag{{"foo", "baz"}},
 		Values: 123,
 	})
 
@@ -75,17 +75,17 @@ func TestUnique(t *testing.T) {
 }
 
 func TestAccumulator(t *testing.T) {
-	a.Add(accumulator.Metric{
+	a.Add(metrics.Metric{
 		Key:  "test_sum_values",
-		Tags: []accumulator.Tag{{"foo", "bar"}},
-		Values: []accumulator.Value{{"a", uint(1)},
+		Tags: []metrics.Tag{{"foo", "bar"}},
+		Values: []metrics.Value{{"a", uint(1)},
 			{"b", uint(1)}},
 	})
 
-	a.Add(accumulator.Metric{
+	a.Add(metrics.Metric{
 		Key:  "test_sum_values",
-		Tags: []accumulator.Tag{{"foo", "bar"}},
-		Values: []accumulator.Value{{"a", uint(2)},
+		Tags: []metrics.Tag{{"foo", "bar"}},
+		Values: []metrics.Value{{"a", uint(2)},
 			{"b", uint(2)}},
 	})
 

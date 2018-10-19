@@ -6,7 +6,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 // Index is a struct to save result of query.
@@ -42,7 +42,7 @@ func Indexes() {
 		log.Error("MySQL:Indexes - Impossible to execute query: " + err.Error())
 	}
 
-	var a = accumulator.Load()
+	var a = metrics.Load()
 
 	for rows.Next() {
 		var i Index
@@ -54,15 +54,15 @@ func Indexes() {
 			&i.column,
 			&i.cardinality)
 
-		a.Add(accumulator.Metric{
+		a.Add(metrics.Metric{
 			Key: "mysql_indexes",
-			Tags: []accumulator.Tag{
+			Tags: []metrics.Tag{
 				{"schema", strings.ToLower(i.schema)},
 				{"table", strings.ToLower(i.table)},
 				{"index", strings.ToLower(i.name)},
 				{"column", strings.ToLower(i.column)},
 			},
-			Values: []accumulator.Value{
+			Values: []metrics.Value{
 				{"cardinality", i.cardinality},
 			},
 		})

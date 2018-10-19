@@ -7,7 +7,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
@@ -17,7 +17,7 @@ func Check() {
 		return
 	}
 
-	var metrics = accumulator.Load()
+	var metrics = metrics.Load()
 	var value = metrics.FetchOne("mysql_variables", "name", "read_only")
 	var status = common.InterfaceToInt(value)
 

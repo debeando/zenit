@@ -9,21 +9,21 @@ import (
 	"github.com/swapbyt3s/zenit/common/file"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 func Run() {
 	file.Create(config.File.Prometheus.TextFile)
 	file.Truncate(config.File.Prometheus.TextFile)
 
-	var a = accumulator.Load()
+	var a = metrics.Load()
 	var e = Normalize(a)
 	var o = strings.Join(e, "\n")
 
 	file.Write(config.File.Prometheus.TextFile, o + "\n")
 }
 
-func Normalize(a *accumulator.Items) []string {
+func Normalize(a *metrics.Items) []string {
 	var s string
 	var e []string
 
@@ -37,8 +37,8 @@ func Normalize(a *accumulator.Items) []string {
 			}
 
 			e = append(e, s)
-		case []accumulator.Value:
-			for _, i := range m.Values.([]accumulator.Value) {
+		case []metrics.Value:
+			for _, i := range m.Values.([]metrics.Value) {
 				s = fmt.Sprintf("%s{%s,type=\"%s\"} %s", m.Key, getTags(m.Tags), i.Key, getValue(i.Value))
 
 				if config.File.General.Debug {
@@ -53,7 +53,7 @@ func Normalize(a *accumulator.Items) []string {
 	return e
 }
 
-func getTags(tags []accumulator.Tag) string {
+func getTags(tags []metrics.Tag) string {
 	s := []string{}
 	for t := range tags {
 		k := tags[t].Name

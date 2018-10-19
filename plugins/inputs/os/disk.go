@@ -1,7 +1,7 @@
 package os
 
 import (
-	"github.com/swapbyt3s/zenit/plugins/lists/accumulator"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 
 	"github.com/shirou/gopsutil/disk"
 )
@@ -20,9 +20,9 @@ func Disk() {
 			return
 		}
 
-		accumulator.Load().Add(accumulator.Metric{
+		metrics.Load().Add(metrics.Metric{
 			Key: "os",
-			Tags: []accumulator.Tag{
+			Tags: []metrics.Tag{
 				{"name", "disk"},
 				{"device", device.Device},
 			},
