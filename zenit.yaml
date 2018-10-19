@@ -45,6 +45,11 @@ proxysql:
   alerts:
     errors:
       enable: true
+      warning: 10  # Numbers
+      critical: 20 # Numbers
+      duration: 30 # Seconds
+    status:
+      enable: true
       duration: 30 # Seconds
 
 clickhouse:

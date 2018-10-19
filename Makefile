@@ -55,7 +55,7 @@ docker-mysql-secondary-bash: ## Enter in MySQL Secondary bash console
 docker-proxysql: ## Enter in ProxySQL Console
 	docker exec -i -t -u root zenit_proxysql /usr/bin/mysql --socket=/tmp/proxysql_admin.sock -u proxysql -padmin  --prompt='ProxySQLAdmin> '
 
-docker-proxysq-bash: ## Enter in ProxySQL bash console
+docker-proxysql-bash: ## Enter in ProxySQL bash console
 	docker exec -i -t -u root zenit_proxysql /bin/bash
 
 docker-zenit-build: ## Build binary and copy to container

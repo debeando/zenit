@@ -13,6 +13,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/alerts/os/disk"
 	"github.com/swapbyt3s/zenit/plugins/alerts/os/mem"
 	"github.com/swapbyt3s/zenit/plugins/alerts/proxysql/errors"
+	"github.com/swapbyt3s/zenit/plugins/alerts/proxysql/status"
 )
 
 func Check(wg *sync.WaitGroup) {
@@ -40,6 +41,10 @@ func Check(wg *sync.WaitGroup) {
 		if config.File.MySQL.Alerts.Replication.Enable {
 			replication.Check()
 			lagging.Check()
+		}
+
+		if config.File.ProxySQL.Alerts.Status.Enable {
+			status.Check()
 		}
 
 		if config.File.ProxySQL.Alerts.Errors.Enable {

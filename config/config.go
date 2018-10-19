@@ -75,6 +75,12 @@ type All struct {
 		Alerts struct {
 			Errors struct {
 				Enable   bool `yaml:"enable"`
+				Warning  int  `yaml:"warning"`
+				Critical int  `yaml:"critical"`
+				Duration int  `yaml:"duration"`
+			}
+			Status struct {
+				Enable   bool `yaml:"enable"`
 				Duration int  `yaml:"duration"`
 			}
 		}

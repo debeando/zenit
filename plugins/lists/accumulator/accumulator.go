@@ -1,6 +1,10 @@
 // Maybe rename to matrics
 package accumulator
 
+import (
+	"reflect"
+)
+
 // Tag for metric.
 type Tag struct {
 	Name  string
@@ -82,16 +86,18 @@ func (l *Items) Unique(m Metric) bool {
 func (l *Items) Metrics(m Metric) {
 	for itemIndex := 0; itemIndex < len(*l); itemIndex++ {
 		if (*l)[itemIndex].Key == m.Key && TagsEquals((*l)[itemIndex].Tags, m.Tags) == true {
-			for itemValueIndex, itemValue := range (*l)[itemIndex].Values.([]Value) {
-				for _, metricValue := range m.Values.([]Value) {
-					if itemValue.Key == metricValue.Key {
-						sumValue := metricValue.Value.(uint)
-						oldValue := (*l)[itemIndex].Values.([]Value)[itemValueIndex].Value.(uint)
-						newValue := oldValue + sumValue
+			if reflect.TypeOf((*l)[itemIndex].Values) == reflect.TypeOf([]Value{}) {
+				for itemValueIndex, itemValue := range (*l)[itemIndex].Values.([]Value) {
+					for _, metricValue := range m.Values.([]Value) {
+						if itemValue.Key == metricValue.Key {
+							sumValue := metricValue.Value.(uint)
+							oldValue := (*l)[itemIndex].Values.([]Value)[itemValueIndex].Value.(uint)
+							newValue := oldValue + sumValue
 
-						(*l)[itemIndex].Values.([]Value)[itemValueIndex].Value = newValue
+							(*l)[itemIndex].Values.([]Value)[itemValueIndex].Value = newValue
 
-						break
+							break
+						}
 					}
 				}
 			}
