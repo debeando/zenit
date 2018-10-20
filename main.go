@@ -42,7 +42,7 @@ func (p *program) run() {
 
 	go inputs.Plugins(&wg)
 	go inputs.Parsers(&wg)
-	go alerts.Check(&wg)
+	go alerts.Alerts(&wg)
 
 	wg.Wait()
 }

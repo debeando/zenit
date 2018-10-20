@@ -1,4 +1,4 @@
-package os
+package cpu
 
 import (
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
@@ -6,7 +6,7 @@ import (
 	"github.com/shirou/gopsutil/cpu"
 )
 
-func CPU() {
+func Collect() {
 	percentage, err := cpu.Percent(0, false)
 
 	if err == nil {

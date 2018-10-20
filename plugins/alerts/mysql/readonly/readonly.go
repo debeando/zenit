@@ -11,7 +11,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
-func Check() {
+func Register() {
 	if ! config.File.MySQL.Inputs.Variables {
 		log.Info("Require to enable MySQL Variables in config file.")
 		return

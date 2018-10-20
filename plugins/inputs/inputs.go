@@ -16,6 +16,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
 	"github.com/swapbyt3s/zenit/plugins/inputs/os"
+	"github.com/swapbyt3s/zenit/plugins/inputs/os/cpu"
 	"github.com/swapbyt3s/zenit/plugins/inputs/process"
 	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
@@ -31,7 +32,7 @@ func Plugins(wg *sync.WaitGroup) {
 		metrics.Load().Reset()
 
 		if config.File.OS.Inputs.CPU {
-			os.CPU()
+			cpu.Collect()
 		}
 		if config.File.OS.Inputs.Disk {
 			os.Disk()

@@ -38,6 +38,6 @@ func TestClearUser(t *testing.T) {
 	result := mysql.ClearUser(user)
 
 	if result != expected {
-		t.Error("Expected: " + expected)
+		t.Errorf("Expected: '%s', got: '%s'.", expected, result)
 	}
 }

@@ -27,6 +27,6 @@ func TestNormalize(t *testing.T) {
   result := strings.Join(output, "\n")
 
   if result != expected {
-    t.Error("Expected: " + expected)
+    t.Errorf("Expected: '%s', got: '%s'", expected, result)
   }
 }

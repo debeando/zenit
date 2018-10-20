@@ -1,7 +1,6 @@
 package slow_test
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
@@ -36,7 +35,7 @@ func TestEvent(t *testing.T) {
 	expected := strings.Join(event[0:7], "\n")
 
 	if result != expected {
-		t.Error("Expected: " + expected)
+		t.Errorf("Expected: '%s', got: '%s'.", expected, result)
 	}
 }
 
@@ -58,6 +57,6 @@ func TestProperty(t *testing.T) {
 	}
 
 	if !common.ComparteMapString(result, expected) {
-		t.Error("Expected:", fmt.Sprintf("%#v", expected))
+		t.Errorf("Expected: '%#v', got: '%#v'.", expected, result)
 	}
 }

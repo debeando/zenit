@@ -25,6 +25,6 @@ func TestInsert(t *testing.T) {
 	expected := "INSERT INTO zenit.test (FieldA,FieldN) VALUES ('a',1),('b',2),('c',3);"
 
 	if result != expected {
-		t.Error("Expected: " + expected)
+		t.Errorf("Expected: '%#v', got: '%#v'.", expected, result)
 	}
 }

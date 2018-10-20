@@ -1,7 +1,6 @@
 package alerts_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
@@ -76,12 +75,14 @@ func TestEvaluate(t *testing.T) {
 		t1.LastSeen = s.LastSeen
 		t1.Value = s.Value
 
-		if t1.Evaluate() != s.Expected {
-			t.Error(fmt.Sprintf("Check %d: Expected evaluate %t", s.Key, s.Expected))
+		evaluated := t1.Evaluate()
+
+		if evaluated != s.Expected {
+			t.Errorf("Test %d - Expected: '%t', got: '%t'", s.Key, s.Expected, evaluated)
 		}
 
 		if t1.Status != s.Status {
-			t.Error(fmt.Sprintf("Check %d: Expected status %d", s.Key, s.Status))
+			t.Errorf("Test %d - Expected: '%d', got: '%d'", s.Key, s.Status, t1.Status)
 		}
 	}
 }

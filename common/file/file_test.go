@@ -46,7 +46,7 @@ func TestRead(t *testing.T) {
 	expected := "Test 1\nTest 2"
 
 	if result != expected {
-		t.Error("Expected: " + expected)
+		t.Errorf("Expected: '%s', got: '%s'.", expected, result)
 	}
 }
 

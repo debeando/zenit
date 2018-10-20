@@ -143,7 +143,7 @@ func TestSQLInsert(t *testing.T) {
 	status_code := test.Post(config.File.ClickHouse.DSN, sql_insert)
 
 	if status_code != 200 {
-		t.Errorf("Expected response status to be 200 got %v.", status_code)
+		t.Errorf("Expected: '200', got: '%v'", status_code)
 	}
 }
 

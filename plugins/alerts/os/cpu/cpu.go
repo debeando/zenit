@@ -10,7 +10,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
-func Check() {
+func Register() {
 	if ! config.File.OS.Alerts.CPU.Enable {
 		log.Info("Require to enable OS CPU in config file.")
 		return

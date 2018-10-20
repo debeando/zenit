@@ -28,6 +28,6 @@ func TestPost(t *testing.T) {
 	response := test.Post(ts.URL, "foo")
 
 	if response != 200 {
-		t.Errorf("Expecting status to be 200 got %v", response)
+		t.Errorf("Expected: '200', got: '%v'.", response)
 	}
 }

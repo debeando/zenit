@@ -15,7 +15,7 @@ type Server struct {
 	StatusName string
 }
 
-func Check() {
+func Register() {
 	var m = metrics.Load()
 	var s Server
 

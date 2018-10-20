@@ -16,39 +16,39 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/alerts/proxysql/status"
 )
 
-func Check(wg *sync.WaitGroup) {
+func Alerts(wg *sync.WaitGroup) {
 	for {
 		if config.File.OS.Alerts.CPU.Enable {
-			cpu.Check()
+			cpu.Register()
 		}
 
 		if config.File.OS.Alerts.MEM.Enable {
-			mem.Check()
+			mem.Register()
 		}
 
 		if config.File.OS.Alerts.Disk.Enable {
-			disk.Check()
+			disk.Register()
 		}
 
 		if config.File.MySQL.Alerts.ReadOnly.Enable {
-			readonly.Check()
+			readonly.Register()
 		}
 
 		if config.File.MySQL.Alerts.Connections.Enable {
-			connections.Check()
+			connections.Register()
 		}
 
 		if config.File.MySQL.Alerts.Replication.Enable {
-			replication.Check()
-			lagging.Check()
+			replication.Register()
+			lagging.Register()
 		}
 
 		if config.File.ProxySQL.Alerts.Status.Enable {
-			status.Check()
+			status.Register()
 		}
 
 		if config.File.ProxySQL.Alerts.Errors.Enable {
-			errors.Check()
+			errors.Register()
 		}
 
 		time.Sleep(config.File.General.Interval * time.Second)

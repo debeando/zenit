@@ -10,7 +10,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
-func Check() {
+func Register() {
 	if ! config.File.OS.Alerts.MEM.Enable {
 		log.Info("Require to enable OS MEM in config file.")
 		return
