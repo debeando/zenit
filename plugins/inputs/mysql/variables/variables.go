@@ -1,4 +1,4 @@
-package mysql
+package variables
 
 import (
 	"database/sql"
@@ -11,7 +11,7 @@ import (
 
 const QuerySQLVariables = "SHOW GLOBAL VARIABLES"
 
-func Variables() {
+func Collect() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
@@ -31,10 +31,6 @@ func Variables() {
 	for rows.Next() {
 		rows.Scan(&k, &v)
 		if value, ok := mysql.ParseValue(v); ok {
-			if config.File.General.Debug {
-				// log.Printf("D! - MySQL:Variables - %s=%d\n", k, value)
-			}
-
 			a.Add(metrics.Metric{
 				Key:    "mysql_variables",
 				Tags:   []metrics.Tag{{"name", k}},

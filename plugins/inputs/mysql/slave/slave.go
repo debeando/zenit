@@ -1,4 +1,4 @@
-package mysql
+package slave
 
 import (
 	"github.com/swapbyt3s/zenit/common/log"
@@ -9,7 +9,7 @@ import (
 
 const QuerySQLSlave = "SHOW SLAVE STATUS"
 
-func Slave() {
+func Collect() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {

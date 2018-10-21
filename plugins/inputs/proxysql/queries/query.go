@@ -1,4 +1,4 @@
-package proxysql
+package queries
 
 import (
 	"regexp"
@@ -35,7 +35,7 @@ FROM stats.stats_mysql_query_digest;`
 
 var re *regexp.Regexp
 
-func QueryDigest() {
+func Collect() {
 	re, _ = regexp.Compile(ReQuery)
 
 	conn, err := mysql.Connect(config.File.ProxySQL.DSN)

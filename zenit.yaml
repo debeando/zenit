@@ -40,8 +40,11 @@ mysql:
       duration: 30 # Seconds
 
 proxysql:
-  enable: true
   dsn: radminuser:radminpass@tcp(127.0.0.1:6032)/
+  inputs:
+    commands: true
+    pool: true
+    queries: true
   alerts:
     errors:
       enable: true

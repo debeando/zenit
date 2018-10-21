@@ -1,6 +1,5 @@
 // TODO:
 // - Convert this into module/package called "collect" because use for inputs and parsers.
-// - Find any way to simplify this to make more dinamyc.
 // - If not set any option, ignore and no enter in infinite loop.
 
 package inputs
@@ -14,11 +13,23 @@ import (
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
+	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/indexes"
+	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/overflow"
+	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/slave"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
-	"github.com/swapbyt3s/zenit/plugins/inputs/os"
+	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/status"
+	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/tables"
+	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/variables"
 	"github.com/swapbyt3s/zenit/plugins/inputs/os/cpu"
+	"github.com/swapbyt3s/zenit/plugins/inputs/os/disk"
+	"github.com/swapbyt3s/zenit/plugins/inputs/os/mem"
+	"github.com/swapbyt3s/zenit/plugins/inputs/os/net"
+	"github.com/swapbyt3s/zenit/plugins/inputs/os/sys"
 	"github.com/swapbyt3s/zenit/plugins/inputs/process"
 	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql"
+	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql/commands"
+	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql/pool"
+	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql/queries"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
 	"github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
@@ -29,47 +40,62 @@ func Plugins(wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for {
+		// Flush old metrics:
 		metrics.Load().Reset()
 
+		// Collect by OS:
 		if config.File.OS.Inputs.CPU {
 			cpu.Collect()
 		}
 		if config.File.OS.Inputs.Disk {
-			os.Disk()
+			disk.Collect()
 		}
 		if config.File.OS.Inputs.Mem {
-			os.Mem()
+			mem.Collect()
 		}
 		if config.File.OS.Inputs.Net {
-			os.Net()
+			net.Collect()
 		}
 		if config.File.OS.Inputs.Limits {
-			os.SysLimits()
+			sys.Collect()
 		}
+
+		// Collect by MySQL:
 		if mysql.Check() {
 			if config.File.MySQL.Inputs.Indexes {
-				mysql.Indexes()
+				indexes.Collect()
 			}
 			if config.File.MySQL.Inputs.Overflow {
-				mysql.Overflow()
+				overflow.Collect()
 			}
 			if config.File.MySQL.Inputs.Slave {
-				mysql.Slave()
+				slave.Collect()
 			}
 			if config.File.MySQL.Inputs.Status {
-				mysql.Status()
+				status.Collect()
 			}
 			if config.File.MySQL.Inputs.Tables {
-				mysql.Tables()
+				tables.Collect()
 			}
 			if config.File.MySQL.Inputs.Variables {
-				mysql.Variables()
+				variables.Collect()
 			}
 		}
-		if config.File.ProxySQL.Enable && proxysql.Check() {
-			proxysql.ConnectionPool()
-			proxysql.QueryDigest()
+
+		// Collect by ProxySQL:
+		if proxysql.Check() {
+			if config.File.ProxySQL.Inputs.Commands {
+				commands.Collect()
+			}
+			if config.File.ProxySQL.Inputs.Pool {
+				pool.Collect()
+			}
+			if config.File.ProxySQL.Inputs.Queries {
+				queries.Collect()
+			}
 		}
+
+		// Collect by process:
 		if config.File.Process.Inputs.PerconaToolKitKill {
 			process.PerconaToolKitKill()
 		}
@@ -91,6 +117,8 @@ func Plugins(wg *sync.WaitGroup) {
 		if config.File.Slack.Enable {
 			slack.Run()
 		}
+
+		// Wait loop:
 		time.Sleep(config.File.General.Interval * time.Second)
 	}
 }

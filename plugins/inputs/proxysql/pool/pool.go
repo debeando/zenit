@@ -1,4 +1,4 @@
-package proxysql
+package pool
 
 import (
 	"github.com/swapbyt3s/zenit/common/log"
@@ -41,7 +41,7 @@ const (
 	FROM stats.stats_mysql_connection_pool;`
 )
 
-func ConnectionPool() {
+func Collect() {
 	conn, err := mysql.Connect(config.File.ProxySQL.DSN)
 	defer conn.Close()
 	if err != nil {

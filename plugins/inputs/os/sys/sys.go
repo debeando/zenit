@@ -1,4 +1,4 @@
-package os
+package sys
 
 import (
 	"github.com/swapbyt3s/zenit/common"
@@ -8,7 +8,7 @@ import (
 const NR_OPEN string = "/proc/sys/fs/nr_open"
 const FILE_MAX string = "/proc/sys/fs/file-max"
 
-func SysLimits() {
+func Collect() {
 	metrics.Load().Add(metrics.Metric{
 		Key: "os",
 		Tags: []metrics.Tag{

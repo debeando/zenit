@@ -1,4 +1,4 @@
-package os
+package mem
 
 import (
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
@@ -6,7 +6,7 @@ import (
 	"github.com/shirou/gopsutil/mem"
 )
 
-func Mem() {
+func Collect() {
 	vmStat, err := mem.VirtualMemory()
 
 	if err == nil {

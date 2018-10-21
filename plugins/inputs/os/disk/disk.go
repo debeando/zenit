@@ -1,4 +1,4 @@
-package os
+package disk
 
 import (
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
@@ -6,7 +6,7 @@ import (
 	"github.com/shirou/gopsutil/disk"
 )
 
-func Disk() {
+func Collect() {
 	devices, err := disk.Partitions(false)
 
 	if err != nil {

@@ -1,4 +1,4 @@
-package os
+package net
 
 import (
 	"regexp"
@@ -9,7 +9,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-func Net() {
+func Collect() {
 	reGroups := regexp.MustCompile(`(\d+)`)
 	net := file.Read("/proc/net/dev")
 	lines := strings.Split(net, "\n")

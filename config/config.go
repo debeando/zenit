@@ -70,8 +70,12 @@ type All struct {
 		}
 	}
 	ProxySQL struct {
-		Enable      bool   `yaml:"enable"`
-		DSN         string `yaml:"dsn"`
+		DSN string `yaml:"dsn"`
+		Inputs struct {
+			Commands bool `yaml:"commands"`
+			Pool     bool `yaml:"pool"`
+			Queries  bool `yaml:"queries"`
+		}
 		Alerts struct {
 			Errors struct {
 				Enable   bool `yaml:"enable"`

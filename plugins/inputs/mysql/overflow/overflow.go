@@ -1,4 +1,4 @@
-package mysql
+package overflow
 
 import (
 	"fmt"
@@ -34,7 +34,7 @@ WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schem
 )
 
 // Overflow collect the max value of Primary Key on table and verify the limit which Data Type.
-func Overflow() {
+func Collect() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {

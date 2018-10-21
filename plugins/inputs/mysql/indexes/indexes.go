@@ -1,4 +1,4 @@
-package mysql
+package indexes
 
 import (
 	"strings"
@@ -29,7 +29,7 @@ FROM INFORMATION_SCHEMA.STATISTICS
 WHERE TABLE_SCHEMA NOT IN ('mysql');`
 )
 
-func Indexes() {
+func Collect() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {

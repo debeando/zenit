@@ -131,7 +131,7 @@ func TestDigest(t *testing.T) {
 		actual := sql.Digest(test.Input)
 
 		if test.Expected != actual {
-			t.Errorf("Test %d - Expected: '%#v', got: '%#v'.", test.ID, test.Expected, actual)
+			t.Errorf("Test %s - Expected: '%s', got: '%s'.", test.ID, test.Expected, actual)
 		}
 	}
 }

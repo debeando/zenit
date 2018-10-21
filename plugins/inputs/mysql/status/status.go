@@ -1,4 +1,4 @@
-package mysql
+package status
 
 import (
 	"database/sql"
@@ -11,7 +11,7 @@ import (
 
 const QuerySQLStatus = "SHOW GLOBAL STATUS"
 
-func Status() {
+func Collect() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {

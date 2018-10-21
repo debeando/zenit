@@ -1,4 +1,4 @@
-package mysql
+package tables
 
 import (
 	"github.com/swapbyt3s/zenit/common/log"
@@ -26,7 +26,7 @@ WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schem
 ORDER BY table_schema, table_name;
 `
 
-func Tables() {
+func Collect() {
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
