@@ -22,7 +22,7 @@ type Query struct {
 
 const (
 	ReQuery = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z0-9._]+)`
-	SQLDigest = `SELECT CASE
+	SQL = `SELECT CASE
          WHEN hostgroup IN (SELECT writer_hostgroup FROM main.mysql_replication_hostgroups) THEN 'writer'
          WHEN hostgroup IN (SELECT reader_hostgroup FROM main.mysql_replication_hostgroups) THEN 'reader'
        END AS 'group',
@@ -44,7 +44,7 @@ func Collect() {
 		log.Error("ProxySQL - Impossible to connect: " + err.Error())
 	}
 
-	rows, err := conn.Query(SQLDigest)
+	rows, err := conn.Query(SQL)
 	defer rows.Close()
 	if err != nil {
 		log.Error("ProxySQL - Impossible to execute query: " + err.Error())

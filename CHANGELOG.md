@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add alert for Errors and Status connections on ProxySQL.
 - Add basic alerts for OS: Disk, Mem, CPU.
 - Add basic alerts for MySQL: Max Connection, Lagging, Replication, ReadOnly.
-- Add basic alerts for ProxySQL: Errors and Status by hosts.
+- Add basic alerts for ProxySQL: Errors, Commands, Queries and Status by hosts.
 - Refactoring logging.
 - Allow environment variables in config file.
 - Refactoring config skeleton to show hierarchy for collect and alerts.
