@@ -32,7 +32,7 @@ func Collect() {
 		rows.Scan(&k, &v)
 		if value, ok := mysql.ParseValue(v); ok {
 			a.Add(metrics.Metric{
-				Key:    "mysql_variables",
+				Key:    "zenit_mysql_variables",
 				Tags:   []metrics.Tag{{"name", k}},
 				Values: value,
 			})

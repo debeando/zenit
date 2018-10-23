@@ -23,11 +23,11 @@ func Register() {
 
 	var metrics = metrics.Load()
 
-	value = metrics.FetchOne("mysql_slave", "name", "Slave_IO_Running")
+	value = metrics.FetchOne("zenit_mysql_slave", "name", "Slave_IO_Running")
 	var ioRunning = common.InterfaceToInt(value)
-	value = metrics.FetchOne("mysql_slave", "name", "Slave_SQL_Running")
+	value = metrics.FetchOne("zenit_mysql_slave", "name", "Slave_SQL_Running")
 	var sqlRunning = common.InterfaceToInt(value)
-	value = metrics.FetchOne("mysql_slave", "name", "Last_SQL_Errno")
+	value = metrics.FetchOne("zenit_mysql_slave", "name", "Last_SQL_Errno")
 	var sqlError = common.InterfaceToInt(value)
 
 	if sqlError == -1 {

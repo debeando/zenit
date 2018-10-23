@@ -68,7 +68,7 @@ func Collect() {
 		c.Percentage()
 
 		a.Add(metrics.Metric{
-			Key: "mysql_stats_overflow",
+			Key: "zenit_mysql_stats_overflow",
 			Tags: []metrics.Tag{
 				{"schema", c.schema},
 				{"table", c.table},

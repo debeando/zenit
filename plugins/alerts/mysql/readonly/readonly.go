@@ -18,7 +18,7 @@ func Register() {
 	}
 
 	var metrics = metrics.Load()
-	var value = metrics.FetchOne("mysql_variables", "name", "read_only")
+	var value = metrics.FetchOne("zenit_mysql_variables", "name", "read_only")
 	var status = common.InterfaceToInt(value)
 
 	// Verify status range is valid:

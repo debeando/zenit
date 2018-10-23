@@ -42,7 +42,7 @@ func Collect() {
 			if state, ok := status[columnIndex].([]byte); ok {
 				if value, ok := mysql.ParseValue(state); ok {
 					m.Add(metrics.Metric{
-						Key:    "mysql_slave",
+						Key:    "zenit_mysql_slave",
 						Tags:   []metrics.Tag{{"name", columnName}},
 						Values: value,
 					})

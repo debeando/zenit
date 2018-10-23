@@ -17,7 +17,7 @@ func Register() {
 	}
 
 	var metrics = metrics.Load()
-	var value = metrics.FetchOne("mysql_slave", "name", "Seconds_Behind_Master")
+	var value = metrics.FetchOne("zenit_mysql_slave", "name", "Seconds_Behind_Master")
 	var lagging = common.InterfaceToInt(value)
 
 	if lagging == -1 {

@@ -64,15 +64,17 @@ func Collect() {
 			table, command := Match(q.digest)
 
 			metrics.Load().Add(metrics.Metric{
-				Key: "proxysql_queries",
+				Key: "zenit_proxysql_queries",
 				Tags: []metrics.Tag{
 					{"group", q.group},
 					{"schema", q.schema},
 					{"table", table},
-					{"command", command}},
+					{"command", command},
+				},
 				Values: []metrics.Value{
 					{"count", q.count},
-					{"sum", q.sum}},
+					{"sum", q.sum},
+				},
 			})
 		}
 	}

@@ -44,7 +44,7 @@ func TestCPU(t *testing.T) {
 		// Add test value on metrics:
 		metrics.Load().Reset()
 		metrics.Load().Add(metrics.Metric{
-			Key: "os",
+			Key: "zenit_os",
 			Tags: []metrics.Tag{
 				{"name", "cpu"},
 			},

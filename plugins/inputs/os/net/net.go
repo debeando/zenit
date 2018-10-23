@@ -23,12 +23,15 @@ func Collect() {
 			transmit_bytes := common.StringToUInt64(match[8])
 
 			metrics.Load().Add(metrics.Metric{
-				Key: "os",
+				Key: "zenit_os",
 				Tags: []metrics.Tag{
 					{"name", "net"},
-					{"device", dev}},
-				Values: []metrics.Value{{"receive", receive_bytes},
-					{"transmit", transmit_bytes}},
+					{"device", dev},
+				},
+				Values: []metrics.Value{
+					{"receive", receive_bytes},
+					{"transmit", transmit_bytes},
+				},
 			})
 		}
 	}

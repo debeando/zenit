@@ -62,7 +62,7 @@ func Collect() {
 		)
 
 		metrics.Load().Add(metrics.Metric{
-			Key: "proxysql_commands",
+			Key: "zenit_proxysql_commands",
 			Tags: []metrics.Tag{
 				{"name", c.Name},
 			},

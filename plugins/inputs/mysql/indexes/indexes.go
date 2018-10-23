@@ -55,7 +55,7 @@ func Collect() {
 			&i.cardinality)
 
 		a.Add(metrics.Metric{
-			Key: "mysql_indexes",
+			Key: "zenit_mysql_indexes",
 			Tags: []metrics.Tag{
 				{"schema", strings.ToLower(i.schema)},
 				{"table", strings.ToLower(i.table)},

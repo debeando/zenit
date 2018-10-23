@@ -23,9 +23,9 @@ func Register() {
 
 	var m = metrics.Load()
 	var value interface{}
-	value = m.FetchOne("mysql_variables", "name", "max_connections")
+	value = m.FetchOne("zenit_mysql_variables", "name", "max_connections")
 	var MaxConnections = float64(common.InterfaceToInt(value))
-	value = m.FetchOne("mysql_status", "name", "Threads_connected")
+	value = m.FetchOne("zenit_mysql_status", "name", "Threads_connected")
 	var ThreadsConnected = float64(common.InterfaceToInt(value))
 	var percentage = int(common.Percentage(ThreadsConnected, MaxConnections))
 

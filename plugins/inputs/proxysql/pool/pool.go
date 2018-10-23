@@ -72,7 +72,7 @@ func Collect() {
 			&q.latency)
 
 		metrics.Load().Add(metrics.Metric{
-			Key: "proxysql_connection_pool",
+			Key: "zenit_proxysql_connection_pool",
 			Tags: []metrics.Tag{
 				{"group", q.group},
 				{"host", q.serverHost},

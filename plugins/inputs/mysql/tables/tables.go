@@ -52,7 +52,7 @@ func Collect() {
 			&t.increment)
 
 		a.Add(metrics.Metric{
-			Key: "mysql_stats_tables",
+			Key: "zenit_mysql_stats_tables",
 			Tags: []metrics.Tag{
 				{"schema", t.schema},
 				{"table", t.table}},

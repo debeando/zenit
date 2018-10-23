@@ -18,7 +18,7 @@ func Register() {
 
 	var metrics = metrics.Load()
 	var message string = ""
-	var value = metrics.FetchOne("os", "name", "cpu")
+	var value = metrics.FetchOne("zenit_os", "name", "cpu")
 	var percentage = int(common.InterfaceToFloat64(value))
 
 	if percentage == -1 {

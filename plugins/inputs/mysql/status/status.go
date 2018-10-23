@@ -36,7 +36,7 @@ func Collect() {
 
 		if value, ok := mysql.ParseValue(v); ok {
 			a.Add(metrics.Metric{
-				Key:    "mysql_status",
+				Key:    "zenit_mysql_status",
 				Tags:   []metrics.Tag{{"name", k}},
 				Values: value,
 			})

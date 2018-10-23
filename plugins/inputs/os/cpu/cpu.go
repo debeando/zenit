@@ -11,7 +11,7 @@ func Collect() {
 
 	if err == nil {
 		metrics.Load().Add(metrics.Metric{
-			Key: "os",
+			Key: "zenit_os",
 			Tags: []metrics.Tag{
 				{"name", "cpu"},
 			},

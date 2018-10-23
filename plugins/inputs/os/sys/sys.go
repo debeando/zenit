@@ -10,7 +10,7 @@ const FILE_MAX string = "/proc/sys/fs/file-max"
 
 func Collect() {
 	metrics.Load().Add(metrics.Metric{
-		Key: "os",
+		Key: "zenit_os",
 		Tags: []metrics.Tag{
 			{"name", "sysctl"},
 		},

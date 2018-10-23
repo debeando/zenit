@@ -19,7 +19,7 @@ func Register() {
 	var metrics = metrics.Load()
 
 	for _, metric := range *metrics {
-		if metric.Key == "os" {
+		if metric.Key == "zenit_os" {
 			for _, metricTag := range metric.Tags {
 				if metricTag.Name == "name" && metricTag.Value == "disk" {
 					var message string = ""

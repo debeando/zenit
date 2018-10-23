@@ -19,7 +19,7 @@ func Register() {
 	var s Server
 
 	for _, m := range *m {
-		if m.Key == "proxysql_connection_pool" {
+		if m.Key == "zenit_proxysql_connection_pool" {
 			for _, metricTag := range m.Tags {
 				if metricTag.Name == "host" {
 					s.Host = metricTag.Value

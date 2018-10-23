@@ -21,7 +21,7 @@ func Collect() {
 		}
 
 		metrics.Load().Add(metrics.Metric{
-			Key: "os",
+			Key: "zenit_os",
 			Tags: []metrics.Tag{
 				{"name", "disk"},
 				{"device", device.Device},

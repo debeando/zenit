@@ -8,7 +8,7 @@ import (
 
 func PerconaToolKitKill() {
 	metrics.Load().Add(metrics.Metric{
-		Key: "os",
+		Key: "zenit_os",
 		Tags: []metrics.Tag{{"system", "linux"},
 			{"process", "pt_kill"}},
 		Values: common.PGrep("pt-kill") ^ 1,
@@ -17,7 +17,7 @@ func PerconaToolKitKill() {
 
 func PerconaToolKitDeadlockLogger() {
 	metrics.Load().Add(metrics.Metric{
-		Key: "os",
+		Key: "zenit_os",
 		Tags: []metrics.Tag{{"system", "linux"},
 			{"process", "pt_deadlock_logger"}},
 		Values: common.PGrep("pt-deadlock-logger") ^ 1,
@@ -26,7 +26,7 @@ func PerconaToolKitDeadlockLogger() {
 
 func PerconaToolKitSlaveDelay() {
 	metrics.Load().Add(metrics.Metric{
-		Key: "os",
+		Key: "zenit_os",
 		Tags: []metrics.Tag{{"system", "linux"},
 			{"process", "pt_slave_delay"}},
 		Values: common.PGrep("pt-slave-delay") ^ 1,
@@ -35,7 +35,7 @@ func PerconaToolKitSlaveDelay() {
 
 func PerconaToolKitOnlineSchemaChange() {
 	metrics.Load().Add(metrics.Metric{
-		Key: "os",
+		Key: "zenit_os",
 		Tags: []metrics.Tag{{"system", "linux"},
 			{"process", "pt_online_schema_change"}},
 		Values: common.PGrep("pt-online-schema-change") ^ 1,
@@ -44,7 +44,7 @@ func PerconaToolKitOnlineSchemaChange() {
 
 func PerconaXtraBackup() {
 	metrics.Load().Add(metrics.Metric{
-		Key: "os",
+		Key: "zenit_os",
 		Tags: []metrics.Tag{{"system", "linux"},
 			{"process", "xtrabackup"}},
 		Values: common.PGrep("xtrabackup") ^ 1,
