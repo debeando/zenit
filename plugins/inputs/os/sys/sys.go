@@ -14,7 +14,9 @@ func Collect() {
 		Tags: []metrics.Tag{
 			{"name", "sysctl"},
 		},
-		Values: []metrics.Value{{"nr_open", common.GetUInt64FromFile(NR_OPEN)},
-			{"file_max", common.GetUInt64FromFile(FILE_MAX)}},
+		Values: []metrics.Value{
+			{"nr_open", common.GetUInt64FromFile(NR_OPEN)},
+			{"file_max", common.GetUInt64FromFile(FILE_MAX)},
+		},
 	})
 }
