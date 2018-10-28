@@ -38,10 +38,9 @@ func (p *program) run() {
 
 	var wg sync.WaitGroup
 
-	wg.Add(3)
+	wg.Add(2)
 
 	go inputs.Plugins(&wg)
-	go inputs.Parsers(&wg)
 	go alerts.Alerts(&wg)
 
 	wg.Wait()

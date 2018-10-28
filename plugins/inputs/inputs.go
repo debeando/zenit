@@ -8,8 +8,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/swapbyt3s/zenit/common"
-	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
@@ -31,13 +29,15 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql/pool"
 	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql/queries"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
-	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
 	"github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
 	"github.com/swapbyt3s/zenit/plugins/outputs/slack"
 )
 
 func Plugins(wg *sync.WaitGroup) {
 	defer wg.Done()
+
+	audit.Collect()
+	slow.Collect()
 
 	for {
 		// Flush old metrics:
@@ -120,118 +120,5 @@ func Plugins(wg *sync.WaitGroup) {
 
 		// Wait loop:
 		time.Sleep(config.File.General.Interval * time.Second)
-	}
-}
-
-func Parsers(wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	if config.File.MySQL.Inputs.AuditLog.Enable {
-		if config.File.General.Debug {
-			log.Debug("Load MySQL AuditLog")
-			log.Debug("Read MySQL AuditLog: " + config.File.MySQL.Inputs.AuditLog.LogPath)
-		}
-
-		if !clickhouse.Check() {
-			log.Error("AuditLog require active connection to ClickHouse.")
-		}
-
-		if config.File.MySQL.Inputs.AuditLog.Format == "xml-old" {
-			channel_tail := make(chan string)
-			channel_parser := make(chan map[string]string)
-			channel_data := make(chan map[string]string)
-
-			event := &clickhouse.Event{
-				Type:    "AuditLog",
-				Schema:  "zenit",
-				Table:   "mysql_audit_log",
-				Size:    config.File.MySQL.Inputs.AuditLog.BufferSize,
-				Timeout: config.File.MySQL.Inputs.AuditLog.BufferTimeOut,
-				Wildcard: map[string]string{
-					"_time":          "'%s'",
-					"command_class":  "'%s'",
-					"connection_id":  "%s",
-					"db":             "'%s'",
-					"host":           "'%s'",
-					"host_ip":        "IPv4StringToNum('%s')",
-					"host_name":      "'%s'",
-					"ip":             "'%s'",
-					"name":           "'%s'",
-					"os_login":       "'%s'",
-					"os_user":        "'%s'",
-					"priv_user":      "'%s'",
-					"proxy_user":     "'%s'",
-					"record":         "'%s'",
-					"sqltext":        "'%s'",
-					"sqltext_digest": "'%s'",
-					"status":         "%s",
-					"user":           "'%s'",
-				},
-				Values: []map[string]string{},
-			}
-
-			go common.Tail(config.File.MySQL.Inputs.AuditLog.LogPath, channel_tail)
-			go audit.Parser(config.File.MySQL.Inputs.AuditLog.LogPath, channel_tail, channel_parser)
-			go clickhouse.Send(event, channel_data)
-
-			go func() {
-				for channel_event := range channel_parser {
-					channel_data <- channel_event
-				}
-			}()
-		}
-	}
-
-	if config.File.MySQL.Inputs.SlowLog.Enable {
-		if config.File.General.Debug {
-			log.Debug("Load MySQL SlowLog")
-			log.Debug("Read MySQL SlowLog: " + config.File.MySQL.Inputs.SlowLog.LogPath)
-		}
-
-		if !clickhouse.Check() {
-			log.Error("SlowLog require active connection to ClickHouse.")
-		}
-
-		channel_tail := make(chan string)
-		channel_parser := make(chan map[string]string)
-		channel_data := make(chan map[string]string)
-
-		event := &clickhouse.Event{
-			Type:    "SlowLog",
-			Schema:  "zenit",
-			Table:   "mysql_slow_log",
-			Size:    config.File.MySQL.Inputs.SlowLog.BufferSize,
-			Timeout: config.File.MySQL.Inputs.SlowLog.BufferTimeOut,
-			Wildcard: map[string]string{
-				"_time":         "'%s'",
-				"bytes_sent":    "%s",
-				"host_ip":       "IPv4StringToNum('%s')",
-				"host_name":     "'%s'",
-				"killed":        "%s",
-				"last_errno":    "%s",
-				"lock_time":     "%s",
-				"query":         "'%s'",
-				"query_digest":  "'%s'",
-				"query_time":    "%s",
-				"rows_affected": "%s",
-				"rows_examined": "%s",
-				"rows_read":     "%s",
-				"rows_sent":     "%s",
-				"schema":        "'%s'",
-				"thread_id":     "%s",
-				"user_host":     "'%s'",
-			},
-			Values: []map[string]string{},
-		}
-
-		go common.Tail(config.File.MySQL.Inputs.SlowLog.LogPath, channel_tail)
-		go slow.Parser(config.File.MySQL.Inputs.SlowLog.LogPath, channel_tail, channel_parser)
-		go clickhouse.Send(event, channel_data)
-
-		go func() {
-			for channel_event := range channel_parser {
-				channel_data <- channel_event
-			}
-		}()
 	}
 }
