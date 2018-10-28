@@ -36,8 +36,8 @@ import (
 func Plugins(wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	audit.Collect()
-	slow.Collect()
+	audit.Start()
+	slow.Start()
 
 	for {
 		// Flush old metrics:

@@ -14,7 +14,7 @@ type Server struct {
 	Errors int
 }
 
-func Register() {
+func Collect() {
 	var m = metrics.Load()
 	var s Server
 

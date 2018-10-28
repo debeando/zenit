@@ -10,7 +10,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
-func Register() {
+func Collect() {
 	if ! config.File.OS.Alerts.Disk.Enable {
 		log.Info("Require to enable OS Disk in config file.")
 		return

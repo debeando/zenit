@@ -52,7 +52,7 @@ func TestCPU(t *testing.T) {
 		})
 
 		// Register alert:
-		cpu.Register()
+		cpu.Collect()
 
 		// Evaluate alert status
 		alert := alerts.Load().Exist("cpu")

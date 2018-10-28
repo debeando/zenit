@@ -19,36 +19,36 @@ import (
 func Alerts(wg *sync.WaitGroup) {
 	for {
 		if config.File.OS.Alerts.CPU.Enable {
-			cpu.Register()
+			cpu.Collect()
 		}
 
 		if config.File.OS.Alerts.MEM.Enable {
-			mem.Register()
+			mem.Collect()
 		}
 
 		if config.File.OS.Alerts.Disk.Enable {
-			disk.Register()
+			disk.Collect()
 		}
 
 		if config.File.MySQL.Alerts.ReadOnly.Enable {
-			readonly.Register()
+			readonly.Collect()
 		}
 
 		if config.File.MySQL.Alerts.Connections.Enable {
-			connections.Register()
+			connections.Collect()
 		}
 
 		if config.File.MySQL.Alerts.Replication.Enable {
-			replication.Register()
-			lagging.Register()
+			replication.Collect()
+			lagging.Collect()
 		}
 
 		if config.File.ProxySQL.Alerts.Status.Enable {
-			status.Register()
+			status.Collect()
 		}
 
 		if config.File.ProxySQL.Alerts.Errors.Enable {
-			errors.Register()
+			errors.Collect()
 		}
 
 		time.Sleep(config.File.General.Interval * time.Second)

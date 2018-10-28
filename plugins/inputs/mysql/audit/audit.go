@@ -13,7 +13,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
 )
 
-func Collect() {
+func Start() {
 	if config.File.MySQL.Inputs.AuditLog.Enable {
 		if config.File.General.Debug {
 			log.Debug("Load MySQL AuditLog")

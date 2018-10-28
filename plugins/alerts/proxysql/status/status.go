@@ -15,7 +15,7 @@ type Server struct {
 	StatusName string
 }
 
-func Register() {
+func Collect() {
 	var m = metrics.Load()
 	var s Server
 

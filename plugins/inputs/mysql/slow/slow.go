@@ -1,6 +1,3 @@
-// TODO:
-// - Move this package to inputs/parsers/mysqlslowlog
-
 package slow
 
 import (
@@ -13,7 +10,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
 )
 
-func Collect() {
+func Start() {
 	if config.File.MySQL.Inputs.SlowLog.Enable {
 		if config.File.General.Debug {
 			log.Debug("Load MySQL SlowLog")
