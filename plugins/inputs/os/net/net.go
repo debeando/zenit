@@ -6,10 +6,18 @@ import (
 
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/file"
+	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-func Collect() {
+type InputOSNet struct {}
+
+func (l *InputOSNet) Collect() {
+	if ! config.File.OS.Inputs.Net {
+		return
+	}
+
 	reGroups := regexp.MustCompile(`(\d+)`)
 	net := file.Read("/proc/net/dev")
 	lines := strings.Split(net, "\n")
@@ -35,4 +43,8 @@ func Collect() {
 			})
 		}
 	}
+}
+
+func init() {
+	loader.Add("InputOSNet", func() loader.Plugin { return &InputOSNet{} })
 }

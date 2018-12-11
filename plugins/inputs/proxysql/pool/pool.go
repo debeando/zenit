@@ -4,6 +4,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -41,7 +42,13 @@ const (
 	FROM stats.stats_mysql_connection_pool;`
 )
 
-func Collect() {
+type InputProxySQLPool struct {}
+
+func (l *InputProxySQLPool) Collect() {
+	if ! config.File.ProxySQL.Inputs.Pool {
+		return
+	}
+
 	conn, err := mysql.Connect(config.File.ProxySQL.DSN)
 	defer conn.Close()
 	if err != nil {
@@ -90,4 +97,8 @@ func Collect() {
 			},
 		})
 	}
+}
+
+func init() {
+	loader.Add("InputProxySQLPool", func() loader.Plugin { return &InputProxySQLPool{} })
 }

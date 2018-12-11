@@ -7,6 +7,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -35,7 +36,13 @@ FROM stats.stats_mysql_query_digest;`
 
 var re *regexp.Regexp
 
-func Collect() {
+type InputProxySQLQuery struct {}
+
+func (l *InputProxySQLQuery) Collect() {
+	if ! config.File.ProxySQL.Inputs.Queries {
+		return
+	}
+
 	re, _ = regexp.Compile(ReQuery)
 
 	conn, err := mysql.Connect(config.File.ProxySQL.DSN)
@@ -106,4 +113,8 @@ func GetTable(values []string) string {
 		return sql_sentence_objetcs[len(sql_sentence_objetcs)-1]
 	}
 	return "unknown"
+}
+
+func init() {
+	loader.Add("InputProxySQLQuery", func() loader.Plugin { return &InputProxySQLQuery{} })
 }

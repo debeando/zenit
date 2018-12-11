@@ -10,6 +10,7 @@ import (
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/alerts"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/plugins/outputs"
 
 	"github.com/kardianos/service"
 )
@@ -38,10 +39,11 @@ func (p *program) run() {
 
 	var wg sync.WaitGroup
 
-	wg.Add(2)
+	wg.Add(3)
 
 	go inputs.Plugins(&wg)
-	go alerts.Alerts(&wg)
+	go alerts.Plugins(&wg)
+	go outputs.Plugins(&wg)
 
 	wg.Wait()
 }

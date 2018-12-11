@@ -6,12 +6,19 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 const QuerySQLStatus = "SHOW GLOBAL STATUS"
 
-func Collect() {
+type MySQLStatus struct {}
+
+func (l *MySQLStatus) Collect() {
+	if ! config.File.MySQL.Inputs.Status {
+		return
+	}
+
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
@@ -42,4 +49,8 @@ func Collect() {
 			})
 		}
 	}
+}
+
+func init() {
+	loader.Add("MySQLStatus", func() loader.Plugin { return &MySQLStatus{} })
 }

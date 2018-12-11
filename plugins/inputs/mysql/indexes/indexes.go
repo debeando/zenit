@@ -6,6 +6,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -29,7 +30,13 @@ FROM INFORMATION_SCHEMA.STATISTICS
 WHERE TABLE_SCHEMA NOT IN ('mysql');`
 )
 
-func Collect() {
+type MySQLIndexes struct {}
+
+func (l *MySQLIndexes) Collect() {
+	if ! config.File.MySQL.Inputs.Indexes {
+		return
+	}
+
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
@@ -67,4 +74,8 @@ func Collect() {
 			},
 		})
 	}
+}
+
+func init() {
+	loader.Add("MySQLIndexes", func() loader.Plugin { return &MySQLIndexes{} })
 }

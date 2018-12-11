@@ -4,6 +4,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -26,7 +27,13 @@ WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schem
 ORDER BY table_schema, table_name;
 `
 
-func Collect() {
+type MySQLTables struct {}
+
+func (l *MySQLTables) Collect() {
+	if ! config.File.MySQL.Inputs.Tables {
+		return
+	}
+
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
@@ -62,4 +69,8 @@ func Collect() {
 				{"increment", t.increment}},
 		})
 	}
+}
+
+func init() {
+	loader.Add("MySQLTables", func() loader.Plugin { return &MySQLTables{} })
 }

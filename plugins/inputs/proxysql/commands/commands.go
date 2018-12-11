@@ -4,6 +4,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -27,7 +28,13 @@ type Command struct {
 
 const SQL = "SELECT * FROM stats_mysql_commands_counters;"
 
-func Collect() {
+type InputProxySQLCommands struct {}
+
+func (l *InputProxySQLCommands) Collect() {
+	if ! config.File.ProxySQL.Inputs.Commands {
+		return
+	}
+
 	conn, err := mysql.Connect(config.File.ProxySQL.DSN)
 	defer conn.Close()
 	if err != nil {
@@ -84,4 +91,8 @@ func Collect() {
 			},
 		})
 	}
+}
+
+func init() {
+	loader.Add("InputProxySQLCommands", func() loader.Plugin { return &InputProxySQLCommands{} })
 }

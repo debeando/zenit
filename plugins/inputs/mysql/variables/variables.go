@@ -6,12 +6,19 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 const QuerySQLVariables = "SHOW GLOBAL VARIABLES"
 
-func Collect() {
+type MySQLVariables struct {}
+
+func (l *MySQLVariables) Collect() {
+	if ! config.File.MySQL.Inputs.Variables {
+		return
+	}
+
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
@@ -38,4 +45,8 @@ func Collect() {
 			})
 		}
 	}
+}
+
+func init() {
+	loader.Add("MySQLVariables", func() loader.Plugin { return &MySQLVariables{} })
 }

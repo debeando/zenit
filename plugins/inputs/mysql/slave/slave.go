@@ -4,12 +4,19 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 const QuerySQLSlave = "SHOW SLAVE STATUS"
 
-func Collect() {
+type MySQLSlave struct {}
+
+func (l *MySQLSlave) Collect() {
+	if ! config.File.MySQL.Inputs.Status {
+		return
+	}
+
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
@@ -50,4 +57,8 @@ func Collect() {
 			}
 		}
 	}
+}
+
+func init() {
+	loader.Add("MySQLSlave", func() loader.Plugin { return &MySQLSlave{} })
 }

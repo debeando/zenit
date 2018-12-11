@@ -3,12 +3,20 @@ package disk
 import (
 	"strings"
 
+	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 
 	"github.com/shirou/gopsutil/disk"
 )
 
-func Collect() {
+type InputOSDisk struct {}
+
+func (l *InputOSDisk) Collect() {
+	if ! config.File.OS.Inputs.Disk {
+		return
+	}
+
 	devices, err := disk.Partitions(false)
 
 	if err != nil {
@@ -35,4 +43,8 @@ func Collect() {
 
 func GetDevice(s string) string {
 	return strings.Replace(s, "/dev/", "", -1)
+}
+
+func init() {
+	loader.Add("InputOSDisk", func() loader.Plugin { return &InputOSDisk{} })
 }

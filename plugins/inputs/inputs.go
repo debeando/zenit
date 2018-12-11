@@ -9,28 +9,31 @@ import (
 	"time"
 
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql"
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/indexes"
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/overflow"
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/slave"
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/status"
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/tables"
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/variables"
-	"github.com/swapbyt3s/zenit/plugins/inputs/os/cpu"
-	"github.com/swapbyt3s/zenit/plugins/inputs/os/disk"
-	"github.com/swapbyt3s/zenit/plugins/inputs/os/mem"
-	"github.com/swapbyt3s/zenit/plugins/inputs/os/net"
-	"github.com/swapbyt3s/zenit/plugins/inputs/os/sys"
-	"github.com/swapbyt3s/zenit/plugins/inputs/process"
-	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql"
-	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql/commands"
-	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql/pool"
-	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql/queries"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
-	"github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
-	"github.com/swapbyt3s/zenit/plugins/outputs/slack"
+
+	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
+	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
+
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/indexes"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/overflow"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/slave"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/status"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/tables"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/variables"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/os/cpu"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/os/disk"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/os/mem"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/os/net"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/os/sys"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/percona/deadlock"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/percona/delay"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/percona/kill"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/percona/osc"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/percona/xtrabackup"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/commands"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/pool"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/queries"
 )
 
 func Plugins(wg *sync.WaitGroup) {
@@ -43,79 +46,11 @@ func Plugins(wg *sync.WaitGroup) {
 		// Flush old metrics:
 		metrics.Load().Reset()
 
-		// Collect by OS:
-		if config.File.OS.Inputs.CPU {
-			cpu.Collect()
-		}
-		if config.File.OS.Inputs.Disk {
-			disk.Collect()
-		}
-		if config.File.OS.Inputs.Mem {
-			mem.Collect()
-		}
-		if config.File.OS.Inputs.Net {
-			net.Collect()
-		}
-		if config.File.OS.Inputs.Limits {
-			sys.Collect()
-		}
-
-		// Collect by MySQL:
-		if mysql.Check() {
-			if config.File.MySQL.Inputs.Indexes {
-				indexes.Collect()
+		for key := range loader.Plugins {
+			if creator, ok := loader.Plugins[key]; ok {
+				c := creator()
+				c.Collect()
 			}
-			if config.File.MySQL.Inputs.Overflow {
-				overflow.Collect()
-			}
-			if config.File.MySQL.Inputs.Slave {
-				slave.Collect()
-			}
-			if config.File.MySQL.Inputs.Status {
-				status.Collect()
-			}
-			if config.File.MySQL.Inputs.Tables {
-				tables.Collect()
-			}
-			if config.File.MySQL.Inputs.Variables {
-				variables.Collect()
-			}
-		}
-
-		// Collect by ProxySQL:
-		if proxysql.Check() {
-			if config.File.ProxySQL.Inputs.Commands {
-				commands.Collect()
-			}
-			if config.File.ProxySQL.Inputs.Pool {
-				pool.Collect()
-			}
-			if config.File.ProxySQL.Inputs.Queries {
-				queries.Collect()
-			}
-		}
-
-		// Collect by process:
-		if config.File.Process.Inputs.PerconaToolKitKill {
-			process.PerconaToolKitKill()
-		}
-		if config.File.Process.Inputs.PerconaToolKitDeadlockLogger {
-			process.PerconaToolKitDeadlockLogger()
-		}
-		if config.File.Process.Inputs.PerconaToolKitSlaveDelay {
-			process.PerconaToolKitSlaveDelay()
-		}
-		if config.File.Process.Inputs.PerconaToolKitOnlineSchemaChange {
-			process.PerconaToolKitOnlineSchemaChange()
-		}
-		if config.File.Process.Inputs.PerconaXtraBackup {
-			process.PerconaXtraBackup()
-		}
-		if config.File.Prometheus.Enable {
-			prometheus.Run()
-		}
-		if config.File.Slack.Enable {
-			slack.Run()
 		}
 
 		// Wait loop:

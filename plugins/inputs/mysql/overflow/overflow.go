@@ -1,3 +1,5 @@
+// Overflow collect the max value of Primary Key on table and verify the limit which Data Type.
+
 package overflow
 
 import (
@@ -9,6 +11,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -33,8 +36,13 @@ WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schem
 	querySQLMaxInt = "SELECT COALESCE(MAX(%s), 0) FROM %s.%s"
 )
 
-// Overflow collect the max value of Primary Key on table and verify the limit which Data Type.
-func Collect() {
+type MySQLOverflow struct {}
+
+func (l *MySQLOverflow) Collect() {
+	if ! config.File.MySQL.Inputs.Overflow {
+		return
+	}
+
 	conn, err := mysql.Connect(config.File.MySQL.DSN)
 	defer conn.Close()
 	if err != nil {
@@ -94,4 +102,8 @@ func (c *Column) Maximum() {
 
 func (c *Column) Percentage() {
 	c.percent = common.Percentage(c.current, float64(c.maximum))
+}
+
+func init() {
+	loader.Add("MySQLOverflow", func() loader.Plugin { return &MySQLOverflow{} })
 }

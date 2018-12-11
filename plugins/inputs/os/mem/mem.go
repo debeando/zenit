@@ -1,12 +1,20 @@
 package mem
 
 import (
+	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 
 	"github.com/shirou/gopsutil/mem"
 )
 
-func Collect() {
+type InputOSMem struct {}
+
+func (l *InputOSMem) Collect() {
+	if ! config.File.OS.Inputs.Mem {
+		return
+	}
+
 	vmStat, err := mem.VirtualMemory()
 
 	if err == nil {
@@ -18,4 +26,8 @@ func Collect() {
 			Values: vmStat.UsedPercent,
 		})
 	}
+}
+
+func init() {
+	loader.Add("InputOSMem", func() loader.Plugin { return &InputOSMem{} })
 }
