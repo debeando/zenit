@@ -6,11 +6,14 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-func Collect() {
+type MySQLConnections struct {}
+
+func (l *MySQLConnections) Collect() {
 	if ! config.File.MySQL.Inputs.Variables {
 		log.Info("Require to enable MySQL Variables in config file.")
 		return
@@ -45,4 +48,8 @@ func Collect() {
 		percentage,
 		message,
 	)
+}
+
+func init() {
+	loader.Add("MySQLConnections", func() loader.Plugin { return &MySQLConnections{} })
 }

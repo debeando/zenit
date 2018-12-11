@@ -5,6 +5,7 @@ import (
 
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
@@ -14,7 +15,9 @@ type Server struct {
 	Errors int
 }
 
-func Collect() {
+type ProxySQLErrors struct {}
+
+func (l *ProxySQLErrors) Collect() {
 	var m = metrics.Load()
 	var s Server
 
@@ -55,4 +58,8 @@ func Collect() {
 
 		}
 	}
+}
+
+func init() {
+	loader.Add("ProxySQLErrors", func() loader.Plugin { return &ProxySQLErrors{} })
 }

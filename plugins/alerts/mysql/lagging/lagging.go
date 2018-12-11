@@ -6,11 +6,14 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-func Collect() {
+type MySQLLagging struct {}
+
+func (l *MySQLLagging) Collect() {
 	if ! config.File.MySQL.Inputs.Slave {
 		log.Info("Require to enable MySQL Slave Status in config file.")
 		return
@@ -36,4 +39,8 @@ func Collect() {
 		lagging,
 		message,
 	)
+}
+
+func init() {
+	loader.Add("MySQLLagging", func() loader.Plugin { return &MySQLLagging{} })
 }

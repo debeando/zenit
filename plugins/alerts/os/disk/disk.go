@@ -7,10 +7,13 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
-func Collect() {
+type OSDisk struct {}
+
+func (l *OSDisk) Collect() {
 	if ! config.File.OS.Alerts.Disk.Enable {
 		log.Info("Require to enable OS Disk in config file.")
 		return
@@ -49,4 +52,8 @@ func Collect() {
 			}
 		}
 	}
+}
+
+func init() {
+	loader.Add("OSDisk", func() loader.Plugin { return &OSDisk{} })
 }

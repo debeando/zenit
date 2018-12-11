@@ -7,10 +7,13 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
 )
 
-func Collect() {
+type OSMEM struct {}
+
+func (l *OSMEM) Collect() {
 	if ! config.File.OS.Alerts.MEM.Enable {
 		log.Info("Require to enable OS MEM in config file.")
 		return
@@ -36,4 +39,8 @@ func Collect() {
 		percentage,
 		message,
 	)
+}
+
+func init() {
+	loader.Add("OSMEM", func() loader.Plugin { return &OSMEM{} })
 }
