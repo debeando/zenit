@@ -41,12 +41,14 @@ func (l *MySQLIndexes) Collect() {
 	defer conn.Close()
 	if err != nil {
 		log.Error("MySQL:Indexes - Impossible to connect: " + err.Error())
+		return
 	}
 
 	rows, err := conn.Query(querySQLIndexes)
 	defer rows.Close()
 	if err != nil {
 		log.Error("MySQL:Indexes - Impossible to execute query: " + err.Error())
+		return
 	}
 
 	var a = metrics.Load()
@@ -70,12 +72,12 @@ func (l *MySQLIndexes) Collect() {
 				{"column", strings.ToLower(i.column)},
 			},
 			Values: []metrics.Value{
-				{"cardinality", i.cardinality},
+				{"cardinality", uint(i.cardinality)},
 			},
 		})
 	}
 }
 
 func init() {
-	loader.Add("MySQLIndexes", func() loader.Plugin { return &MySQLIndexes{} })
+	loader.Add("InputMySQLIndexes", func() loader.Plugin { return &MySQLIndexes{} })
 }

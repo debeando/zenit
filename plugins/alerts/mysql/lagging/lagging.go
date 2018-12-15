@@ -42,5 +42,5 @@ func (l *MySQLLagging) Collect() {
 }
 
 func init() {
-	loader.Add("MySQLLagging", func() loader.Plugin { return &MySQLLagging{} })
+	loader.Add("AlertMySQLLagging", func() loader.Plugin { return &MySQLLagging{} })
 }

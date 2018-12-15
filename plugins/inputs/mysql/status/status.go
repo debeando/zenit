@@ -23,12 +23,14 @@ func (l *MySQLStatus) Collect() {
 	defer conn.Close()
 	if err != nil {
 		log.Error("MySQL:Status - Impossible to connect: " + err.Error())
+		return
 	}
 
 	rows, err := conn.Query(QuerySQLStatus)
 	defer rows.Close()
 	if err != nil {
 		log.Error("MySQL:Status - Impossible to execute query: " + err.Error())
+		return
 	}
 
 	var a = metrics.Load()
@@ -52,5 +54,5 @@ func (l *MySQLStatus) Collect() {
 }
 
 func init() {
-	loader.Add("MySQLStatus", func() loader.Plugin { return &MySQLStatus{} })
+	loader.Add("InputMySQLStatus", func() loader.Plugin { return &MySQLStatus{} })
 }

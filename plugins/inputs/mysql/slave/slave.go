@@ -21,12 +21,14 @@ func (l *MySQLSlave) Collect() {
 	defer conn.Close()
 	if err != nil {
 		log.Error("MySQL:Slave - Impossible to connect: " + err.Error())
+		return
 	}
 
 	rows, err := conn.Query(QuerySQLSlave)
 	defer rows.Close()
 	if err != nil {
 		log.Error("MySQL:Slave - Impossible to execute query: " + err.Error())
+		return
 	}
 
 	m := metrics.Load()
@@ -60,5 +62,5 @@ func (l *MySQLSlave) Collect() {
 }
 
 func init() {
-	loader.Add("MySQLSlave", func() loader.Plugin { return &MySQLSlave{} })
+	loader.Add("InputMySQLSlave", func() loader.Plugin { return &MySQLSlave{} })
 }

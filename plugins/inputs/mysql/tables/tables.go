@@ -38,12 +38,14 @@ func (l *MySQLTables) Collect() {
 	defer conn.Close()
 	if err != nil {
 		log.Error("MySQL:Tables - Impossible to connect: " + err.Error())
+		return
 	}
 
 	rows, err := conn.Query(QuerySQLTable)
 	defer rows.Close()
 	if err != nil {
 		log.Error("MySQL:Tables - Impossible to execute query: " + err.Error())
+		return
 	}
 
 	var a = metrics.Load()
@@ -64,13 +66,13 @@ func (l *MySQLTables) Collect() {
 				{"schema", t.schema},
 				{"table", t.table}},
 			Values: []metrics.Value{
-				{"size", t.size},
-				{"rows", t.rows},
-				{"increment", t.increment}},
+				{"size", uint(t.size)},
+				{"rows", uint(t.rows)},
+				{"increment", uint(t.increment)}},
 		})
 	}
 }
 
 func init() {
-	loader.Add("MySQLTables", func() loader.Plugin { return &MySQLTables{} })
+	loader.Add("InputMySQLTables", func() loader.Plugin { return &MySQLTables{} })
 }

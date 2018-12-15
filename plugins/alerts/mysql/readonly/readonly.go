@@ -48,5 +48,5 @@ func (l *MySQLReadOnly) Collect() {
 }
 
 func init() {
-	loader.Add("MySQLReadOnly", func() loader.Plugin { return &MySQLReadOnly{} })
+	loader.Add("AlertMySQLReadOnly", func() loader.Plugin { return &MySQLReadOnly{} })
 }

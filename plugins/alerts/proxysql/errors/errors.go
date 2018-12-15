@@ -61,5 +61,5 @@ func (l *ProxySQLErrors) Collect() {
 }
 
 func init() {
-	loader.Add("ProxySQLErrors", func() loader.Plugin { return &ProxySQLErrors{} })
+	loader.Add("AlertProxySQLErrors", func() loader.Plugin { return &ProxySQLErrors{} })
 }

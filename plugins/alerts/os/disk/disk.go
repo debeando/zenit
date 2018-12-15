@@ -55,5 +55,5 @@ func (l *OSDisk) Collect() {
 }
 
 func init() {
-	loader.Add("OSDisk", func() loader.Plugin { return &OSDisk{} })
+	loader.Add("AlertOSDisk", func() loader.Plugin { return &OSDisk{} })
 }

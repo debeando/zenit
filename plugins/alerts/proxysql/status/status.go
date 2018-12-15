@@ -79,5 +79,5 @@ func Status(s string) int {
 }
 
 func init() {
-	loader.Add("ProxySQLStatus", func() loader.Plugin { return &ProxySQLStatus{} })
+	loader.Add("AlertProxySQLStatus", func() loader.Plugin { return &ProxySQLStatus{} })
 }

@@ -42,5 +42,5 @@ func (l *OSCPU) Collect() {
 }
 
 func init() {
-	loader.Add("OSCPU", func() loader.Plugin { return &OSCPU{} })
+	loader.Add("AlertOSCPU", func() loader.Plugin { return &OSCPU{} })
 }

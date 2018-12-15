@@ -7,6 +7,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql"
 	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
@@ -40,6 +41,10 @@ type InputProxySQLQuery struct {}
 
 func (l *InputProxySQLQuery) Collect() {
 	if ! config.File.ProxySQL.Inputs.Queries {
+		return
+	}
+
+	if ! proxysql.Check() {
 		return
 	}
 

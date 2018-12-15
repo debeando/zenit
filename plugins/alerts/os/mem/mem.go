@@ -42,5 +42,5 @@ func (l *OSMEM) Collect() {
 }
 
 func init() {
-	loader.Add("OSMEM", func() loader.Plugin { return &OSMEM{} })
+	loader.Add("AlertOSMEM", func() loader.Plugin { return &OSMEM{} })
 }

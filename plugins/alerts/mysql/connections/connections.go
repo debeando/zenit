@@ -51,5 +51,5 @@ func (l *MySQLConnections) Collect() {
 }
 
 func init() {
-	loader.Add("MySQLConnections", func() loader.Plugin { return &MySQLConnections{} })
+	loader.Add("AlertMySQLConnections", func() loader.Plugin { return &MySQLConnections{} })
 }

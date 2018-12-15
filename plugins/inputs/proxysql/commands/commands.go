@@ -4,6 +4,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql"
 	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
@@ -32,6 +33,10 @@ type InputProxySQLCommands struct {}
 
 func (l *InputProxySQLCommands) Collect() {
 	if ! config.File.ProxySQL.Inputs.Commands {
+		return
+	}
+
+	if ! proxysql.Check() {
 		return
 	}
 

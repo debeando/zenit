@@ -55,5 +55,5 @@ func (l *MySQLReplication) Collect() {
 }
 
 func init() {
-	loader.Add("MySQLReplication", func() loader.Plugin { return &MySQLReplication{} })
+	loader.Add("AlertMySQLReplication", func() loader.Plugin { return &MySQLReplication{} })
 }

@@ -47,12 +47,14 @@ func (l *MySQLOverflow) Collect() {
 	defer conn.Close()
 	if err != nil {
 		log.Error("MySQL:Overflow - Impossible to connect: " + err.Error())
+		return
 	}
 
 	rows, err := conn.Query(querySQLColumns)
 	defer rows.Close()
 	if err != nil {
 		log.Error("MySQL:Overflow - Impossible to execute query: " + err.Error())
+		return
 	}
 
 	var a = metrics.Load()
@@ -105,5 +107,5 @@ func (c *Column) Percentage() {
 }
 
 func init() {
-	loader.Add("MySQLOverflow", func() loader.Plugin { return &MySQLOverflow{} })
+	loader.Add("InputMySQLOverflow", func() loader.Plugin { return &MySQLOverflow{} })
 }

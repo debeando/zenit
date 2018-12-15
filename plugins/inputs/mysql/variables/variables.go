@@ -23,12 +23,14 @@ func (l *MySQLVariables) Collect() {
 	defer conn.Close()
 	if err != nil {
 		log.Error("MySQL:Variables - Impossible to connect: " + err.Error())
+		return
 	}
 
 	rows, err := conn.Query(QuerySQLVariables)
 	defer rows.Close()
 	if err != nil {
 		log.Error("MySQL:Variables - Impossible to execute query: " + err.Error())
+		return
 	}
 
 	var a = metrics.Load()
@@ -48,5 +50,5 @@ func (l *MySQLVariables) Collect() {
 }
 
 func init() {
-	loader.Add("MySQLVariables", func() loader.Plugin { return &MySQLVariables{} })
+	loader.Add("InputMySQLVariables", func() loader.Plugin { return &MySQLVariables{} })
 }
