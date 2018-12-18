@@ -7,7 +7,6 @@ general:
 mysql:
   dsn: root@tcp(127.0.0.1:3306)/
   inputs:
-    indexes: true
     overflow: true
     slave: true
     status: true
@@ -40,7 +39,7 @@ mysql:
       duration: 30 # Seconds
 
 proxysql:
-  dsn: radminuser:radminpass@tcp(127.0.0.1:6032)/
+  dsn: proxysql:admin@tcp(127.0.0.1:6032)/
   inputs:
     commands: true
     pool: true

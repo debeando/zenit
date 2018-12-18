@@ -30,7 +30,6 @@ type All struct {
 	MySQL struct {
 		DSN string `yaml:"dsn"`
 		Inputs struct {
-			Indexes   bool `yaml:"indexes"`
 			Overflow  bool `yaml:"overflow"`
 			Slave     bool `yaml:"slave"`
 			Status    bool `yaml:"status"`

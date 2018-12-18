@@ -1,5 +1,3 @@
-// Overflow collect the max value of Primary Key on table and verify the limit which Data Type.
-
 package overflow
 
 import (
@@ -15,25 +13,22 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-// Column is a struct to save result of query.
 type Column struct {
-	schema   string
-	table    string
-	column   string
 	dataType string
 	unsigned bool
-	current  float64
+	current  uint64
 	percent  float64
 	maximum  uint64
 }
 
 const (
-	querySQLColumns = `SELECT table_schema, table_name, column_name, SUBSTRING_INDEX(column_type, '(', 1) AS column_type
-FROM information_schema.columns
-WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schema','percona')
-  AND column_type LIKE '%int%'
-  AND column_key = 'PRI'`
-	querySQLMaxInt = "SELECT COALESCE(MAX(%s), 0) FROM %s.%s"
+	queryFields = `SELECT DISTINCT c.table_schema, c.table_name, c.column_name, SUBSTRING_INDEX(c.column_type, '(', 1) AS data_type
+FROM information_schema.columns c
+WHERE c.table_schema NOT IN ('mysql','sys','performance_schema','information_schema','percona')
+  AND c.column_type LIKE '%int%'
+  AND c.column_key = 'PRI'
+ORDER BY c.table_schema, c.table_name, c.column_name`
+	queryMax = "SELECT COALESCE(MAX(%s), 0) AS max FROM %s.%s"
 )
 
 type MySQLOverflow struct {}
@@ -43,50 +38,56 @@ func (l *MySQLOverflow) Collect() {
 		return
 	}
 
-	conn, err := mysql.Connect(config.File.MySQL.DSN)
-	defer conn.Close()
-	if err != nil {
-		log.Error("MySQL:Overflow - Impossible to connect: " + err.Error())
-		return
-	}
-
-	rows, err := conn.Query(querySQLColumns)
-	defer rows.Close()
-	if err != nil {
-		log.Error("MySQL:Overflow - Impossible to execute query: " + err.Error())
-		return
-	}
-
 	var a = metrics.Load()
+	var m = mysql.GetInstance("mysql")
+	m.Connect(config.File.MySQL.DSN)
 
-	for rows.Next() {
-		var c Column
+	rows := m.Query(queryFields)
 
-		rows.Scan(
-			&c.schema,
-			&c.table,
-			&c.column,
-			&c.dataType)
+	for row := range rows {
+		max := m.Query(
+			fmt.Sprintf(
+				queryMax,
+				rows[row]["column_name"],
+				rows[row]["table_schema"],
+				rows[row]["table_name"],
+			),
+		)
 
-		err = conn.QueryRow(fmt.Sprintf(querySQLMaxInt, c.column, c.schema, c.table)).Scan(&c.current)
-		if err != nil {
-			log.Error("MySQL:Overflow - Impossible to execute query: " + err.Error())
+		if value, ok := mysql.ParseValue(max[0]["max"]); ok {
+			var c Column
+			c.dataType = rows[row]["data_type"]
+			c.current = value
+
+			c.Unsigned()
+			c.Maximum()
+			c.Percentage()
+
+			a.Add(metrics.Metric{
+				Key: "zenit_mysql_overflow",
+				Tags: []metrics.Tag{
+					{"schema", rows[row]["table_schema"],},
+					{"table", rows[row]["table_name"]},
+					{"type", "overflow"},
+					{"data_type", c.dataType},
+					{"unsigned", strconv.FormatBool(c.unsigned)}},
+				Values: c.percent,
+			})
+
+			log.Debug(
+				fmt.Sprintf("Plugin - InputMySQLOverflow - %s.%s.%s(%s,%t)=%d [(%d/%d)*100=%.2f%%]",
+					rows[row]["table_schema"],
+					rows[row]["table_name"],
+					rows[row]["column_name"],
+					c.dataType,
+					c.unsigned,
+					value,
+					c.current,
+					c.maximum,
+					c.percent,
+				),
+			)
 		}
-
-		c.Unsigned()
-		c.Maximum()
-		c.Percentage()
-
-		a.Add(metrics.Metric{
-			Key: "zenit_mysql_stats_overflow",
-			Tags: []metrics.Tag{
-				{"schema", c.schema},
-				{"table", c.table},
-				{"type", "overflow"},
-				{"data_type", c.dataType},
-				{"unsigned", strconv.FormatBool(c.unsigned)}},
-			Values: c.percent,
-		})
 	}
 }
 
@@ -103,7 +104,7 @@ func (c *Column) Maximum() {
 }
 
 func (c *Column) Percentage() {
-	c.percent = common.Percentage(c.current, float64(c.maximum))
+	c.percent = common.Percentage(float64(c.current), float64(c.maximum))
 }
 
 func init() {

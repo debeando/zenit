@@ -15,6 +15,10 @@ import (
 type MySQLReadOnly struct {}
 
 func (l *MySQLReadOnly) Collect() {
+	if ! config.File.MySQL.Alerts.ReadOnly.Enable {
+		return
+	}
+
 	if ! config.File.MySQL.Inputs.Variables {
 		log.Info("Require to enable MySQL Variables in config file.")
 		return

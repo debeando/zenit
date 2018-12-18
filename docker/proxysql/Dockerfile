@@ -23,7 +23,8 @@ ENV PERCONA_VERSION 5.5
 # -----------------------------------------------------------------------------
 # Install additional packages
 # -----------------------------------------------------------------------------
-RUN apt-get install -y vim
+RUN apt-get install -y vim wget htop stress
+RUN apt-get install -y curl
 
 # -----------------------------------------------------------------------------
 # Install ProxySQL packages

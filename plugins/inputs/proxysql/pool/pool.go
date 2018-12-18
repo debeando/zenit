@@ -1,31 +1,16 @@
 package pool
 
 import (
+	"fmt"
+
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql"
 	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-type Pool struct {
-	group         string
-	serverHost    string
-	serverPort    uint
-	status        string
-	connUsed      uint
-	connFree      uint
-	connOK        uint
-	connERR       uint
-	queries       uint
-	bytesDataSent uint
-	bytesDataRecv uint
-	latency       uint
-}
-
-const (
-	SQL = `SELECT CASE
+const querySQLPool = `SELECT CASE
 			WHEN hostgroup IN (SELECT writer_hostgroup FROM main.mysql_replication_hostgroups) THEN 'writer'
 			WHEN hostgroup IN (SELECT reader_hostgroup FROM main.mysql_replication_hostgroups) THEN 'reader'
 		END AS 'group',
@@ -41,7 +26,6 @@ const (
 		Bytes_data_recv,
 		Latency_us
 	FROM stats.stats_mysql_connection_pool;`
-)
 
 type InputProxySQLPool struct {}
 
@@ -50,57 +34,33 @@ func (l *InputProxySQLPool) Collect() {
 		return
 	}
 
-	if ! proxysql.Check() {
-		return
-	}
+	var a = metrics.Load()
+	var p = mysql.GetInstance("proxysql")
+	p.Connect(config.File.ProxySQL.DSN)
 
-	conn, err := mysql.Connect(config.File.ProxySQL.DSN)
-	defer conn.Close()
-	if err != nil {
-		log.Error("ProxySQL - Impossible to connect: " + err.Error())
-	}
+	rows := p.Query(querySQLPool)
 
-	rows, err := conn.Query(SQL)
-	defer rows.Close()
-	if err != nil {
-		log.Error("ProxySQL - Impossible to execute query: " + err.Error())
-	}
-
-	for rows.Next() {
-		var q Pool
-
-		rows.Scan(
-			&q.group,
-			&q.serverHost,
-			&q.serverPort,
-			&q.status,
-			&q.connUsed,
-			&q.connFree,
-			&q.connOK,
-			&q.connERR,
-			&q.queries,
-			&q.bytesDataSent,
-			&q.bytesDataRecv,
-			&q.latency)
-
-		metrics.Load().Add(metrics.Metric{
+	for i := range rows {
+		a.Add(metrics.Metric{
 			Key: "zenit_proxysql_connection_pool",
 			Tags: []metrics.Tag{
-				{"group", q.group},
-				{"host", q.serverHost},
+				{"group", rows[i]["group"]},
+				{"host", rows[i]["srv_host"]},
 			},
 			Values: []metrics.Value{
-				{"status", q.status},
-				{"used", q.connUsed},
-				{"free", q.connFree},
-				{"ok", q.connOK},
-				{"errors", q.connERR},
-				{"queries", q.queries},
-				{"tx", q.bytesDataSent},
-				{"rx", q.bytesDataRecv},
-				{"latency", q.latency},
+				{"status", rows[i]["status"]},
+				{"used", rows[i]["ConnUsed"]},
+				{"free", rows[i]["ConnFree"]},
+				{"ok", rows[i]["ConnOK"]},
+				{"errors", rows[i]["ConnERR"]},
+				{"queries", rows[i]["Queries"]},
+				{"tx", rows[i]["Bytes_data_sent"]},
+				{"rx", rows[i]["Bytes_data_recv"]},
+				{"latency", rows[i]["Latency_us"]},
 			},
 		})
+
+		log.Debug(fmt.Sprintf("Plugin - InputProxySQLPool - %#v", rows[i]))
 	}
 }
 

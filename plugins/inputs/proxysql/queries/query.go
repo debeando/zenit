@@ -1,13 +1,13 @@
 package queries
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/inputs/proxysql"
 	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
@@ -24,7 +24,7 @@ type Query struct {
 
 const (
 	ReQuery = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z0-9._]+)`
-	SQL = `SELECT CASE
+	querySQDigestL = `SELECT CASE
          WHEN hostgroup IN (SELECT writer_hostgroup FROM main.mysql_replication_hostgroups) THEN 'writer'
          WHEN hostgroup IN (SELECT reader_hostgroup FROM main.mysql_replication_hostgroups) THEN 'reader'
        END AS 'group',
@@ -44,51 +44,43 @@ func (l *InputProxySQLQuery) Collect() {
 		return
 	}
 
-	if ! proxysql.Check() {
-		return
-	}
-
 	re, _ = regexp.Compile(ReQuery)
+	var a = metrics.Load()
+	var p = mysql.GetInstance("proxysql")
+	p.Connect(config.File.ProxySQL.DSN)
 
-	conn, err := mysql.Connect(config.File.ProxySQL.DSN)
-	defer conn.Close()
-	if err != nil {
-		log.Error("ProxySQL - Impossible to connect: " + err.Error())
-	}
+	rows:= p.Query(querySQDigestL)
 
-	rows, err := conn.Query(SQL)
-	defer rows.Close()
-	if err != nil {
-		log.Error("ProxySQL - Impossible to execute query: " + err.Error())
-	}
+	for i := range rows {
+		table, command := Match(rows[i]["digest_text"])
 
-	for rows.Next() {
-		var q Query
-
-		rows.Scan(
-			&q.group,
-			&q.schema,
-			&q.digest,
-			&q.count,
-			&q.sum)
-
-		if len(q.digest) > 0 {
-			table, command := Match(q.digest)
-
-			metrics.Load().Add(metrics.Metric{
-				Key: "zenit_proxysql_queries",
-				Tags: []metrics.Tag{
-					{"group", q.group},
-					{"schema", q.schema},
-					{"table", table},
-					{"command", command},
-				},
-				Values: []metrics.Value{
-					{"count", q.count},
-					{"sum", q.sum},
-				},
-			})
+		if table == "unknown" || command == "unknown" {
+			continue
 		}
+
+		a.Add(metrics.Metric{
+			Key: "zenit_proxysql_queries",
+			Tags: []metrics.Tag{
+				{"group", rows[i]["group"]},
+				{"schema", rows[i]["schemaname"]},
+				{"table", table},
+				{"command", command},
+			},
+			Values: []metrics.Value{
+				{"count", rows[i]["count_star"]},
+				{"sum", rows[i]["sum_time"]},
+			},
+		})
+
+		log.Debug(
+			fmt.Sprintf("Plugin - InputProxySQLQuery - (%s)%s.%s %s=%s",
+				rows[i]["group"],
+				rows[i]["schemaname"],
+				table,
+				command,
+				rows[i]["count_star"],
+			),
+		)
 	}
 }
 

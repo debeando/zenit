@@ -1,11 +1,13 @@
 package tables
 
 import (
-	"github.com/swapbyt3s/zenit/common/log"
+	// "fmt"
+
+	// "github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/loader"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	// "github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 type Table struct {
@@ -16,7 +18,7 @@ type Table struct {
 	increment float64
 }
 
-const QuerySQLTable = `
+const querySQLTable = `
 SELECT table_schema AS 'schema',
        table_name AS 'table',
        data_length + index_length AS 'size',
@@ -34,43 +36,35 @@ func (l *MySQLTables) Collect() {
 		return
 	}
 
-	conn, err := mysql.Connect(config.File.MySQL.DSN)
-	defer conn.Close()
-	if err != nil {
-		log.Error("MySQL:Tables - Impossible to connect: " + err.Error())
-		return
-	}
+	var m = mysql.GetInstance("mysql")
+	m.Connect(config.File.MySQL.DSN)
 
-	rows, err := conn.Query(QuerySQLTable)
-	defer rows.Close()
-	if err != nil {
-		log.Error("MySQL:Tables - Impossible to execute query: " + err.Error())
-		return
-	}
+	m.Query(querySQLTable)
+	// fmt.Printf("%#v", rows)
 
-	var a = metrics.Load()
-
-	for rows.Next() {
-		var t Table
-
-		rows.Scan(
-			&t.schema,
-			&t.table,
-			&t.size,
-			&t.rows,
-			&t.increment)
-
-		a.Add(metrics.Metric{
-			Key: "zenit_mysql_stats_tables",
-			Tags: []metrics.Tag{
-				{"schema", t.schema},
-				{"table", t.table}},
-			Values: []metrics.Value{
-				{"size", uint(t.size)},
-				{"rows", uint(t.rows)},
-				{"increment", uint(t.increment)}},
-		})
-	}
+//	var a = metrics.Load()
+//
+//	for rows.Next() {
+//		var t Table
+//
+//		rows.Scan(
+//			&t.schema,
+//			&t.table,
+//			&t.size,
+//			&t.rows,
+//			&t.increment)
+//
+//		a.Add(metrics.Metric{
+//			Key: "zenit_mysql_stats_tables",
+//			Tags: []metrics.Tag{
+//				{"schema", t.schema},
+//				{"table", t.table}},
+//			Values: []metrics.Value{
+//				{"size", uint(t.size)},
+//				{"rows", uint(t.rows)},
+//				{"increment", uint(t.increment)}},
+//		})
+//	}
 }
 
 func init() {

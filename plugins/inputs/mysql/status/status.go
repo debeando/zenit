@@ -1,7 +1,7 @@
 package status
 
 import (
-	"database/sql"
+	"fmt"
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
@@ -10,7 +10,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-const QuerySQLStatus = "SHOW GLOBAL STATUS"
+const query = "SHOW GLOBAL STATUS"
 
 type MySQLStatus struct {}
 
@@ -19,36 +19,21 @@ func (l *MySQLStatus) Collect() {
 		return
 	}
 
-	conn, err := mysql.Connect(config.File.MySQL.DSN)
-	defer conn.Close()
-	if err != nil {
-		log.Error("MySQL:Status - Impossible to connect: " + err.Error())
-		return
-	}
-
-	rows, err := conn.Query(QuerySQLStatus)
-	defer rows.Close()
-	if err != nil {
-		log.Error("MySQL:Status - Impossible to execute query: " + err.Error())
-		return
-	}
-
 	var a = metrics.Load()
-	var k string
-	var v sql.RawBytes
+	var m = mysql.GetInstance("mysql")
+	m.Connect(config.File.MySQL.DSN)
 
-	for rows.Next() {
-		err = rows.Scan(&k, &v)
-		if err != nil {
-			log.Error("MySQL:Slave - Error: " + err.Error())
-		}
+	rows := m.Query(query)
 
-		if value, ok := mysql.ParseValue(v); ok {
+	for i := range rows {
+		if value, ok := mysql.ParseValue(rows[i]["Value"]); ok {
 			a.Add(metrics.Metric{
 				Key:    "zenit_mysql_status",
-				Tags:   []metrics.Tag{{"name", k}},
+				Tags:   []metrics.Tag{{"name", rows[i]["Variable_name"]}},
 				Values: value,
 			})
+
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLStatus - %s=%d", rows[i]["Variable_name"], value))
 		}
 	}
 }
