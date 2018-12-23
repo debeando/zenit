@@ -37,7 +37,7 @@ func (l *MySQLTables) Collect() {
 
 	for i := range rows {
 		a.Add(metrics.Metric{
-			Key: "zenit_mysql_stats_tables",
+			Key: "zenit_mysql_tables",
 			Tags: []metrics.Tag{
 				{"schema", rows[i]["schema"]},
 				{"table", rows[i]["table"]},
