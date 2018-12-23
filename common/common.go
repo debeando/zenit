@@ -17,9 +17,9 @@ import (
 )
 
 func PGrep(cmd string) int {
-	_, exitcode := ExecCommand("/usr/bin/pgrep -x '" + cmd + "' > /dev/null")
+	stdout, _ := ExecCommand("/usr/bin/pgrep -f '" + cmd + "'")
 
-	return exitcode
+	return StringToInt(stdout)
 }
 
 func GetUInt64FromFile(path string) uint64 {
@@ -129,12 +129,12 @@ func Escape(text string) string {
 
 func ExecCommand(cmd string) (stdout string, exitcode int) {
 	out, err := exec.Command("/bin/bash", "-c", cmd).Output()
-	if err != nil {
-		if exitError, ok := err.(*exec.ExitError); ok {
-			ws := exitError.Sys().(syscall.WaitStatus)
-			exitcode = ws.ExitStatus()
-		}
+
+	if exitError, ok := err.(*exec.ExitError); ok {
+		ws := exitError.Sys().(syscall.WaitStatus)
+		exitcode = ws.ExitStatus()
 	}
+
 	stdout = string(out[:])
 	return
 }

@@ -7,8 +7,24 @@ import (
 )
 
 func TestParseValue(t *testing.T) {
+	if value, ok := mysql.ParseValue("yes"); !ok || value != 1 {
+		t.Error("Expected: Found Parse and value = 1.")
+	}
+
+	if value, ok := mysql.ParseValue("Yes"); !ok || value != 1 {
+		t.Error("Expected: Found Parse and value = 1.")
+	}
+
 	if value, ok := mysql.ParseValue("YES"); !ok || value != 1 {
 		t.Error("Expected: Found Parse and value = 1.")
+	}
+
+	if value, ok := mysql.ParseValue("no"); !ok || value != 0 {
+		t.Error("Expected: Found Parse and value = 0.")
+	}
+
+	if value, ok := mysql.ParseValue("No"); !ok || value != 0 {
+		t.Error("Expected: Found Parse and value = 0.")
 	}
 
 	if value, ok := mysql.ParseValue("NO"); !ok || value != 0 {

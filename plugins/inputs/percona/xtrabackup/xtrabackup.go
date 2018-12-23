@@ -1,8 +1,10 @@
-// TODO: Read from zenit.yaml the list of process to check.
 package process
 
 import (
+	"fmt"
+
 	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
@@ -15,12 +17,23 @@ func (l *InputsPerconaXtraBackup) Collect() {
 		return
 	}
 
+	var pid = common.PGrep("xtrabackup")
+	var value = 0
+
+	if pid > 0 {
+		value = 1
+	}
+
 	metrics.Load().Add(metrics.Metric{
 		Key: "zenit_os",
-		Tags: []metrics.Tag{{"system", "linux"},
-			{"process", "xtrabackup"}},
-		Values: common.PGrep("xtrabackup") ^ 1,
+		Tags: []metrics.Tag{
+			{"system", "linux"},
+			{"process", "xtrabackup"},
+		},
+		Values: value,
 	})
+
+	log.Debug(fmt.Sprintf("Plugin - InputsPerconaOSC - %d", value))
 }
 
 func init() {

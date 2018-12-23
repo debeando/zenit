@@ -37,6 +37,20 @@ func (l *MySQLReplication) Collect() {
 	value = metrics.FetchOne("zenit_mysql_slave", "name", "Last_SQL_Errno")
 	var sqlError = common.InterfaceToInt(value)
 
+	if sqlRunning == 0 {
+		var delay = metrics.FetchOne("zenit_os", "process", "pt_slave_delay")
+
+		if delay == -1 {
+			return
+		}
+
+		if delay == 1 {
+			log.Debug("Plugin - AlertMySQLReplication - Is running pt-slave-delay, skip check!.")
+
+			return
+		}
+	}
+
 	if sqlError == -1 {
 		return
 	}
@@ -56,6 +70,10 @@ func (l *MySQLReplication) Collect() {
 		running,
 		message,
 	)
+
+	log.Debug(fmt.Sprintf("Plugin - AlertMySQLReplication - Slave_IO_Running=%d", ioRunning))
+	log.Debug(fmt.Sprintf("Plugin - AlertMySQLReplication - Slave_SQL_Running=%d", sqlRunning))
+	log.Debug(fmt.Sprintf("Plugin - AlertMySQLReplication - Last_SQL_Errno=%d", sqlError))
 }
 
 func init() {

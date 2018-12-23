@@ -1,8 +1,3 @@
-// TODO: Add more tests;
-// - example of process use.
-// - metrics.Value by another data type.
-// - test for Reset().
-
 package metrics_test
 
 import (
@@ -92,4 +87,34 @@ func TestAccumulator(t *testing.T) {
 	if a.Count() != 2 {
 		t.Error("Expected 1")
 	}
+}
+
+func TestFetchOne(t *testing.T) {
+	a.Add(metrics.Metric{
+		Key: "test_values",
+		Tags: []metrics.Tag{
+			{"name", "fulano"},
+		},
+		Values: 1,
+	})
+
+	a.Add(metrics.Metric{
+		Key: "test_values",
+		Tags: []metrics.Tag{
+			{"name", "mengano"},
+		},
+		Values: 2,
+	})
+
+	a.Add(metrics.Metric{
+		Key: "test_values",
+		Tags: []metrics.Tag{
+			{"name", "zutano"},
+		},
+		Values: 3,
+	})
+
+	value := a.FetchOne("test_values", "name", "mengano")
+
+	t.Log(value)
 }

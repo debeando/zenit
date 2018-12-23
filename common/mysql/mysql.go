@@ -93,11 +93,13 @@ func (s *singleton) Close() {
 }
 
 func ParseValue(value string) (uint64, bool) {
-	if value == "YES" || value == "ON" {
+	value = strings.ToLower(value)
+
+	if value == "yes" || value == "on" {
 		return 1, true
 	}
 
-	if value == "NO" || value == "OFF" {
+	if value == "no" || value == "off" {
 		return 0, true
 	}
 
