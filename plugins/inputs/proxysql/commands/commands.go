@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 
+	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
@@ -32,20 +33,20 @@ func (l *InputProxySQLCommands) Collect() {
 				{"name", rows[i]["Command"]},
 			},
 			Values: []metrics.Value{
-				{"total_time_us", rows[i]["Total_Time_us"]},
-				{"total_cnt", rows[i]["Total_cnt"]},
-				{"cnt_100us", rows[i]["cnt_100us"]},
-				{"cnt_500us", rows[i]["cnt_500us"]},
-				{"cnt_1ms", rows[i]["cnt_1ms"]},
-				{"cnt_5ms", rows[i]["cnt_5ms"]},
-				{"cnt_10ms", rows[i]["cnt_10ms"]},
-				{"cnt_50ms", rows[i]["cnt_50ms"]},
-				{"cnt_100ms", rows[i]["cnt_100ms"]},
-				{"cnt_500ms", rows[i]["cnt_500ms"]},
-				{"cnt_1s", rows[i]["cnt_1s"]},
-				{"cnt_5s", rows[i]["cnt_5s"]},
-				{"cnt_10s", rows[i]["cnt_10s"]},
-				{"cnt_infs", rows[i]["cnt_infs"]},
+				{"total_time_us", common.StringToUInt64(rows[i]["Total_Time_us"])},
+				{"total_cnt", common.StringToUInt64(rows[i]["Total_cnt"])},
+				{"cnt_100us", common.StringToUInt64(rows[i]["cnt_100us"])},
+				{"cnt_500us", common.StringToUInt64(rows[i]["cnt_500us"])},
+				{"cnt_1ms", common.StringToUInt64(rows[i]["cnt_1ms"])},
+				{"cnt_5ms", common.StringToUInt64(rows[i]["cnt_5ms"])},
+				{"cnt_10ms", common.StringToUInt64(rows[i]["cnt_10ms"])},
+				{"cnt_50ms", common.StringToUInt64(rows[i]["cnt_50ms"])},
+				{"cnt_100ms", common.StringToUInt64(rows[i]["cnt_100ms"])},
+				{"cnt_500ms", common.StringToUInt64(rows[i]["cnt_500ms"])},
+				{"cnt_1s", common.StringToUInt64(rows[i]["cnt_1s"])},
+				{"cnt_5s", common.StringToUInt64(rows[i]["cnt_5s"])},
+				{"cnt_10s", common.StringToUInt64(rows[i]["cnt_10s"])},
+				{"cnt_infs", common.StringToUInt64(rows[i]["cnt_infs"])},
 			},
 		})
 

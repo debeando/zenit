@@ -3,6 +3,7 @@ package pool
 import (
 	"fmt"
 
+	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
@@ -48,15 +49,15 @@ func (l *InputProxySQLPool) Collect() {
 				{"host", rows[i]["srv_host"]},
 			},
 			Values: []metrics.Value{
-				{"status", rows[i]["status"]},
-				{"used", rows[i]["ConnUsed"]},
-				{"free", rows[i]["ConnFree"]},
-				{"ok", rows[i]["ConnOK"]},
-				{"errors", rows[i]["ConnERR"]},
-				{"queries", rows[i]["Queries"]},
-				{"tx", rows[i]["Bytes_data_sent"]},
-				{"rx", rows[i]["Bytes_data_recv"]},
-				{"latency", rows[i]["Latency_us"]},
+				{"status", common.StringToUInt64(rows[i]["status"])},
+				{"used", common.StringToUInt64(rows[i]["ConnUsed"])},
+				{"free", common.StringToUInt64(rows[i]["ConnFree"])},
+				{"ok", common.StringToUInt64(rows[i]["ConnOK"])},
+				{"errors", common.StringToUInt64(rows[i]["ConnERR"])},
+				{"queries", common.StringToUInt64(rows[i]["Queries"])},
+				{"tx", common.StringToUInt64(rows[i]["Bytes_data_sent"])},
+				{"rx", common.StringToUInt64(rows[i]["Bytes_data_recv"])},
+				{"latency", common.StringToUInt64(rows[i]["Latency_us"])},
 			},
 		})
 

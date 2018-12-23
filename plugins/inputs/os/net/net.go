@@ -37,8 +37,8 @@ func (l *InputOSNet) Collect() {
 					{"device", dev},
 				},
 				Values: []metrics.Value{
-					{"receive", uint(receive_bytes)},
-					{"transmit", uint(transmit_bytes)},
+					{"receive", receive_bytes},
+					{"transmit", transmit_bytes},
 				},
 			})
 		}

@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
@@ -67,8 +68,8 @@ func (l *InputProxySQLQuery) Collect() {
 				{"command", command},
 			},
 			Values: []metrics.Value{
-				{"count", rows[i]["count_star"]},
-				{"sum", rows[i]["sum_time"]},
+				{"count", common.StringToUInt64(rows[i]["count_star"])},
+				{"sum", common.StringToUInt64(rows[i]["sum_time"])},
 			},
 		})
 
