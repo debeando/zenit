@@ -1,29 +1,22 @@
 package tables
 
 import (
-	// "fmt"
+	"fmt"
 
-	// "github.com/swapbyt3s/zenit/common/log"
+	"github.com/swapbyt3s/zenit/common"
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/loader"
-	// "github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-type Table struct {
-	schema    string
-	table     string
-	size      float64
-	rows      float64
-	increment float64
-}
-
-const querySQLTable = `
+const query = `
 SELECT table_schema AS 'schema',
        table_name AS 'table',
-       data_length + index_length AS 'size',
-       table_rows AS 'rows',
-       auto_increment AS 'increment'
+       COALESCE(data_length + index_length, 0) AS 'size',
+       COALESCE(table_rows, 0) AS 'rows',
+       COALESCE(auto_increment, 0) AS 'increment'
 FROM information_schema.tables
 WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schema','percona')
 ORDER BY table_schema, table_name;
@@ -36,35 +29,29 @@ func (l *MySQLTables) Collect() {
 		return
 	}
 
+	var a = metrics.Load()
 	var m = mysql.GetInstance("mysql")
 	m.Connect(config.File.MySQL.DSN)
 
-	m.Query(querySQLTable)
-	// fmt.Printf("%#v", rows)
+	rows := m.Query(query)
 
-//	var a = metrics.Load()
-//
-//	for rows.Next() {
-//		var t Table
-//
-//		rows.Scan(
-//			&t.schema,
-//			&t.table,
-//			&t.size,
-//			&t.rows,
-//			&t.increment)
-//
-//		a.Add(metrics.Metric{
-//			Key: "zenit_mysql_stats_tables",
-//			Tags: []metrics.Tag{
-//				{"schema", t.schema},
-//				{"table", t.table}},
-//			Values: []metrics.Value{
-//				{"size", uint(t.size)},
-//				{"rows", uint(t.rows)},
-//				{"increment", uint(t.increment)}},
-//		})
-//	}
+	for i := range rows {
+		a.Add(metrics.Metric{
+			Key: "zenit_mysql_stats_tables",
+			Tags: []metrics.Tag{
+				{"schema", rows[i]["schema"]},
+				{"table", rows[i]["table"]},
+			},
+			Values: []metrics.Value{
+				{"size", common.StringToUInt64(rows[i]["size"])},
+				{"rows", common.StringToUInt64(rows[i]["rows"])},
+				{"increment", common.StringToUInt64(rows[i]["increment"])}},
+		})
+
+		log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Size %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["size"]))
+		log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Rows %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["rows"]))
+		log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Increment %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["increment"]))
+	}
 }
 
 func init() {
