@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/swapbyt3s/zenit/config"
+
 	"github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
 	"github.com/swapbyt3s/zenit/plugins/outputs/slack"
 )

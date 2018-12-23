@@ -14,6 +14,10 @@ import (
 type MySQLConnections struct {}
 
 func (l *MySQLConnections) Collect() {
+	if ! config.File.MySQL.Alerts.Connections.Enable {
+		return
+	}
+
 	if ! config.File.MySQL.Inputs.Variables {
 		log.Info("Require to enable MySQL Variables in config file.")
 		return

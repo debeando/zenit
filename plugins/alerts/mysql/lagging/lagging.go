@@ -14,6 +14,10 @@ import (
 type MySQLLagging struct {}
 
 func (l *MySQLLagging) Collect() {
+	if ! config.File.MySQL.Alerts.Replication.Enable {
+		return
+	}
+
 	if ! config.File.MySQL.Inputs.Slave {
 		log.Info("Require to enable MySQL Slave Status in config file.")
 		return

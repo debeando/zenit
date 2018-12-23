@@ -1,7 +1,7 @@
 package variables
 
 import (
-	"database/sql"
+	"fmt"
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
@@ -10,7 +10,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-const QuerySQLVariables = "SHOW GLOBAL VARIABLES"
+const query = "SHOW GLOBAL VARIABLES"
 
 type MySQLVariables struct {}
 
@@ -19,32 +19,21 @@ func (l *MySQLVariables) Collect() {
 		return
 	}
 
-	conn, err := mysql.Connect(config.File.MySQL.DSN)
-	defer conn.Close()
-	if err != nil {
-		log.Error("MySQL:Variables - Impossible to connect: " + err.Error())
-		return
-	}
-
-	rows, err := conn.Query(QuerySQLVariables)
-	defer rows.Close()
-	if err != nil {
-		log.Error("MySQL:Variables - Impossible to execute query: " + err.Error())
-		return
-	}
-
 	var a = metrics.Load()
-	var k string
-	var v sql.RawBytes
+	var m = mysql.GetInstance("mysql")
+	m.Connect(config.File.MySQL.DSN)
 
-	for rows.Next() {
-		rows.Scan(&k, &v)
-		if value, ok := mysql.ParseValue(v); ok {
+	rows := m.Query(query)
+
+	for i := range rows {
+		if value, ok := mysql.ParseValue(rows[i]["Value"]); ok {
 			a.Add(metrics.Metric{
 				Key:    "zenit_mysql_variables",
-				Tags:   []metrics.Tag{{"name", k}},
+				Tags:   []metrics.Tag{{"name", rows[i]["Variable_name"]}},
 				Values: value,
 			})
+
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLVariables - %s=%d", rows[i]["Variable_name"], value))
 		}
 	}
 }

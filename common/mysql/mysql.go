@@ -1,7 +1,6 @@
 package mysql
 
 import (
-	"bytes"
 	"database/sql"
 	"log"
 	"strconv"
@@ -10,43 +9,99 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func Connect(dsn string) (*sql.DB, error) {
-	db, err := sql.Open("mysql", dsn)
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.Ping()
-	if err != nil {
-		return nil, err
-	}
-
-	return db, err
+type singleton struct {
+	Connection *sql.DB
+	Name string
 }
 
-func Check(dsn string, name string) bool {
-	log.Printf("I! - %s - DSN: %s\n", name, dsn)
-	conn, err := Connect(dsn)
-	if err != nil {
-		log.Printf("E! - %s - Impossible to connect: %s\n", name, err)
-		return false
-	}
+var instance = make(map[string]*singleton)
 
-	log.Printf("I! - %s - Connected successfully.\n", name)
-	conn.Close()
-	return true
+func GetInstance(name string) *singleton {
+	if instance[name] == nil {
+		instance[name] = &singleton{}
+		instance[name].Name = name
+	}
+	return instance[name]
 }
 
-func ParseValue(value sql.RawBytes) (uint64, bool) {
-	if bytes.EqualFold(value, []byte("YES")) || bytes.Compare(value, []byte("ON")) == 0 {
+func (s *singleton) Connect(dsn string) {
+	if s.Connection == nil {
+		conn, err := sql.Open("mysql", dsn)
+		if err != nil {
+			log.Printf("E! - %s - %s\n", s.Name, err)
+		}
+
+		if err := conn.Ping(); err != nil {
+			log.Printf("E! - %s - %s\n", s.Name, err)
+		}
+
+		s.Connection = conn
+	}
+}
+
+func (s *singleton) Query(query string) map[int]map[string]string {
+	if err := s.Connection.Ping(); err != nil {
+		log.Printf("E! - %s - %s\n", s.Name, err)
+		return nil
+	}
+
+	// Execute the query
+	rows, err := s.Connection.Query(query)
+	if err != nil {
+		log.Printf("E! - %s - %s\n", s.Name, err)
+	}
+	defer rows.Close()
+
+	// Get column names
+	cols, _ := rows.Columns()
+	if err != nil {
+		log.Printf("E! - %s - %s\n", s.Name, err)
+	}
+
+	dataset  := make(map[int]map[string]string)
+	row_id   := 0
+	columns  := make([]sql.RawBytes, len(cols))
+	columnPointers := make([]interface{}, len(cols))
+
+	for i := range cols {
+		columnPointers[i] = &columns[i]
+	}
+
+	for rows.Next() {
+		err = rows.Scan(columnPointers...)
+		if err != nil {
+			log.Printf("E! - %s - %s\n", s.Name, err)
+		}
+
+		row := make(map[string]string)
+
+		for columnIndex, columnValue := range columns {
+			row[cols[columnIndex]] = string(columnValue)
+			dataset[row_id] = row
+		}
+
+		row_id++
+	}
+
+	return dataset
+}
+
+func (s *singleton) Close() {
+	if s.Connection != nil {
+		s.Connection.Close()
+	}
+}
+
+func ParseValue(value string) (uint64, bool) {
+	if value == "YES" || value == "ON" {
 		return 1, true
 	}
 
-	if bytes.EqualFold(value, []byte("NO")) || bytes.Compare(value, []byte("OFF")) == 0 {
+	if value == "NO" || value == "OFF" {
 		return 0, true
 	}
 
-	if val, err := strconv.ParseUint(string(value), 10, 64); err == nil {
+	if val, err := strconv.ParseUint(value, 10, 64); err == nil {
 		return val, true
 	}
 

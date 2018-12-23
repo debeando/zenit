@@ -8,8 +8,7 @@ import (
 	"sync"
 
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/alerts"
-	"github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/plugins"
 	"github.com/swapbyt3s/zenit/plugins/outputs"
 
 	"github.com/kardianos/service"
@@ -17,10 +16,9 @@ import (
 
 // USAGE is a const to have help description for CLI.
 const USAGE = `zenit (%s) written by %s
-Usage: %s [--help | --Debug | --install | --uninstall | --version]
+Usage: %s [--help | --install | --uninstall | --version]
 Options:
   --help        Show this help.
-  --debug       Show debugging messages.
   --install     Install service on system.
   --uninstall   Uninstall service on system.
   --version     Print version numbers.
@@ -38,10 +36,9 @@ func (p *program) Start(s service.Service) error {
 func (p *program) run() {
 	var wg sync.WaitGroup
 
-	wg.Add(3)
+	wg.Add(2)
 
-	go inputs.Plugins(&wg)
-	go alerts.Plugins(&wg)
+	go plugins.Load(&wg)
 	go outputs.Plugins(&wg)
 
 	wg.Wait()
@@ -67,7 +64,6 @@ func main() {
 	prg := &program{}
 
 	fHelp := flag.Bool("help", false, "Show this help.")
-	fDebug := flag.Bool("debug", false, "Show debugging messages.")
 	fInstall := flag.Bool("install", false, "Install service on system.")
 	fUninstall := flag.Bool("uninstall", false, "Uninstall service on system.")
 	fVersion := flag.Bool("version", false, "Show version.")
@@ -83,8 +79,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	config.File.General.Debug = *fDebug
 
 	switch {
 	case *fVersion:
