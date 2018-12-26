@@ -16,14 +16,14 @@ type Server struct {
 	StatusName string
 }
 
-type ProxySQLStatus struct {}
+type ProxyPoolStatus struct {}
 
-func (l *ProxySQLStatus) Collect() {
+func (l *ProxyPoolStatus) Collect() {
 	var m = metrics.Load()
 	var s Server
 
 	for _, m := range *m {
-		if m.Key == "zenit_proxysql_connection_pool" {
+		if m.Key == "zenit_proxysql_connections" {
 			for _, metricTag := range m.Tags {
 				if metricTag.Name == "host" {
 					s.Host = metricTag.Value
@@ -56,7 +56,6 @@ func (l *ProxySQLStatus) Collect() {
 				s.StatusCode,
 				message,
 			)
-
 		}
 	}
 }
@@ -79,5 +78,5 @@ func Status(s string) int {
 }
 
 func init() {
-	loader.Add("AlertProxySQLStatus", func() loader.Plugin { return &ProxySQLStatus{} })
+	loader.Add("AlertProxyPoolStatus", func() loader.Plugin { return &ProxyPoolStatus{} })
 }

@@ -15,14 +15,14 @@ type Server struct {
 	Errors int
 }
 
-type ProxySQLErrors struct {}
+type ProxyConnectionsErrors struct {}
 
-func (l *ProxySQLErrors) Collect() {
+func (l *ProxyConnectionsErrors) Collect() {
 	var m = metrics.Load()
 	var s Server
 
 	for _, m := range *m {
-		if m.Key == "zenit_proxysql_connection_pool" {
+		if m.Key == "zenit_proxysql_connections" {
 			for _, metricTag := range m.Tags {
 				if metricTag.Name == "host" {
 					s.Host = metricTag.Value
@@ -47,7 +47,7 @@ func (l *ProxySQLErrors) Collect() {
 
 			// Register new check and update last status:
 			alerts.Load().Register(
-				"proxysql_pool_errors_" + s.Host + s.Group,
+				"proxysql_connections_errors_" + s.Host + s.Group,
 				"ProxySQL Connection Pool Errors",
 				config.File.ProxySQL.Alerts.Errors.Duration,
 				config.File.ProxySQL.Alerts.Errors.Warning,
@@ -55,11 +55,10 @@ func (l *ProxySQLErrors) Collect() {
 				s.Errors,
 				message,
 			)
-
 		}
 	}
 }
 
 func init() {
-	loader.Add("AlertProxySQLErrors", func() loader.Plugin { return &ProxySQLErrors{} })
+	loader.Add("AlertProxyConnectionsErrors", func() loader.Plugin { return &ProxyConnectionsErrors{} })
 }
