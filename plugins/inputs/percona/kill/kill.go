@@ -25,10 +25,10 @@ func (l *InputsPerconaKill) Collect() {
 	}
 
 	metrics.Load().Add(metrics.Metric{
-		Key: "zenit_os",
+		Key: "zenit_process",
 		Tags: []metrics.Tag{
 			{"system", "linux"},
-			{"process", "pt_kill"},
+			{"name", "pt_kill"},
 		},
 		Values: value,
 	})

@@ -25,10 +25,10 @@ func (l *InputsPerconaXtraBackup) Collect() {
 	}
 
 	metrics.Load().Add(metrics.Metric{
-		Key: "zenit_os",
+		Key: "zenit_process",
 		Tags: []metrics.Tag{
 			{"system", "linux"},
-			{"process", "xtrabackup"},
+			{"name", "xtrabackup"},
 		},
 		Values: value,
 	})

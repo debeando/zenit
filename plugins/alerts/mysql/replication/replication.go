@@ -38,7 +38,7 @@ func (l *MySQLReplication) Collect() {
 	var sqlError = common.InterfaceToInt(value)
 
 	if sqlRunning == 0 {
-		var delay = metrics.FetchOne("zenit_os", "process", "pt_slave_delay")
+		var delay = metrics.FetchOne("zenit_process", "name", "pt_slave_delay")
 
 		if delay == -1 {
 			return

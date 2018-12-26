@@ -25,10 +25,10 @@ func (l *InputsPerconaOSC) Collect() {
 	}
 
 	metrics.Load().Add(metrics.Metric{
-		Key: "zenit_os",
+		Key: "zenit_process",
 		Tags: []metrics.Tag{
 			{"system", "linux"},
-			{"process", "pt_online_schema_change"},
+			{"name", "pt_online_schema_change"},
 		},
 		Values: value,
 	})

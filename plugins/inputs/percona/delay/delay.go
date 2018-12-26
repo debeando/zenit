@@ -25,10 +25,10 @@ func (l *InputsPerconaDelay) Collect() {
 	}
 
 	metrics.Load().Add(metrics.Metric{
-		Key: "zenit_os",
+		Key: "zenit_process",
 		Tags: []metrics.Tag{
 			{"system", "linux"},
-			{"process", "pt_slave_delay"},
+			{"name", "pt_slave_delay"},
 		},
 		Values: value,
 	})
