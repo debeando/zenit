@@ -13,9 +13,9 @@ func TestEvaluate(t *testing.T) {
 		LastSeen  int
 		Status    uint8
 		Duration  int
-		Value     int
-		Warning   int
-		Critical  int
+		Value     uint64
+		Warning   uint64
+		Critical  uint64
 		Notify    bool
 	}{
 		{ 1, 1537705900, 1537705910, alerts.Normal , 10, 1, 2, 3, false},
@@ -59,7 +59,7 @@ func TestEvaluate(t *testing.T) {
 	var states = []struct{
 		Key      int
 		LastSeen int
-		Value    int
+		Value    uint64
 		Status   uint8
 		Expected bool
 	}{

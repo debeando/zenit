@@ -26,7 +26,7 @@ func (l *MySQLReadOnly) Collect() {
 
 	var metrics = metrics.Load()
 	var value = metrics.FetchOne("zenit_mysql_variables", "name", "read_only")
-	var status = common.InterfaceToInt(value)
+	var status = common.InterfaceToUInt64(value)
 
 	// Verify status range is valid:
 	if ! (status == 0 || status == 1) {
@@ -37,7 +37,7 @@ func (l *MySQLReadOnly) Collect() {
 	status = (status ^ 1)
 
 	// Build one message with details for notification:
-	var message = fmt.Sprintf("*Current:* %s", mysql.YesOrNo(status ^ 1))
+	var message = fmt.Sprintf("*Current:* %s", mysql.YesOrNo(status))
 
 	// Register new check and update last status:
 	alerts.Load().Register(

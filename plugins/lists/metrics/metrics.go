@@ -67,7 +67,7 @@ func (l *Items) FetchOne(key string, tagName string, tagValue string) (interface
 		}
 	}
 
-	return -1
+	return nil
 }
 
 // Unique is a check to verify the metric key is one in the metrics.
@@ -88,8 +88,8 @@ func (l *Items) Update(m Metric) {
 				for itemValueIndex, itemValue := range (*l)[itemIndex].Values.([]Value) {
 					for _, metricValue := range m.Values.([]Value) {
 						if itemValue.Key == metricValue.Key {
-							sumValue := metricValue.Value.(uint)
-							oldValue := (*l)[itemIndex].Values.([]Value)[itemValueIndex].Value.(uint)
+							sumValue := metricValue.Value.(uint64)
+							oldValue := (*l)[itemIndex].Values.([]Value)[itemValueIndex].Value.(uint64)
 							newValue := oldValue + sumValue
 
 							(*l)[itemIndex].Values.([]Value)[itemValueIndex].Value = newValue

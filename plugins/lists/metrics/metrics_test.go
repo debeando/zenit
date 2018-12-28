@@ -73,15 +73,19 @@ func TestAccumulator(t *testing.T) {
 	a.Add(metrics.Metric{
 		Key:  "test_sum_values",
 		Tags: []metrics.Tag{{"foo", "bar"}},
-		Values: []metrics.Value{{"a", uint(1)},
-			{"b", uint(1)}},
+		Values: []metrics.Value{
+			{"a", uint64(1)},
+			{"b", uint64(1)},
+		},
 	})
 
 	a.Add(metrics.Metric{
 		Key:  "test_sum_values",
 		Tags: []metrics.Tag{{"foo", "bar"}},
-		Values: []metrics.Value{{"a", uint(2)},
-			{"b", uint(2)}},
+		Values: []metrics.Value{
+			{"a", uint64(2)},
+			{"b", uint64(2)},
+		},
 	})
 
 	if a.Count() != 2 {

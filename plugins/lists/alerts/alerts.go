@@ -9,7 +9,7 @@ import (
 
 // Check is a status for each alert.
 type Check struct {
-	Critical  int    // Critical value
+	Critical  uint64 // Critical value
 	Duration  int    // Duration limit between FirstSeen and LastSeen to alert.
 	FirstSeen int    // UnixTimeStamp when is register alert.
 	Key       string // Key to identify own check.
@@ -18,8 +18,8 @@ type Check struct {
 	Name      string // Name human own check.
 	Notified  uint8  // Has the same values from Status, and indicate what level is notificated.
 	Status    uint8  // Current status for the check: normal, warning, critical or resolved.
-	Value     int    // Value to evaluate.
-	Warning   int    // Warning value.
+	Value     uint64 // Value to evaluate.
+	Warning   uint64 // Warning value.
 }
 
 const (
@@ -43,7 +43,7 @@ func Load() *Items {
 }
 
 // Add new check or update last status from existed check.
-func (l *Items) Register(key string, name string, duration int, warning int, critical int, value int, message string) {
+func (l *Items) Register(key string, name string, duration int, warning uint64, critical uint64, value uint64, message string) {
 	check := items.Exist(key)
 
 	if check == nil {

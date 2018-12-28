@@ -35,7 +35,7 @@ func (l *OSDisk) Collect() {
 						}
 					}
 
-					var percentage = int(common.InterfaceToFloat64(metric.Values))
+					var percentage = uint64(common.InterfaceToFloat64(metric.Values))
 
 					message += fmt.Sprintf("*Volume:* %s, *Usage:* %d%%\n", device, percentage)
 

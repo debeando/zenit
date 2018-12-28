@@ -17,7 +17,7 @@ type Column struct {
 	dataType string
 	unsigned bool
 	current  uint64
-	percent  float64
+	percent  uint64
 	maximum  uint64
 }
 
@@ -75,7 +75,7 @@ func (l *MySQLOverflow) Collect() {
 			})
 
 			log.Debug(
-				fmt.Sprintf("Plugin - InputMySQLOverflow - %s.%s.%s(%s,%t)=%d [(%d/%d)*100=%.2f%%]",
+				fmt.Sprintf("Plugin - InputMySQLOverflow - %s.%s.%s(%s,%t)=%d [(%d/%d)*100=%d%%]",
 					rows[row]["table_schema"],
 					rows[row]["table_name"],
 					rows[row]["column_name"],
@@ -104,7 +104,7 @@ func (c *Column) Maximum() {
 }
 
 func (c *Column) Percentage() {
-	c.percent = common.Percentage(float64(c.current), float64(c.maximum))
+	c.percent = common.Percentage(c.current, c.maximum)
 }
 
 func init() {

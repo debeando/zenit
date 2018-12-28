@@ -22,11 +22,11 @@ func (l *OSMEM) Collect() {
 	var metrics = metrics.Load()
 	var message string = ""
 	var value = metrics.FetchOne("zenit_os", "name", "mem")
-	var percentage = int(common.InterfaceToFloat64(value))
+	var percentage = uint64(common.InterfaceToFloat64(value))
 
-	if percentage == -1 {
-		return
-	}
+//	if percentage == -1 {
+//		return
+//	}
 
 	message += fmt.Sprintf("*Memory:* %d%%\n", percentage)
 

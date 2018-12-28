@@ -25,24 +25,24 @@ func (l *MySQLReplication) Collect() {
 	}
 
 	var message string = ""
-	var running int
+	var running uint64
 	var value interface{}
 
 	var metrics = metrics.Load()
 
 	value = metrics.FetchOne("zenit_mysql_slave", "name", "Slave_IO_Running")
-	var ioRunning = common.InterfaceToInt(value)
+	var ioRunning = common.InterfaceToUInt64(value)
 	value = metrics.FetchOne("zenit_mysql_slave", "name", "Slave_SQL_Running")
-	var sqlRunning = common.InterfaceToInt(value)
+	var sqlRunning = common.InterfaceToUInt64(value)
 	value = metrics.FetchOne("zenit_mysql_slave", "name", "Last_SQL_Errno")
-	var sqlError = common.InterfaceToInt(value)
+	var sqlError = common.InterfaceToUInt64(value)
 
 	if sqlRunning == 0 {
 		var delay = metrics.FetchOne("zenit_process", "name", "pt_slave_delay")
 
-		if delay == -1 {
-			return
-		}
+//		if delay == -1 {
+//			return
+//		}
 
 		if delay == 1 {
 			log.Debug("Plugin - AlertMySQLReplication - Is running pt-slave-delay, skip check!.")
@@ -51,9 +51,9 @@ func (l *MySQLReplication) Collect() {
 		}
 	}
 
-	if sqlError == -1 {
-		return
-	}
+//	if sqlError == -1 {
+//		return
+//	}
 
 	message += fmt.Sprintf("*IO Running:* %s\n", mysql.YesOrNo(ioRunning))
 	message += fmt.Sprintf("*SQL Running:* %s\n", mysql.YesOrNo(sqlRunning))

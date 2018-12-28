@@ -1,6 +1,9 @@
 package mem
 
 import (
+	"fmt"
+
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
@@ -25,6 +28,8 @@ func (l *InputOSMem) Collect() {
 			},
 			Values: vmStat.UsedPercent,
 		})
+
+		log.Debug(fmt.Sprintf("Plugin - InputOSMem - MEM=%.2f", vmStat.UsedPercent))
 	}
 }
 

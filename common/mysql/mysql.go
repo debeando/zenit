@@ -150,9 +150,16 @@ func MaximumValueUnsigned(dataType string) uint64 {
 	return 0
 }
 
-func YesOrNo(v int) string {
+func YesOrNo(v uint64) string {
 	if v == 1 {
 		return "Yes"
 	}
 	return "No"
+}
+
+func IsBool(v uint64) bool {
+	if (v == 0 || v == 1) {
+		return true
+	}
+	return false
 }

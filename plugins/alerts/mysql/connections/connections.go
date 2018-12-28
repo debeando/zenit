@@ -31,14 +31,10 @@ func (l *MySQLConnections) Collect() {
 	var m = metrics.Load()
 	var value interface{}
 	value = m.FetchOne("zenit_mysql_variables", "name", "max_connections")
-	var MaxConnections = float64(common.InterfaceToInt(value))
+	var MaxConnections = common.InterfaceToUInt64(value)
 	value = m.FetchOne("zenit_mysql_status", "name", "Threads_connected")
-	var ThreadsConnected = float64(common.InterfaceToInt(value))
-	var percentage = int(common.Percentage(ThreadsConnected, MaxConnections))
-
-	if percentage == -1 {
-		return
-	}
+	var ThreadsConnected = common.InterfaceToUInt64(value)
+	var percentage = uint64(common.Percentage(ThreadsConnected, MaxConnections))
 
 	// Build one message with details for notification:
 	var message = fmt.Sprintf("*Current:* %d%%", percentage)
@@ -51,6 +47,14 @@ func (l *MySQLConnections) Collect() {
 		config.File.MySQL.Alerts.Connections.Critical,
 		percentage,
 		message,
+	)
+
+	log.Debug(
+		fmt.Sprintf("Plugin - AlertMySQLConnections - MaxConnections: %d, ThreadsConnected: %d, Percentage: %d%%",
+			MaxConnections,
+			ThreadsConnected,
+			percentage,
+		),
 	)
 }
 

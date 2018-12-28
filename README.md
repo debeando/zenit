@@ -15,12 +15,10 @@ for the moment.
 
 ### Advantage
 
-- Centralize all logs in a single point of view.
-- Audit database access.
-- Have more details for debugging or performance analyses. For example; filter by user account, type of query, error, execution time, killed, etc.
-- Improve security to prevent user access into server.
-- Provider useful information for developers to help optimization queries.
-- Monitoring and alerting toolkit.
+- Centralize all logs in a single point of view, you have more details for debugging and analyse, with this you can optimize queries, understand what happen inside, and more.
+- Audit database security access and identify possible risk.
+- Monitoring and alerting system to prevent a disaster or identify possible risk.
+- One agent for all, easy to install and configure, low memory consumption and high performance.
 
 ### Compatibility
 

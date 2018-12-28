@@ -12,7 +12,7 @@ import (
 type Server struct {
 	Host       string
 	Group      string
-	StatusCode int
+	StatusCode uint64
 	StatusName string
 }
 
@@ -60,7 +60,7 @@ func (l *ProxyPoolStatus) Collect() {
 	}
 }
 
-func Status(s string) int {
+func Status(s string) uint64 {
 	switch s {
 	case "ONLINE":
 		return 0

@@ -3,6 +3,7 @@ package errors
 import (
 	"fmt"
 
+	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/lists/loader"
@@ -12,7 +13,7 @@ import (
 type Server struct {
 	Host   string
 	Group  string
-	Errors int
+	Errors uint64
 }
 
 type ProxyConnectionsErrors struct {}
@@ -33,10 +34,7 @@ func (l *ProxyConnectionsErrors) Collect() {
 
 			for _, value := range m.Values.([]metrics.Value) {
 				if value.Key == "errors" {
-					if v, ok := value.Value.(uint); ok {
-						s.Errors = int(v)
-						break
-					}
+					s.Errors = common.InterfaceToUInt64(value.Value)
 				}
 			}
 

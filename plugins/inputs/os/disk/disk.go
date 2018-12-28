@@ -1,8 +1,10 @@
 package disk
 
 import (
+	"fmt"
 	"strings"
 
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
@@ -38,6 +40,8 @@ func (l *InputOSDisk) Collect() {
 			},
 			Values: u.UsedPercent,
 		})
+
+		log.Debug(fmt.Sprintf("Plugin - InputOSDisk - Disk=%s(%.2f)", GetDevice(device.Device), u.UsedPercent))
 	}
 }
 

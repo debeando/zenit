@@ -22,11 +22,7 @@ func (l *OSCPU) Collect() {
 	var metrics = metrics.Load()
 	var message string = ""
 	var value = metrics.FetchOne("zenit_os", "name", "cpu")
-	var percentage = int(common.InterfaceToFloat64(value))
-
-	if percentage == -1 {
-		return
-	}
+	var percentage = uint64(common.InterfaceToFloat64(value))
 
 	message += fmt.Sprintf("*CPU:* %d%%\n", percentage)
 
