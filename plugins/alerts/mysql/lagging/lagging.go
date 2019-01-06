@@ -27,10 +27,6 @@ func (l *MySQLLagging) Collect() {
 	var value = metrics.FetchOne("zenit_mysql_slave", "name", "Seconds_Behind_Master")
 	var lagging = common.InterfaceToUInt64(value)
 
-//	if lagging == -1 {
-//		return
-//	}
-
 	// Build one message with details for notification:
 	var message = fmt.Sprintf("*Lagging:* %d\n", lagging)
 

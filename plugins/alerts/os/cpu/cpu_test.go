@@ -23,24 +23,25 @@ func TestMain(m *testing.M) {
 
 func TestCPU(t *testing.T) {
 	var checks = []struct{
-		Value  float64
+		Value uint64
 		Status uint8
+		Notify bool
 	}{
-		{ 10, 0 }, // CPU Peak, False positive.
-		{ 50, 0 }, //
-		{ 10, 0 }, //
-		{ 10, 0 }, //
-		{ 50, 1 }, // Warning
-		{ 55, 1 }, //
-		{ 50, 1 }, //
-		{ 90, 1 }, // Critical
-		{ 95, 2 }, //
-		{ 10, 2 }, //
-		{ 10, 3 }, //
-		{ 10, 3 }, // Resolved
+		{ 10, alerts.Normal   , false }, // 1s
+		{ 10, alerts.Normal   , false }, // 2s
+		{ 50, alerts.Normal   , false }, // 3s
+		{ 10, alerts.Normal   , false }, // 4s
+		{ 10, alerts.Normal   , false }, // 5s
+		{ 50, alerts.Normal   , false }, // 6s
+		{ 55, alerts.Normal   , false }, // 7s
+		{ 50, alerts.Normal   , false }, // 8s
+		{ 90, alerts.Notified , true  }, // 9s
+		{ 95, alerts.Normal   , false }, // 10s
+		{ 10, alerts.Recovered, true  }, // 11s
+		{ 10, alerts.Normal   , false }, // 12s
 	}
 
-	for _, check := range checks {
+	for second, check := range checks {
 		// Add test value on metrics:
 		metrics.Load().Reset()
 		metrics.Load().Add(metrics.Metric{
@@ -57,13 +58,19 @@ func TestCPU(t *testing.T) {
 
 		// Evaluate alert status
 		alert := alerts.Load().Exist("cpu")
-		alert.Evaluate()
+		notify := alert.Notify()
 
-		if alert.Status != check.Status {
-			t.Errorf("Expected: '%d', got: '%d'.", check.Status, alert.Status)
+		if ! (alert.Status == check.Status && check.Notify == notify) {
+			t.Errorf("Second: %d, Value: %d, Evaluated: %t, Expected: '%d', Got: '%d'.",
+				second,
+				check.Value,
+				notify,
+				check.Status,
+				alert.Status,
+			)
 		}
 
 		// Wait:
-		time.Sleep(2 * time.Second)
+		time.Sleep(1 * time.Second)
 	}
 }

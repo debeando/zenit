@@ -22,17 +22,21 @@ func TestMain(m *testing.M) {
 
 func TestConnection(t *testing.T) {
 	var checks = []struct{
-		ReadOnly uint64
+		Value uint64
 		Status uint8
+		Notify bool
 	}{
-		{ 1, 0 },
-		{ 0, 0 },
-		{ 0, 2 },
-		{ 1, 2 },
-		{ 1, 3 },
+		{ 1, alerts.Normal   , false }, // 0s
+		{ 0, alerts.Normal   , false }, // 1s
+		{ 1, alerts.Normal   , false }, // 2s
+		{ 0, alerts.Normal   , false }, // 3s
+		{ 0, alerts.Normal   , false }, // 4s
+		{ 0, alerts.Normal   , false }, // 5s
+		{ 0, alerts.Notified , true  }, // 6s
+		{ 1, alerts.Recovered, true  }, // 7s
 	}
 
-	for _, check := range checks {
+	for second, check := range checks {
 		// Add test value on metrics:
 		metrics.Load().Reset()
 		metrics.Load().Add(metrics.Metric{
@@ -40,7 +44,7 @@ func TestConnection(t *testing.T) {
 			Tags: []metrics.Tag{
 				{"name", "read_only"},
 			},
-			Values: check.ReadOnly,
+			Values: check.Value,
 		})
 
 		// Register alert:
@@ -49,13 +53,19 @@ func TestConnection(t *testing.T) {
 
 		// Evaluate alert status
 		alert := alerts.Load().Exist("readonly")
-		alert.Evaluate()
+		notify := alert.Notify()
 
-		if alert.Status != check.Status {
-			t.Errorf("Expected: '%d', got: '%d'.", check.Status, alert.Status)
+		if ! (alert.Status == check.Status && check.Notify == notify) {
+			t.Errorf("Second: %d, Value: %d, Evaluated: %t, Expected: '%d', Got: '%d'.",
+				second,
+				check.Value,
+				notify,
+				check.Status,
+				alert.Status,
+			)
 		}
 
 		// Wait:
-		time.Sleep(2 * time.Second)
+		time.Sleep(1 * time.Second)
 	}
 }

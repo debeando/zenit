@@ -32,7 +32,7 @@ func Run() {
 			var color  = ""
 			var status = ""
 
-			if check.Evaluate() {
+			if check.Notify() {
 				switch check.Status {
 				case alerts.Warning:
 					check.Status = alerts.Warning
@@ -42,10 +42,10 @@ func Run() {
 					check.Status = alerts.Critical
 					color = "danger"
 					status = "Critical"
-				case alerts.Resolved:
-					check.Status = alerts.Resolved
+				case alerts.Recovered:
+					check.Status = alerts.Recovered
 					color = "good"
-					status = "Resolved"
+					status = "Recovered"
 				}
 
 				msg := &Message{

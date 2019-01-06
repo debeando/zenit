@@ -9,24 +9,25 @@ import (
 
 // Check is a status for each alert.
 type Check struct {
-	Critical  uint64 // Critical value
-	Duration  int    // Duration limit between FirstSeen and LastSeen to alert.
-	FirstSeen int    // UnixTimeStamp when is register alert.
-	Key       string // Key to identify own check.
-	LastSeen  int    // What is the last seen (in UnixTimeStamp) value to rest with first seen and compare with duration.
-	Message   string // Custom message.
-	Name      string // Name human own check.
-	Notified  uint8  // Has the same values from Status, and indicate what level is notificated.
-	Status    uint8  // Current status for the check: normal, warning, critical or resolved.
-	Value     uint64 // Value to evaluate.
-	Warning   uint64 // Warning value.
+	Critical    uint64 // Critical value
+	Duration    int    // Duration limit between FirstSeen and LastSeen to alert.
+	FirstSeen   int    // UnixTimeStamp when is register alert.
+	Key         string // Key to identify own check.
+	LastSeen    int    // What is the last seen (in UnixTimeStamp) value to rest with first seen and compare with duration.
+	Message     string // Custom message.
+	Name        string // Name human own check.
+	Status      uint8  // Current status for the check: normal, warning, critical or Recovered.
+	Value       uint64 // Value to evaluate.
+	BeforeValue uint64 // Last evaluated value.
+	Warning     uint64 // Warning value.
 }
 
 const (
-	Normal   = 0
-	Warning  = 1
-	Critical = 2
-	Resolved = 3
+	Normal    = 0
+	Warning   = 1
+	Critical  = 2
+	Notified  = 3
+	Recovered = 4
 )
 
 // Items is a collection of checks
@@ -52,17 +53,19 @@ func (l *Items) Register(key string, name string, duration int, warning uint64, 
 			Duration: duration,
 			FirstSeen: int(time.Now().Unix()),
 			Key: key,
-			Name: name,
-			Status: Normal,
-			Warning: warning,
-			Value: value,
+			LastSeen: int(time.Now().Unix()),
 			Message: message,
+			Name: name,
+			BeforeValue: value,
+			Status: Normal,
+			Value: value,
+			Warning: warning,
 		}
 
 		*l = append(*l, c)
 
 		log.Debug(fmt.Sprintf("Alert - Insert: %#v", c))
-	} else {
+	} else if l != nil {
 		check.LastSeen = int(time.Now().Unix())
 		check.Value = value
 		check.Message = message
@@ -89,39 +92,51 @@ func (l *Items) Exist(key string) *Check {
 	return nil
 }
 
-// IsAlert verify the last time and current time is a valid alert.
-func (c *Check) Evaluate() bool {
+func (c *Check) Notify() bool {
 	if c == nil {
 		return false
 	}
 
-	if ! ((c.LastSeen - c.FirstSeen) >= c.Duration) {
-		return false
-	} else {
-		c.FirstSeen = c.LastSeen
+	switch status := c.Status; status {
+	case Normal:
+		if c.Between(c.Value) == Normal {
+			c.FirstSeen = c.LastSeen
+		} else if c.Between(c.Value) == Warning || c.Between(c.Value) == Critical {
+			if c.Between(c.BeforeValue) == Warning || c.Between(c.BeforeValue) == Critical {
+				if c.Delay() >= c.Duration {
+					c.Status = Notified
+					return true
+				}
+			}
+		}
+	case Notified:
+		if c.Between(c.Value) == Normal {
+			c.Status = Recovered
+			return true
+		}
+	case Recovered:
+		if c.Between(c.Value) == Normal {
+			c.FirstSeen = c.LastSeen
+			c.Status = Normal
+		}
 	}
 
-	if (c.Status == Warning || c.Status == Critical) && c.Value < c.Warning {
-		c.Status = Resolved
-	} else if c.Warning == c.Critical && c.Value >= c.Critical {
-		c.Status = Critical
-	} else if c.Value >= c.Warning && c.Value >= c.Critical {
-		c.Status = Critical
-	} else if c.Value >= c.Warning && c.Value < c.Critical {
-		c.Status = Warning
+	c.BeforeValue = c.Value
+
+	return false
+}
+
+func (c *Check) Delay() int {
+	return c.LastSeen - c.FirstSeen
+}
+
+func (c *Check) Between(value uint64) uint8 {
+	if value >= c.Warning {
+		if value >= c.Critical {
+			return Critical
+		}
+		return Warning
 	}
 
-	if c.Notified == 0 && c.Status == Normal {
-		return false
-	}
-
-	if c.Notified == c.Status {
-		return false
-	}
-
-	c.Notified = c.Status
-
-	log.Debug(fmt.Sprintf("Alert - Evaluated: %#v", c))
-
-	return true
+	return Normal
 }
