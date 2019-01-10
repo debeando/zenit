@@ -32,7 +32,7 @@ func Run() {
 			var color  = ""
 			var status = ""
 
-			if check.Notify() {
+			if check.Notify() && check.Status > alerts.Normal {
 				switch check.Status {
 				case alerts.Warning:
 					check.Status = alerts.Warning
@@ -51,6 +51,7 @@ func Run() {
 				msg := &Message{
 					Channel: config.File.Slack.Channel,
 				}
+
 				msg.AddAttachment(&Attachment{
 					Color: color,
 					Text: fmt.Sprintf(
