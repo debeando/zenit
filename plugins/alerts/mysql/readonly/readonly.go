@@ -7,8 +7,8 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
+	"github.com/swapbyt3s/zenit/plugins/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -40,7 +40,7 @@ func (l *MySQLReadOnly) Collect() {
 	var message = fmt.Sprintf("*Current:* %s", mysql.YesOrNo(status))
 
 	// Register new check and update last status:
-	alerts.Load().Register(
+	checks.Load().Register(
 		"readonly",
 		"MySQL Read Only",
 		config.File.MySQL.Alerts.ReadOnly.Duration,
@@ -52,5 +52,5 @@ func (l *MySQLReadOnly) Collect() {
 }
 
 func init() {
-	loader.Add("AlertMySQLReadOnly", func() loader.Plugin { return &MySQLReadOnly{} })
+	alerts.Add("AlertMySQLReadOnly", func() alerts.Alert { return &MySQLReadOnly{} })
 }

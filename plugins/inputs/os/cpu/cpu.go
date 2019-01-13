@@ -5,8 +5,8 @@ import (
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 
 	"github.com/shirou/gopsutil/cpu"
 )
@@ -34,5 +34,5 @@ func (l *InputOSCPU) Collect() {
 }
 
 func init() {
-	loader.Add("InputOSCPU", func() loader.Plugin { return &InputOSCPU{} })
+	inputs.Add("InputOSCPU", func() inputs.Input { return &InputOSCPU{} })
 }

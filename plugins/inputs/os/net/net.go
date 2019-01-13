@@ -7,8 +7,8 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/file"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
 type InputOSNet struct {}
@@ -46,5 +46,5 @@ func (l *InputOSNet) Collect() {
 }
 
 func init() {
-	loader.Add("InputOSNet", func() loader.Plugin { return &InputOSNet{} })
+	inputs.Add("InputOSNet", func() inputs.Input { return &InputOSNet{} })
 }

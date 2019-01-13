@@ -6,7 +6,7 @@ import (
 
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/alerts/mysql/lagging"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -45,29 +45,29 @@ func TestConnection(t *testing.T) {
 // - c = Notify Critical
 // - r = Notify Recovered
 //
-	var checks = []struct{
+	var histogram = []struct{
 		Value uint64
 		Status uint8
 		Notify bool
 	}{
-		{  0, alerts.Normal   , false }, // 0s
-		{  0, alerts.Normal   , false }, // 1s
-		{ 10, alerts.Normal   , false }, // 2s
-		{ 10, alerts.Normal   , false }, // 3s
-		{ 10, alerts.Normal   , false }, // 4s
-		{  0, alerts.Normal   , false }, // 5s
-		{  0, alerts.Normal   , false }, // 6s
-		{  0, alerts.Normal   , false }, // 7s
-		{ 60, alerts.Normal   , false }, // 8s
-		{ 70, alerts.Normal   , false }, // 9s
-		{ 80, alerts.Normal   , false }, // 10s
-		{ 80, alerts.Notified , true  }, // 11s
-		{ 80, alerts.Notified , false }, // 12s
-		{  0, alerts.Recovered, true  }, // 13s
-		{  0, alerts.Normal   , false }, // 14s
+		{  0, checks.Normal   , false }, // 0s
+		{  0, checks.Normal   , false }, // 1s
+		{ 10, checks.Normal   , false }, // 2s
+		{ 10, checks.Normal   , false }, // 3s
+		{ 10, checks.Normal   , false }, // 4s
+		{  0, checks.Normal   , false }, // 5s
+		{  0, checks.Normal   , false }, // 6s
+		{  0, checks.Normal   , false }, // 7s
+		{ 60, checks.Normal   , false }, // 8s
+		{ 70, checks.Normal   , false }, // 9s
+		{ 80, checks.Normal   , false }, // 10s
+		{ 80, checks.Notified , true  }, // 11s
+		{ 80, checks.Notified , false }, // 12s
+		{  0, checks.Recovered, true  }, // 13s
+		{  0, checks.Normal   , false }, // 14s
 	}
 
-	for second, check := range checks {
+	for second, variable := range histogram {
 		// Add test value on metrics:
 		metrics.Load().Reset()
 		metrics.Load().Add(metrics.Metric{
@@ -75,7 +75,7 @@ func TestConnection(t *testing.T) {
 			Tags: []metrics.Tag{
 				{"name", "Seconds_Behind_Master"},
 			},
-			Values: check.Value,
+			Values: variable.Value,
 		})
 
 		// Register alert:
@@ -83,16 +83,16 @@ func TestConnection(t *testing.T) {
 		c.Collect()
 
 		// Evaluate alert status
-		alert := alerts.Load().Exist("lagging")
-		notify := alert.Notify()
+		check := checks.Load().Exist("lagging")
+		notify := check.Notify()
 
-		if ! (alert.Status == check.Status && check.Notify == notify) {
+		if ! (check.Status == variable.Status && variable.Notify == notify) {
 			t.Errorf("Second: %d, Value: %d, Evaluated: %t, Expected: '%d', Got: '%d'.",
 				second,
-				check.Value,
+				variable.Value,
 				notify,
+				variable.Status,
 				check.Status,
-				alert.Status,
 			)
 		}
 

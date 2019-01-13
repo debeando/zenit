@@ -6,9 +6,9 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/alerts"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 )
 
 type OSDisk struct {}
@@ -39,7 +39,7 @@ func (l *OSDisk) Collect() {
 
 					message += fmt.Sprintf("*Volume:* %s, *Usage:* %d%%\n", device, percentage)
 
-					alerts.Load().Register(
+					checks.Load().Register(
 						"disk_" + device,
 						fmt.Sprintf("Volumen (%s)", device),
 						config.File.OS.Alerts.Disk.Duration,
@@ -55,5 +55,5 @@ func (l *OSDisk) Collect() {
 }
 
 func init() {
-	loader.Add("AlertOSDisk", func() loader.Plugin { return &OSDisk{} })
+	alerts.Add("AlertOSDisk", func() alerts.Alert { return &OSDisk{} })
 }

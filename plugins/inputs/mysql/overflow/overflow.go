@@ -9,7 +9,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -108,5 +108,5 @@ func (c *Column) Percentage() {
 }
 
 func init() {
-	loader.Add("InputMySQLOverflow", func() loader.Plugin { return &MySQLOverflow{} })
+	inputs.Add("InputMySQLOverflow", func() inputs.Input { return &MySQLOverflow{} })
 }

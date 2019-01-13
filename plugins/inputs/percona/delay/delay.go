@@ -6,8 +6,8 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
 type InputsPerconaDelay struct {}
@@ -37,5 +37,5 @@ func (l *InputsPerconaDelay) Collect() {
 }
 
 func init() {
-	loader.Add("InputsPerconaDelay", func() loader.Plugin { return &InputsPerconaDelay{} })
+	inputs.Add("InputsPerconaDelay", func() inputs.Input { return &InputsPerconaDelay{} })
 }

@@ -6,7 +6,7 @@ import (
 
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/alerts/os/cpu"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -22,26 +22,26 @@ func TestMain(m *testing.M) {
 }
 
 func TestCPU(t *testing.T) {
-	var checks = []struct{
+	var histogram = []struct{
 		Value uint64
 		Status uint8
 		Notify bool
 	}{
-		{ 10, alerts.Normal   , false }, // 1s
-		{ 10, alerts.Normal   , false }, // 2s
-		{ 50, alerts.Normal   , false }, // 3s
-		{ 10, alerts.Normal   , false }, // 4s
-		{ 10, alerts.Normal   , false }, // 5s
-		{ 50, alerts.Normal   , false }, // 6s
-		{ 55, alerts.Normal   , false }, // 7s
-		{ 50, alerts.Normal   , false }, // 8s
-		{ 90, alerts.Notified , true  }, // 9s
-		{ 95, alerts.Normal   , false }, // 10s
-		{ 10, alerts.Recovered, true  }, // 11s
-		{ 10, alerts.Normal   , false }, // 12s
+		{ 10, checks.Normal   , false }, // 1s
+		{ 10, checks.Normal   , false }, // 2s
+		{ 50, checks.Normal   , false }, // 3s
+		{ 10, checks.Normal   , false }, // 4s
+		{ 10, checks.Normal   , false }, // 5s
+		{ 50, checks.Normal   , false }, // 6s
+		{ 55, checks.Normal   , false }, // 7s
+		{ 50, checks.Normal   , false }, // 8s
+		{ 90, checks.Notified , true  }, // 9s
+		{ 95, checks.Normal   , false }, // 10s
+		{ 10, checks.Recovered, true  }, // 11s
+		{ 10, checks.Normal   , false }, // 12s
 	}
 
-	for second, check := range checks {
+	for second, variable := range histogram {
 		// Add test value on metrics:
 		metrics.Load().Reset()
 		metrics.Load().Add(metrics.Metric{
@@ -49,7 +49,7 @@ func TestCPU(t *testing.T) {
 			Tags: []metrics.Tag{
 				{"name", "cpu"},
 			},
-			Values: check.Value,
+			Values: variable.Value,
 		})
 
 		// Register alert:
@@ -57,16 +57,16 @@ func TestCPU(t *testing.T) {
 		c.Collect()
 
 		// Evaluate alert status
-		alert := alerts.Load().Exist("cpu")
-		notify := alert.Notify()
+		check := checks.Load().Exist("cpu")
+		notify := check.Notify()
 
-		if ! (alert.Status == check.Status && check.Notify == notify) {
+		if ! (check.Status == variable.Status && variable.Notify == notify) {
 			t.Errorf("Second: %d, Value: %d, Evaluated: %t, Expected: '%d', Got: '%d'.",
 				second,
-				check.Value,
+				variable.Value,
 				notify,
+				variable.Status,
 				check.Status,
-				alert.Status,
 			)
 		}
 

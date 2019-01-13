@@ -6,8 +6,8 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
 type InputsPerconaKill struct {}
@@ -37,5 +37,5 @@ func (l *InputsPerconaKill) Collect() {
 }
 
 func init() {
-	loader.Add("InputsPerconaKill", func() loader.Plugin { return &InputsPerconaKill{} })
+	inputs.Add("InputsPerconaKill", func() inputs.Input { return &InputsPerconaKill{} })
 }

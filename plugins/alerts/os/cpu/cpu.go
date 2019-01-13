@@ -6,9 +6,9 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/alerts"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 )
 
 type OSCPU struct {}
@@ -26,7 +26,7 @@ func (l *OSCPU) Collect() {
 
 	message += fmt.Sprintf("*CPU:* %d%%\n", percentage)
 
-	alerts.Load().Register(
+	checks.Load().Register(
 		"cpu",
 		"CPU",
 		config.File.OS.Alerts.CPU.Duration,
@@ -38,5 +38,5 @@ func (l *OSCPU) Collect() {
 }
 
 func init() {
-	loader.Add("AlertOSCPU", func() loader.Plugin { return &OSCPU{} })
+	alerts.Add("AlertOSCPU", func() alerts.Alert { return &OSCPU{} })
 }

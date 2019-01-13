@@ -6,7 +6,7 @@ import (
 
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/alerts/mysql/connections"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -46,24 +46,24 @@ func TestConnection(t *testing.T) {
 // - c = Notify Critical
 // - r = Notify Recovered
 //
-	var checks = []struct{
+	var histogram = []struct{
 		MaxConnections uint64
 		ThreadsConnected uint64
 		Status uint8
 		Notify bool
 	}{
-		{ 100, 10, alerts.Normal   , false }, // 0s
-		{ 100, 30, alerts.Normal   , false }, // 1s
-		{ 100, 60, alerts.Normal   , false }, // 2s
-		{ 100, 10, alerts.Normal   , false }, // 3s
-		{ 100, 60, alerts.Normal   , false }, // 4s
-		{ 100, 60, alerts.Normal   , false }, // 5s
-		{ 100, 60, alerts.Normal   , false }, // 6s
-		{ 100, 60, alerts.Notified , true  }, // 7s
-		{ 100, 10, alerts.Recovered, true  }, // 8s
+		{ 100, 10, checks.Normal   , false }, // 0s
+		{ 100, 30, checks.Normal   , false }, // 1s
+		{ 100, 60, checks.Normal   , false }, // 2s
+		{ 100, 10, checks.Normal   , false }, // 3s
+		{ 100, 60, checks.Normal   , false }, // 4s
+		{ 100, 60, checks.Normal   , false }, // 5s
+		{ 100, 60, checks.Normal   , false }, // 6s
+		{ 100, 60, checks.Notified , true  }, // 7s
+		{ 100, 10, checks.Recovered, true  }, // 8s
 	}
 
-	for second, check := range checks {
+	for second, variable := range histogram {
 		// Add test value on metrics:
 		metrics.Load().Reset()
 		metrics.Load().Add(metrics.Metric{
@@ -71,30 +71,30 @@ func TestConnection(t *testing.T) {
 			Tags: []metrics.Tag{
 				{"name", "max_connections"},
 			},
-			Values: check.MaxConnections,
+			Values: variable.MaxConnections,
 		})
 		metrics.Load().Add(metrics.Metric{
 			Key: "zenit_mysql_status",
 			Tags: []metrics.Tag{
 				{"name", "Threads_connected"},
 			},
-			Values: check.ThreadsConnected,
+			Values: variable.ThreadsConnected,
 		})
 
 		// Register alert:
 		var c connections.MySQLConnections
 		c.Collect()
 
-		alert := alerts.Load().Exist("connections")
-		notify := alert.Notify()
+		check := checks.Load().Exist("connections")
+		notify := check.Notify()
 
-		if ! (alert.Status == check.Status && check.Notify == notify) {
+		if ! (check.Status == variable.Status && variable.Notify == notify) {
 			t.Errorf("Second: %d, ThreadsConnected: %d, Evaluated: %t, Expected: '%d', Got: '%d'.",
 				second,
-				check.ThreadsConnected,
+				variable.ThreadsConnected,
 				notify,
+				variable.Status,
 				check.Status,
-				alert.Status,
 			)
 		}
 

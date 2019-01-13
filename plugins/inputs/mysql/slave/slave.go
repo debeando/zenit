@@ -6,7 +6,7 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -39,5 +39,5 @@ func (l *MySQLSlave) Collect() {
 }
 
 func init() {
-	loader.Add("InputMySQLSlave", func() loader.Plugin { return &MySQLSlave{} })
+	inputs.Add("InputMySQLSlave", func() inputs.Input { return &MySQLSlave{} })
 }

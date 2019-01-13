@@ -1,4 +1,4 @@
-package alerts
+package checks
 
 import (
 	"fmt"
@@ -7,21 +7,33 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 )
 
-// Check is a status for each alert.
+// Struct to manage each alerts.
 type Check struct {
-	Critical    uint64 // Critical value
-	Duration    int    // Duration limit between FirstSeen and LastSeen to alert.
-	FirstSeen   int    // UnixTimeStamp when is register alert.
-	Key         string // Key to identify own check.
-	LastSeen    int    // What is the last seen (in UnixTimeStamp) value to rest with first seen and compare with duration.
-	Message     string // Custom message.
-	Name        string // Name human own check.
-	Status      uint8  // Current status for the check: normal, warning, critical or Recovered.
-	Value       uint64 // Value to evaluate.
-	BeforeValue uint64 // Last evaluated value.
-	Warning     uint64 // Warning value.
+	// Critical value from config file.
+	Critical uint64
+	// Duration limit between FirstSeen and LastSeen to alert.
+	Duration int
+	// UnixTimeStamp when is register alert or recovered or in normal state.
+	FirstSeen int
+	// Key to identify own check.
+	Key string
+	// What is the last seen (in UnixTimeStamp) value to rest with first seen and compare with duration.
+	LastSeen int
+	// Custom message from alert plugin.
+	Message string
+	// Name human own check from alert plugin.
+	Name string
+	// Current status for the check: normal, warning, critical or Recovered.
+	Status uint8
+	// Value to evaluate become input plugin.
+	Value uint64
+	// Last evaluated value.
+	BeforeValue uint64
+	// Warning value from config file..
+	Warning uint64
 }
 
+// Alert levels
 const (
 	Normal    = 0
 	Warning   = 1
@@ -74,6 +86,7 @@ func (l *Items) Register(key string, name string, duration int, warning uint64, 
 	}
 }
 
+// Return all keys from the list.
 func (l *Items) Keys() []string {
 	var keys = []string{}
 
@@ -83,6 +96,7 @@ func (l *Items) Keys() []string {
 	return keys
 }
 
+// Check de alert by key name exist on the list and return the item.
 func (l *Items) Exist(key string) *Check {
 	for i := 0; i < len(*l); i++ {
 		if (*l)[i].Key == key {
@@ -92,6 +106,7 @@ func (l *Items) Exist(key string) *Check {
 	return nil
 }
 
+// Verify the item on list is a valid alert.
 func (c *Check) Notify() bool {
 	if c == nil {
 		return false
@@ -126,10 +141,12 @@ func (c *Check) Notify() bool {
 	return false
 }
 
+// Calculate difference between dates
 func (c *Check) Delay() int {
 	return c.LastSeen - c.FirstSeen
 }
 
+// Check the value is between range of warning and critical.
 func (c *Check) Between(value uint64) uint8 {
 	if value >= c.Warning {
 		if value >= c.Critical {

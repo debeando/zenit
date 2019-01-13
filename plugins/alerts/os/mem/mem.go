@@ -6,9 +6,9 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/alerts"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 )
 
 type OSMEM struct {}
@@ -30,7 +30,7 @@ func (l *OSMEM) Collect() {
 
 	message += fmt.Sprintf("*Memory:* %d%%\n", percentage)
 
-	alerts.Load().Register(
+	checks.Load().Register(
 		"mem",
 		"MEM",
 		config.File.OS.Alerts.MEM.Duration,
@@ -42,5 +42,5 @@ func (l *OSMEM) Collect() {
 }
 
 func init() {
-	loader.Add("AlertOSMEM", func() loader.Plugin { return &OSMEM{} })
+	alerts.Add("AlertOSMEM", func() alerts.Alert { return &OSMEM{} })
 }

@@ -9,8 +9,8 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
 type Query struct {
@@ -114,5 +114,5 @@ func GetTable(values []string) string {
 }
 
 func init() {
-	loader.Add("InputProxySQLQuery", func() loader.Plugin { return &InputProxySQLQuery{} })
+	inputs.Add("InputProxySQLQuery", func() inputs.Input { return &InputProxySQLQuery{} })
 }

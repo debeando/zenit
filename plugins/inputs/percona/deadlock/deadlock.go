@@ -6,8 +6,8 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
 type InputsPerconaDeadlock struct {}
@@ -37,5 +37,5 @@ func (l *InputsPerconaDeadlock) Collect() {
 }
 
 func init() {
-	loader.Add("InputsPerconaDeadlock", func() loader.Plugin { return &InputsPerconaDeadlock{} })
+	inputs.Add("InputsPerconaDeadlock", func() inputs.Input { return &InputsPerconaDeadlock{} })
 }

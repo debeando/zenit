@@ -7,8 +7,8 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
+	"github.com/swapbyt3s/zenit/plugins/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -61,7 +61,7 @@ func (l *MySQLReplication) Collect() {
 
 	running = 2 - (ioRunning + sqlRunning)
 
-	alerts.Load().Register(
+	checks.Load().Register(
 		"replication",
 		"MySQL Replication Status",
 		config.File.MySQL.Alerts.Replication.Duration,
@@ -77,5 +77,5 @@ func (l *MySQLReplication) Collect() {
 }
 
 func init() {
-	loader.Add("AlertMySQLReplication", func() loader.Plugin { return &MySQLReplication{} })
+	alerts.Add("AlertMySQLReplication", func() alerts.Alert { return &MySQLReplication{} })
 }

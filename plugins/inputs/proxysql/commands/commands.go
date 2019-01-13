@@ -7,8 +7,8 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
 const query = "SELECT * FROM stats_mysql_commands_counters;"
@@ -55,5 +55,5 @@ func (l *InputProxySQLCommands) Collect() {
 }
 
 func init() {
-	loader.Add("InputProxySQLCommands", func() loader.Plugin { return &InputProxySQLCommands{} })
+	inputs.Add("InputProxySQLCommands", func() inputs.Input { return &InputProxySQLCommands{} })
 }

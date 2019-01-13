@@ -3,8 +3,8 @@ package sys
 import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
 const NR_OPEN string = "/proc/sys/fs/nr_open"
@@ -30,5 +30,5 @@ func (l *InputOSLimits) Collect() {
 }
 
 func init() {
-	loader.Add("InputOSLimits", func() loader.Plugin { return &InputOSLimits{} })
+	inputs.Add("InputOSLimits", func() inputs.Input { return &InputOSLimits{} })
 }

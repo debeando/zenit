@@ -7,8 +7,8 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
 const querySQLPool = `SELECT CASE
@@ -66,5 +66,5 @@ func (l *InputProxySQLPool) Collect() {
 }
 
 func init() {
-	loader.Add("InputProxySQLPool", func() loader.Plugin { return &InputProxySQLPool{} })
+	inputs.Add("InputProxySQLPool", func() inputs.Input { return &InputProxySQLPool{} })
 }

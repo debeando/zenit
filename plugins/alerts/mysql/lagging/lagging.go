@@ -6,8 +6,8 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
+	"github.com/swapbyt3s/zenit/plugins/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -30,7 +30,7 @@ func (l *MySQLLagging) Collect() {
 	// Build one message with details for notification:
 	var message = fmt.Sprintf("*Lagging:* %d\n", lagging)
 
-	alerts.Load().Register(
+	checks.Load().Register(
 		"lagging",
 		"MySQL Replication Lagging",
 		config.File.MySQL.Alerts.Replication.Duration,
@@ -42,5 +42,5 @@ func (l *MySQLLagging) Collect() {
 }
 
 func init() {
-	loader.Add("AlertMySQLLagging", func() loader.Plugin { return &MySQLLagging{} })
+	alerts.Add("AlertMySQLLagging", func() alerts.Alert { return &MySQLLagging{} })
 }

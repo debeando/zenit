@@ -5,8 +5,8 @@ import (
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 
 	"github.com/shirou/gopsutil/mem"
 )
@@ -34,5 +34,5 @@ func (l *InputOSMem) Collect() {
 }
 
 func init() {
-	loader.Add("InputOSMem", func() loader.Plugin { return &InputOSMem{} })
+	inputs.Add("InputOSMem", func() inputs.Input { return &InputOSMem{} })
 }

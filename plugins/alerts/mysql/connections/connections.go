@@ -6,8 +6,8 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
+	"github.com/swapbyt3s/zenit/plugins/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -36,10 +36,14 @@ func (l *MySQLConnections) Collect() {
 	var ThreadsConnected = common.InterfaceToUInt64(value)
 	var percentage = uint64(common.Percentage(ThreadsConnected, MaxConnections))
 
+	//if MaxConnections == 0 || ThreadsConnected == 0 || percentage == 0 {
+	//	return
+	//}
+
 	// Build one message with details for notification:
 	var message = fmt.Sprintf("*Current:* %d%%", percentage)
 
-	alerts.Load().Register(
+	checks.Load().Register(
 		"connections",
 		"MySQL Connections",
 		config.File.MySQL.Alerts.Connections.Duration,
@@ -59,5 +63,5 @@ func (l *MySQLConnections) Collect() {
 }
 
 func init() {
-	loader.Add("AlertMySQLConnections", func() loader.Plugin { return &MySQLConnections{} })
+	alerts.Add("AlertMySQLConnections", func() alerts.Alert { return &MySQLConnections{} })
 }

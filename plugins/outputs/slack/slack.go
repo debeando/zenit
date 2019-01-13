@@ -8,7 +8,7 @@ import (
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 )
 
 type Message struct {
@@ -27,23 +27,19 @@ func (m *Message) AddAttachment(a *Attachment) {
 
 func Run() {
 	if config.File.Slack.Enable {
-		for _, key := range alerts.Load().Keys() {
-			var check  = alerts.Load().Exist(key)
+		for _, key := range checks.Load().Keys() {
+			var check  = checks.Load().Exist(key)
 			var color  = ""
 			var status = ""
 
-			if check.Notify() && check.Status > alerts.Normal {
-				switch check.Status {
-				case alerts.Warning:
-					check.Status = alerts.Warning
+			if check.Notify() && check.Status >= checks.Notified {
+				if check.Between(check.Value) == checks.Warning {
 					color = "warning"
 					status = "Warning"
-				case alerts.Critical:
-					check.Status = alerts.Critical
+				} else if check.Between(check.Value) == checks.Critical {
 					color = "danger"
 					status = "Critical"
-				case alerts.Recovered:
-					check.Status = alerts.Recovered
+				} else if check.Status == checks.Recovered {
 					color = "good"
 					status = "Recovered"
 				}

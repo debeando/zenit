@@ -6,8 +6,8 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
 const query = "SHOW GLOBAL STATUS"
@@ -39,5 +39,5 @@ func (l *MySQLStatus) Collect() {
 }
 
 func init() {
-	loader.Add("InputMySQLStatus", func() loader.Plugin { return &MySQLStatus{} })
+	inputs.Add("InputMySQLStatus", func() inputs.Input { return &MySQLStatus{} })
 }

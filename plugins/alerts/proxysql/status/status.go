@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/alerts"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 )
 
 type Server struct {
@@ -47,7 +47,7 @@ func (l *ProxyPoolStatus) Collect() {
 			// fmt.Printf("ProxySQL Message: %s\n", message)
 
 			// Register new check and update last status:
-			alerts.Load().Register(
+			checks.Load().Register(
 				"proxysql_pool_status_" + s.Host + s.Group,
 				"ProxySQL Connection Pool Status",
 				config.File.ProxySQL.Alerts.Errors.Duration,
@@ -78,5 +78,5 @@ func Status(s string) uint64 {
 }
 
 func init() {
-	loader.Add("AlertProxyPoolStatus", func() loader.Plugin { return &ProxyPoolStatus{} })
+	alerts.Add("AlertProxyPoolStatus", func() alerts.Alert { return &ProxyPoolStatus{} })
 }

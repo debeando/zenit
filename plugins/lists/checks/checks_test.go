@@ -1,27 +1,27 @@
-package alerts_test
+package checks_test
 
 import (
 	"fmt"
 	"testing"
 	"time"
 
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 )
 
 func TestBetween(t *testing.T) {
-	var checks = []struct{
+	var histogram = []struct{
 		Value uint64
 		Status uint8
 	}{
-		{ 10, alerts.Normal   },
-		{ 50, alerts.Warning  },
-		{ 90, alerts.Critical },
-		{ 49, alerts.Normal   },
-		{ 89, alerts.Warning  },
-		{ 99, alerts.Critical },
+		{ 10, checks.Normal   },
+		{ 50, checks.Warning  },
+		{ 90, checks.Critical },
+		{ 49, checks.Normal   },
+		{ 89, checks.Warning  },
+		{ 99, checks.Critical },
 	}
 
-	alerts.Load().Register(
+	checks.Load().Register(
 		"TestRange",
 		"TestRange",
 		0,
@@ -31,13 +31,13 @@ func TestBetween(t *testing.T) {
 		"TestRange",
 	)
 
-	alert := alerts.Load().Exist("TestRange")
+	alert := checks.Load().Exist("TestRange")
 
-	for _, check := range checks {
-		r := alert.Between(check.Value)
+	for _, variable := range histogram {
+		r := alert.Between(variable.Value)
 
-		if ! (r == check.Status) {
-			t.Errorf("Expected: '%d', got: '%d'", check.Status, r)
+		if ! (r == variable.Status) {
+			t.Errorf("Expected: '%d', got: '%d'", variable.Status, r)
 		}
 	}
 }
@@ -79,87 +79,87 @@ func TestNotify(t *testing.T) {
 // - r = Notify Recovered
 //
 
-	var checks = []struct{
+	var histogram = []struct{
 		Value uint64
 		Status uint8
 		Notify bool
 	}{
-		{  0, alerts.Normal   , false }, // 0s
-		{ 10, alerts.Normal   , false }, // 1s
-		{ 30, alerts.Normal   , false }, // 2s
-		{ 60, alerts.Normal   , false }, // 3s
-		{ 10, alerts.Normal   , false }, // 4s
-		{ 60, alerts.Normal   , false }, // 5s
-		{ 60, alerts.Normal   , false }, // 6s
-		{ 10, alerts.Normal   , false }, // 7s
-		{ 60, alerts.Normal   , false }, // 8s
-		{ 60, alerts.Normal   , false }, // 9s
-		{ 60, alerts.Normal   , false }, // 10s
-		{ 10, alerts.Normal   , false }, // 11s
-		{ 60, alerts.Normal   , false }, // 12s
-		{ 60, alerts.Normal   , false }, // 13s
-		{ 60, alerts.Normal   , false }, // 14s
-		{ 60, alerts.Notified , true  }, // 15s
-		{ 10, alerts.Recovered, true  }, // 16s
-		{ 30, alerts.Normal   , false }, // 17s
-		{ 60, alerts.Normal   , false }, // 18s
-		{ 90, alerts.Normal   , false }, // 19s
-		{ 90, alerts.Normal   , false }, // 20s
-		{ 10, alerts.Normal   , false }, // 21s
-		{ 60, alerts.Normal   , false }, // 22s
-		{ 90, alerts.Normal   , false }, // 23s
-		{ 90, alerts.Normal   , false }, // 24s
-		{ 90, alerts.Notified , true  }, // 25s
-		{ 10, alerts.Recovered, true  }, // 26s
-		{ 10, alerts.Normal   , false }, // 27s
-		{ 30, alerts.Normal   , false }, // 28s
-		{ 60, alerts.Normal   , false }, // 29s
-		{ 60, alerts.Normal   , false }, // 30s
-		{ 60, alerts.Normal   , false }, // 31s
-		{ 60, alerts.Notified , true  }, // 32s
-		{ 60, alerts.Notified , false }, // 33s
-		{ 60, alerts.Notified , false }, // 34s
-		{ 10, alerts.Recovered, true  }, // 35s
+		{  0, checks.Normal   , false }, // 0s
+		{ 10, checks.Normal   , false }, // 1s
+		{ 30, checks.Normal   , false }, // 2s
+		{ 60, checks.Normal   , false }, // 3s
+		{ 10, checks.Normal   , false }, // 4s
+		{ 60, checks.Normal   , false }, // 5s
+		{ 60, checks.Normal   , false }, // 6s
+		{ 10, checks.Normal   , false }, // 7s
+		{ 60, checks.Normal   , false }, // 8s
+		{ 60, checks.Normal   , false }, // 9s
+		{ 60, checks.Normal   , false }, // 10s
+		{ 10, checks.Normal   , false }, // 11s
+		{ 60, checks.Normal   , false }, // 12s
+		{ 60, checks.Normal   , false }, // 13s
+		{ 60, checks.Normal   , false }, // 14s
+		{ 60, checks.Notified , true  }, // 15s
+		{ 10, checks.Recovered, true  }, // 16s
+		{ 30, checks.Normal   , false }, // 17s
+		{ 60, checks.Normal   , false }, // 18s
+		{ 90, checks.Normal   , false }, // 19s
+		{ 90, checks.Normal   , false }, // 20s
+		{ 10, checks.Normal   , false }, // 21s
+		{ 60, checks.Normal   , false }, // 22s
+		{ 90, checks.Normal   , false }, // 23s
+		{ 90, checks.Normal   , false }, // 24s
+		{ 90, checks.Notified , true  }, // 25s
+		{ 10, checks.Recovered, true  }, // 26s
+		{ 10, checks.Normal   , false }, // 27s
+		{ 30, checks.Normal   , false }, // 28s
+		{ 60, checks.Normal   , false }, // 29s
+		{ 60, checks.Normal   , false }, // 30s
+		{ 60, checks.Normal   , false }, // 31s
+		{ 60, checks.Notified , true  }, // 32s
+		{ 60, checks.Notified , false }, // 33s
+		{ 60, checks.Notified , false }, // 34s
+		{ 10, checks.Recovered, true  }, // 35s
 	}
 
 	fmt.Printf("  * Second\tLastSeen\tFirstSeen\tDelay\tMaxTime\tNotify\tValue\tBetween\tStatus\n")
 
-	for second, check := range checks {
+	for second, variable := range histogram {
 		time.Sleep(time.Second)
 
-		alerts.Load().Register(
+		checks.Load().Register(
 			"test",
 			"Test",
 			4,
 			50, // Warning
 			90, // Critical
-			check.Value,
+			variable.Value,
 			"",
 		)
 
-		alert := alerts.Load().Exist("test")
-		delay := alert.Delay()
-		notify := alert.Notify()
+		check := checks.Load().Exist("test")
+		delay := check.Delay()
+		notify := check.Notify()
 
 		fmt.Printf("  - %d\t\t%d\t%d\t%d\t%d\t%t\t%d\t%d\t%d\n",
 			second,
-			alert.LastSeen,
-			alert.FirstSeen,
+			check.LastSeen,
+			check.FirstSeen,
 			delay,          // Delay
-			alert.Duration, // MaxTime
+			check.Duration, // MaxTime
 			notify,         // Notify
-			alert.Value,
-			alert.Between(alert.Value),
-			alert.Status,
+			check.Value,
+			check.Between(check.Value),
+			check.Status,
 		)
 
-		if ! (alert.Status == check.Status && check.Notify == notify) {
+		if ! (check.Status == variable.Status && variable.Notify == notify) {
 			t.Errorf("Second: %d, Value: %d, Evaluated: %t, Expected: '%d', Got: '%d'.",
 				second,
-				check.Value,
+				variable.Value,
 				notify,
+				variable.Status,
 				check.Status,
-				alert.Status,
 			)
 		}
 	}

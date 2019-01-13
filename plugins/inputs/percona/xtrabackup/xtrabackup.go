@@ -6,8 +6,8 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
 type InputsPerconaXtraBackup struct {}
@@ -37,5 +37,5 @@ func (l *InputsPerconaXtraBackup) Collect() {
 }
 
 func init() {
-	loader.Add("InputsPerconaXtraBackup", func() loader.Plugin { return &InputsPerconaXtraBackup{} })
+	inputs.Add("InputsPerconaXtraBackup", func() inputs.Input { return &InputsPerconaXtraBackup{} })
 }

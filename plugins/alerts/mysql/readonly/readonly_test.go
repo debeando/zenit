@@ -6,7 +6,7 @@ import (
 
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/alerts/mysql/readonly"
-	"github.com/swapbyt3s/zenit/plugins/lists/alerts"
+	"github.com/swapbyt3s/zenit/plugins/lists/checks"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
@@ -21,22 +21,22 @@ func TestMain(m *testing.M) {
 }
 
 func TestConnection(t *testing.T) {
-	var checks = []struct{
+	var histogram = []struct{
 		Value uint64
 		Status uint8
 		Notify bool
 	}{
-		{ 1, alerts.Normal   , false }, // 0s
-		{ 0, alerts.Normal   , false }, // 1s
-		{ 1, alerts.Normal   , false }, // 2s
-		{ 0, alerts.Normal   , false }, // 3s
-		{ 0, alerts.Normal   , false }, // 4s
-		{ 0, alerts.Normal   , false }, // 5s
-		{ 0, alerts.Notified , true  }, // 6s
-		{ 1, alerts.Recovered, true  }, // 7s
+		{ 1, checks.Normal   , false }, // 0s
+		{ 0, checks.Normal   , false }, // 1s
+		{ 1, checks.Normal   , false }, // 2s
+		{ 0, checks.Normal   , false }, // 3s
+		{ 0, checks.Normal   , false }, // 4s
+		{ 0, checks.Normal   , false }, // 5s
+		{ 0, checks.Notified , true  }, // 6s
+		{ 1, checks.Recovered, true  }, // 7s
 	}
 
-	for second, check := range checks {
+	for second, variable := range histogram {
 		// Add test value on metrics:
 		metrics.Load().Reset()
 		metrics.Load().Add(metrics.Metric{
@@ -44,7 +44,7 @@ func TestConnection(t *testing.T) {
 			Tags: []metrics.Tag{
 				{"name", "read_only"},
 			},
-			Values: check.Value,
+			Values: variable.Value,
 		})
 
 		// Register alert:
@@ -52,16 +52,16 @@ func TestConnection(t *testing.T) {
 		c.Collect()
 
 		// Evaluate alert status
-		alert := alerts.Load().Exist("readonly")
-		notify := alert.Notify()
+		check := checks.Load().Exist("readonly")
+		notify := check.Notify()
 
-		if ! (alert.Status == check.Status && check.Notify == notify) {
+		if ! (check.Status == variable.Status && variable.Notify == notify) {
 			t.Errorf("Second: %d, Value: %d, Evaluated: %t, Expected: '%d', Got: '%d'.",
 				second,
-				check.Value,
+				variable.Value,
 				notify,
+				variable.Status,
 				check.Status,
-				alert.Status,
 			)
 		}
 

@@ -5,9 +5,10 @@ import (
 	"time"
 
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/loader"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 
+	"github.com/swapbyt3s/zenit/plugins/alerts"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
 
@@ -51,8 +52,15 @@ func Load(wg *sync.WaitGroup) {
 		// Flush old metrics:
 		metrics.Load().Reset()
 
-		for key := range loader.Plugins {
-			if creator, ok := loader.Plugins[key]; ok {
+		for key := range inputs.Inputs {
+			if creator, ok := inputs.Inputs[key]; ok {
+				c := creator()
+				c.Collect()
+			}
+		}
+
+		for key := range alerts.Alerts {
+			if creator, ok := alerts.Alerts[key]; ok {
 				c := creator()
 				c.Collect()
 			}
