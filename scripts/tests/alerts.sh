@@ -34,18 +34,23 @@ echo "==> MySQL-Replication: normal"
 docker exec -d -i -t -u root zenit_percona_server_secondary /usr/bin/mysql -e "SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1; START SLAVE;"
 sleep 20
 
+
+docker exec -d -i -t -u root zenit_percona_server_secondary /usr/bin/pt-slave-delay h=127.0.0.1,u=root --delay 24h --interval 60s --daemonize
+
+docker exec -d -i -t -u root zenit_percona_server_secondary /usr/bin/pkill pt-slave-delay
+
 echo "==> MySQL-MaxConnections: warning"
 docker exec -d -i -t -u root zenit_percona_server_secondary /bin/sh -c "/usr/bin/mysql -e 'SET GLOBAL max_connections = 10;'"
 docker exec -d -i -t -u root zenit_percona_server_secondary /bin/sh -c "/usr/bin/mysql -e 'SELECT SLEEP(60);'"
 docker exec -d -i -t -u root zenit_percona_server_secondary /bin/sh -c "/usr/bin/mysql -e 'SELECT SLEEP(60);'"
 docker exec -d -i -t -u root zenit_percona_server_secondary /bin/sh -c "/usr/bin/mysql -e 'SELECT SLEEP(60);'"
 docker exec -d -i -t -u root zenit_percona_server_secondary /bin/sh -c "/usr/bin/mysql -e 'SELECT SLEEP(60);'"
-sleep 20
+sleep 30
 
 echo "==> MySQL-MaxConnections: critical"
 docker exec -d -i -t -u root zenit_percona_server_secondary /bin/sh -c "/usr/bin/mysql -e 'SELECT SLEEP(60);'"
 docker exec -d -i -t -u root zenit_percona_server_secondary /bin/sh -c "/usr/bin/mysql -e 'SELECT SLEEP(60);'"
-sleep 20
+sleep 60
 
 echo "==> OS-Disk: warning"
 docker exec -d -i -t -u root zenit_percona_server_secondary /bin/sh -c "fallocate -l 40G /root/demo"

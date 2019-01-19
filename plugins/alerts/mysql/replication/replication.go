@@ -58,6 +58,7 @@ func (l *MySQLReplication) Collect() {
 	log.Debug(fmt.Sprintf("Plugin - AlertMySQLReplication - Slave_IO_Running=%d", ioRunning))
 	log.Debug(fmt.Sprintf("Plugin - AlertMySQLReplication - Slave_SQL_Running=%d", sqlRunning))
 	log.Debug(fmt.Sprintf("Plugin - AlertMySQLReplication - Last_SQL_Errno=%d", sqlError))
+	log.Debug(fmt.Sprintf("Plugin - AlertMySQLReplication - PerconaToolkitSlaveDelay=%d", delay))
 }
 
 func init() {

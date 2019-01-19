@@ -27,7 +27,6 @@ func (l *InputsPerconaDeadlock) Collect() {
 	metrics.Load().Add(metrics.Metric{
 		Key: "zenit_process",
 		Tags: []metrics.Tag{
-			{"system", "linux"},
 			{"name", "pt_deadlock_logger"},
 		},
 		Values: value,

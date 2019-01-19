@@ -16,10 +16,10 @@ import (
 	"github.com/swapbyt3s/zenit/common/file"
 )
 
-func PGrep(cmd string) int {
+func PGrep(cmd string) uint64 {
 	stdout, _ := ExecCommand("/usr/bin/pgrep -f '" + cmd + "'")
 
-	return StringToInt(stdout)
+	return StringToUInt64(stdout)
 }
 
 func GetUInt64FromFile(path string) uint64 {

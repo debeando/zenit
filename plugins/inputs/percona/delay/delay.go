@@ -10,15 +10,15 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/inputs"
 )
 
-type InputsPerconaDelay struct {}
+type InputsPerconaToolkitSlaveDelay struct {}
 
-func (l *InputsPerconaDelay) Collect() {
+func (l *InputsPerconaToolkitSlaveDelay) Collect() {
 	if ! config.File.Process.Inputs.PerconaToolKitSlaveDelay {
 		return
 	}
 
 	var pid = common.PGrep("pt-slave-delay")
-	var value = 0
+	var value uint64 = 0
 
 	if pid > 0 {
 		value = 1
@@ -27,15 +27,14 @@ func (l *InputsPerconaDelay) Collect() {
 	metrics.Load().Add(metrics.Metric{
 		Key: "zenit_process",
 		Tags: []metrics.Tag{
-			{"system", "linux"},
 			{"name", "pt_slave_delay"},
 		},
 		Values: value,
 	})
 
-	log.Debug(fmt.Sprintf("Plugin - InputsPerconaDelay - %d", value))
+	log.Debug(fmt.Sprintf("Plugin - InputsPerconaToolkitSlaveDelay - %d", value))
 }
 
 func init() {
-	inputs.Add("InputsPerconaDelay", func() inputs.Input { return &InputsPerconaDelay{} })
+	inputs.Add("InputsPerconaToolkitSlaveDelay", func() inputs.Input { return &InputsPerconaToolkitSlaveDelay{} })
 }
