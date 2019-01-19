@@ -9,8 +9,8 @@ FROM ubuntu:18.04
 # File Author / Maintainer
 MAINTAINER Swapbyt3s
 LABEL vendor="Swapbyt3s" \
-      description="ClickHouse 18.10.3 on Ubuntu 18.04" \
-      version="18.10.3"
+      description="ClickHouse 18.16.1 on Ubuntu 18.04" \
+      version="18.16.1"
 
 # Update the repository sources list
 RUN apt-get update
@@ -37,13 +37,13 @@ RUN mkdir -p /etc/apt/sources.list.d && \
 # -----------------------------------------------------------------------------
 RUN env DEBIAN_FRONTEND=noninteractive \
     apt-get install --allow-unauthenticated -y \
-            clickhouse-server=18.10.3 \
-            clickhouse-common-static=18.10.3 \
+            clickhouse-server=18.16.1 \
+            clickhouse-common-static=18.16.1 \
             libgcc-7-dev && \
     env DEBIAN_FRONTEND=noninteractive \
     apt-get install --allow-unauthenticated -y \
-    clickhouse-client=18.10.3 \
-    clickhouse-common-static=18.10.3 \
+    clickhouse-client=18.16.1 \
+    clickhouse-common-static=18.16.1 \
     locales \
     tzdata \
     curl

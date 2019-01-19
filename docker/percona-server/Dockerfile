@@ -13,7 +13,8 @@ LABEL vendor="Swapbyt3s" \
       version="5.x"
 
 # Update the repository sources list
-RUN apt-get update
+RUN apt-get update && \
+    apt-get -y upgrade
 
 ENV PERCONA_VERSION=5.5
 
@@ -23,8 +24,7 @@ ENV PERCONA_VERSION=5.5
 # -----------------------------------------------------------------------------
 # Install additional packages
 # -----------------------------------------------------------------------------
-RUN apt-get install -y vim wget htop stress
-RUN apt-get install -y curl
+RUN apt-get install -y vim wget htop stress curl lsb
 
 # -----------------------------------------------------------------------------
 # Install Zenit
@@ -53,11 +53,14 @@ COPY docker/percona-server/loop_log_slow.sh /root/loop_log_slow.sh
 # -----------------------------------------------------------------------------
 RUN apt-get install -y --no-install-recommends \
     apt-transport-https dirmngr apt-utils apt-transport-https ca-certificates \
-    libpwquality-tools cracklib-runtime gnupg wget
+    libpwquality-tools cracklib-runtime gnupg
 
-RUN wget https://repo.percona.com/apt/percona-release_latest.bionic_all.deb >/dev/null 2>&1 && \
-    dpkg -i percona-release_latest.bionic_all.deb && \
+RUN wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb >/dev/null 2>&1 && \
+    dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb && \
     apt-get update
+
+RUN wget https://www.percona.com/downloads/percona-toolkit/3.0.3/binary/debian/zesty/x86_64/percona-toolkit_3.0.3-1.zesty_amd64.deb >/dev/null 2>&1 && \
+    dpkg -i percona-toolkit_3.0.3-1.zesty_amd64.deb
 
 RUN env DEBIAN_FRONTEND=noninteractive \
     apt-get install -y percona-server-server-$PERCONA_VERSION && \
