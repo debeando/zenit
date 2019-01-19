@@ -61,7 +61,7 @@ func TestCPU(t *testing.T) {
 		notify := check.Notify()
 
 		if ! (check.Status == variable.Status && variable.Notify == notify) {
-			t.Errorf("Second: %d, Value: %d, Evaluated: %t, Expected: '%d', Got: '%d'.",
+			t.Errorf("Second: %d, Value: %d, Evaluated: %t, Expected: %d, Got: %d.",
 				second,
 				variable.Value,
 				notify,

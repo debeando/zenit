@@ -20,7 +20,7 @@ func TestMain(m *testing.M) {
 	m.Run()
 }
 
-func TestConnection(t *testing.T) {
+func TestReadonly(t *testing.T) {
 	var histogram = []struct{
 		Value uint64
 		Status uint8
@@ -56,7 +56,7 @@ func TestConnection(t *testing.T) {
 		notify := check.Notify()
 
 		if ! (check.Status == variable.Status && variable.Notify == notify) {
-			t.Errorf("Second: %d, Value: %d, Evaluated: %t, Expected: '%d', Got: '%d'.",
+			t.Errorf("Second: %d, Value: %d, Evaluated: %t, Expected: %d, Got: %d.",
 				second,
 				variable.Value,
 				notify,

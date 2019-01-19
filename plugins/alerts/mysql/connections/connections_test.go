@@ -89,7 +89,7 @@ func TestConnection(t *testing.T) {
 		notify := check.Notify()
 
 		if ! (check.Status == variable.Status && variable.Notify == notify) {
-			t.Errorf("Second: %d, ThreadsConnected: %d, Evaluated: %t, Expected: '%d', Got: '%d'.",
+			t.Errorf("Second: %d, ThreadsConnected: %d, Evaluated: %t, Expected: %d, Got: %d.",
 				second,
 				variable.ThreadsConnected,
 				notify,
