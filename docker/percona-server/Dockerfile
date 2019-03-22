@@ -53,7 +53,8 @@ COPY docker/percona-server/loop_log_slow.sh /root/loop_log_slow.sh
 # -----------------------------------------------------------------------------
 RUN apt-get install -y --no-install-recommends \
     apt-transport-https dirmngr apt-utils apt-transport-https ca-certificates \
-    libpwquality-tools cracklib-runtime gnupg
+    libpwquality-tools cracklib-runtime gnupg \
+    libdbi-perl libdbd-mysql-perl libterm-readkey-perl libio-socket-ssl-perl
 
 RUN wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb >/dev/null 2>&1 && \
     dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb && \
