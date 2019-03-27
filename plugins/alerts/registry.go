@@ -2,6 +2,7 @@ package alerts
 
 import (
   "fmt"
+  "os"
 
   "github.com/swapbyt3s/zenit/common/log"
 )
@@ -20,7 +21,9 @@ var Alerts = map[string]Creator{}
 // Add can be called from init() on a plugin in this package
 // It will automatically be added to the Alerts map to be called externally
 func Add(name string, creator Creator) {
-  log.Info(fmt.Sprintf("Plugin Alerts - %s", name))
+	if len(os.Args) == 1 {
+		log.Info(fmt.Sprintf("Plugin Alerts - %s", name))
+	}
 
   Alerts[name] = creator
 }

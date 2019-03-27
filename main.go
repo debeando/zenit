@@ -33,6 +33,7 @@ func (p *program) Start(s service.Service) error {
 	go p.run()
 	return nil
 }
+
 func (p *program) run() {
 	var wg sync.WaitGroup
 
@@ -43,6 +44,7 @@ func (p *program) run() {
 
 	wg.Wait()
 }
+
 func (p *program) Stop(s service.Service) error {
 	// Stop should not block. Return with a few seconds.
 	return nil
@@ -68,7 +70,7 @@ func main() {
 	fUninstall := flag.Bool("uninstall", false, "Uninstall service on system.")
 	fVersion := flag.Bool("version", false, "Show version.")
 
-	flag.Usage = func() { help(0) }
+	flag.Usage = func() { help(1) }
 	flag.Parse()
 
 	s, err := service.New(prg, svcConfig)
