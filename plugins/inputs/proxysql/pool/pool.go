@@ -49,7 +49,7 @@ func (l *InputProxySQLPool) Collect() {
 				{"host", rows[i]["srv_host"]},
 			},
 			Values: []metrics.Value{
-				{"status", common.StringToUInt64(rows[i]["status"])},
+				{"status", rows[i]["status"]},
 				{"used", common.StringToUInt64(rows[i]["ConnUsed"])},
 				{"free", common.StringToUInt64(rows[i]["ConnFree"])},
 				{"ok", common.StringToUInt64(rows[i]["ConnOK"])},
