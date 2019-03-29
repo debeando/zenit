@@ -24,7 +24,12 @@ Options:
   --version     Print version numbers.
 `
 
-var logger service.Logger
+var (
+	logger service.Logger
+
+	// Build date and time when building.
+	build  string
+)
 
 type program struct{}
 
@@ -84,7 +89,7 @@ func main() {
 
 	switch {
 	case *fVersion:
-		fmt.Printf("%s\n", config.Version)
+		fmt.Printf("%s (%s)\n", config.Version, build)
 		os.Exit(0)
 	case *fHelp:
 		help(0)

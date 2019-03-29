@@ -1,4 +1,5 @@
 SHELL := /bin/bash
+BUILD_DATE := `date +%Y%m%d.%H%M%S`
 .PHONY: help
 
 help: ## Show this help.
@@ -20,7 +21,10 @@ tests: ## Run tests
 	go test -cover -race -coverprofile=coverage.txt -covermode=atomic ./...
 
 build: ## Build binary
-	go build -ldflags "-s -w" -o zenit main.go
+	go build -ldflags "-s -w -X main.build=$(BUILD_DATE)" -o zenit main.go
+
+build-linux:
+	GOOS=linux go build -ldflags "-s -w -X main.build=$(BUILD_DATE)" -o zenit main.go
 
 release: ## Create release
 	scripts/release.sh
@@ -59,7 +63,7 @@ docker-proxysql-bash: ## Enter in ProxySQL bash console
 	docker exec -i -t -u root zenit_proxysql /bin/bash
 
 docker-zenit-build: ## Build binary and copy to container
-	GOOS=linux go build -ldflags "-s -w" -o zenit main.go
+	GOOS=linux go build -ldflags "-s -w -X main.build=$(BUILD_DATE)" -o zenit main.go
 	docker cp zenit zenit_percona_server_primary:/usr/bin/
 	docker cp zenit zenit_percona_server_secondary:/usr/bin/
 	docker cp zenit zenit_proxysql:/usr/bin/
