@@ -52,7 +52,7 @@ func (l *ProxyPoolStatus) Collect() {
 				"ProxySQL Connection Pool Status",
 				config.File.ProxySQL.Alerts.Errors.Duration,
 				1,
-				1,
+				2,
 				s.StatusCode,
 				message,
 			)
@@ -69,9 +69,9 @@ func Status(s string) uint64 {
 	case "SHUNNED_REPLICATION_LAG":
 		return 1
 	case "OFFLINE_SOFT":
-		return 1
+		return 2
 	case "OFFLINE_HARD":
-		return 1
+		return 2
 	}
 
 	return 0
