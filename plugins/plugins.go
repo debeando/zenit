@@ -9,6 +9,8 @@ import (
 
 	"github.com/swapbyt3s/zenit/plugins/alerts"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/plugins/outputs"
+
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
 	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
 
@@ -40,6 +42,9 @@ import (
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/commands"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/pool"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/queries"
+
+	_ "github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
+	_ "github.com/swapbyt3s/zenit/plugins/outputs/slack"
 )
 
 func Load(wg *sync.WaitGroup) {
@@ -61,6 +66,13 @@ func Load(wg *sync.WaitGroup) {
 
 		for key := range alerts.Alerts {
 			if creator, ok := alerts.Alerts[key]; ok {
+				c := creator()
+				c.Collect()
+			}
+		}
+
+		for key := range outputs.Outputs {
+			if creator, ok := outputs.Outputs[key]; ok {
 				c := creator()
 				c.Collect()
 			}

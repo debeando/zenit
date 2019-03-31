@@ -9,7 +9,6 @@ import (
 
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins"
-	"github.com/swapbyt3s/zenit/plugins/outputs"
 
 	"github.com/kardianos/service"
 )
@@ -42,10 +41,9 @@ func (p *program) Start(s service.Service) error {
 func (p *program) run() {
 	var wg sync.WaitGroup
 
-	wg.Add(2)
+	wg.Add(1)
 
 	go plugins.Load(&wg)
-	go outputs.Plugins(&wg)
 
 	wg.Wait()
 }
