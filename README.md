@@ -6,6 +6,8 @@ ProxySQL. Maybe not requires many another agents for this purpose, but with this
 
 The name [Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) is inspired by a russian spy satellite.
 
+This project is sponsored by [zinio](https://www.zinio.com).
+
 ## Description:
 
 This agent collect all basic metrics from the hardware and more details from MySQL or ProxySQL services.
