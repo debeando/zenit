@@ -39,20 +39,21 @@ mysql:
       duration: 30 # Seconds
 
 proxysql:
-  dsn: proxysql:admin@tcp(127.0.0.1:6032)/
-  inputs:
-    commands: true
-    pool: true
-    queries: true
-  alerts:
-    errors:
-      enable: true
-      warning: 10  # Numbers
-      critical: 20 # Numbers
-      duration: 30 # Seconds
-    status:
-      enable: true
-      duration: 30 # Seconds
+  - hostname: localhost
+    dsn: proxysql:admin@tcp(127.0.0.1:6032)/
+    inputs:
+      commands: true
+      pool: true
+      queries: true
+    alerts:
+      errors:
+        enable: true
+        warning: 10  # Numbers
+        critical: 20 # Numbers
+        duration: 30 # Seconds
+      status:
+        enable: true
+        duration: 30 # Seconds
 
 clickhouse:
   enable: true

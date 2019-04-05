@@ -1,5 +1,8 @@
 SHELL := /bin/bash
 BUILD_DATE := `date +%Y%m%d.%H%M%S`
+DOCKER_COMPOSE_FILE := docker-compose --file docker/docker-compose.yml
+DOCKER_EXEC := docker exec -i -t -u root
+
 .PHONY: help
 
 help: ## Show this help.
@@ -30,40 +33,39 @@ release: ## Create release
 	scripts/release.sh
 
 docker-build: ## Build docker images
-	docker-compose --file docker/docker-compose.yml build
+	$(DOCKER_COMPOSE_FILE) build
 
 docker-up: ## Run docker-compose
-	docker-compose --file docker/docker-compose.yml --project-name=zenit up
+	$(DOCKER_COMPOSE_FILE) --project-name=zenit up
 
 docker-ps: ## Show status for all containers
-	docker-compose --file docker/docker-compose.yml --project-name=zenit ps
+	$(DOCKER_COMPOSE_FILE) --project-name=zenit ps
 
 docker-down: ## Down docker-compose
-	docker-compose --file docker/docker-compose.yml --project-name=zenit down
+	$(DOCKER_COMPOSE_FILE) --project-name=zenit down
 
 docker-clickhouse: ## Enter into ClickHouse Client
-	docker exec -i -t -u root zenit_clickhouse /usr/bin/clickhouse-client
+	$(DOCKER_EXEC) zenit_clickhouse /usr/bin/clickhouse-client
 
 docker-mysql-primary: ## Enter in MySQL Primary Console
-	docker exec -i -t -u root zenit_percona_server_primary /usr/bin/mysql
+	$(DOCKER_EXEC) zenit_percona_server_primary /usr/bin/mysql
 
 docker-mysql-primary-bash: ## Enter in MySQL Primary bash console
-	docker exec -i -t -u root zenit_percona_server_primary /bin/bash
+	$(DOCKER_EXEC) zenit_percona_server_primary /bin/bash
 
 docker-mysql-secondary: ## Enter in MySQL Secondary Console
-	docker exec -i -t -u root zenit_percona_server_secondary /usr/bin/mysql
+	$(DOCKER_EXEC) zenit_percona_server_secondary /usr/bin/mysql
 
 docker-mysql-secondary-bash: ## Enter in MySQL Secondary bash console
-	docker exec -i -t -u root zenit_percona_server_secondary /bin/bash
+	$(DOCKER_EXEC) zenit_percona_server_secondary /bin/bash
 
 docker-proxysql: ## Enter in ProxySQL Console
-	docker exec -i -t -u root zenit_proxysql /usr/bin/mysql --socket=/tmp/proxysql_admin.sock -u proxysql -padmin  --prompt='ProxySQLAdmin> '
+	$(DOCKER_EXEC) zenit_proxysql /usr/bin/mysql --socket=/tmp/proxysql_admin.sock -u proxysql -padmin  --prompt='ProxySQLAdmin> '
 
 docker-proxysql-bash: ## Enter in ProxySQL bash console
-	docker exec -i -t -u root zenit_proxysql /bin/bash
+	$(DOCKER_EXEC) zenit_proxysql /bin/bash
 
-docker-zenit-build: ## Build binary and copy to container
-	build-linux
+docker-zenit-build: build-linux ## Build binary and copy to container
 	docker cp zenit zenit_percona_server_primary:/usr/bin/
 	docker cp zenit zenit_percona_server_secondary:/usr/bin/
 	docker cp zenit zenit_proxysql:/usr/bin/

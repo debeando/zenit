@@ -21,8 +21,8 @@ import (
 	_ "github.com/swapbyt3s/zenit/plugins/alerts/os/cpu"
 	_ "github.com/swapbyt3s/zenit/plugins/alerts/os/disk"
 	_ "github.com/swapbyt3s/zenit/plugins/alerts/os/mem"
-	_ "github.com/swapbyt3s/zenit/plugins/alerts/proxysql/errors"
-	_ "github.com/swapbyt3s/zenit/plugins/alerts/proxysql/status"
+	// _ "github.com/swapbyt3s/zenit/plugins/alerts/proxysql/errors"
+	// _ "github.com/swapbyt3s/zenit/plugins/alerts/proxysql/status"
 
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/overflow"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/slave"

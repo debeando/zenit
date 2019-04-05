@@ -41,47 +41,57 @@ var re *regexp.Regexp
 type InputProxySQLQuery struct {}
 
 func (l *InputProxySQLQuery) Collect() {
-	if ! config.File.ProxySQL.Inputs.Queries {
-		return
-	}
+  defer func () {
+    if err := recover(); err != nil {
+      fmt.Printf("Plugin - InputProxySQLQuery - Panic (code %d) has been recover from somewhere.\n", err)
+    }
+  }()
 
-	re, _ = regexp.Compile(ReQuery)
-	var a = metrics.Load()
-	var p = mysql.GetInstance("proxysql")
-	p.Connect(config.File.ProxySQL.DSN)
-
-	rows:= p.Query(querySQDigestL)
-
-	for i := range rows {
-		table, command := Match(rows[i]["digest_text"])
-
-		if table == "unknown" || command == "unknown" {
-			continue
+	for host := range config.File.ProxySQL {
+		if ! config.File.ProxySQL[host].Inputs.Queries {
+			return
 		}
 
-		a.Add(metrics.Metric{
-			Key: "zenit_proxysql_queries",
-			Tags: []metrics.Tag{
-				{"group", rows[i]["group"]},
-				{"schema", rows[i]["schemaname"]},
-				{"table", table},
-				{"command", command},
-			},
-			Values: []metrics.Value{
-				{"count", common.StringToUInt64(rows[i]["count_star"])},
-				{"sum", common.StringToUInt64(rows[i]["sum_time"])},
-			},
-		})
+		log.Info(fmt.Sprintf("Plugin - InputProxySQLQuery - Hostname: %s", config.File.ProxySQL[host].Hostname))
 
-		log.Debug(
-			fmt.Sprintf("Plugin - InputProxySQLQuery - (%s)%s.%s %s=%s",
-				rows[i]["group"],
-				rows[i]["schemaname"],
-				table,
-				command,
-				rows[i]["count_star"],
-			),
-		)
+		re, _ = regexp.Compile(ReQuery)
+		var a = metrics.Load()
+		var p = mysql.GetInstance("proxysql")
+		p.Connect(config.File.ProxySQL[host].DSN)
+
+		rows:= p.Query(querySQDigestL)
+
+		for i := range rows {
+			table, command := Match(rows[i]["digest_text"])
+
+			if table == "unknown" || command == "unknown" {
+				continue
+			}
+
+			a.Add(metrics.Metric{
+				Key: "zenit_proxysql_queries",
+				Tags: []metrics.Tag{
+					{"group", rows[i]["group"]},
+					{"schema", rows[i]["schemaname"]},
+					{"table", table},
+					{"command", command},
+				},
+				Values: []metrics.Value{
+					{"count", common.StringToUInt64(rows[i]["count_star"])},
+					{"sum", common.StringToUInt64(rows[i]["sum_time"])},
+				},
+			})
+
+			log.Debug(
+				fmt.Sprintf("Plugin - InputProxySQLQuery - (%s)%s.%s %s=%s",
+					rows[i]["group"],
+					rows[i]["schemaname"],
+					table,
+					command,
+					rows[i]["count_star"],
+				),
+			)
+		}
 	}
 }
 
