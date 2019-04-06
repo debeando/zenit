@@ -11,10 +11,10 @@ import (
 )
 
 func Start() {
-	if config.File.MySQL.Inputs.SlowLog.Enable {
+	if config.File.Parser.MySQL.SlowLog.Enable {
 		if config.File.General.Debug {
 			log.Debug("Load MySQL SlowLog")
-			log.Debug("Read MySQL SlowLog: " + config.File.MySQL.Inputs.SlowLog.LogPath)
+			log.Debug("Read MySQL SlowLog: " + config.File.Parser.MySQL.SlowLog.LogPath)
 		}
 
 		if !clickhouse.Check() {
@@ -29,8 +29,8 @@ func Start() {
 			Type:    "SlowLog",
 			Schema:  "zenit",
 			Table:   "mysql_slow_log",
-			Size:    config.File.MySQL.Inputs.SlowLog.BufferSize,
-			Timeout: config.File.MySQL.Inputs.SlowLog.BufferTimeOut,
+			Size:    config.File.Parser.MySQL.SlowLog.BufferSize,
+			Timeout: config.File.Parser.MySQL.SlowLog.BufferTimeOut,
 			Wildcard: map[string]string{
 				"_time":         "'%s'",
 				"bytes_sent":    "%s",
@@ -53,8 +53,8 @@ func Start() {
 			Values: []map[string]string{},
 		}
 
-		go common.Tail(config.File.MySQL.Inputs.SlowLog.LogPath, channel_tail)
-		go Parser(config.File.MySQL.Inputs.SlowLog.LogPath, channel_tail, channel_parser)
+		go common.Tail(config.File.Parser.MySQL.SlowLog.LogPath, channel_tail)
+		go Parser(config.File.Parser.MySQL.SlowLog.LogPath, channel_tail, channel_parser)
 		go clickhouse.Send(event, channel_data)
 
 		go func() {

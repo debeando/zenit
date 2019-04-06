@@ -10,8 +10,8 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/inputs"
 	"github.com/swapbyt3s/zenit/plugins/outputs"
 
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/audit"
-	"github.com/swapbyt3s/zenit/plugins/inputs/mysql/slow"
+	"github.com/swapbyt3s/zenit/plugins/inputs/parsers/mysql/audit"
+	"github.com/swapbyt3s/zenit/plugins/inputs/parsers/mysql/slow"
 
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/overflow"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/slave"

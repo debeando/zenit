@@ -19,7 +19,6 @@ and you can analize and monitoring with [Grafana](https://grafana.com/) for the 
 
 - Centralize all logs in a single point of view, you have more details for debugging and analyse, with this you can optimize queries, understand what happen inside, and more.
 - Audit database security access and identify possible risk.
-- Monitoring and alerting system to prevent a disaster or identify possible risk.
 - One agent for all, easy to install and configure, low memory consumption and high performance.
 
 ### Compatibility

@@ -4,14 +4,8 @@ general:
   interval: 10 # Seconds
   debug: false
 
-mysql:
-  dsn: root@tcp(127.0.0.1:3306)/
-  inputs:
-    overflow: true
-    slave: true
-    status: true
-    tables: true
-    variables: true
+parser:
+  mysql:
     slowlog:
       enable: true
       log_path: /var/lib/mysql/slow.log
@@ -23,6 +17,15 @@ mysql:
       log_path: /var/lib/mysql/audit.log
       buffer_size: 100   # Number of events.
       buffer_timeout: 60 # Seconds
+
+mysql:
+  dsn: root@tcp(127.0.0.1:3306)/
+  inputs:
+    overflow: true
+    slave: true
+    status: true
+    tables: true
+    variables: true
 
 proxysql:
   - hostname: localhost
