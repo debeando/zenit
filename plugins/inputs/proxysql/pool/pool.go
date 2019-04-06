@@ -31,37 +31,48 @@ const querySQLPool = `SELECT CASE
 type InputProxySQLPool struct {}
 
 func (l *InputProxySQLPool) Collect() {
-	if ! config.File.ProxySQL.Inputs.Pool {
-		return
-	}
+  defer func () {
+    if err := recover(); err != nil {
+      fmt.Printf("Plugin - InputProxySQLPool - Panic (code %d) has been recover from somewhere.\n", err)
+    }
+  }()
 
-	var a = metrics.Load()
-	var p = mysql.GetInstance("proxysql")
-	p.Connect(config.File.ProxySQL.DSN)
+	for host := range config.File.ProxySQL {
+		if ! config.File.ProxySQL[host].Inputs.Pool {
+			return
+		}
 
-	rows := p.Query(querySQLPool)
+		log.Info(fmt.Sprintf("Plugin - InputProxySQLPool - Hostname: %s", config.File.ProxySQL[host].Hostname))
 
-	for i := range rows {
-		a.Add(metrics.Metric{
-			Key: "zenit_proxysql_connections",
-			Tags: []metrics.Tag{
-				{"group", rows[i]["group"]},
-				{"host", rows[i]["srv_host"]},
-			},
-			Values: []metrics.Value{
-				{"status", rows[i]["status"]},
-				{"used", common.StringToUInt64(rows[i]["ConnUsed"])},
-				{"free", common.StringToUInt64(rows[i]["ConnFree"])},
-				{"ok", common.StringToUInt64(rows[i]["ConnOK"])},
-				{"errors", common.StringToUInt64(rows[i]["ConnERR"])},
-				{"queries", common.StringToUInt64(rows[i]["Queries"])},
-				{"tx", common.StringToUInt64(rows[i]["Bytes_data_sent"])},
-				{"rx", common.StringToUInt64(rows[i]["Bytes_data_recv"])},
-				{"latency", common.StringToUInt64(rows[i]["Latency_us"])},
-			},
-		})
+		var a = metrics.Load()
+		var p = mysql.GetInstance("proxysql")
+		p.Connect(config.File.ProxySQL[host].DSN)
 
-		log.Debug(fmt.Sprintf("Plugin - InputProxySQLPool - %#v", rows[i]))
+		rows := p.Query(querySQLPool)
+
+		for i := range rows {
+			a.Add(metrics.Metric{
+				Key: "zenit_proxysql_connections",
+				Tags: []metrics.Tag{
+					{"hostname", config.File.ProxySQL[host].Hostname},
+					{"group", rows[i]["group"]},
+					{"host", rows[i]["srv_host"]},
+				},
+				Values: []metrics.Value{
+					{"status", rows[i]["status"]},
+					{"used", common.StringToUInt64(rows[i]["ConnUsed"])},
+					{"free", common.StringToUInt64(rows[i]["ConnFree"])},
+					{"ok", common.StringToUInt64(rows[i]["ConnOK"])},
+					{"errors", common.StringToUInt64(rows[i]["ConnERR"])},
+					{"queries", common.StringToUInt64(rows[i]["Queries"])},
+					{"tx", common.StringToUInt64(rows[i]["Bytes_data_sent"])},
+					{"rx", common.StringToUInt64(rows[i]["Bytes_data_recv"])},
+					{"latency", common.StringToUInt64(rows[i]["Latency_us"])},
+				},
+			})
+
+			log.Debug(fmt.Sprintf("Plugin - InputProxySQLPool - %#v", rows[i]))
+		}
 	}
 }
 
