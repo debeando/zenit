@@ -14,17 +14,17 @@ import (
 )
 
 func Start() {
-	if config.File.MySQL.Inputs.AuditLog.Enable {
+	if config.File.Parser.MySQL.AuditLog.Enable {
 		if config.File.General.Debug {
 			log.Debug("Load MySQL AuditLog")
-			log.Debug("Read MySQL AuditLog: " + config.File.MySQL.Inputs.AuditLog.LogPath)
+			log.Debug("Read MySQL AuditLog: " + config.File.Parser.MySQL.AuditLog.LogPath)
 		}
 
 		if !clickhouse.Check() {
 			log.Error("AuditLog require active connection to ClickHouse.")
 		}
 
-		if config.File.MySQL.Inputs.AuditLog.Format == "xml-old" {
+		if config.File.Parser.MySQL.AuditLog.Format == "xml-old" {
 			channel_tail := make(chan string)
 			channel_parser := make(chan map[string]string)
 			channel_data := make(chan map[string]string)
@@ -33,8 +33,8 @@ func Start() {
 				Type:    "AuditLog",
 				Schema:  "zenit",
 				Table:   "mysql_audit_log",
-				Size:    config.File.MySQL.Inputs.AuditLog.BufferSize,
-				Timeout: config.File.MySQL.Inputs.AuditLog.BufferTimeOut,
+				Size:    config.File.Parser.MySQL.AuditLog.BufferSize,
+				Timeout: config.File.Parser.MySQL.AuditLog.BufferTimeOut,
 				Wildcard: map[string]string{
 					"_time":          "'%s'",
 					"command_class":  "'%s'",
@@ -58,8 +58,8 @@ func Start() {
 				Values: []map[string]string{},
 			}
 
-			go common.Tail(config.File.MySQL.Inputs.AuditLog.LogPath, channel_tail)
-			go Parser(config.File.MySQL.Inputs.AuditLog.LogPath, channel_tail, channel_parser)
+			go common.Tail(config.File.Parser.MySQL.AuditLog.LogPath, channel_tail)
+			go Parser(config.File.Parser.MySQL.AuditLog.LogPath, channel_tail, channel_parser)
 			go clickhouse.Send(event, channel_data)
 
 			go func() {

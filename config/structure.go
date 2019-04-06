@@ -11,14 +11,8 @@ type All struct {
 		Interval time.Duration `yaml:"interval"`
 		Debug    bool          `yaml:"debug"`
 	}
-	MySQL struct {
-		DSN string `yaml:"dsn"`
-		Inputs struct {
-			Overflow  bool `yaml:"overflow"`
-			Slave     bool `yaml:"slave"`
-			Status    bool `yaml:"status"`
-			Tables    bool `yaml:"tables"`
-			Variables bool `yaml:"variables"`
+	Parser struct {
+		MySQL struct {
 			AuditLog struct {
 				Enable        bool   `yaml:"enable"`
 				Format        string `yaml:"format"`
@@ -32,6 +26,16 @@ type All struct {
 				BufferSize    int    `yaml:"buffer_size"`
 				BufferTimeOut int    `yaml:"buffer_timeout"`
 			}
+		}
+	}
+	MySQL struct {
+		DSN string `yaml:"dsn"`
+		Inputs struct {
+			Overflow  bool `yaml:"overflow"`
+			Slave     bool `yaml:"slave"`
+			Status    bool `yaml:"status"`
+			Tables    bool `yaml:"tables"`
+			Variables bool `yaml:"variables"`
 		}
 	}
 	ProxySQL []struct {
