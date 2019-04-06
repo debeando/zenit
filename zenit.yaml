@@ -2,7 +2,7 @@
 general:
   hostname: localhost
   interval: 10 # Seconds
-  debug: false
+  debug: true
 
 parser:
   mysql:
@@ -59,3 +59,9 @@ process:
     pt_online_schema_change: true
     pt_slave_delay: true
     xtrabackup: true
+
+newrelic:
+  insight:
+    enable: false
+    account_id: 0
+    insert_key: abc123example

@@ -16,11 +16,11 @@ const query = "SELECT * FROM stats_mysql_commands_counters;"
 type InputProxySQLCommands struct {}
 
 func (l *InputProxySQLCommands) Collect() {
-  defer func () {
-    if err := recover(); err != nil {
-      fmt.Printf("Plugin - InputProxySQLCommands - Panic (code %d) has been recover from somewhere.\n", err)
-    }
-  }()
+	defer func () {
+		if err := recover(); err != nil {
+			fmt.Printf("Plugin - InputProxySQLCommands - Panic (code %d) has been recover from somewhere.\n", err)
+		}
+	}()
 
 	for host := range config.File.ProxySQL {
 		if ! config.File.ProxySQL[host].Inputs.Commands {

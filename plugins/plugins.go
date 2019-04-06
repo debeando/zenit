@@ -32,6 +32,7 @@ import (
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/pool"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/queries"
 
+	_ "github.com/swapbyt3s/zenit/plugins/outputs/newrelic"
 	_ "github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
 )
 
