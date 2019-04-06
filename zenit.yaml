@@ -23,20 +23,6 @@ mysql:
       log_path: /var/lib/mysql/audit.log
       buffer_size: 100   # Number of events.
       buffer_timeout: 60 # Seconds
-  alerts:
-    readonly:
-      enable: true
-      duration: 30 # Seconds
-    replication:
-      enable: true
-      warning: 10  # Seconds
-      critical: 60 # Seconds
-      duration: 30 # Seconds
-    connections:
-      enable: true
-      warning: 70  # Percentage
-      critical: 90 # Percentage
-      duration: 30 # Seconds
 
 proxysql:
   - hostname: localhost
@@ -45,15 +31,6 @@ proxysql:
       commands: true
       pool: true
       queries: true
-    alerts:
-      errors:
-        enable: true
-        warning: 10  # Numbers
-        critical: 20 # Numbers
-        duration: 30 # Seconds
-      status:
-        enable: true
-        duration: 30 # Seconds
 
 clickhouse:
   enable: true
@@ -64,11 +41,6 @@ prometheus:
   enable: true
   textfile: /var/tmp/zenit.prom
 
-slack:
-  enable: true
-  token: xxx/yyy/zzz
-  channel: alerts
-
 os:
   inputs:
     cpu: true
@@ -76,22 +48,6 @@ os:
     limits: true
     mem: true
     net: true
-  alerts:
-    cpu:
-      enable: true
-      warning: 30  # Percentage
-      critical: 60 # Percentage
-      duration: 30 # Seconds
-    disk:
-      enable: true
-      warning: 50  # Percentage
-      critical: 75 # Percentage
-      duration: 30 # Seconds
-    mem:
-      enable: true
-      warning: 80  # Percentage
-      critical: 95 # Percentage
-      duration: 30 # Seconds
 
 process:
   inputs:

@@ -33,24 +33,6 @@ type All struct {
 				BufferTimeOut int    `yaml:"buffer_timeout"`
 			}
 		}
-		Alerts struct {
-			ReadOnly struct {
-				Enable   bool `yaml:"enable"`
-				Duration int  `yaml:"duration"`
-			}
-			Connections struct {
-				Enable   bool   `yaml:"enable"`
-				Warning  uint64 `yaml:"warning"`
-				Critical uint64 `yaml:"critical"`
-				Duration int    `yaml:"duration"`
-			}
-			Replication struct {
-				Enable   bool   `yaml:"enable"`
-				Warning  uint64 `yaml:"warning"`
-				Critical uint64 `yaml:"critical"`
-				Duration int    `yaml:"duration"`
-			}
-		}
 	}
 	ProxySQL []struct {
 		Hostname string `yaml:"hostname"`
@@ -60,18 +42,6 @@ type All struct {
 			Pool     bool `yaml:"pool"`
 			Queries  bool `yaml:"queries"`
 		}
-		Alerts struct {
-			Errors struct {
-				Enable   bool   `yaml:"enable"`
-				Warning  uint64 `yaml:"warning"`
-				Critical uint64 `yaml:"critical"`
-				Duration int    `yaml:"duration"`
-			}
-			Status struct {
-				Enable   bool `yaml:"enable"`
-				Duration int  `yaml:"duration"`
-			}
-		}
 	}
 	ClickHouse struct {
 		DSN string `yaml:"dsn"`
@@ -80,11 +50,6 @@ type All struct {
 		Enable   bool   `yaml:"enable"`
 		TextFile string `yaml:"textfile"`
 	}
-	Slack struct {
-		Enable  bool   `yaml:"enable"`
-		Token   string `yaml:"token"`
-		Channel string `yaml:"channel"`
-	}
 	OS struct {
 		Inputs struct {
 			CPU    bool `yaml:"cpu"`
@@ -92,26 +57,6 @@ type All struct {
 			Limits bool `yaml:"limits"`
 			Mem    bool `yaml:"mem"`
 			Net    bool `yaml:"net"`
-		}
-		Alerts struct {
-			CPU struct {
-				Enable   bool   `yaml:"enable"`
-				Warning  uint64 `yaml:"warning"`
-				Critical uint64 `yaml:"critical"`
-				Duration int    `yaml:"duration"`
-			}
-			Disk struct {
-				Enable   bool   `yaml:"enable"`
-				Warning  uint64 `yaml:"warning"`
-				Critical uint64 `yaml:"critical"`
-				Duration int    `yaml:"duration"`
-			}
-			MEM struct {
-				Enable   bool   `yaml:"enable"`
-				Warning  uint64 `yaml:"warning"`
-				Critical uint64 `yaml:"critical"`
-				Duration int    `yaml:"duration"`
-			}
 		}
 	}
 	Process struct {
