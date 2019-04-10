@@ -72,4 +72,11 @@ type All struct {
 			PerconaXtraBackup                bool `yaml:"xtrabackup"`
 		}
 	}
+	Newrelic struct {
+		Insight	struct {
+			Enable    bool   `yaml:"enable"`
+			AccountID string `yaml:"account_id"`
+			InsertKey string `yaml:"insert_key"`
+		}
+	}
 }

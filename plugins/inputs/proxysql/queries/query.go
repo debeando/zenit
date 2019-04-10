@@ -41,11 +41,11 @@ var re *regexp.Regexp
 type InputProxySQLQuery struct {}
 
 func (l *InputProxySQLQuery) Collect() {
-  defer func () {
-    if err := recover(); err != nil {
-      fmt.Printf("Plugin - InputProxySQLQuery - Panic (code %d) has been recover from somewhere.\n", err)
-    }
-  }()
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - InputProxySQLQuery - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
 
 	for host := range config.File.ProxySQL {
 		if ! config.File.ProxySQL[host].Inputs.Queries {

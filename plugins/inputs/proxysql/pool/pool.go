@@ -31,11 +31,11 @@ const querySQLPool = `SELECT CASE
 type InputProxySQLPool struct {}
 
 func (l *InputProxySQLPool) Collect() {
-  defer func () {
-    if err := recover(); err != nil {
-      fmt.Printf("Plugin - InputProxySQLPool - Panic (code %d) has been recover from somewhere.\n", err)
-    }
-  }()
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - InputProxySQLPool - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
 
 	for host := range config.File.ProxySQL {
 		if ! config.File.ProxySQL[host].Inputs.Pool {

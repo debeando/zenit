@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -198,4 +199,42 @@ func InterfaceToFloat64(value interface{}) float64 {
 		return float64(v)
 	}
 	return 0
+}
+
+func ToCamel(s string) string {
+	s = addWordBoundariesToNumbers(s)
+	s = strings.Trim(s, " ")
+	n := ""
+	capNext := true
+
+	for _, v := range s {
+		if v >= 'A' && v <= 'Z' {
+			n += string(v)
+		}
+		if v >= '0' && v <= '9' {
+			n += string(v)
+		}
+		if v >= 'a' && v <= 'z' {
+			if capNext {
+				n += strings.ToUpper(string(v))
+			} else {
+				n += string(v)
+			}
+		}
+		if v == '_' || v == ' ' || v == '-' {
+			capNext = true
+		} else {
+			capNext = false
+		}
+	}
+	return n
+}
+
+func addWordBoundariesToNumbers(s string) string {
+	numberSequence := regexp.MustCompile(`([a-zA-Z])(\d+)([a-zA-Z]?)`)
+	numberReplacement := []byte(`$1 $2 $3`)
+
+	b := []byte(s)
+	b = numberSequence.ReplaceAll(b, numberReplacement)
+	return string(b)
 }

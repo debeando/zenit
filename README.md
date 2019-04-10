@@ -12,7 +12,7 @@ This project is sponsored by [zinio](https://www.zinio.com).
 
 This agent collect all basic metrics from the hardware and more details from MySQL or ProxySQL services.
 And read logs in real time, each event is parsed to analyse later, the logs is send to [ClickHouse](https://github.com/yandex/ClickHouse/)
-because is very easy to analyse with SQL and have great performance. And the metrics is send only to [Prometheus](https://github.com/prometheus/prometheus)
+because is very easy to analyse with SQL and have great performance. And the metrics is send only to [NewRelic Insights](https://newrelic.com/products/insights) and [Prometheus](https://github.com/prometheus/prometheus)
 and you can analize and monitoring with [Grafana](https://grafana.com/) for the moment.
 
 ### Advantage
@@ -32,6 +32,7 @@ This tool collect stats data from:
 
 And this is ingested on:
 
+- **NewRelic Insights:** Commercial tool to analyze and visualize data to build Alerts in your business.
 - **Prometheus:** This another metric tools, good for alerts by metrics generated with zenit.
 - **ClickHouse:** This a columnar database to save all log parsers to analyze them.
 
