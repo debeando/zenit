@@ -2,7 +2,6 @@
 
 This is the list about stupid `TODO` when not require create tickets.
 
-- Replace all whitespaces by tabs
 - Define correct headers for clickhouse.
 - Add retry while for HTTP Post func.
 - Add test for Input Percona.
