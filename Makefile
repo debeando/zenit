@@ -24,10 +24,10 @@ tests: ## Run tests
 	go test -cover -race -coverprofile=coverage.txt -covermode=atomic ./...
 
 build: ## Build binary for local operating system
-	go build -ldflags "-s -w -X main.build=$(BUILD_DATE)" -o zenit main.go
+	go build -ldflags "-s -w -X github.com/swapbyt3s/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
 
 build-linux: ## Build binary for Linux
-	GOOS=linux go build -ldflags "-s -w -X main.build=$(BUILD_DATE)" -o zenit main.go
+	GOOS=linux go build -ldflags "-s -w -X github.com/swapbyt3s/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
 
 release: ## Create release
 	scripts/release.sh

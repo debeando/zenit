@@ -1,7 +1,6 @@
 package plugins
 
 import (
-	"sync"
 	"time"
 
 	"github.com/swapbyt3s/zenit/config"
@@ -36,9 +35,7 @@ import (
 	_ "github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
 )
 
-func Load(wg *sync.WaitGroup) {
-	defer wg.Done()
-
+func Load() {
 	audit.Start()
 	slow.Start()
 
