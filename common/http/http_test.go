@@ -25,7 +25,7 @@ func TestPost(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	response := test.Post(ts.URL, "foo")
+	response := test.Post(ts.URL, "foo", nil)
 
 	if response != 200 {
 		t.Errorf("Expected: '200', got: '%v'.", response)

@@ -13,6 +13,12 @@ import (
 type InputsPerconaXtraBackup struct {}
 
 func (l *InputsPerconaXtraBackup) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - InputsPerconaXtraBackup - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.Process.Inputs.PerconaXtraBackup {
 		return
 	}

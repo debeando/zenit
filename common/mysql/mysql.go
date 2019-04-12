@@ -2,9 +2,11 @@ package mysql
 
 import (
 	"database/sql"
-	"log"
+	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/swapbyt3s/zenit/common/log"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -28,11 +30,11 @@ func (s *singleton) Connect(dsn string) {
 	if s.Connection == nil {
 		conn, err := sql.Open("mysql", dsn)
 		if err != nil {
-			log.Printf("E! - %s - %s\n", s.Name, err)
+			log.Error(fmt.Sprintf("%s - %s", s.Name, err))
 		}
 
 		if err := conn.Ping(); err != nil {
-			log.Printf("E! - %s - %s\n", s.Name, err)
+			log.Error(fmt.Sprintf("%s - %s", s.Name, err))
 		}
 
 		s.Connection = conn
@@ -41,21 +43,21 @@ func (s *singleton) Connect(dsn string) {
 
 func (s *singleton) Query(query string) map[int]map[string]string {
 	if err := s.Connection.Ping(); err != nil {
-		log.Printf("E! - %s - %s\n", s.Name, err)
+		log.Error(fmt.Sprintf("%s - %s", s.Name, err))
 		return nil
 	}
 
 	// Execute the query
 	rows, err := s.Connection.Query(query)
 	if err != nil {
-		log.Printf("E! - %s - %s\n", s.Name, err)
+		log.Error(fmt.Sprintf("%s - %s", s.Name, err))
 	}
 	defer rows.Close()
 
 	// Get column names
 	cols, _ := rows.Columns()
 	if err != nil {
-		log.Printf("E! - %s - %s\n", s.Name, err)
+		log.Error(fmt.Sprintf("%s - %s", s.Name, err))
 	}
 
 	dataset  := make(map[int]map[string]string)
@@ -70,7 +72,7 @@ func (s *singleton) Query(query string) map[int]map[string]string {
 	for rows.Next() {
 		err = rows.Scan(columnPointers...)
 		if err != nil {
-			log.Printf("E! - %s - %s\n", s.Name, err)
+			log.Error(fmt.Sprintf("%s - %s", s.Name, err))
 		}
 
 		row := make(map[string]string)

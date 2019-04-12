@@ -14,12 +14,17 @@ import (
 type InputOSCPU struct {}
 
 func (l *InputOSCPU) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - InputOSCPU - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.OS.Inputs.CPU {
 		return
 	}
 
 	percentage, err := cpu.Percent(0, false)
-
 	if err == nil {
 		metrics.Load().Add(metrics.Metric{
 			Key: "zenit_os",

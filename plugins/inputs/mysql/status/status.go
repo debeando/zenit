@@ -15,6 +15,12 @@ const query = "SHOW GLOBAL STATUS"
 type MySQLStatus struct {}
 
 func (l *MySQLStatus) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - MySQLStatus - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.MySQL.Inputs.Status {
 		return
 	}

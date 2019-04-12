@@ -140,7 +140,7 @@ func TestSQLInsert(t *testing.T) {
 	})
 
 	sql_insert := sql.Insert(event.Schema, event.Table, event.Wildcard, event.Values)
-	status_code := test.Post(config.File.ClickHouse.DSN, sql_insert)
+	status_code := test.Post(config.File.ClickHouse.DSN, sql_insert, nil)
 
 	if status_code != 200 {
 		t.Errorf("Expected: '200', got: '%v'", status_code)

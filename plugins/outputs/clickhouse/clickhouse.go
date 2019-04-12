@@ -53,7 +53,7 @@ func Send(e *Event, data <-chan map[string]string) {
 
 				log.Debug(fmt.Sprintf("ClickHouse - Event insert: %s - %s", e.Type, sql))
 
-				go http.Post(config.File.ClickHouse.DSN, sql, map[string]string{})
+				go http.Post(config.File.ClickHouse.DSN, sql, nil)
 			}
 		case d := <-data:
 			log.Debug(fmt.Sprintf("ClickHouse - Event capture: %s - %#v", e.Type, d))
@@ -65,7 +65,7 @@ func Send(e *Event, data <-chan map[string]string) {
 
 				log.Debug(fmt.Sprintf("ClickHouse - Event insert: %s - %s", e.Type, sql))
 
-				go http.Post(config.File.ClickHouse.DSN, sql, map[string]string{})
+				go http.Post(config.File.ClickHouse.DSN, sql, nil)
 			}
 		}
 	}

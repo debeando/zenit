@@ -14,12 +14,17 @@ import (
 type InputOSMem struct {}
 
 func (l *InputOSMem) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - InputOSMem - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.OS.Inputs.Mem {
 		return
 	}
 
 	vmStat, err := mem.VirtualMemory()
-
 	if err == nil {
 		metrics.Load().Add(metrics.Metric{
 			Key: "zenit_os",

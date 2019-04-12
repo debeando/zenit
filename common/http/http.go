@@ -1,9 +1,11 @@
 package http
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/swapbyt3s/zenit/common/log"
 )
 
 func Post(uri string, data string, headers map[string]string) int {
@@ -13,7 +15,7 @@ func Post(uri string, data string, headers map[string]string) int {
 		strings.NewReader(data),
 	)
 	if err != nil {
-		log.Printf("E! - %s\n", err)
+		log.Error(fmt.Sprintf("%s", err))
 	}
 
 	for key, value := range headers {
@@ -23,7 +25,7 @@ func Post(uri string, data string, headers map[string]string) int {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Printf("E! - %s\n", err)
+		log.Error(fmt.Sprintf("%s", err))
 		return 520 // Status code 520 Unknown Error
 	}
 	defer resp.Body.Close()

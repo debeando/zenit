@@ -15,12 +15,17 @@ import (
 type InputOSDisk struct {}
 
 func (l *InputOSDisk) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - InputOSDisk - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.OS.Inputs.Disk {
 		return
 	}
 
 	devices, err := disk.Partitions(false)
-
 	if err != nil {
 		return
 	}

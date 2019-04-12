@@ -5,7 +5,6 @@ import (
 
 	"github.com/swapbyt3s/zenit/common/file"
 	"github.com/swapbyt3s/zenit/common/log"
-	"github.com/swapbyt3s/zenit/common/prometheus"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/outputs"
@@ -26,7 +25,7 @@ func (l *OutputPrometheus) Collect() {
 
 	file.Create(config.File.Prometheus.TextFile)
 	file.Truncate(config.File.Prometheus.TextFile)
-	file.Write(config.File.Prometheus.TextFile, prometheus.Normalize(metrics.Load()))
+	file.Write(config.File.Prometheus.TextFile, Normalize(metrics.Load()))
 }
 
 func init() {

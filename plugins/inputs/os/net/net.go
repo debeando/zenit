@@ -1,19 +1,27 @@
 package net
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/file"
+	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 type InputOSNet struct {}
 
 func (l *InputOSNet) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - InputOSNet - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.OS.Inputs.Net {
 		return
 	}

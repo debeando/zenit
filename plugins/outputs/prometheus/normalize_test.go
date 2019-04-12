@@ -3,7 +3,7 @@ package prometheus_test
 import (
   "testing"
 
-  "github.com/swapbyt3s/zenit/common/prometheus"
+  "github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
   "github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 

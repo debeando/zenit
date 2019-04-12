@@ -13,6 +13,12 @@ import (
 type InputsPerconaOSC struct {}
 
 func (l *InputsPerconaOSC) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - InputsPerconaOSC - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.Process.Inputs.PerconaToolKitOnlineSchemaChange {
 		return
 	}

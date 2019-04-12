@@ -25,6 +25,12 @@ ORDER BY table_schema, table_name;
 type MySQLTables struct {}
 
 func (l *MySQLTables) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - MySQLTables - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.MySQL.Inputs.Tables {
 		return
 	}

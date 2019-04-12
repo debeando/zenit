@@ -34,6 +34,12 @@ ORDER BY c.table_schema, c.table_name, c.column_name`
 type MySQLOverflow struct {}
 
 func (l *MySQLOverflow) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - MySQLOverflow - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.MySQL.Inputs.Overflow {
 		return
 	}

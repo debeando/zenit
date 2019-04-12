@@ -13,6 +13,12 @@ import (
 type InputsPerconaToolkitSlaveDelay struct {}
 
 func (l *InputsPerconaToolkitSlaveDelay) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - InputsPerconaToolkitSlaveDelay - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.Process.Inputs.PerconaToolKitSlaveDelay {
 		return
 	}

@@ -15,6 +15,12 @@ const query = "SHOW SLAVE STATUS"
 type MySQLSlave struct {}
 
 func (l *MySQLSlave) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - MySQLSlave - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.MySQL.Inputs.Status {
 		return
 	}

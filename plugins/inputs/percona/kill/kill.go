@@ -13,6 +13,12 @@ import (
 type InputsPerconaKill struct {}
 
 func (l *InputsPerconaKill) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - InputsPerconaKill - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.Process.Inputs.PerconaToolKitKill {
 		return
 	}

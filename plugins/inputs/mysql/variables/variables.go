@@ -15,6 +15,12 @@ const query = "SHOW GLOBAL VARIABLES"
 type MySQLVariables struct {}
 
 func (l *MySQLVariables) Collect() {
+	defer func () {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - MySQLVariables - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if ! config.File.MySQL.Inputs.Variables {
 		return
 	}
