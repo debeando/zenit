@@ -6,20 +6,20 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-type InputsPerconaDeadlock struct {}
+type InputsPerconaDeadlock struct{}
 
 func (l *InputsPerconaDeadlock) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - InputsPerconaDeadlock - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
-	if ! config.File.Process.Inputs.PerconaToolKitDeadlockLogger {
+	if !config.File.Process.Inputs.PerconaToolKitDeadlockLogger {
 		return
 	}
 

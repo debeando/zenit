@@ -27,7 +27,7 @@ var (
 	logger service.Logger
 
 	// Build date and time when building.
-	build  string
+	build string
 )
 
 type program struct{}

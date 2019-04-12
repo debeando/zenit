@@ -4,23 +4,23 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/http"
-	"github.com/swapbyt3s/zenit/plugins/outputs"
+	"github.com/swapbyt3s/zenit/common/log"
+	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/outputs"
 )
 
-type OutputNewrelicInsights struct {}
+type OutputNewrelicInsights struct{}
 
 func (l *OutputNewrelicInsights) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - OutputNewrelicInsights - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
-	if ! config.File.Newrelic.Insight.Enable {
+	if !config.File.Newrelic.Insight.Enable {
 		return
 	}
 
@@ -30,7 +30,7 @@ func (l *OutputNewrelicInsights) Collect() {
 		events_json, err := json.Marshal(events[j])
 		if err != nil {
 			log.Error(fmt.Sprintf("Fail parsing to JSON: %s", err))
-			return;
+			return
 		}
 
 		log.Debug(fmt.Sprintf("Plugin - OutputNewrelicInsights - JSON Event: %s", string(events_json)))

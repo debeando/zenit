@@ -7,23 +7,23 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 const query = "SELECT * FROM stats_mysql_commands_counters;"
 
-type InputProxySQLCommands struct {}
+type InputProxySQLCommands struct{}
 
 func (l *InputProxySQLCommands) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - InputProxySQLCommands - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
 	for host := range config.File.ProxySQL {
-		if ! config.File.ProxySQL[host].Inputs.Commands {
+		if !config.File.ProxySQL[host].Inputs.Commands {
 			return
 		}
 

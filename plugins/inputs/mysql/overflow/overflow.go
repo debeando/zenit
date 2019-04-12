@@ -31,16 +31,16 @@ ORDER BY c.table_schema, c.table_name, c.column_name`
 	queryMax = "SELECT COALESCE(MAX(%s), 0) AS max FROM %s.%s"
 )
 
-type MySQLOverflow struct {}
+type MySQLOverflow struct{}
 
 func (l *MySQLOverflow) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - MySQLOverflow - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
-	if ! config.File.MySQL.Inputs.Overflow {
+	if !config.File.MySQL.Inputs.Overflow {
 		return
 	}
 
@@ -72,7 +72,7 @@ func (l *MySQLOverflow) Collect() {
 			a.Add(metrics.Metric{
 				Key: "zenit_mysql_overflow",
 				Tags: []metrics.Tag{
-					{"schema", rows[row]["table_schema"],},
+					{"schema", rows[row]["table_schema"]},
 					{"table", rows[row]["table_name"]},
 					{"type", "overflow"},
 					{"data_type", c.dataType},

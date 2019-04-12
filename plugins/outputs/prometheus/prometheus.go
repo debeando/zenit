@@ -10,16 +10,16 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/outputs"
 )
 
-type OutputPrometheus struct {}
+type OutputPrometheus struct{}
 
 func (l *OutputPrometheus) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - OutputPrometheus - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
-	if ! config.File.Prometheus.Enable {
+	if !config.File.Prometheus.Enable {
 		return
 	}
 

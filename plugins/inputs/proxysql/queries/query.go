@@ -9,8 +9,8 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 type Query struct {
@@ -24,7 +24,7 @@ type Query struct {
 }
 
 const (
-	ReQuery = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z0-9._]+)`
+	ReQuery        = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z0-9._]+)`
 	querySQDigestL = `SELECT CASE
          WHEN hostgroup IN (SELECT writer_hostgroup FROM main.mysql_replication_hostgroups) THEN 'writer'
          WHEN hostgroup IN (SELECT reader_hostgroup FROM main.mysql_replication_hostgroups) THEN 'reader'
@@ -38,17 +38,17 @@ FROM stats.stats_mysql_query_digest;`
 
 var re *regexp.Regexp
 
-type InputProxySQLQuery struct {}
+type InputProxySQLQuery struct{}
 
 func (l *InputProxySQLQuery) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - InputProxySQLQuery - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
 	for host := range config.File.ProxySQL {
-		if ! config.File.ProxySQL[host].Inputs.Queries {
+		if !config.File.ProxySQL[host].Inputs.Queries {
 			return
 		}
 
@@ -59,7 +59,7 @@ func (l *InputProxySQLQuery) Collect() {
 		var p = mysql.GetInstance("proxysql")
 		p.Connect(config.File.ProxySQL[host].DSN)
 
-		rows:= p.Query(querySQDigestL)
+		rows := p.Query(querySQDigestL)
 
 		for i := range rows {
 			table, command := Match(rows[i]["digest_text"])

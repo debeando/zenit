@@ -6,20 +6,20 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-type InputsPerconaToolkitSlaveDelay struct {}
+type InputsPerconaToolkitSlaveDelay struct{}
 
 func (l *InputsPerconaToolkitSlaveDelay) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - InputsPerconaToolkitSlaveDelay - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
-	if ! config.File.Process.Inputs.PerconaToolKitSlaveDelay {
+	if !config.File.Process.Inputs.PerconaToolKitSlaveDelay {
 		return
 	}
 

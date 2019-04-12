@@ -13,7 +13,7 @@ import (
 
 type singleton struct {
 	Connection *sql.DB
-	Name string
+	Name       string
 }
 
 var instance = make(map[string]*singleton)
@@ -60,9 +60,9 @@ func (s *singleton) Query(query string) map[int]map[string]string {
 		log.Error(fmt.Sprintf("%s - %s", s.Name, err))
 	}
 
-	dataset  := make(map[int]map[string]string)
-	row_id   := 0
-	columns  := make([]sql.RawBytes, len(cols))
+	dataset := make(map[int]map[string]string)
+	row_id := 0
+	columns := make([]sql.RawBytes, len(cols))
 	columnPointers := make([]interface{}, len(cols))
 
 	for i := range cols {
@@ -160,7 +160,7 @@ func YesOrNo(v uint64) string {
 }
 
 func IsBool(v uint64) bool {
-	if (v == 0 || v == 1) {
+	if v == 0 || v == 1 {
 		return true
 	}
 	return false

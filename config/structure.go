@@ -29,7 +29,7 @@ type All struct {
 		}
 	}
 	MySQL struct {
-		DSN string `yaml:"dsn"`
+		DSN    string `yaml:"dsn"`
 		Inputs struct {
 			Overflow  bool `yaml:"overflow"`
 			Slave     bool `yaml:"slave"`
@@ -41,7 +41,7 @@ type All struct {
 	ProxySQL []struct {
 		Hostname string `yaml:"hostname"`
 		DSN      string `yaml:"dsn"`
-		Inputs struct {
+		Inputs   struct {
 			Commands bool `yaml:"commands"`
 			Pool     bool `yaml:"pool"`
 			Queries  bool `yaml:"queries"`
@@ -73,7 +73,7 @@ type All struct {
 		}
 	}
 	Newrelic struct {
-		Insight	struct {
+		Insight struct {
 			Enable    bool   `yaml:"enable"`
 			AccountID string `yaml:"account_id"`
 			InsertKey string `yaml:"insert_key"`

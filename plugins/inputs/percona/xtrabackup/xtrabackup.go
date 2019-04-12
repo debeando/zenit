@@ -6,20 +6,20 @@ import (
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-type InputsPerconaXtraBackup struct {}
+type InputsPerconaXtraBackup struct{}
 
 func (l *InputsPerconaXtraBackup) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - InputsPerconaXtraBackup - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
-	if ! config.File.Process.Inputs.PerconaXtraBackup {
+	if !config.File.Process.Inputs.PerconaXtraBackup {
 		return
 	}
 

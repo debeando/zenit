@@ -13,16 +13,16 @@ import (
 const NR_OPEN string = "/proc/sys/fs/nr_open"
 const FILE_MAX string = "/proc/sys/fs/file-max"
 
-type InputOSLimits struct {}
+type InputOSLimits struct{}
 
 func (l *InputOSLimits) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - InputOSLimits - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
-	if ! config.File.OS.Inputs.Limits {
+	if !config.File.OS.Inputs.Limits {
 		return
 	}
 

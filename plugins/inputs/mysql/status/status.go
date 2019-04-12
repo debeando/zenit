@@ -6,22 +6,22 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 const query = "SHOW GLOBAL STATUS"
 
-type MySQLStatus struct {}
+type MySQLStatus struct{}
 
 func (l *MySQLStatus) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - MySQLStatus - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
-	if ! config.File.MySQL.Inputs.Status {
+	if !config.File.MySQL.Inputs.Status {
 		return
 	}
 

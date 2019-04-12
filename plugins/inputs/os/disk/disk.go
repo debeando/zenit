@@ -6,22 +6,22 @@ import (
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 
 	"github.com/shirou/gopsutil/disk"
 )
 
-type InputOSDisk struct {}
+type InputOSDisk struct{}
 
 func (l *InputOSDisk) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - InputOSDisk - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
-	if ! config.File.OS.Inputs.Disk {
+	if !config.File.OS.Inputs.Disk {
 		return
 	}
 

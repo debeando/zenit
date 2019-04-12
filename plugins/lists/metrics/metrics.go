@@ -56,7 +56,7 @@ func (l *Items) Add(m Metric) {
 }
 
 // FetchOne and return specific metric.
-func (l *Items) FetchOne(key string, tagName string, tagValue string) (interface{}) {
+func (l *Items) FetchOne(key string, tagName string, tagValue string) interface{} {
 	for _, metric := range *l {
 		if metric.Key == key {
 			for _, tag := range metric.Tags {

@@ -13,16 +13,16 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-type InputOSNet struct {}
+type InputOSNet struct{}
 
 func (l *InputOSNet) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - InputOSNet - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
-	if ! config.File.OS.Inputs.Net {
+	if !config.File.OS.Inputs.Net {
 		return
 	}
 

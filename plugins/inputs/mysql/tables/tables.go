@@ -7,8 +7,8 @@ import (
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/inputs"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
 const query = `
@@ -22,16 +22,16 @@ WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schem
 ORDER BY table_schema, table_name;
 `
 
-type MySQLTables struct {}
+type MySQLTables struct{}
 
 func (l *MySQLTables) Collect() {
-	defer func () {
+	defer func() {
 		if err := recover(); err != nil {
 			log.Debug(fmt.Sprintf("Plugin - MySQLTables - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
-	if ! config.File.MySQL.Inputs.Tables {
+	if !config.File.MySQL.Inputs.Tables {
 		return
 	}
 
