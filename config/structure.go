@@ -28,43 +28,30 @@ type All struct {
 			}
 		}
 	}
-	MySQL struct {
-		DSN    string `yaml:"dsn"`
-		Inputs struct {
+	Inputs struct {
+		MySQL struct {
+			DSN    string `yaml:"dsn"`
 			Overflow  bool `yaml:"overflow"`
 			Slave     bool `yaml:"slave"`
 			Status    bool `yaml:"status"`
 			Tables    bool `yaml:"tables"`
 			Variables bool `yaml:"variables"`
 		}
-	}
-	ProxySQL []struct {
-		Hostname string `yaml:"hostname"`
-		DSN      string `yaml:"dsn"`
-		Inputs   struct {
+		ProxySQL []struct {
+			Hostname string `yaml:"hostname"`
+			DSN      string `yaml:"dsn"`
 			Commands bool `yaml:"commands"`
 			Pool     bool `yaml:"pool"`
 			Queries  bool `yaml:"queries"`
 		}
-	}
-	ClickHouse struct {
-		DSN string `yaml:"dsn"`
-	}
-	Prometheus struct {
-		Enable   bool   `yaml:"enable"`
-		TextFile string `yaml:"textfile"`
-	}
-	OS struct {
-		Inputs struct {
+		OS struct {
 			CPU    bool `yaml:"cpu"`
 			Disk   bool `yaml:"disk"`
 			Limits bool `yaml:"limits"`
 			Mem    bool `yaml:"mem"`
 			Net    bool `yaml:"net"`
 		}
-	}
-	Process struct {
-		Inputs struct {
+		Process struct {
 			PerconaToolKitDeadlockLogger     bool `yaml:"pt_deadlock_logger"`
 			PerconaToolKitKill               bool `yaml:"pt_kill"`
 			PerconaToolKitOnlineSchemaChange bool `yaml:"pt_online_schema_change"`
@@ -72,11 +59,20 @@ type All struct {
 			PerconaXtraBackup                bool `yaml:"xtrabackup"`
 		}
 	}
-	Newrelic struct {
-		Insight struct {
-			Enable    bool   `yaml:"enable"`
-			AccountID string `yaml:"account_id"`
-			InsertKey string `yaml:"insert_key"`
+	Outputs struct {
+		ClickHouse struct {
+			DSN string `yaml:"dsn"`
+		}
+		Prometheus struct {
+			Enable   bool   `yaml:"enable"`
+			TextFile string `yaml:"textfile"`
+		}
+		Newrelic struct {
+			Insight struct {
+				Enable    bool   `yaml:"enable"`
+				AccountID string `yaml:"account_id"`
+				InsertKey string `yaml:"insert_key"`
+			}
 		}
 	}
 }

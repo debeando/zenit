@@ -19,7 +19,7 @@ func (l *InputsPerconaXtraBackup) Collect() {
 		}
 	}()
 
-	if !config.File.Process.Inputs.PerconaXtraBackup {
+	if !config.File.Inputs.Process.PerconaXtraBackup {
 		return
 	}
 

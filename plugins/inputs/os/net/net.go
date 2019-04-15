@@ -22,7 +22,7 @@ func (l *InputOSNet) Collect() {
 		}
 	}()
 
-	if !config.File.OS.Inputs.Net {
+	if !config.File.Inputs.OS.Net {
 		return
 	}
 

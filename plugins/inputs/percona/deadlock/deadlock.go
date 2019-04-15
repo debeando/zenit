@@ -19,7 +19,7 @@ func (l *InputsPerconaDeadlock) Collect() {
 		}
 	}()
 
-	if !config.File.Process.Inputs.PerconaToolKitDeadlockLogger {
+	if !config.File.Inputs.Process.PerconaToolKitDeadlockLogger {
 		return
 	}
 

@@ -20,7 +20,7 @@ func (l *InputOSCPU) Collect() {
 		}
 	}()
 
-	if !config.File.OS.Inputs.CPU {
+	if !config.File.Inputs.OS.CPU {
 		return
 	}
 

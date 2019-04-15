@@ -22,16 +22,16 @@ func (l *InputProxySQLCommands) Collect() {
 		}
 	}()
 
-	for host := range config.File.ProxySQL {
-		if !config.File.ProxySQL[host].Inputs.Commands {
+	for host := range config.File.Inputs.ProxySQL {
+		if !config.File.Inputs.ProxySQL[host].Commands {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputProxySQLCommands - Hostname: %s", config.File.ProxySQL[host].Hostname))
+		log.Info(fmt.Sprintf("Plugin - InputProxySQLCommands - Hostname: %s", config.File.Inputs.ProxySQL[host].Hostname))
 
 		var a = metrics.Load()
 		var p = mysql.GetInstance("proxysql")
-		p.Connect(config.File.ProxySQL[host].DSN)
+		p.Connect(config.File.Inputs.ProxySQL[host].DSN)
 
 		rows := p.Query(query)
 
@@ -39,7 +39,7 @@ func (l *InputProxySQLCommands) Collect() {
 			a.Add(metrics.Metric{
 				Key: "zenit_proxysql_commands",
 				Tags: []metrics.Tag{
-					{"hostname", config.File.ProxySQL[host].Hostname},
+					{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
 					{"name", rows[i]["Command"]},
 				},
 				Values: []metrics.Value{

@@ -20,7 +20,7 @@ func (l *InputOSMem) Collect() {
 		}
 	}()
 
-	if !config.File.OS.Inputs.Mem {
+	if !config.File.Inputs.OS.Mem {
 		return
 	}
 

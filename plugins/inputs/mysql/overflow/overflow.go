@@ -40,13 +40,13 @@ func (l *MySQLOverflow) Collect() {
 		}
 	}()
 
-	if !config.File.MySQL.Inputs.Overflow {
+	if !config.File.Inputs.MySQL.Overflow {
 		return
 	}
 
 	var a = metrics.Load()
 	var m = mysql.GetInstance("mysql")
-	m.Connect(config.File.MySQL.DSN)
+	m.Connect(config.File.Inputs.MySQL.DSN)
 
 	rows := m.Query(queryFields)
 

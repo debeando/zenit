@@ -2,6 +2,10 @@
 
 This is the list about stupid `TODO` when not require create tickets.
 
+- On ProxySQL metrics send to Newrelic no have value for text:
+  - connection server
+  - queries group
+- Implement multi server for mysql.
 - Define correct headers for clickhouse.
 - Add retry while for HTTP Post func.
 - Add test for Input Percona.

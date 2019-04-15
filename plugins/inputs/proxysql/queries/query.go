@@ -47,17 +47,17 @@ func (l *InputProxySQLQuery) Collect() {
 		}
 	}()
 
-	for host := range config.File.ProxySQL {
-		if !config.File.ProxySQL[host].Inputs.Queries {
+	for host := range config.File.Inputs.ProxySQL {
+		if !config.File.Inputs.ProxySQL[host].Queries {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputProxySQLQuery - Hostname: %s", config.File.ProxySQL[host].Hostname))
+		log.Info(fmt.Sprintf("Plugin - InputProxySQLQuery - Hostname: %s", config.File.Inputs.ProxySQL[host].Hostname))
 
 		re, _ = regexp.Compile(ReQuery)
 		var a = metrics.Load()
 		var p = mysql.GetInstance("proxysql")
-		p.Connect(config.File.ProxySQL[host].DSN)
+		p.Connect(config.File.Inputs.ProxySQL[host].DSN)
 
 		rows := p.Query(querySQDigestL)
 

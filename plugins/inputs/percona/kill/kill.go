@@ -19,7 +19,7 @@ func (l *InputsPerconaKill) Collect() {
 		}
 	}()
 
-	if !config.File.Process.Inputs.PerconaToolKitKill {
+	if !config.File.Inputs.Process.PerconaToolKitKill {
 		return
 	}
 

@@ -37,16 +37,16 @@ func (l *InputProxySQLPool) Collect() {
 		}
 	}()
 
-	for host := range config.File.ProxySQL {
-		if !config.File.ProxySQL[host].Inputs.Pool {
+	for host := range config.File.Inputs.ProxySQL {
+		if !config.File.Inputs.ProxySQL[host].Pool {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputProxySQLPool - Hostname: %s", config.File.ProxySQL[host].Hostname))
+		log.Info(fmt.Sprintf("Plugin - InputProxySQLPool - Hostname: %s", config.File.Inputs.ProxySQL[host].Hostname))
 
 		var a = metrics.Load()
 		var p = mysql.GetInstance("proxysql")
-		p.Connect(config.File.ProxySQL[host].DSN)
+		p.Connect(config.File.Inputs.ProxySQL[host].DSN)
 
 		rows := p.Query(querySQLPool)
 
@@ -54,7 +54,7 @@ func (l *InputProxySQLPool) Collect() {
 			a.Add(metrics.Metric{
 				Key: "zenit_proxysql_connections",
 				Tags: []metrics.Tag{
-					{"hostname", config.File.ProxySQL[host].Hostname},
+					{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
 					{"group", rows[i]["group"]},
 					{"host", rows[i]["srv_host"]},
 				},

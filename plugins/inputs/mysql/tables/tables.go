@@ -31,13 +31,13 @@ func (l *MySQLTables) Collect() {
 		}
 	}()
 
-	if !config.File.MySQL.Inputs.Tables {
+	if !config.File.Inputs.MySQL.Tables {
 		return
 	}
 
 	var a = metrics.Load()
 	var m = mysql.GetInstance("mysql")
-	m.Connect(config.File.MySQL.DSN)
+	m.Connect(config.File.Inputs.MySQL.DSN)
 
 	rows := m.Query(query)
 

@@ -19,13 +19,13 @@ func (l *OutputPrometheus) Collect() {
 		}
 	}()
 
-	if !config.File.Prometheus.Enable {
+	if !config.File.Outputs.Prometheus.Enable {
 		return
 	}
 
-	file.Create(config.File.Prometheus.TextFile)
-	file.Truncate(config.File.Prometheus.TextFile)
-	file.Write(config.File.Prometheus.TextFile, Normalize(metrics.Load()))
+	file.Create(config.File.Outputs.Prometheus.TextFile)
+	file.Truncate(config.File.Outputs.Prometheus.TextFile)
+	file.Write(config.File.Outputs.Prometheus.TextFile, Normalize(metrics.Load()))
 }
 
 func init() {

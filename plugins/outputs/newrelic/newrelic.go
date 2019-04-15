@@ -20,7 +20,7 @@ func (l *OutputNewrelicInsights) Collect() {
 		}
 	}()
 
-	if !config.File.Newrelic.Insight.Enable {
+	if !config.File.Outputs.Newrelic.Insight.Enable {
 		return
 	}
 
@@ -37,9 +37,9 @@ func (l *OutputNewrelicInsights) Collect() {
 
 		headers := make(map[string]string)
 		headers["Content-Type"] = "application/json"
-		headers["X-Insert-Key"] = config.File.Newrelic.Insight.InsertKey
+		headers["X-Insert-Key"] = config.File.Outputs.Newrelic.Insight.InsertKey
 
-		url := fmt.Sprintf("https://insights-collector.newrelic.com/v1/accounts/%s/events", config.File.Newrelic.Insight.AccountID)
+		url := fmt.Sprintf("https://insights-collector.newrelic.com/v1/accounts/%s/events", config.File.Outputs.Newrelic.Insight.AccountID)
 
 		http.Post(url, string(events_json), headers)
 	}

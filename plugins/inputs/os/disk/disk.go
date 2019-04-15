@@ -21,7 +21,7 @@ func (l *InputOSDisk) Collect() {
 		}
 	}()
 
-	if !config.File.OS.Inputs.Disk {
+	if !config.File.Inputs.OS.Disk {
 		return
 	}
 

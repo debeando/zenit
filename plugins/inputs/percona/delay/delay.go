@@ -19,7 +19,7 @@ func (l *InputsPerconaToolkitSlaveDelay) Collect() {
 		}
 	}()
 
-	if !config.File.Process.Inputs.PerconaToolKitSlaveDelay {
+	if !config.File.Inputs.Process.PerconaToolKitSlaveDelay {
 		return
 	}
 

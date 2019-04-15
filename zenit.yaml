@@ -18,50 +18,43 @@ parser:
       buffer_size: 100   # Number of events.
       buffer_timeout: 60 # Seconds
 
-mysql:
-  dsn: root@tcp(127.0.0.1:3306)/
-  inputs:
+inputs:
+  mysql:
+    dsn: root@tcp(127.0.0.1:3306)/
     overflow: true
     slave: true
     status: true
     tables: true
     variables: true
-
-proxysql:
-  - hostname: localhost
-    dsn: proxysql:admin@tcp(127.0.0.1:6032)/
-    inputs:
+  proxysql:
+    - hostname: localhost
+      dsn: proxysql:admin@tcp(127.0.0.1:6032)/
       commands: true
       pool: true
       queries: true
-
-clickhouse:
-  enable: true
-  dsn: http://127.0.0.1:8123/?database=zenit
-# dsn: http://127.0.0.1:8123/?user=admin&password=admin&database=zenit
-
-prometheus:
-  enable: true
-  textfile: /var/tmp/zenit.prom
-
-os:
-  inputs:
+  os:
     cpu: true
     disk: true
     limits: true
     mem: true
     net: true
-
-process:
-  inputs:
+  process:
     pt_deadlock_logger: true
     pt_kill: true
     pt_online_schema_change: true
     pt_slave_delay: true
     xtrabackup: true
 
-newrelic:
-  insight:
-    enable: false
-    account_id: 0
-    insert_key: abc123example
+outputs:
+  clickhouse:
+    enable: true
+    dsn: http://127.0.0.1:8123/?database=zenit
+  # dsn: http://127.0.0.1:8123/?user=admin&password=admin&database=zenit
+  prometheus:
+    enable: true
+    textfile: /var/tmp/zenit.prom
+  newrelic:
+    insight:
+      enable: false
+      account_id: 0
+      insert_key: abc123example

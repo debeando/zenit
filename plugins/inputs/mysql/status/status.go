@@ -21,13 +21,13 @@ func (l *MySQLStatus) Collect() {
 		}
 	}()
 
-	if !config.File.MySQL.Inputs.Status {
+	if !config.File.Inputs.MySQL.Status {
 		return
 	}
 
 	var a = metrics.Load()
 	var m = mysql.GetInstance("mysql")
-	m.Connect(config.File.MySQL.DSN)
+	m.Connect(config.File.Inputs.MySQL.DSN)
 
 	rows := m.Query(query)
 

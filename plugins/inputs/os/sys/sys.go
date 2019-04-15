@@ -22,7 +22,7 @@ func (l *InputOSLimits) Collect() {
 		}
 	}()
 
-	if !config.File.OS.Inputs.Limits {
+	if !config.File.Inputs.OS.Limits {
 		return
 	}
 

@@ -19,7 +19,7 @@ func (l *InputsPerconaOSC) Collect() {
 		}
 	}()
 
-	if !config.File.Process.Inputs.PerconaToolKitOnlineSchemaChange {
+	if !config.File.Inputs.Process.PerconaToolKitOnlineSchemaChange {
 		return
 	}
 
