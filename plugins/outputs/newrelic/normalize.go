@@ -10,14 +10,15 @@ func Normalize(items *metrics.Items) map[string]map[string]interface{} {
 	events := make(map[string]map[string]interface{})
 
 	for _, m := range *items {
+		events[m.Key] = make(map[string]interface{})
+
+		if _, ok := events[m.Key]; !ok {
+			events[m.Key]["hostname"] = config.File.General.Hostname
+			events[m.Key]["eventType"] = common.ToCamel(m.Key)
+		}
+
 		switch v := m.Values.(type) {
 		case int, uint, uint64, float64:
-			if _, ok := events[m.Key]; !ok {
-				events[m.Key] = make(map[string]interface{})
-				events[m.Key]["host"] = config.File.General.Hostname
-				events[m.Key]["eventType"] = common.ToCamel(m.Key)
-			}
-
 			for t := range m.Tags {
 				if m.Tags[t].Name == "name" {
 					events[m.Key][m.Tags[t].Value] = v
@@ -26,10 +27,8 @@ func Normalize(items *metrics.Items) map[string]map[string]interface{} {
 				}
 			}
 		case []metrics.Value:
-			if _, ok := events[m.Key]; !ok {
-				events[m.Key] = make(map[string]interface{})
-				events[m.Key]["host"] = config.File.General.Hostname
-				events[m.Key]["eventType"] = common.ToCamel(m.Key)
+			for t := range m.Tags {
+				events[m.Key][m.Tags[t].Name] = m.Tags[t].Value
 			}
 
 			for y := range v {
