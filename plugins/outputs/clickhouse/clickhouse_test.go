@@ -98,7 +98,7 @@ func HandlerResponse() http.Handler {
 func setup() {
 	ts = httptest.NewServer(HandlerResponse())
 
-	config.File.ClickHouse.DSN = fmt.Sprintf("%s/?database=zenit", ts.URL)
+	config.File.Outputs.ClickHouse.DSN = fmt.Sprintf("%s/?database=zenit", ts.URL)
 }
 
 func shutdown() {
@@ -140,7 +140,7 @@ func TestSQLInsert(t *testing.T) {
 	})
 
 	sql_insert := sql.Insert(event.Schema, event.Table, event.Wildcard, event.Values)
-	status_code := test.Post(config.File.ClickHouse.DSN, sql_insert, nil)
+	status_code := test.Post(config.File.Outputs.ClickHouse.DSN, sql_insert, nil)
 
 	if status_code != 200 {
 		t.Errorf("Expected: '200', got: '%v'", status_code)
