@@ -21,25 +21,32 @@ func (l *MySQLSlave) Collect() {
 		}
 	}()
 
-	if !config.File.Inputs.MySQL.Status {
-		return
-	}
+	for host := range config.File.Inputs.MySQL {
+		if !config.File.Inputs.MySQL[host].Slave {
+			return
+		}
 
-	var a = metrics.Load()
-	var m = mysql.GetInstance("mysql")
-	m.Connect(config.File.Inputs.MySQL.DSN)
+		log.Info(fmt.Sprintf("Plugin - MySQLSlave - Hostname: %s", config.File.Inputs.MySQL[host].Hostname))
 
-	rows := m.Query(query)
+		var a = metrics.Load()
+		var m = mysql.GetInstance("mysql")
+		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
-	for column := range rows[0] {
-		if value, ok := mysql.ParseValue(rows[0][column]); ok {
-			a.Add(metrics.Metric{
-				Key:    "zenit_mysql_slave",
-				Tags:   []metrics.Tag{{"name", column}},
-				Values: value,
-			})
+		rows := m.Query(query)
 
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLSlave - %s=%d", column, value))
+		for column := range rows[0] {
+			if value, ok := mysql.ParseValue(rows[0][column]); ok {
+				a.Add(metrics.Metric{
+					Key:    "zenit_mysql_slave",
+					Tags:   []metrics.Tag{
+						{"hostname", config.File.Inputs.MySQL[host].Hostname},
+						{"name", column},
+					},
+					Values: value,
+				})
+
+				log.Debug(fmt.Sprintf("Plugin - InputMySQLSlave - %s=%d", column, value))
+			}
 		}
 	}
 }

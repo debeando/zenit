@@ -40,59 +40,64 @@ func (l *MySQLOverflow) Collect() {
 		}
 	}()
 
-	if !config.File.Inputs.MySQL.Overflow {
-		return
-	}
+	for host := range config.File.Inputs.MySQL {
+		if !config.File.Inputs.MySQL[host].Overflow {
+			return
+		}
 
-	var a = metrics.Load()
-	var m = mysql.GetInstance("mysql")
-	m.Connect(config.File.Inputs.MySQL.DSN)
+		log.Info(fmt.Sprintf("Plugin - MySQLOverflow - Hostname: %s", config.File.Inputs.MySQL[host].Hostname))
 
-	rows := m.Query(queryFields)
+		var a = metrics.Load()
+		var m = mysql.GetInstance("mysql")
+		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
-	for row := range rows {
-		max := m.Query(
-			fmt.Sprintf(
-				queryMax,
-				rows[row]["column_name"],
-				rows[row]["table_schema"],
-				rows[row]["table_name"],
-			),
-		)
+		rows := m.Query(queryFields)
 
-		if value, ok := mysql.ParseValue(max[0]["max"]); ok {
-			var c Column
-			c.dataType = rows[row]["data_type"]
-			c.current = value
-
-			c.Unsigned()
-			c.Maximum()
-			c.Percentage()
-
-			a.Add(metrics.Metric{
-				Key: "zenit_mysql_overflow",
-				Tags: []metrics.Tag{
-					{"schema", rows[row]["table_schema"]},
-					{"table", rows[row]["table_name"]},
-					{"type", "overflow"},
-					{"data_type", c.dataType},
-					{"unsigned", strconv.FormatBool(c.unsigned)}},
-				Values: c.percent,
-			})
-
-			log.Debug(
-				fmt.Sprintf("Plugin - InputMySQLOverflow - %s.%s.%s(%s,%t)=%d [(%d/%d)*100=%d%%]",
+		for row := range rows {
+			max := m.Query(
+				fmt.Sprintf(
+					queryMax,
+					rows[row]["column_name"],
 					rows[row]["table_schema"],
 					rows[row]["table_name"],
-					rows[row]["column_name"],
-					c.dataType,
-					c.unsigned,
-					value,
-					c.current,
-					c.maximum,
-					c.percent,
 				),
 			)
+
+			if value, ok := mysql.ParseValue(max[0]["max"]); ok {
+				var c Column
+				c.dataType = rows[row]["data_type"]
+				c.current = value
+
+				c.Unsigned()
+				c.Maximum()
+				c.Percentage()
+
+				a.Add(metrics.Metric{
+					Key: "zenit_mysql_overflow",
+					Tags: []metrics.Tag{
+						{"hostname", config.File.Inputs.MySQL[host].Hostname},
+						{"schema", rows[row]["table_schema"]},
+						{"table", rows[row]["table_name"]},
+						{"type", "overflow"},
+						{"data_type", c.dataType},
+						{"unsigned", strconv.FormatBool(c.unsigned)}},
+					Values: c.percent,
+				})
+
+				log.Debug(
+					fmt.Sprintf("Plugin - InputMySQLOverflow - %s.%s.%s(%s,%t)=%d [(%d/%d)*100=%d%%]",
+						rows[row]["table_schema"],
+						rows[row]["table_name"],
+						rows[row]["column_name"],
+						c.dataType,
+						c.unsigned,
+						value,
+						c.current,
+						c.maximum,
+						c.percent,
+					),
+				)
+			}
 		}
 	}
 }

@@ -21,25 +21,32 @@ func (l *MySQLVariables) Collect() {
 		}
 	}()
 
-	if !config.File.Inputs.MySQL.Variables {
-		return
-	}
+	for host := range config.File.Inputs.MySQL {
+		if !config.File.Inputs.MySQL[host].Variables {
+			return
+		}
 
-	var a = metrics.Load()
-	var m = mysql.GetInstance("mysql")
-	m.Connect(config.File.Inputs.MySQL.DSN)
+		log.Info(fmt.Sprintf("Plugin - MySQLVariables - Hostname: %s", config.File.Inputs.MySQL[host].Hostname))
 
-	rows := m.Query(query)
+		var a = metrics.Load()
+		var m = mysql.GetInstance("mysql")
+		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
-	for i := range rows {
-		if value, ok := mysql.ParseValue(rows[i]["Value"]); ok {
-			a.Add(metrics.Metric{
-				Key:    "zenit_mysql_variables",
-				Tags:   []metrics.Tag{{"name", rows[i]["Variable_name"]}},
-				Values: value,
-			})
+		rows := m.Query(query)
 
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLVariables - %s=%d", rows[i]["Variable_name"], value))
+		for i := range rows {
+			if value, ok := mysql.ParseValue(rows[i]["Value"]); ok {
+				a.Add(metrics.Metric{
+					Key:    "zenit_mysql_variables",
+					Tags:   []metrics.Tag{
+						{"hostname", config.File.Inputs.MySQL[host].Hostname},
+						{"name", rows[i]["Variable_name"]},
+					},
+					Values: value,
+				})
+
+				log.Debug(fmt.Sprintf("Plugin - InputMySQLVariables - %s=%d", rows[i]["Variable_name"], value))
+			}
 		}
 	}
 }

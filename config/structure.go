@@ -29,8 +29,9 @@ type All struct {
 		}
 	}
 	Inputs struct {
-		MySQL struct {
-			DSN    string `yaml:"dsn"`
+		MySQL []struct {
+			Hostname  string `yaml:"hostname"`
+			DSN       string `yaml:"dsn"`
 			Overflow  bool `yaml:"overflow"`
 			Slave     bool `yaml:"slave"`
 			Status    bool `yaml:"status"`

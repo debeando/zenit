@@ -20,12 +20,13 @@ parser:
 
 inputs:
   mysql:
-    dsn: root@tcp(127.0.0.1:3306)/
-    overflow: true
-    slave: true
-    status: true
-    tables: true
-    variables: true
+    - hostname: localhost
+      dsn: root@tcp(127.0.0.1:3306)/
+      overflow: true
+      slave: true
+      status: true
+      tables: true
+      variables: true
   proxysql:
     - hostname: localhost
       dsn: proxysql:admin@tcp(127.0.0.1:6032)/

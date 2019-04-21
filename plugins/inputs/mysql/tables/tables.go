@@ -31,32 +31,38 @@ func (l *MySQLTables) Collect() {
 		}
 	}()
 
-	if !config.File.Inputs.MySQL.Tables {
-		return
-	}
+	for host := range config.File.Inputs.MySQL {
+		if !config.File.Inputs.MySQL[host].Tables {
+			return
+		}
 
-	var a = metrics.Load()
-	var m = mysql.GetInstance("mysql")
-	m.Connect(config.File.Inputs.MySQL.DSN)
+		log.Info(fmt.Sprintf("Plugin - MySQLTables - Hostname: %s", config.File.Inputs.MySQL[host].Hostname))
 
-	rows := m.Query(query)
 
-	for i := range rows {
-		a.Add(metrics.Metric{
-			Key: "zenit_mysql_tables",
-			Tags: []metrics.Tag{
-				{"schema", rows[i]["schema"]},
-				{"table", rows[i]["table"]},
-			},
-			Values: []metrics.Value{
-				{"size", common.StringToUInt64(rows[i]["size"])},
-				{"rows", common.StringToUInt64(rows[i]["rows"])},
-				{"increment", common.StringToUInt64(rows[i]["increment"])}},
-		})
+		var a = metrics.Load()
+		var m = mysql.GetInstance("mysql")
+		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
-		log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Size %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["size"]))
-		log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Rows %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["rows"]))
-		log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Increment %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["increment"]))
+		rows := m.Query(query)
+
+		for i := range rows {
+			a.Add(metrics.Metric{
+				Key: "zenit_mysql_tables",
+				Tags: []metrics.Tag{
+					{"hostname", config.File.Inputs.MySQL[host].Hostname},
+					{"schema", rows[i]["schema"]},
+					{"table", rows[i]["table"]},
+				},
+				Values: []metrics.Value{
+					{"size", common.StringToUInt64(rows[i]["size"])},
+					{"rows", common.StringToUInt64(rows[i]["rows"])},
+					{"increment", common.StringToUInt64(rows[i]["increment"])}},
+			})
+
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Size %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["size"]))
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Rows %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["rows"]))
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Increment %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["increment"]))
+		}
 	}
 }
 
