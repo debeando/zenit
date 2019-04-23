@@ -5,8 +5,10 @@ import (
 )
 
 // All is a struct to contain all configuration imported or loaded from config file.
-type All struct {
-	General struct {
+type Config struct{
+	Path      string
+	IPAddress string
+	General   struct {
 		Hostname string        `yaml:"hostname"`
 		Interval time.Duration `yaml:"interval"`
 		Debug    bool          `yaml:"debug"`

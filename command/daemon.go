@@ -18,8 +18,8 @@ var (
 type program struct{}
 
 func (p *program) Start(s service.Service) error {
-	config.Load()
-	config.SanityCheck()
+	config.File.Load()
+	config.File.SanityCheck()
 	plugins.Load()
 
 	return nil
