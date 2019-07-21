@@ -70,6 +70,13 @@ type Config struct{
 			Enable   bool   `yaml:"enable"`
 			TextFile string `yaml:"textfile"`
 		}
+		InfluxDB struct {
+			Enable   bool   `yaml:"enable"`
+			URL      string `yaml:"url"`
+			Username string `yaml:"username"`
+			Password string `yaml:"password"`
+			Database string `yaml:"database"`
+		}
 		Newrelic struct {
 			Insight struct {
 				Enable    bool   `yaml:"enable"`

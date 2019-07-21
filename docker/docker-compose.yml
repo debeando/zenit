@@ -65,6 +65,20 @@ services:
       - percona-server-primary
       - percona-server-secondary
 
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "8090:8090"
+    environment:
+      - INFLUXDB_DATA_ENGINE=tsm1
+      - INFLUXDB_REPORTING_DISABLED=false
+    networks:
+      default:
+        ipv4_address: 172.20.1.6
+
 networks:
   default:
     driver: bridge
