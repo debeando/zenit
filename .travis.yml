@@ -4,9 +4,11 @@ go:
   - "1.12"
 before_install:
   - go get github.com/mattn/goveralls
+  - apt-get install shellcheck
 notifications:
   email: false
 script:
   - make deps
   - make tests
   - $GOPATH/bin/goveralls -coverprofile=coverage.txt -service=travis-ci
+  - shellcheck scripts/*.sh
