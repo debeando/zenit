@@ -31,8 +31,8 @@ if [ -L /usr/bin/zenit ]; then
   rm -f /usr/bin/zenit
 fi
 
-if [ ! -z "${FILE}" ]; then
-  wget -qO- https://github.com/swapbyt3s/zenit/releases/download/${TAG}/${FILE} | tar xz -C /usr/local/bin/
+if [ -n "${FILE}" ]; then
+  wget -qO- "https://github.com/swapbyt3s/zenit/releases/download/${TAG}/${FILE}" | tar xz -C /usr/local/bin/
 fi
 
 if [ -f /usr/local/bin/zenit ]; then
