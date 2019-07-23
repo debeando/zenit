@@ -1,10 +1,10 @@
-sudo: false
+sudo: true
 language: go
 go:
   - "1.12"
 before_install:
   - go get github.com/mattn/goveralls
-  - apt-get install shellcheck
+  - sudo apt-get install -y shellcheck
 notifications:
   email: false
 script:
