@@ -60,14 +60,14 @@ func (l *InputProxySQLPool) Collect() {
 				},
 				Values: []metrics.Value{
 					{"status", rows[i]["status"]},
-					{"used", common.StringToUInt64(rows[i]["ConnUsed"])},
-					{"free", common.StringToUInt64(rows[i]["ConnFree"])},
-					{"ok", common.StringToUInt64(rows[i]["ConnOK"])},
-					{"errors", common.StringToUInt64(rows[i]["ConnERR"])},
-					{"queries", common.StringToUInt64(rows[i]["Queries"])},
-					{"tx", common.StringToUInt64(rows[i]["Bytes_data_sent"])},
-					{"rx", common.StringToUInt64(rows[i]["Bytes_data_recv"])},
-					{"latency", common.StringToUInt64(rows[i]["Latency_us"])},
+					{"used", common.StringToInt64(rows[i]["ConnUsed"])},
+					{"free", common.StringToInt64(rows[i]["ConnFree"])},
+					{"ok", common.StringToInt64(rows[i]["ConnOK"])},
+					{"errors", common.StringToInt64(rows[i]["ConnERR"])},
+					{"queries", common.StringToInt64(rows[i]["Queries"])},
+					{"tx", common.StringToInt64(rows[i]["Bytes_data_sent"])},
+					{"rx", common.StringToInt64(rows[i]["Bytes_data_recv"])},
+					{"latency", common.StringToInt64(rows[i]["Latency_us"])},
 				},
 			})
 

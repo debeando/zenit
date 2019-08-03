@@ -32,8 +32,8 @@ func (l *InputOSLimits) Collect() {
 			{"name", "sysctl"},
 		},
 		Values: []metrics.Value{
-			{"nr_open", common.GetUInt64FromFile(NR_OPEN)},
-			{"file_max", common.GetUInt64FromFile(FILE_MAX)},
+			{"nr_open", common.GetInt64FromFile(NR_OPEN)},
+			{"file_max", common.GetInt64FromFile(FILE_MAX)},
 		},
 	})
 }

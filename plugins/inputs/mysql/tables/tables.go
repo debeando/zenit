@@ -54,9 +54,9 @@ func (l *MySQLTables) Collect() {
 					{"table", rows[i]["table"]},
 				},
 				Values: []metrics.Value{
-					{"size", common.StringToUInt64(rows[i]["size"])},
-					{"rows", common.StringToUInt64(rows[i]["rows"])},
-					{"increment", common.StringToUInt64(rows[i]["increment"])}},
+					{"size", common.StringToInt64(rows[i]["size"])},
+					{"rows", common.StringToInt64(rows[i]["rows"])},
+					{"increment", common.StringToInt64(rows[i]["increment"])}},
 			})
 
 			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Size %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["size"]))

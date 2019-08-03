@@ -15,7 +15,7 @@ func Normalize(a *metrics.Items) string {
 
 	for _, m := range *a {
 		switch m.Values.(type) {
-		case int, uint, uint64, float64:
+		case int, int64, float64:
 			s = fmt.Sprintf("%s{%s} %s", m.Key, getTags(m.Tags), getValue(m.Values))
 
 			if config.File.General.Debug {
@@ -51,7 +51,7 @@ func getTags(tags []metrics.Tag) string {
 
 func getValue(value interface{}) string {
 	switch v := value.(type) {
-	case int, uint, uint64:
+	case int, int64:
 		return fmt.Sprintf("%d", v)
 	case float64:
 		return fmt.Sprintf("%.2f", v)

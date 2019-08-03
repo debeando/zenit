@@ -15,16 +15,25 @@ func TestCount(t *testing.T) {
 }
 
 func TestTagsEquals(t *testing.T) {
-	result := metrics.TagsEquals([]metrics.Tag{{"baz", "foo"}},
-		[]metrics.Tag{{"baz", "foo"}})
+	result := metrics.TagsEquals(
+		[]metrics.Tag{
+			{"baz", "foo"},
+		},
+		[]metrics.Tag{
+			{"baz", "foo"},
+		},
+	)
 
 	if !result == true {
 		t.Error("Expected false")
 	}
 
 	result = metrics.TagsEquals([]metrics.Tag{{"bar", "foo1"}},
-		[]metrics.Tag{{"bar", "foo1"},
-			{"baz", "foo2"}})
+		[]metrics.Tag{
+			{"bar", "foo1"},
+			{"baz", "foo2"},
+		},
+	)
 
 	if !result == false {
 		t.Error("Expected true")
@@ -34,7 +43,9 @@ func TestTagsEquals(t *testing.T) {
 func TestAdd(t *testing.T) {
 	a.Add(metrics.Metric{
 		Key:    "test",
-		Tags:   []metrics.Tag{{"foo", "bar"}},
+		Tags:   []metrics.Tag{
+			{"foo", "bar"},
+		},
 		Values: 123,
 	})
 
@@ -50,7 +61,9 @@ func TestUnique(t *testing.T) {
 
 	result := a.Unique(metrics.Metric{
 		Key:    "test",
-		Tags:   []metrics.Tag{{"foo", "bar"}},
+		Tags:   []metrics.Tag{
+			{"foo", "bar"},
+		},
 		Values: 123,
 	})
 
@@ -60,7 +73,9 @@ func TestUnique(t *testing.T) {
 
 	result = a.Unique(metrics.Metric{
 		Key:    "test",
-		Tags:   []metrics.Tag{{"foo", "baz"}},
+		Tags:   []metrics.Tag{
+			{"foo", "baz"},
+		},
 		Values: 123,
 	})
 
@@ -72,19 +87,23 @@ func TestUnique(t *testing.T) {
 func TestAccumulator(t *testing.T) {
 	a.Add(metrics.Metric{
 		Key:  "test_sum_values",
-		Tags: []metrics.Tag{{"foo", "bar"}},
+		Tags: []metrics.Tag{
+			{"foo", "bar"},
+		},
 		Values: []metrics.Value{
-			{"a", uint64(1)},
-			{"b", uint64(1)},
+			{"a", int64(1)},
+			{"b", int64(1)},
 		},
 	})
 
 	a.Add(metrics.Metric{
 		Key:  "test_sum_values",
-		Tags: []metrics.Tag{{"foo", "bar"}},
+		Tags: []metrics.Tag{
+			{"foo", "bar"},
+		},
 		Values: []metrics.Value{
-			{"a", uint64(2)},
-			{"b", uint64(2)},
+			{"a", int64(2)},
+			{"b", int64(2)},
 		},
 	})
 

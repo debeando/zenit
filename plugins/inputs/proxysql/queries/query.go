@@ -77,8 +77,8 @@ func (l *InputProxySQLQuery) Collect() {
 					{"command", command},
 				},
 				Values: []metrics.Value{
-					{"count", common.StringToUInt64(rows[i]["count_star"])},
-					{"sum", common.StringToUInt64(rows[i]["sum_time"])},
+					{"count", common.StringToInt64(rows[i]["count_star"])},
+					{"sum", common.StringToInt64(rows[i]["sum_time"])},
 				},
 			})
 

@@ -16,8 +16,8 @@ func TestNormalize(t *testing.T) {
 			{"foo", "bar"},
 		},
 		Values: []metrics.Value{
-			{"a", uint(2)},
-			{"b", uint(2)},
+			{"a", 2},
+			{"b", 2},
 		},
 	})
 

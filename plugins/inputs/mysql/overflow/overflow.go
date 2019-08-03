@@ -17,7 +17,7 @@ type Column struct {
 	dataType string
 	unsigned bool
 	current  uint64
-	percent  uint64
+	percent  int
 	maximum  uint64
 }
 

@@ -35,8 +35,8 @@ func (l *InputOSNet) Collect() {
 			data := strings.Split(line, ":")
 			dev := strings.TrimSpace(data[0])
 			match := reGroups.FindAllString(data[1], -1)
-			receive_bytes := common.StringToUInt64(match[0])
-			transmit_bytes := common.StringToUInt64(match[8])
+			receive_bytes := common.StringToInt64(match[0])
+			transmit_bytes := common.StringToInt64(match[8])
 
 			metrics.Load().Add(metrics.Metric{
 				Key: "zenit_os",
