@@ -178,7 +178,7 @@ func Trim(value *string) string {
 	return *value
 }
 
-func Percentage(value uint64, max uint64) int {
+func Percentage(value int64, max uint64) int {
 	v := float64(value)
 	m := float64(max)
 	if v >= 0 && m > 0 {

@@ -8,7 +8,7 @@ import (
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
-	// "github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/outputs"
 
 	client "github.com/influxdata/influxdb1-client"
@@ -63,13 +63,10 @@ func (l *OutputIndluxDB) Collect() {
 	log.Debug(fmt.Sprintf("Plugin - OutputIndluxDB - Connected to InfluxDB V-%s", ver))
 
 	pts := make([]client.Point, 1000)
-/*
+
 	events := metrics.Load()
 
 	for i, m := range *events {
-		// log.Debug(fmt.Sprintf("%d\n", i))
-		// log.Debug(fmt.Sprintf("Key: %s\n", m.Key))
-
 		tags   := map[string]string{}
 		values := make(map[string]interface{})
 
@@ -88,8 +85,6 @@ func (l *OutputIndluxDB) Collect() {
 				values["value"] = v
 		}
 
-		log.Debug(fmt.Sprintf("%#v\n", values))
-
 		pts[i] = client.Point{
 			Measurement: m.Key,
 			Tags:      tags,
@@ -99,19 +94,6 @@ func (l *OutputIndluxDB) Collect() {
 		}
 
 	}
-*/
-
-	pts[0] = client.Point{
-			Measurement: "demo",
-			Tags:     map[string]string{
-				"foo": "bar",
-			},
-			Fields:   map[string]interface{}{
-				"values": int64(9223372036854775807), // float64(10.5), //
-			},
-			Time:      time.Now(),
-			Precision: "s",
-		}
 
 	bps := client.BatchPoints{
 		Points:          pts,
@@ -145,15 +127,4 @@ func (l *OutputIndluxDB) Collect() {
 
 func init() {
 	outputs.Add("OutputIndluxDB", func() outputs.Output { return &OutputIndluxDB{} })
-}
-
-func getValue(value interface{}) interface{} {
-	switch v := value.(type) {
-	case int, uint, uint64:
-		return fmt.Sprintf("%d", v)
-	case float64:
-		return fmt.Sprintf("%,2f", v)
-	}
-
-	return "0"
 }
