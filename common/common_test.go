@@ -18,37 +18,37 @@ func TestPGrep(t *testing.T) {
 
 }
 
-func TestGetUInt64FromFile(t *testing.T) {
-	expected := uint64(1234567890)
-	result := common.GetUInt64FromFile(wd + "/../assets/tests/uint64.txt")
+func TestGetInt64FromFile(t *testing.T) {
+	expected := int64(1234567890)
+	result := common.GetInt64FromFile(wd + "/../assets/tests/int64.txt")
 
 	if result != expected {
-		t.Error("Expected: uint64(1234567890)")
+		t.Error("Expected: int64(1234567890)")
 	}
 
-	expected = uint64(0)
-	result = common.GetUInt64FromFile(wd + "/../assets/tests/uint64.log")
+	expected = int64(0)
+	result = common.GetInt64FromFile(wd + "/../assets/tests/int64.log")
 
 	if result != expected {
-		t.Error("Expected: uint64(0)")
+		t.Error("Expected: int64(0)")
 	}
 }
 
-func TestStringToUInt64(t *testing.T) {
-	expected := uint64(1234)
-	result := common.StringToUInt64("1234")
+func TestStringToInt64(t *testing.T) {
+	expected := int64(1234)
+	result := common.StringToInt64("1234")
 
 	if result != expected {
-		t.Error("Expected: uint64(1234)")
+		t.Error("Expected: int64(1234)")
 	}
 
-	result = common.StringToUInt64("abc")
+	result = common.StringToInt64("abc")
 
 	if result != 0 {
 		t.Error("Expected: 0")
 	}
 
-	result = common.StringToUInt64("")
+	result = common.StringToInt64("")
 
 	if result != 0 {
 		t.Error("Expected: 0")

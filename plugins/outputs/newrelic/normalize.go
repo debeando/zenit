@@ -15,7 +15,7 @@ func Normalize(items *metrics.Items) map[string]map[string]interface{} {
 		events[m.Key]["eventType"] = common.ToCamel(m.Key)
 
 		switch v := m.Values.(type) {
-		case int, uint, uint64, float64:
+		case int, int64, float64:
 			for t := range m.Tags {
 				if m.Tags[t].Name == "name" {
 					events[m.Key][m.Tags[t].Value] = v
