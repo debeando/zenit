@@ -6,7 +6,7 @@ DOCKER_EXEC := docker exec -i -t -u root
 .PHONY: help
 
 help: ## Show this help.
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-40s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 deps: ## Install dependencies
 	go get -u github.com/go-sql-driver/mysql
@@ -36,6 +36,15 @@ release: ## Create release
 docker-build: ## Build docker images
 	$(DOCKER_COMPOSE_FILE) build
 
+docker-build-clickhouse: ## Build docker images for clickhouse
+	$(DOCKER_COMPOSE_FILE) build clickhouse
+
+docker-build-percona-server-primary: ## Build docker images for percona-server-primary
+	$(DOCKER_COMPOSE_FILE) build percona-server-primary
+
+docker-build-proxysql: ## Build docker images for proxysql
+	$(DOCKER_COMPOSE_FILE) build proxysql
+
 docker-up: ## Run docker-compose
 	$(DOCKER_COMPOSE_FILE) --project-name=zenit up
 
@@ -48,16 +57,16 @@ docker-down: ## Down docker-compose
 docker-clickhouse: ## Enter into ClickHouse Client
 	$(DOCKER_EXEC) zenit_clickhouse /usr/bin/clickhouse-client
 
-docker-mysql-primary: ## Enter in MySQL Primary Console
+docker-percona-primary: ## Enter in Percona Server Primary Console
 	$(DOCKER_EXEC) zenit_percona_server_primary /usr/bin/mysql
 
-docker-mysql-primary-bash: ## Enter in MySQL Primary bash console
+docker-percona-primary-bash: ## Enter in Percona Server Primary bash console
 	$(DOCKER_EXEC) zenit_percona_server_primary /bin/bash
 
-docker-mysql-secondary: ## Enter in MySQL Secondary Console
+docker-percona-secondary: ## Enter in Percona Server Secondary Console
 	$(DOCKER_EXEC) zenit_percona_server_secondary /usr/bin/mysql
 
-docker-mysql-secondary-bash: ## Enter in MySQL Secondary bash console
+docker-percona-secondary-bash: ## Enter in Percona Server Secondary bash console
 	$(DOCKER_EXEC) zenit_percona_server_secondary /bin/bash
 
 docker-proxysql: ## Enter in ProxySQL Console
@@ -65,6 +74,9 @@ docker-proxysql: ## Enter in ProxySQL Console
 
 docker-proxysql-bash: ## Enter in ProxySQL bash console
 	$(DOCKER_EXEC) zenit_proxysql /bin/bash
+
+docker-influxdb-bash: ## Enter in InfluxDB bash console
+	$(DOCKER_EXEC) influxdb /usr/bin/influx
 
 docker-zenit-build: build-linux ## Build binary and copy to container
 	docker cp zenit zenit_percona_server_primary:/usr/bin/

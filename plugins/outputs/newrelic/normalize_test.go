@@ -20,7 +20,7 @@ func TestNormalizeSingleValue(t *testing.T) {
 		Tags: []metrics.Tag{
 			{"name", "bar"},
 		},
-		Values: uint(1),
+		Values: 1,
 	})
 
 	result := newrelic.Normalize(a)
@@ -37,7 +37,7 @@ func TestNormalizeSingleValue(t *testing.T) {
 		t.Errorf("Expected key: bar, got: '%s'", result)
 	}
 
-	if value := result["test_metric"]["bar"]; value != uint(1) {
+	if value := result["test_metric"]["bar"]; value != 1 {
 		t.Errorf("Expected key: bar, got: '%s'", result)
 	}
 }
@@ -49,9 +49,9 @@ func TestNormalizeMultipleValues(t *testing.T) {
 			{"foo", "bar"},
 		},
 		Values: []metrics.Value{
-			{"a", uint(1)},
-			{"b", uint(2)},
-			{"c", uint(3)},
+			{"a", 1},
+			{"b", 2},
+			{"c", 3},
 		},
 	})
 
@@ -69,7 +69,7 @@ func TestNormalizeMultipleValues(t *testing.T) {
 		t.Errorf("Expected key: a, got: '%s'", result)
 	}
 
-	if value := result["test_metric"]["a"]; value != uint(1) {
+	if value := result["test_metric"]["a"]; value != 1 {
 		t.Errorf("Expected key: a, got: '%s'", result)
 	}
 }

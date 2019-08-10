@@ -24,7 +24,7 @@ func (l *InputsPerconaToolkitSlaveDelay) Collect() {
 	}
 
 	var pid = common.PGrep("pt-slave-delay")
-	var value uint64 = 0
+	var value int64 = 0
 
 	if pid > 0 {
 		value = 1

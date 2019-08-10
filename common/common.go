@@ -17,16 +17,16 @@ import (
 	"github.com/swapbyt3s/zenit/common/file"
 )
 
-func PGrep(cmd string) uint64 {
+func PGrep(cmd string) int64 {
 	stdout, _ := ExecCommand("/usr/bin/pgrep -f '" + cmd + "'")
 
-	return StringToUInt64(stdout)
+	return StringToInt64(stdout)
 }
 
-func GetUInt64FromFile(path string) uint64 {
+func GetInt64FromFile(path string) int64 {
 	lines := file.Read(path)
 	if len(lines) > 0 {
-		return StringToUInt64(lines)
+		return StringToInt64(lines)
 	}
 	return 0
 }
@@ -51,8 +51,8 @@ func IntToString(value int) string {
 	return strconv.Itoa(value)
 }
 
-func StringToUInt64(value string) uint64 {
-	i, err := strconv.ParseUint(strings.TrimSpace(value), 10, 64)
+func StringToInt64(value string) int64 {
+	i, err := strconv.ParseInt(strings.TrimSpace(value), 10, 64)
 	if err != nil {
 		return 0
 	}
@@ -178,17 +178,17 @@ func Trim(value *string) string {
 	return *value
 }
 
-func Percentage(value uint64, max uint64) uint64 {
+func Percentage(value int64, max uint64) int {
 	v := float64(value)
 	m := float64(max)
 	if v >= 0 && m > 0 {
-		return uint64((v / m) * 100)
+		return int((v / m) * 100)
 	}
 	return 0
 }
 
-func InterfaceToUInt64(value interface{}) uint64 {
-	if v, ok := value.(uint64); ok {
+func InterfaceToInt64(value interface{}) int64 {
+	if v, ok := value.(int64); ok {
 		return v
 	}
 	return 0

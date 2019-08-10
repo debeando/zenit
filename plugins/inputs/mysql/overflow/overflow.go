@@ -16,8 +16,8 @@ import (
 type Column struct {
 	dataType string
 	unsigned bool
-	current  uint64
-	percent  uint64
+	current  int64
+	percent  int
 	maximum  uint64
 }
 
@@ -66,7 +66,7 @@ func (l *MySQLOverflow) Collect() {
 			if value, ok := mysql.ParseValue(max[0]["max"]); ok {
 				var c Column
 				c.dataType = rows[row]["data_type"]
-				c.current = value
+				c.current = int64(value)
 
 				c.Unsigned()
 				c.Maximum()
@@ -115,7 +115,7 @@ func (c *Column) Maximum() {
 }
 
 func (c *Column) Percentage() {
-	c.percent = common.Percentage(c.current, c.maximum)
+	c.percent = int(common.Percentage(c.current, c.maximum))
 }
 
 func init() {

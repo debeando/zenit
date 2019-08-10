@@ -8,6 +8,7 @@ import (
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/outputs"
 
 	client "github.com/influxdata/influxdb1-client"
@@ -63,16 +64,37 @@ func (l *OutputIndluxDB) Collect() {
 
 	pts := make([]client.Point, 1000)
 
-	pts[0] = client.Point{
-		Measurement: "zenit",
-		Tags: map[string]string{
-			"color": "blue",
-		},
-		Fields: map[string]interface{}{
-			"value": 1234,
-		},
-		Time:      time.Now(),
-		Precision: "s",
+	events := metrics.Load()
+
+	for i, m := range *events {
+		tags   := map[string]string{}
+		values := make(map[string]interface{})
+
+		tags["hostname"] = config.File.General.Hostname
+
+		switch v := m.Values.(type) {
+			case []metrics.Value:
+				for y := range v {
+					log.Debug(fmt.Sprintf("Plugin - OutputIndluxDB - Metric: [%s:%#v]", v[y].Key, v[y].Value))
+
+					values[v[y].Key] = v[y].Value
+				}
+			default:
+				for t := range m.Tags {
+					if m.Tags[t].Name == "name" {
+						log.Debug(fmt.Sprintf("Plugin - OutputIndluxDB - Metric: [%s:%#v]", m.Tags[t].Value, v))
+						values[m.Tags[t].Value] = v
+					}
+				}
+		}
+
+		pts[i] = client.Point{
+			Measurement: m.Key,
+			Tags:      tags,
+			Fields:    values,
+			Time:      time.Now(),
+			Precision: "s",
+		}
 	}
 
 	bps := client.BatchPoints{
@@ -103,10 +125,6 @@ func (l *OutputIndluxDB) Collect() {
 			log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:Write - Error: %s", err))
 		}
 	}
-}
-
-func CreateDatabase() {
-
 }
 
 func init() {
