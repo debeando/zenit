@@ -70,7 +70,7 @@ func (l *InputProxySQLQuery) Collect() {
 			}
 
 			a.Add(metrics.Metric{
-				Key: "zenit_proxysql_queries",
+				Key: "proxysql_queries",
 				Tags: []metrics.Tag{
 					{"group", i["group"]},
 					{"schema", i["schemaname"]},

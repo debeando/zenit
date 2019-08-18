@@ -38,7 +38,7 @@ func (l *InputProxySQLCommands) Collect() {
 
 		for _, i := range r {
 			a.Add(metrics.Metric{
-				Key: "zenit_proxysql_commands",
+				Key: "proxysql_commands",
 				Tags: []metrics.Tag{
 					{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
 					{"name", i["Command"]},

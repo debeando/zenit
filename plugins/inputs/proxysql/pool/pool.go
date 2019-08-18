@@ -53,7 +53,7 @@ func (l *InputProxySQLPool) Collect() {
 
 		for _, i := range r {
 			a.Add(metrics.Metric{
-				Key: "zenit_proxysql_connections",
+				Key: "proxysql_connections",
 				Tags: []metrics.Tag{
 					{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
 					{"group", i["group"]},
