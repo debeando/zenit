@@ -42,36 +42,37 @@ func (l *InputProxySQLPool) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputProxySQLPool - Hostname: %s", config.File.Inputs.ProxySQL[host].Hostname))
+		log.Info(fmt.Sprintf("Plugin - InputProxySQLPool - Hostname=%s", config.File.Inputs.ProxySQL[host].Hostname))
 
 		var a = metrics.Load()
 		var p = mysql.GetInstance("proxysql")
+
 		p.Connect(config.File.Inputs.ProxySQL[host].DSN)
 
-		rows := p.Query(querySQLPool)
+		var r = p.Query(querySQLPool)
 
-		for i := range rows {
+		for _, i := range r {
 			a.Add(metrics.Metric{
 				Key: "zenit_proxysql_connections",
 				Tags: []metrics.Tag{
 					{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
-					{"group", rows[i]["group"]},
-					{"host", rows[i]["srv_host"]},
+					{"group", i["group"]},
+					{"host", i["srv_host"]},
 				},
 				Values: []metrics.Value{
-					{"status", rows[i]["status"]},
-					{"used", common.StringToInt64(rows[i]["ConnUsed"])},
-					{"free", common.StringToInt64(rows[i]["ConnFree"])},
-					{"ok", common.StringToInt64(rows[i]["ConnOK"])},
-					{"errors", common.StringToInt64(rows[i]["ConnERR"])},
-					{"queries", common.StringToInt64(rows[i]["Queries"])},
-					{"tx", common.StringToInt64(rows[i]["Bytes_data_sent"])},
-					{"rx", common.StringToInt64(rows[i]["Bytes_data_recv"])},
-					{"latency", common.StringToInt64(rows[i]["Latency_us"])},
+					{"status", i["status"]},
+					{"used", common.StringToInt64(i["ConnUsed"])},
+					{"free", common.StringToInt64(i["ConnFree"])},
+					{"ok", common.StringToInt64(i["ConnOK"])},
+					{"errors", common.StringToInt64(i["ConnERR"])},
+					{"queries", common.StringToInt64(i["Queries"])},
+					{"tx", common.StringToInt64(i["Bytes_data_sent"])},
+					{"rx", common.StringToInt64(i["Bytes_data_recv"])},
+					{"latency", common.StringToInt64(i["Latency_us"])},
 				},
 			})
 
-			log.Debug(fmt.Sprintf("Plugin - InputProxySQLPool - %#v", rows[i]))
+			log.Debug(fmt.Sprintf("Plugin - InputProxySQLPool - %#v", i))
 		}
 	}
 }

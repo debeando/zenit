@@ -17,7 +17,7 @@ type Column struct {
 	dataType string
 	unsigned bool
 	current  int64
-	percent  int
+	percent  float64
 	maximum  uint64
 }
 
@@ -36,7 +36,7 @@ type MySQLOverflow struct{}
 func (l *MySQLOverflow) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - MySQLOverflow - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLOverflow - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
@@ -45,7 +45,7 @@ func (l *MySQLOverflow) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - MySQLOverflow - Hostname: %s", config.File.Inputs.MySQL[host].Hostname))
+		log.Info(fmt.Sprintf("Plugin - InputMySQLOverflow - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
 
 		var a = metrics.Load()
 		var m = mysql.GetInstance("mysql")
@@ -73,15 +73,16 @@ func (l *MySQLOverflow) Collect() {
 				c.Percentage()
 
 				a.Add(metrics.Metric{
-					Key: "zenit_mysql_overflow",
+					Key: "mysql_overflow",
 					Tags: []metrics.Tag{
 						{"hostname", config.File.Inputs.MySQL[host].Hostname},
 						{"schema", rows[row]["table_schema"]},
 						{"table", rows[row]["table_name"]},
-						{"type", "overflow"},
 						{"data_type", c.dataType},
 						{"unsigned", strconv.FormatBool(c.unsigned)}},
-					Values: c.percent,
+					Values: []metrics.Value{
+						{"percentage", c.percent },
+					},
 				})
 
 				log.Debug(
@@ -115,7 +116,7 @@ func (c *Column) Maximum() {
 }
 
 func (c *Column) Percentage() {
-	c.percent = int(common.Percentage(c.current, c.maximum))
+	c.percent = common.Percentage(c.current, c.maximum)
 }
 
 func init() {

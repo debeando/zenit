@@ -57,12 +57,13 @@ func (l *InputProxySQLQuery) Collect() {
 		re, _ = regexp.Compile(ReQuery)
 		var a = metrics.Load()
 		var p = mysql.GetInstance("proxysql")
+
 		p.Connect(config.File.Inputs.ProxySQL[host].DSN)
 
-		rows := p.Query(querySQDigestL)
+		var r = p.Query(querySQDigestL)
 
-		for i := range rows {
-			table, command := Match(rows[i]["digest_text"])
+		for _, i := range r {
+			table, command := Match(i["digest_text"])
 
 			if table == "unknown" || command == "unknown" {
 				continue
@@ -71,24 +72,24 @@ func (l *InputProxySQLQuery) Collect() {
 			a.Add(metrics.Metric{
 				Key: "zenit_proxysql_queries",
 				Tags: []metrics.Tag{
-					{"group", rows[i]["group"]},
-					{"schema", rows[i]["schemaname"]},
+					{"group", i["group"]},
+					{"schema", i["schemaname"]},
 					{"table", table},
 					{"command", command},
 				},
 				Values: []metrics.Value{
-					{"count", common.StringToInt64(rows[i]["count_star"])},
-					{"sum", common.StringToInt64(rows[i]["sum_time"])},
+					{"count", common.StringToInt64(i["count_star"])},
+					{"sum", common.StringToInt64(i["sum_time"])},
 				},
 			})
 
 			log.Debug(
 				fmt.Sprintf("Plugin - InputProxySQLQuery - (%s)%s.%s %s=%s",
-					rows[i]["group"],
-					rows[i]["schemaname"],
+					i["group"],
+					i["schemaname"],
 					table,
 					command,
-					rows[i]["count_star"],
+					i["count_star"],
 				),
 			)
 		}

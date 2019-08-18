@@ -17,7 +17,7 @@ type MySQLSlave struct{}
 func (l *MySQLSlave) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - MySQLSlave - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLSlave - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
@@ -26,28 +26,34 @@ func (l *MySQLSlave) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - MySQLSlave - Hostname: %s", config.File.Inputs.MySQL[host].Hostname))
+		log.Info(fmt.Sprintf("Plugin - InputMySQLSlave - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
 
 		var a = metrics.Load()
 		var m = mysql.GetInstance("mysql")
+		var v = []metrics.Value{}
+
 		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
-		rows := m.Query(query)
+		var r = m.Query(query)
 
-		for column := range rows[0] {
-			if value, ok := mysql.ParseValue(rows[0][column]); ok {
-				a.Add(metrics.Metric{
-					Key:    "zenit_mysql_slave",
-					Tags:   []metrics.Tag{
-						{"hostname", config.File.Inputs.MySQL[host].Hostname},
-						{"name", column},
-					},
-					Values: value,
-				})
-
+		for column := range r[0] {
+			if value, ok := mysql.ParseValue(r[0][column]); ok {
 				log.Debug(fmt.Sprintf("Plugin - InputMySQLSlave - %s=%d", column, value))
+
+				v = append(v, metrics.Value{
+					Key: column,
+					Value: value,
+				})
 			}
 		}
+
+		a.Add(metrics.Metric{
+			Key:    "mysql_slave",
+			Tags:   []metrics.Tag{
+				{"hostname", config.File.Inputs.MySQL[host].Hostname},
+			},
+			Values: v,
+		})
 	}
 }
 

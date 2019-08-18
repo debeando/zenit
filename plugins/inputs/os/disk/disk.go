@@ -30,6 +30,9 @@ func (l *InputOSDisk) Collect() {
 		return
 	}
 
+	var a = metrics.Load()
+	var v = []metrics.Value{}
+
 	for _, device := range devices {
 		u, err := disk.Usage(device.Mountpoint)
 
@@ -37,17 +40,19 @@ func (l *InputOSDisk) Collect() {
 			return
 		}
 
-		metrics.Load().Add(metrics.Metric{
-			Key: "zenit_os",
-			Tags: []metrics.Tag{
-				{"name", "disk"},
-				{"device", GetDevice(device.Device)},
-			},
-			Values: u.UsedPercent,
-		})
-
 		log.Debug(fmt.Sprintf("Plugin - InputOSDisk - Disk=%s(%.2f)", GetDevice(device.Device), u.UsedPercent))
+
+		v = append(v, metrics.Value{
+			Key: GetDevice(device.Device),
+			Value: u.UsedPercent,
+		})
 	}
+
+	a.Add(metrics.Metric{
+		Key:    "os",
+		Tags:   []metrics.Tag{},
+		Values: v,
+	})
 }
 
 func GetDevice(s string) string {

@@ -30,6 +30,11 @@ build: ## Build binary for local operating system
 build-linux: ## Build binary for Linux
 	GOOS=linux go build -ldflags "-s -w -X github.com/swapbyt3s/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
 
+build-and-run: ## Build binary for Linux and run
+	GOOS=linux go build -ldflags "-s -w -X github.com/swapbyt3s/zenit/command.BuildTime=`date +%Y%m%d.%H%M%S`" -o zenit main.go
+	docker cp zenit zenit_percona_server_primary:/usr/bin/
+	docker exec -i -t -u root zenit_percona_server_primary /usr/bin/zenit
+
 release: ## Create release
 	scripts/release.sh
 

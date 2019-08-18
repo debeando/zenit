@@ -64,36 +64,17 @@ func (l *OutputIndluxDB) Collect() {
 
 	pts := make([]client.Point, 1000)
 
-	events := metrics.Load()
+	events := Normalize(metrics.Load())
 
-	for i, m := range *events {
-		tags   := map[string]string{}
-		values := make(map[string]interface{})
-
-		tags["hostname"] = config.File.General.Hostname
-
-		switch v := m.Values.(type) {
-			case []metrics.Value:
-				for y := range v {
-					log.Debug(fmt.Sprintf("Plugin - OutputIndluxDB - Metric: [%s:%#v]", v[y].Key, v[y].Value))
-
-					values[v[y].Key] = v[y].Value
-				}
-			default:
-				for t := range m.Tags {
-					if m.Tags[t].Name == "name" {
-						log.Debug(fmt.Sprintf("Plugin - OutputIndluxDB - Metric: [%s:%#v]", m.Tags[t].Value, v))
-						values[m.Tags[t].Value] = v
-					}
-				}
-		}
-
-		pts[i] = client.Point{
-			Measurement: m.Key,
-			Tags:      tags,
-			Fields:    values,
-			Time:      time.Now(),
-			Precision: "s",
+	for k, l := range events {
+		for i, m := range l {
+			pts[i] = client.Point{
+				Measurement: k,
+				Tags:      m["tags"].(map[string]string),
+				Fields:    m["fields"].(map[string]interface{}),
+				Time:      time.Now(),
+				Precision: "s",
+			}
 		}
 	}
 

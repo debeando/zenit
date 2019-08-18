@@ -27,11 +27,11 @@ func (l *InputOSCPU) Collect() {
 	percentage, err := cpu.Percent(0, false)
 	if err == nil {
 		metrics.Load().Add(metrics.Metric{
-			Key: "zenit_os",
-			Tags: []metrics.Tag{
-				{"name", "cpu"},
+			Key: "os",
+			Tags: []metrics.Tag{},
+			Values: []metrics.Value{
+				{ "cpu", percentage[0] },
 			},
-			Values: percentage[0],
 		})
 	}
 

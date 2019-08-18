@@ -39,9 +39,8 @@ func (l *InputOSNet) Collect() {
 			transmit_bytes := common.StringToInt64(match[8])
 
 			metrics.Load().Add(metrics.Metric{
-				Key: "zenit_os",
+				Key: "os",
 				Tags: []metrics.Tag{
-					{"name", "net"},
 					{"device", dev},
 				},
 				Values: []metrics.Value{

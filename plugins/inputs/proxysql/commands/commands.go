@@ -27,40 +27,41 @@ func (l *InputProxySQLCommands) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputProxySQLCommands - Hostname: %s", config.File.Inputs.ProxySQL[host].Hostname))
+		log.Info(fmt.Sprintf("Plugin - InputProxySQLCommands - Hostname=%s", config.File.Inputs.ProxySQL[host].Hostname))
 
 		var a = metrics.Load()
 		var p = mysql.GetInstance("proxysql")
+
 		p.Connect(config.File.Inputs.ProxySQL[host].DSN)
 
-		rows := p.Query(query)
+		var r = p.Query(query)
 
-		for i := range rows {
+		for _, i := range r {
 			a.Add(metrics.Metric{
 				Key: "zenit_proxysql_commands",
 				Tags: []metrics.Tag{
 					{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
-					{"name", rows[i]["Command"]},
+					{"name", i["Command"]},
 				},
 				Values: []metrics.Value{
-					{"total_time_us", common.StringToInt64(rows[i]["Total_Time_us"])},
-					{"total_cnt", common.StringToInt64(rows[i]["Total_cnt"])},
-					{"cnt_100us", common.StringToInt64(rows[i]["cnt_100us"])},
-					{"cnt_500us", common.StringToInt64(rows[i]["cnt_500us"])},
-					{"cnt_1ms", common.StringToInt64(rows[i]["cnt_1ms"])},
-					{"cnt_5ms", common.StringToInt64(rows[i]["cnt_5ms"])},
-					{"cnt_10ms", common.StringToInt64(rows[i]["cnt_10ms"])},
-					{"cnt_50ms", common.StringToInt64(rows[i]["cnt_50ms"])},
-					{"cnt_100ms", common.StringToInt64(rows[i]["cnt_100ms"])},
-					{"cnt_500ms", common.StringToInt64(rows[i]["cnt_500ms"])},
-					{"cnt_1s", common.StringToInt64(rows[i]["cnt_1s"])},
-					{"cnt_5s", common.StringToInt64(rows[i]["cnt_5s"])},
-					{"cnt_10s", common.StringToInt64(rows[i]["cnt_10s"])},
-					{"cnt_infs", common.StringToInt64(rows[i]["cnt_infs"])},
+					{"total_time_us", common.StringToInt64(i["Total_Time_us"])},
+					{"total_cnt", common.StringToInt64(i["Total_cnt"])},
+					{"cnt_100us", common.StringToInt64(i["cnt_100us"])},
+					{"cnt_500us", common.StringToInt64(i["cnt_500us"])},
+					{"cnt_1ms", common.StringToInt64(i["cnt_1ms"])},
+					{"cnt_5ms", common.StringToInt64(i["cnt_5ms"])},
+					{"cnt_10ms", common.StringToInt64(i["cnt_10ms"])},
+					{"cnt_50ms", common.StringToInt64(i["cnt_50ms"])},
+					{"cnt_100ms", common.StringToInt64(i["cnt_100ms"])},
+					{"cnt_500ms", common.StringToInt64(i["cnt_500ms"])},
+					{"cnt_1s", common.StringToInt64(i["cnt_1s"])},
+					{"cnt_5s", common.StringToInt64(i["cnt_5s"])},
+					{"cnt_10s", common.StringToInt64(i["cnt_10s"])},
+					{"cnt_infs", common.StringToInt64(i["cnt_infs"])},
 				},
 			})
 
-			log.Debug(fmt.Sprintf("Plugin - InputProxySQLCommands - %#v", rows[i]))
+			log.Debug(fmt.Sprintf("Plugin - InputProxySQLCommands - %#v", i))
 		}
 	}
 }

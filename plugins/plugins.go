@@ -32,8 +32,8 @@ import (
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/queries"
 
 	_ "github.com/swapbyt3s/zenit/plugins/outputs/influxdb"
-	_ "github.com/swapbyt3s/zenit/plugins/outputs/newrelic"
-	_ "github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
+	// _ "github.com/swapbyt3s/zenit/plugins/outputs/newrelic"
+	// _ "github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
 )
 
 func Load() {

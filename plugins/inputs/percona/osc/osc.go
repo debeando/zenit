@@ -31,11 +31,11 @@ func (l *InputsPerconaOSC) Collect() {
 	}
 
 	metrics.Load().Add(metrics.Metric{
-		Key: "zenit_process",
-		Tags: []metrics.Tag{
-			{"name", "pt_online_schema_change"},
+		Key: "process",
+		Tags: []metrics.Tag{},
+		Values: []metrics.Value{
+			{ "pt_online_schema_change", value},
 		},
-		Values: value,
 	})
 
 	log.Debug(fmt.Sprintf("Plugin - InputsPerconaOSC - %d", value))

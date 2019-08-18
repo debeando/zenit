@@ -27,11 +27,11 @@ func (l *InputOSMem) Collect() {
 	vmStat, err := mem.VirtualMemory()
 	if err == nil {
 		metrics.Load().Add(metrics.Metric{
-			Key: "zenit_os",
-			Tags: []metrics.Tag{
-				{"name", "mem"},
+			Key: "os",
+			Tags: []metrics.Tag{},
+			Values: []metrics.Value{
+				{ "mem", vmStat.UsedPercent },
 			},
-			Values: vmStat.UsedPercent,
 		})
 
 		log.Debug(fmt.Sprintf("Plugin - InputOSMem - MEM=%.2f", vmStat.UsedPercent))
