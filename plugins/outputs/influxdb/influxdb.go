@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
-	"time"
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
@@ -62,24 +61,24 @@ func (l *OutputIndluxDB) Collect() {
 
 	log.Debug(fmt.Sprintf("Plugin - OutputIndluxDB - Connected to InfluxDB V-%s", ver))
 
-	pts := make([]client.Point, 1000)
-
-	events := Normalize(metrics.Load())
+	var points = make([]client.Point, 100)
+	var events = Normalize(metrics.Load())
+	var i = 0
 
 	for k, l := range events {
-		for i, m := range l {
-			pts[i] = client.Point{
+		for _, m := range l {
+			points[i] = client.Point{
 				Measurement: k,
 				Tags:      m["tags"].(map[string]string),
 				Fields:    m["fields"].(map[string]interface{}),
-				Time:      time.Now(),
 				Precision: "s",
 			}
+			i++
 		}
 	}
 
 	bps := client.BatchPoints{
-		Points:          pts,
+		Points:          points,
 		Database:        config.File.Outputs.InfluxDB.Database,
 	}
 

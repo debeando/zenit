@@ -21,18 +21,8 @@ func Normalize(items *metrics.Items) map[string][]map[string]interface{} {
       tags[t.Name] = t.Value
     }
 
-    switch v := i.Values.(type) {
-    case int, int64, float64:
-      for _, t := range i.Tags {
-        if t.Name == "name" {
-          fields[t.Value] = v
-          break
-        }
-      }
-    case []metrics.Value:
-      for _, y := range v {
-        fields[y.Key] = y.Value
-      }
+    for _, y := range i.Values {
+      fields[y.Key] = y.Value
     }
 
     item := make(map[string]interface{})
