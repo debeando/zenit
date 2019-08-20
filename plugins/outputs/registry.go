@@ -22,7 +22,7 @@ var Outputs = map[string]Creator{}
 // It will automatically be added to the Outputs map to be called externally
 func Add(name string, creator Creator) {
 	if len(os.Args) == 1 {
-		log.Info(fmt.Sprintf("Plugin Outputs - %s", name))
+		log.Info(fmt.Sprintf("Load Plugin - %s", name))
 	}
 
 	Outputs[name] = creator

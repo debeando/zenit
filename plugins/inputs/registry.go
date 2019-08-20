@@ -22,7 +22,7 @@ var Inputs = map[string]Creator{}
 // It will automatically be added to the Inputs map to be called externally
 func Add(name string, creator Creator) {
 	if len(os.Args) == 1 {
-		log.Info(fmt.Sprintf("Plugin Inputs - %s", name))
+		log.Info(fmt.Sprintf("Load Plugin - %s", name))
 	}
 
 	Inputs[name] = creator
