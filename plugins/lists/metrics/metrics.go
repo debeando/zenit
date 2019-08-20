@@ -14,7 +14,7 @@ type Tag struct {
 type Metric struct {
 	Key    string
 	Tags   []Tag
-	Values interface{}
+	Values []Value
 }
 
 // Value is a collection for specific metric.
@@ -85,14 +85,14 @@ func (l *Items) Update(m Metric) {
 	for itemIndex := 0; itemIndex < len(*l); itemIndex++ {
 		if (*l)[itemIndex].Key == m.Key && TagsEquals((*l)[itemIndex].Tags, m.Tags) == true {
 			if reflect.TypeOf((*l)[itemIndex].Values) == reflect.TypeOf([]Value{}) {
-				for itemValueIndex, itemValue := range (*l)[itemIndex].Values.([]Value) {
-					for _, metricValue := range m.Values.([]Value) {
+				for itemValueIndex, itemValue := range (*l)[itemIndex].Values {
+					for _, metricValue := range m.Values {
 						if itemValue.Key == metricValue.Key {
 							sumValue := metricValue.Value.(int64)
-							oldValue := (*l)[itemIndex].Values.([]Value)[itemValueIndex].Value.(int64)
+							oldValue := (*l)[itemIndex].Values[itemValueIndex].Value.(int64)
 							newValue := oldValue + sumValue
 
-							(*l)[itemIndex].Values.([]Value)[itemValueIndex].Value = newValue
+							(*l)[itemIndex].Values[itemValueIndex].Value = newValue
 
 							break
 						}
