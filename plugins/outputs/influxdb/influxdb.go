@@ -61,19 +61,17 @@ func (l *OutputIndluxDB) Collect() {
 
 	log.Debug(fmt.Sprintf("Plugin - OutputIndluxDB - Connected to InfluxDB V-%s", ver))
 
-	var points = make([]client.Point, 1000)
+	var points = []client.Point{}
 	var events = Normalize(metrics.Load())
-	var i = 0
 
 	for k, l := range events {
 		for _, m := range l {
-			points[i] = client.Point{
+			points = append(points, client.Point{
 				Measurement: k,
 				Tags:      m["tags"].(map[string]string),
 				Fields:    m["fields"].(map[string]interface{}),
 				Precision: "s",
-			}
-			i++
+			})
 		}
 	}
 
