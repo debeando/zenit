@@ -18,6 +18,7 @@ const querySQLPool = `SELECT CASE
 		srv_host,
 		srv_port,
 		status,
+		(SELECT max_connections FROM mysql_servers WHERE hostname = srv_host AND hostgroup_id = hostgroup) AS ConnMax,
 		ConnUsed,
 		ConnFree,
 		ConnOK,
