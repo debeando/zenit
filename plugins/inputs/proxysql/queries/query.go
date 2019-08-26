@@ -56,7 +56,7 @@ func (l *InputProxySQLQuery) Collect() {
 
 		re, _ = regexp.Compile(ReQuery)
 		var a = metrics.Load()
-		var p = mysql.GetInstance("proxysql")
+		var p = mysql.GetInstance(config.File.Inputs.ProxySQL[host].Hostname)
 
 		p.Connect(config.File.Inputs.ProxySQL[host].DSN)
 

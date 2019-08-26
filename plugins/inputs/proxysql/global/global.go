@@ -29,7 +29,7 @@ func (l *InputProxySQLGlobal) Collect() {
 		log.Info(fmt.Sprintf("Plugin - InputProxySQLGlobal - Hostname=%s", config.File.Inputs.ProxySQL[host].Hostname))
 
 		var a = metrics.Load()
-		var p = mysql.GetInstance("proxysql")
+		var p = mysql.GetInstance(config.File.Inputs.ProxySQL[host].Hostname)
 		var v = []metrics.Value{}
 
 		p.Connect(config.File.Inputs.ProxySQL[host].DSN)

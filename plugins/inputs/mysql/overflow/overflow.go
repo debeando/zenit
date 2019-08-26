@@ -24,7 +24,7 @@ type Column struct {
 const (
 	queryFields = `SELECT DISTINCT c.table_schema, c.table_name, c.column_name, SUBSTRING_INDEX(c.column_type, '(', 1) AS data_type
 FROM information_schema.columns c
-WHERE c.table_schema NOT IN ('mysql','sys','performance_schema','information_schema','percona')
+WHERE c.table_schema NOT IN ('mysql','sys','performance_schema','information_schema')
   AND c.column_type LIKE '%int%'
   AND c.column_key = 'PRI'
 ORDER BY c.table_schema, c.table_name, c.column_name`
@@ -48,7 +48,8 @@ func (l *MySQLOverflow) Collect() {
 		log.Info(fmt.Sprintf("Plugin - InputMySQLOverflow - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
 
 		var a = metrics.Load()
-		var m = mysql.GetInstance("mysql")
+		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
+
 		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
 		rows := m.Query(queryFields)

@@ -18,7 +18,7 @@ SELECT table_schema AS 'schema',
        COALESCE(table_rows, 0) AS 'rows',
        COALESCE(auto_increment, 0) AS 'increment'
 FROM information_schema.tables
-WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schema','percona')
+WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schema')
 ORDER BY table_schema, table_name;
 `
 
@@ -40,7 +40,7 @@ func (l *MySQLTables) Collect() {
 
 
 		var a = metrics.Load()
-		var m = mysql.GetInstance("mysql")
+		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
 
 		m.Connect(config.File.Inputs.MySQL[host].DSN)
 

@@ -29,7 +29,7 @@ func (l *MySQLSlave) Collect() {
 		log.Info(fmt.Sprintf("Plugin - InputMySQLSlave - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
 
 		var a = metrics.Load()
-		var m = mysql.GetInstance("mysql")
+		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
 		var v = []metrics.Value{}
 
 		m.Connect(config.File.Inputs.MySQL[host].DSN)
