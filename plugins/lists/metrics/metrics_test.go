@@ -46,7 +46,9 @@ func TestAdd(t *testing.T) {
 		Tags:   []metrics.Tag{
 			{"foo", "bar"},
 		},
-		Values: 123,
+		Values: []metrics.Value{
+			{"a", 1},
+		},
 	})
 
 	if a.Count() != 1 {
@@ -64,7 +66,9 @@ func TestUnique(t *testing.T) {
 		Tags:   []metrics.Tag{
 			{"foo", "bar"},
 		},
-		Values: 123,
+		Values: []metrics.Value{
+			{"a", 123},
+		},
 	})
 
 	if result == false {
@@ -76,7 +80,9 @@ func TestUnique(t *testing.T) {
 		Tags:   []metrics.Tag{
 			{"foo", "baz"},
 		},
-		Values: 123,
+		Values: []metrics.Value{
+			{"a", 123},
+		},
 	})
 
 	if result == true {
@@ -118,7 +124,9 @@ func TestFetchOne(t *testing.T) {
 		Tags: []metrics.Tag{
 			{"name", "fulano"},
 		},
-		Values: 1,
+		Values: []metrics.Value{
+			{"a", 1},
+		},
 	})
 
 	a.Add(metrics.Metric{
@@ -126,7 +134,9 @@ func TestFetchOne(t *testing.T) {
 		Tags: []metrics.Tag{
 			{"name", "mengano"},
 		},
-		Values: 2,
+		Values: []metrics.Value{
+			{"a", 2},
+		},
 	})
 
 	a.Add(metrics.Metric{
@@ -134,7 +144,9 @@ func TestFetchOne(t *testing.T) {
 		Tags: []metrics.Tag{
 			{"name", "zutano"},
 		},
-		Values: 3,
+		Values: []metrics.Value{
+			{"a", 3},
+		},
 	})
 
 	value := a.FetchOne("test_values", "name", "mengano")
