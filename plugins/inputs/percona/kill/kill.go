@@ -31,11 +31,11 @@ func (l *InputsPerconaKill) Collect() {
 	}
 
 	metrics.Load().Add(metrics.Metric{
-		Key: "zenit_process",
-		Tags: []metrics.Tag{
-			{"name", "pt_kill"},
+		Key: "process",
+		Tags: []metrics.Tag{},
+		Values: []metrics.Value{
+			{ "pt_kill", value},
 		},
-		Values: value,
 	})
 
 	log.Debug(fmt.Sprintf("Plugin - InputsPerconaKill - %d", value))

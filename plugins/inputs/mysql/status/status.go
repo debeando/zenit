@@ -17,7 +17,7 @@ type MySQLStatus struct{}
 func (l *MySQLStatus) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - MySQLStatus - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLStatus - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
@@ -26,28 +26,34 @@ func (l *MySQLStatus) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - MySQLStatus - Hostname: %s", config.File.Inputs.MySQL[host].Hostname))
+		log.Info(fmt.Sprintf("Plugin - InputMySQLStatus - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
 
 		var a = metrics.Load()
-		var m = mysql.GetInstance("mysql")
+		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
+		var v = []metrics.Value{}
+
 		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
-		rows := m.Query(query)
+		var r = m.Query(query)
 
-		for i := range rows {
-			if value, ok := mysql.ParseValue(rows[i]["Value"]); ok {
-				a.Add(metrics.Metric{
-					Key:    "zenit_mysql_status",
-					Tags:   []metrics.Tag{
-						{"hostname", config.File.Inputs.MySQL[host].Hostname},
-						{"name", rows[i]["Variable_name"]},
-					},
-					Values: value,
+		for _, i := range r {
+			if value, ok := mysql.ParseValue(i["Value"]); ok {
+				log.Debug(fmt.Sprintf("Plugin - InputMySQLStatus - %s=%d", i["Variable_name"], value))
+
+				v = append(v, metrics.Value{
+					Key: i["Variable_name"],
+					Value: value,
 				})
-
-				log.Debug(fmt.Sprintf("Plugin - InputMySQLStatus - %s=%d", rows[i]["Variable_name"], value))
 			}
 		}
+
+		a.Add(metrics.Metric{
+			Key:    "mysql_status",
+			Tags:   []metrics.Tag{
+				{"hostname", config.File.Inputs.MySQL[host].Hostname},
+			},
+			Values: v,
+		})
 	}
 }
 

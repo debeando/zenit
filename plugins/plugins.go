@@ -28,11 +28,13 @@ import (
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/percona/osc"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/percona/xtrabackup"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/commands"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/global"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/pool"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/proxysql/queries"
 
-	_ "github.com/swapbyt3s/zenit/plugins/outputs/newrelic"
-	_ "github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
+	_ "github.com/swapbyt3s/zenit/plugins/outputs/influxdb"
+	// _ "github.com/swapbyt3s/zenit/plugins/outputs/newrelic"
+	// _ "github.com/swapbyt3s/zenit/plugins/outputs/prometheus"
 )
 
 func Load() {

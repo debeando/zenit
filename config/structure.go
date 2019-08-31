@@ -44,6 +44,7 @@ type Config struct{
 			Hostname string `yaml:"hostname"`
 			DSN      string `yaml:"dsn"`
 			Commands bool `yaml:"commands"`
+			Global   bool `yaml:"global"`
 			Pool     bool `yaml:"pool"`
 			Queries  bool `yaml:"queries"`
 		}
@@ -69,6 +70,13 @@ type Config struct{
 		Prometheus struct {
 			Enable   bool   `yaml:"enable"`
 			TextFile string `yaml:"textfile"`
+		}
+		InfluxDB struct {
+			Enable   bool   `yaml:"enable"`
+			URL      string `yaml:"url"`
+			Username string `yaml:"username"`
+			Password string `yaml:"password"`
+			Database string `yaml:"database"`
 		}
 		Newrelic struct {
 			Insight struct {

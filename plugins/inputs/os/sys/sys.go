@@ -27,10 +27,8 @@ func (l *InputOSLimits) Collect() {
 	}
 
 	metrics.Load().Add(metrics.Metric{
-		Key: "zenit_os",
-		Tags: []metrics.Tag{
-			{"name", "sysctl"},
-		},
+		Key: "os",
+		Tags: []metrics.Tag{},
 		Values: []metrics.Value{
 			{"nr_open", common.GetInt64FromFile(NR_OPEN)},
 			{"file_max", common.GetInt64FromFile(FILE_MAX)},

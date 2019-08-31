@@ -13,7 +13,7 @@ LABEL vendor="Swapbyt3s" \
       version="18.16.1"
 
 # Update the repository sources list
-RUN apt-get update
+RUN apt-get update --fix-missing
 
 ###############################################################################
 # BEGIN INSTALLATION

@@ -16,15 +16,15 @@ import (
 type Column struct {
 	dataType string
 	unsigned bool
-	current  uint64
-	percent  int
+	current  int64
+	percent  float64
 	maximum  uint64
 }
 
 const (
 	queryFields = `SELECT DISTINCT c.table_schema, c.table_name, c.column_name, SUBSTRING_INDEX(c.column_type, '(', 1) AS data_type
 FROM information_schema.columns c
-WHERE c.table_schema NOT IN ('mysql','sys','performance_schema','information_schema','percona')
+WHERE c.table_schema NOT IN ('mysql','sys','performance_schema','information_schema')
   AND c.column_type LIKE '%int%'
   AND c.column_key = 'PRI'
 ORDER BY c.table_schema, c.table_name, c.column_name`
@@ -36,7 +36,7 @@ type MySQLOverflow struct{}
 func (l *MySQLOverflow) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - MySQLOverflow - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLOverflow - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
@@ -45,10 +45,11 @@ func (l *MySQLOverflow) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - MySQLOverflow - Hostname: %s", config.File.Inputs.MySQL[host].Hostname))
+		log.Info(fmt.Sprintf("Plugin - InputMySQLOverflow - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
 
 		var a = metrics.Load()
-		var m = mysql.GetInstance("mysql")
+		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
+
 		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
 		rows := m.Query(queryFields)
@@ -66,22 +67,23 @@ func (l *MySQLOverflow) Collect() {
 			if value, ok := mysql.ParseValue(max[0]["max"]); ok {
 				var c Column
 				c.dataType = rows[row]["data_type"]
-				c.current = value
+				c.current = int64(value)
 
 				c.Unsigned()
 				c.Maximum()
 				c.Percentage()
 
 				a.Add(metrics.Metric{
-					Key: "zenit_mysql_overflow",
+					Key: "mysql_overflow",
 					Tags: []metrics.Tag{
 						{"hostname", config.File.Inputs.MySQL[host].Hostname},
 						{"schema", rows[row]["table_schema"]},
 						{"table", rows[row]["table_name"]},
-						{"type", "overflow"},
 						{"data_type", c.dataType},
 						{"unsigned", strconv.FormatBool(c.unsigned)}},
-					Values: c.percent,
+					Values: []metrics.Value{
+						{"percentage", c.percent },
+					},
 				})
 
 				log.Debug(

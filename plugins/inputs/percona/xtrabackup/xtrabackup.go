@@ -31,14 +31,14 @@ func (l *InputsPerconaXtraBackup) Collect() {
 	}
 
 	metrics.Load().Add(metrics.Metric{
-		Key: "zenit_process",
-		Tags: []metrics.Tag{
-			{"name", "xtrabackup"},
+		Key: "process",
+		Tags: []metrics.Tag{},
+		Values: []metrics.Value{
+			{ "xtrabackup", value},
 		},
-		Values: value,
 	})
 
-	log.Debug(fmt.Sprintf("Plugin - InputsPerconaOSC - %d", value))
+	log.Debug(fmt.Sprintf("Plugin - InputsPerconaXtraBackup - %d", value))
 }
 
 func init() {

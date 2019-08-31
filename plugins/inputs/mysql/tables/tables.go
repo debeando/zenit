@@ -18,7 +18,7 @@ SELECT table_schema AS 'schema',
        COALESCE(table_rows, 0) AS 'rows',
        COALESCE(auto_increment, 0) AS 'increment'
 FROM information_schema.tables
-WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schema','percona')
+WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schema')
 ORDER BY table_schema, table_name;
 `
 
@@ -27,7 +27,7 @@ type MySQLTables struct{}
 func (l *MySQLTables) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - MySQLTables - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Panic (code %d) has been recover from somewhere.\n", err))
 		}
 	}()
 
@@ -36,32 +36,34 @@ func (l *MySQLTables) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - MySQLTables - Hostname: %s", config.File.Inputs.MySQL[host].Hostname))
+		log.Info(fmt.Sprintf("Plugin - InputMySQLTables - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
 
 
 		var a = metrics.Load()
-		var m = mysql.GetInstance("mysql")
+		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
+
 		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
-		rows := m.Query(query)
+		var r = m.Query(query)
 
-		for i := range rows {
+		for _, i := range r {
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Size %s.%s=%s", i["schema"], i["table"], i["size"]))
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Rows %s.%s=%s", i["schema"], i["table"], i["rows"]))
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Increment %s.%s=%s", i["schema"], i["table"], i["increment"]))
+
 			a.Add(metrics.Metric{
-				Key: "zenit_mysql_tables",
+				Key: "mysql_tables",
 				Tags: []metrics.Tag{
 					{"hostname", config.File.Inputs.MySQL[host].Hostname},
-					{"schema", rows[i]["schema"]},
-					{"table", rows[i]["table"]},
+					{"schema", i["schema"]},
+					{"table", i["table"]},
 				},
 				Values: []metrics.Value{
-					{"size", common.StringToInt64(rows[i]["size"])},
-					{"rows", common.StringToInt64(rows[i]["rows"])},
-					{"increment", common.StringToInt64(rows[i]["increment"])}},
+					{"size", common.StringToInt64(i["size"])},
+					{"rows", common.StringToInt64(i["rows"])},
+					{"increment", common.StringToInt64(i["increment"])},
+				},
 			})
-
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Size %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["size"]))
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Rows %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["rows"]))
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Increment %s.%s=%s", rows[i]["schema"], rows[i]["table"], rows[i]["increment"]))
 		}
 	}
 }

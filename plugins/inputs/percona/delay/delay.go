@@ -31,11 +31,11 @@ func (l *InputsPerconaToolkitSlaveDelay) Collect() {
 	}
 
 	metrics.Load().Add(metrics.Metric{
-		Key: "zenit_process",
-		Tags: []metrics.Tag{
-			{"name", "pt_slave_delay"},
+		Key: "process",
+		Tags: []metrics.Tag{},
+		Values: []metrics.Value{
+			{ "pt_slave_delay", value},
 		},
-		Values: value,
 	})
 
 	log.Debug(fmt.Sprintf("Plugin - InputsPerconaToolkitSlaveDelay - %d", value))

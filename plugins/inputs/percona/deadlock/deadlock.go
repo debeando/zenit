@@ -31,11 +31,11 @@ func (l *InputsPerconaDeadlock) Collect() {
 	}
 
 	metrics.Load().Add(metrics.Metric{
-		Key: "zenit_process",
-		Tags: []metrics.Tag{
-			{"name", "pt_deadlock_logger"},
+		Key: "process",
+		Tags: []metrics.Tag{},
+		Values: []metrics.Value{
+			{ "pt_deadlock_logger", value},
 		},
-		Values: value,
 	})
 
 	log.Debug(fmt.Sprintf("Plugin - InputsPerconaDeadlock - %d", value))
