@@ -52,17 +52,9 @@ outputs:
     enable: false
     dsn: http://127.0.0.1:8123/?database=zenit
     # dsn: http://127.0.0.1:8123/?user=admin&password=admin&database=zenit
-  prometheus:
-    enable: false
-    textfile: /var/tmp/zenit.prom
   influxdb:
     enable: true
     url: http://127.0.0.1:8086
     # username: zenit
     # password: zenit
     database: zenit
-  newrelic:
-    insight:
-      enable: false
-      account_id: 0
-      insert_key: abc123example

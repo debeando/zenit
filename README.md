@@ -9,10 +9,7 @@ ProxySQL. Maybe not requires many another agents for this purpose, but with this
 
 ## Description:
 
-This agent collect all basic metrics from the hardware and more details from MySQL or ProxySQL services.
-And read logs in real time, each event is parsed to analyse later, the logs is send to [ClickHouse](https://github.com/yandex/ClickHouse/)
-because is very easy to analyse with SQL and have great performance. And the metrics is send only to [NewRelic Insights](https://newrelic.com/products/insights), [InfluxDB](https://github.com/influxdata/influxdb) and [Prometheus](https://github.com/prometheus/prometheus)
-and you can analize and monitoring with [Grafana](https://grafana.com/) for the moment.
+This agent collect all basic metrics from the hardware and more details from MySQL or ProxySQL services. And read logs in real time, each event is parsed to analyse later, the logs is send to [ClickHouse](https://github.com/yandex/ClickHouse/) because is very easy to analyse with SQL and have great performance. And the metrics is send only to [InfluxDB](https://github.com/influxdata/influxdb) and you can analize and monitoring with [Grafana](https://grafana.com/) for the moment.
 
 ### Advantage
 
@@ -33,8 +30,6 @@ And this is ingested on:
 
 - **ClickHouse:** This a columnar database to save all log parsers to analyze them.
 - **InfluxDB:** Scalable datastore for metrics, events, and real-time analytics.
-- **NewRelic Insights:** Commercial tool to analyze and visualize data to build Alerts in your business.
-- **Prometheus:** This another metric tools, good for alerts by metrics generated with zenit.
 
 The numeric values has represent time has in microseconds.
 
