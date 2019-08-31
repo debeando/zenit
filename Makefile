@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-BUILD_DATE := `date +%Y%m%d.%H%M%S`
+BUILD_DATE := `date +%Y%m%d%H%M`
 DOCKER_COMPOSE_FILE := docker-compose --file docker/docker-compose.yml
 DOCKER_EXEC := docker exec -i -t -u root
 
