@@ -28,7 +28,7 @@ WHERE c.table_schema NOT IN ('mysql','sys','performance_schema','information_sch
   AND c.column_type LIKE '%int%'
   AND c.column_key = 'PRI'
 ORDER BY c.table_schema, c.table_name, c.column_name`
-	queryMax = "SELECT COALESCE(MAX(%s), 0) AS max FROM %s.%s"
+	queryMax = "SELECT COALESCE(MAX(%s), 0) AS max FROM `%s`.`%s`"
 )
 
 type MySQLOverflow struct{}
