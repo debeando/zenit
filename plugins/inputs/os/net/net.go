@@ -26,6 +26,8 @@ func (l *InputOSNet) Collect() {
 		return
 	}
 
+	log.Info("Plugin - InputOSNet")
+
 	var a = metrics.Load()
 
 	reGroups := regexp.MustCompile(`(\d+)`)
@@ -41,7 +43,7 @@ func (l *InputOSNet) Collect() {
 			transmit_bytes := common.StringToInt64(match[8])
 
 			a.Add(metrics.Metric{
-				Key: "os",
+				Key: "os_net",
 				Tags: []metrics.Tag{
 					{"hostname", config.File.General.Hostname},
 					{"device", dev},

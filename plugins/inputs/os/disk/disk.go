@@ -30,6 +30,8 @@ func (l *InputOSDisk) Collect() {
 		return
 	}
 
+	log.Info("Plugin - InputOSDisk")
+
 	var a = metrics.Load()
 	var v = []metrics.Value{}
 
@@ -49,7 +51,7 @@ func (l *InputOSDisk) Collect() {
 	}
 
 	a.Add(metrics.Metric{
-		Key:    "os",
+		Key:    "os_disk",
 		Tags:   []metrics.Tag{
 			{"hostname", config.File.General.Hostname},
 		},

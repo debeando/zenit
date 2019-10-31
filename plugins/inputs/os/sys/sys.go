@@ -26,10 +26,12 @@ func (l *InputOSLimits) Collect() {
 		return
 	}
 
+	log.Info("Plugin - InputOSLimits")
+
 	var a = metrics.Load()
 
 	a.Add(metrics.Metric{
-		Key: "os",
+		Key: "os_sys",
 		Tags: []metrics.Tag{
 			{"hostname", config.File.General.Hostname},
 		},

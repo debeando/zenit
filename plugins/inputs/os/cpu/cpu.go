@@ -24,17 +24,19 @@ func (l *InputOSCPU) Collect() {
 		return
 	}
 
+	log.Info("Plugin - InputOSCPU")
+
 	var a = metrics.Load()
 
 	percentage, err := cpu.Percent(0, false)
 	if err == nil {
 		a.Add(metrics.Metric{
-			Key: "os",
+			Key: "os_cpu",
 			Tags: []metrics.Tag{
 				{"hostname", config.File.General.Hostname},
 			},
 			Values: []metrics.Value{
-				{ "cpu", percentage[0] },
+				{ "percentage", percentage[0] },
 			},
 		})
 	}
