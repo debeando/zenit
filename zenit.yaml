@@ -31,6 +31,7 @@ inputs:
     - hostname: localhost
       dsn: proxysql:admin@tcp(127.0.0.1:6032)/
       commands: true
+      errors: true
       global: true
       pool: true
       queries: true
