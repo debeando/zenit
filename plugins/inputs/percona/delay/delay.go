@@ -23,6 +23,7 @@ func (l *InputsPerconaToolkitSlaveDelay) Collect() {
 		return
 	}
 
+	var a = metrics.Load()
 	var pid = common.PGrep("pt-slave-delay")
 	var value int64 = 0
 
@@ -30,9 +31,11 @@ func (l *InputsPerconaToolkitSlaveDelay) Collect() {
 		value = 1
 	}
 
-	metrics.Load().Add(metrics.Metric{
+	a.Add(metrics.Metric{
 		Key: "process",
-		Tags: []metrics.Tag{},
+		Tags: []metrics.Tag{
+			{"hostname", config.File.General.Hostname},
+		},
 		Values: []metrics.Value{
 			{ "pt_slave_delay", value},
 		},

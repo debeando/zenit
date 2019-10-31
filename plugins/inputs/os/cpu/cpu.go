@@ -24,11 +24,15 @@ func (l *InputOSCPU) Collect() {
 		return
 	}
 
+	var a = metrics.Load()
+
 	percentage, err := cpu.Percent(0, false)
 	if err == nil {
-		metrics.Load().Add(metrics.Metric{
+		a.Add(metrics.Metric{
 			Key: "os",
-			Tags: []metrics.Tag{},
+			Tags: []metrics.Tag{
+				{"hostname", config.File.General.Hostname},
+			},
 			Values: []metrics.Value{
 				{ "cpu", percentage[0] },
 			},

@@ -26,9 +26,13 @@ func (l *InputOSLimits) Collect() {
 		return
 	}
 
-	metrics.Load().Add(metrics.Metric{
+	var a = metrics.Load()
+
+	a.Add(metrics.Metric{
 		Key: "os",
-		Tags: []metrics.Tag{},
+		Tags: []metrics.Tag{
+			{"hostname", config.File.General.Hostname},
+		},
 		Values: []metrics.Value{
 			{"nr_open", common.GetInt64FromFile(NR_OPEN)},
 			{"file_max", common.GetInt64FromFile(FILE_MAX)},

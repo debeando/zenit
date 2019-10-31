@@ -23,6 +23,7 @@ func (l *InputsPerconaKill) Collect() {
 		return
 	}
 
+	var a = metrics.Load()
 	var pid = common.PGrep("pt-kill")
 	var value = 0
 
@@ -30,9 +31,11 @@ func (l *InputsPerconaKill) Collect() {
 		value = 1
 	}
 
-	metrics.Load().Add(metrics.Metric{
+	a.Add(metrics.Metric{
 		Key: "process",
-		Tags: []metrics.Tag{},
+		Tags: []metrics.Tag{
+			{"hostname", config.File.General.Hostname},
+		},
 		Values: []metrics.Value{
 			{ "pt_kill", value},
 		},
