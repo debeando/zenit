@@ -24,11 +24,15 @@ func (l *InputOSMem) Collect() {
 		return
 	}
 
+	var a = metrics.Load()
+
 	vmStat, err := mem.VirtualMemory()
 	if err == nil {
-		metrics.Load().Add(metrics.Metric{
+		a.Add(metrics.Metric{
 			Key: "os",
-			Tags: []metrics.Tag{},
+			Tags: []metrics.Tag{
+				{"hostname", config.File.General.Hostname},
+			},
 			Values: []metrics.Value{
 				{ "mem", vmStat.UsedPercent },
 			},

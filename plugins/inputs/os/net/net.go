@@ -26,6 +26,8 @@ func (l *InputOSNet) Collect() {
 		return
 	}
 
+	var a = metrics.Load()
+
 	reGroups := regexp.MustCompile(`(\d+)`)
 	net := file.Read("/proc/net/dev")
 	lines := strings.Split(net, "\n")
@@ -38,9 +40,10 @@ func (l *InputOSNet) Collect() {
 			receive_bytes := common.StringToInt64(match[0])
 			transmit_bytes := common.StringToInt64(match[8])
 
-			metrics.Load().Add(metrics.Metric{
+			a.Add(metrics.Metric{
 				Key: "os",
 				Tags: []metrics.Tag{
+					{"hostname", config.File.General.Hostname},
 					{"device", dev},
 				},
 				Values: []metrics.Value{

@@ -50,7 +50,9 @@ func (l *InputOSDisk) Collect() {
 
 	a.Add(metrics.Metric{
 		Key:    "os",
-		Tags:   []metrics.Tag{},
+		Tags:   []metrics.Tag{
+			{"hostname", config.File.General.Hostname},
+		},
 		Values: v,
 	})
 }

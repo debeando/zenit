@@ -12,3 +12,4 @@ This is the list about stupid `TODO` when not require create tickets.
 - Implement native autoload in clickhouse output.
 - Find and remove dead code.
 - Maybe in the clickhouse.go is possible to simplify the code implementing OR on case statements.
+- When you use --install, check the executable path, file config are exists.

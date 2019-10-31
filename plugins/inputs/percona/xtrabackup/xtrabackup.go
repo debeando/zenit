@@ -23,6 +23,7 @@ func (l *InputsPerconaXtraBackup) Collect() {
 		return
 	}
 
+	var a = metrics.Load()
 	var pid = common.PGrep("xtrabackup")
 	var value = 0
 
@@ -30,9 +31,11 @@ func (l *InputsPerconaXtraBackup) Collect() {
 		value = 1
 	}
 
-	metrics.Load().Add(metrics.Metric{
+	a.Add(metrics.Metric{
 		Key: "process",
-		Tags: []metrics.Tag{},
+		Tags: []metrics.Tag{
+			{"hostname", config.File.General.Hostname},
+		},
 		Values: []metrics.Value{
 			{ "xtrabackup", value},
 		},
