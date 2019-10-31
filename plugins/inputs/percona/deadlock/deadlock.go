@@ -23,6 +23,8 @@ func (l *InputsPerconaDeadlock) Collect() {
 		return
 	}
 
+	log.Info("Plugin - InputsPerconaDeadlock")
+
 	var a = metrics.Load()
 	var pid = common.PGrep("pt-deadlock-logger")
 	var value = 0
@@ -32,7 +34,7 @@ func (l *InputsPerconaDeadlock) Collect() {
 	}
 
 	a.Add(metrics.Metric{
-		Key: "process",
+		Key: "process_pt_deadlock_logger",
 		Tags: []metrics.Tag{
 			{"hostname", config.File.General.Hostname},
 		},

@@ -23,6 +23,8 @@ func (l *InputsPerconaOSC) Collect() {
 		return
 	}
 
+	log.Info("Plugin - InputsPerconaOSC")
+
 	var a = metrics.Load()
 	var pid = common.PGrep("pt-online-schema-change")
 	var value = 0
@@ -32,7 +34,7 @@ func (l *InputsPerconaOSC) Collect() {
 	}
 
 	a.Add(metrics.Metric{
-		Key: "process",
+		Key: "process_pt_online_schema_change",
 		Tags: []metrics.Tag{
 			{"hostname", config.File.General.Hostname},
 		},
