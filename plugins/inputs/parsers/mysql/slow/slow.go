@@ -1,16 +1,43 @@
 package slow
 
 import (
+	"fmt"
+	"sync"
+
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/common/sql"
 	"github.com/swapbyt3s/zenit/common/sql/parser/slow"
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/swapbyt3s/zenit/plugins/inputs"
 	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
 )
 
-func Start() {
+type MySQLSlowLog struct{}
+
+var (
+	instance *MySQLSlowLog
+	once     sync.Once
+)
+
+func (l *MySQLSlowLog) Collect() {
+	once.Do(func() {
+		if instance == nil {
+			instance = &MySQLSlowLog{}
+
+			l.Load()
+		}
+	})
+}
+
+func (l *MySQLSlowLog) Load() {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Debug(fmt.Sprintf("Plugin - InputMySQLSlowLog - Panic (code %d) has been recover from somewhere.\n", err))
+		}
+	}()
+
 	if config.File.Parser.MySQL.SlowLog.Enable {
 		if config.File.General.Debug {
 			log.Debug("Load MySQL SlowLog")
@@ -54,7 +81,7 @@ func Start() {
 		}
 
 		go common.Tail(config.File.Parser.MySQL.SlowLog.LogPath, channel_tail)
-		go Parser(config.File.Parser.MySQL.SlowLog.LogPath, channel_tail, channel_parser)
+		go l.Parser(channel_tail, channel_parser)
 		go clickhouse.Send(event, channel_data)
 
 		go func() {
@@ -65,7 +92,7 @@ func Start() {
 	}
 }
 
-func Parser(path string, in <-chan string, out chan<- map[string]string) {
+func (l *MySQLSlowLog) Parser (in <-chan string, out chan<- map[string]string) {
 	channelTail := make(chan string)
 	channelEvent := make(chan string)
 
@@ -105,4 +132,8 @@ func Parser(path string, in <-chan string, out chan<- map[string]string) {
 			out <- result
 		}
 	}()
+}
+
+func init() {
+	inputs.Add("InputMySQLSlowLog", func() inputs.Input { return &MySQLSlowLog{} })
 }

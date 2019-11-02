@@ -9,9 +9,6 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/inputs"
 	"github.com/swapbyt3s/zenit/plugins/outputs"
 
-	"github.com/swapbyt3s/zenit/plugins/inputs/parsers/mysql/audit"
-	"github.com/swapbyt3s/zenit/plugins/inputs/parsers/mysql/slow"
-
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/overflow"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/slave"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/status"
@@ -22,6 +19,8 @@ import (
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/os/mem"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/os/net"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/os/sys"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/parsers/mysql/audit"
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/parsers/mysql/slow"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/percona/deadlock"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/percona/delay"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/percona/kill"
@@ -36,9 +35,6 @@ import (
 )
 
 func Load() {
-	audit.Start()
-	slow.Start()
-
 	for {
 		// Flush old metrics:
 		metrics.Load().Reset()
