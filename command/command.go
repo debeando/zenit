@@ -4,20 +4,41 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	"github.com/swapbyt3s/zenit/command/config"
 )
 
 // USAGE is a const to have help description for CLI.
-const USAGE = `zenit %s
+const USAGE = `zenit %s, agent for collecting and reporting metrics for
+MySQL, Percona, MariaDB and ProxySQL.
+
 Usage: %s [--help | --install | --uninstall | --version]
+
 Options:
   --help        Show this help.
+  --config      Print out full sample configuration to stdout.
   --install     Install service on system.
   --uninstall   Uninstall service on system.
   --version     Print version numbers.
+
+Example:
+
+  # Generate a zenit config file:
+  $ sudo zenit --config > /etc/zenit/zenit.yaml
+
+  # Install init script:
+  $ sudo zenit --install
+
+  # Start zenit agent:
+  $ sudo initctl start zenit
+
+For more help, plese visit: https://github.com/swapbyt3s/zenit/wiki
+
 `
 
 func Run() {
 	fHelp      := flag.Bool("help", false, "Show this help.")
+	fConfig    := flag.Bool("config", false, "Print out full sample configuration to stdout.")
 	fInstall   := flag.Bool("install", false, "Install service on system.")
 	fUninstall := flag.Bool("uninstall", false, "Uninstall service on system.")
 	fVersion   := flag.Bool("version", false, "Show version.")
@@ -30,6 +51,8 @@ func Run() {
 		fmt.Println(Version())
 	case *fHelp:
 		help(0)
+	case *fConfig:
+		fmt.Printf(config.GetExampleFile())
 	case *fInstall:
 		Install()
 	case *fUninstall:
