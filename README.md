@@ -51,3 +51,11 @@ Before using this tool, please:
 
 - The audit log cut long query.
 - ClickHouse no have retention policy for data storage.
+
+## How to use it:
+
+See usage with:
+
+```
+zenit --help
+```
