@@ -44,6 +44,7 @@ type Config struct{
 			Hostname string `yaml:"hostname"`
 			DSN      string `yaml:"dsn"`
 			Commands bool `yaml:"commands"`
+			Errors bool `yaml:"errors"`
 			Global   bool `yaml:"global"`
 			Pool     bool `yaml:"pool"`
 			Queries  bool `yaml:"queries"`
