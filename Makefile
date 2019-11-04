@@ -25,12 +25,15 @@ tests: ## Run tests
 	go test -cover -race -coverprofile=coverage.txt -covermode=atomic ./...
 
 build: ## Build binary for local operating system
+	go generate ./...
 	go build -ldflags "-s -w -X github.com/swapbyt3s/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
 
 build-linux: ## Build binary for Linux
+	go generate ./...
 	GOOS=linux go build -ldflags "-s -w -X github.com/swapbyt3s/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
 
 build-and-run: ## Build binary for Linux and run
+	go generate ./...
 	GOOS=linux go build -ldflags "-s -w -X github.com/swapbyt3s/zenit/command.BuildTime=`date +%Y%m%d.%H%M%S`" -o zenit main.go
 	docker cp zenit zenit_percona_server_primary:/usr/bin/
 	docker exec -i -t -u root zenit_percona_server_primary /usr/bin/zenit
