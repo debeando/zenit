@@ -41,7 +41,7 @@ fi
 
 if [ ! -f /etc/zenit/zenit.yaml ]; then
   mkdir -p /etc/zenit/
-  wget -qO- "https://raw.githubusercontent.com/swapbyt3s/zenit/master/zenit.yaml" > /etc/zenit/zenit.yaml
+  /usr/bin/zenit --config > /etc/zenit/zenit.yaml
 fi
 
 if [ -d "/etc/logrotate.d" ]; then

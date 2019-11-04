@@ -27,8 +27,11 @@ ID=$(curl -sH "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/
 
 rm -rf pkg/*
 
+BUILD_DATE=$(date +%Y%m%d%H%M)
+
+go generate ./...
 mkdir -p pkg/linux_amd64/
-GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o pkg/linux_amd64/zenit main.go
+GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -X github.com/swapbyt3s/zenit/command.BuildTime=$(BUILD_DATE)" -o pkg/linux_amd64/zenit main.go
 tar -czf pkg/linux_amd64/zenit-linux_amd64.tar.gz -C pkg/linux_amd64/ zenit
 
 curl -# \
