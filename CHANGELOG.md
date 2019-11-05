@@ -5,19 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### 1.2.0 (Beta)
 
-- Implement alerts system.
-- Add alert for Errors and Status connections on ProxySQL.
-- Add basic alerts for OS: Disk, Mem, CPU.
-- Add basic alerts for MySQL: Max Connection, Lagging, Replication, ReadOnly.
-- Add basic alerts for ProxySQL: Errors, Commands, Queries and Status by hosts.
-- Refactoring logging.
+## [1.2.0] 2019/11/06
+
+- Print config example.
+- Add error collector for ProxySQL.
+- Add overflow collector for MySQL.
+- Implement exporter to InfluxDB.
+- Allow multiples MySQL and ProxySQL in same agent.
+- Refactoring logging, parser, and load plugins.
 - Allow environment variables in config file.
-- Refactoring config skeleton to show hierarchy for collect and alerts.
-- Send alerts notifications to Slack.
-- Prometheus exporter unexpected end of input stream.
-- Replace own OS collector to github.com/shirou/gopsutil
+- Refactoring config skeleton to show hierarchy for collect.
+- Replace own OS collector to github.com/shirou/gopsutil.
 
 ## [1.1.9] 2018/09/19
 
