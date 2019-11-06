@@ -52,6 +52,16 @@ Before using this tool, please:
 - The audit log cut long query.
 - ClickHouse no have retention policy for data storage.
 
+## Install agent
+
+For the moment, this tool only run in any Linux distribution with 64 bits. Paste that at a Terminal prompt:
+
+```bash
+bash < <(curl -s https://raw.githubusercontent.com/swapbyt3s/zenit/master/scripts/install.sh)
+```
+
+For more details, please visit the [wiki](https://github.com/swapbyt3s/zenit/wiki/Install-agent).
+
 ## How to use it:
 
 See usage with:
