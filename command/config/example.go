@@ -3,7 +3,7 @@ package config
 const ExampleFile = `---
 general:
   hostname: localhost
-  interval: 10 # Seconds
+  interval: 60 # Seconds
   debug: true
 
 parser:

@@ -30,7 +30,7 @@ Example:
   $ sudo zenit --install
 
   # Start zenit agent:
-  $ sudo [ systemctl | initctl ] [start|stop|restart|status] zenit
+  $ sudo [systemctl|initctl] [start|stop|restart|status] zenit
 
 For more help, plese visit: https://github.com/swapbyt3s/zenit/wiki
 
