@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 	"github.com/swapbyt3s/zenit/plugins/outputs"
 
-	client "github.com/influxdata/influxdb1-client"
+	client "github.com/influxdata/influxdb1-client/v2"
 )
 
 const (
@@ -35,25 +36,26 @@ func (l *OutputIndluxDB) Collect() {
 		config.File.Outputs.InfluxDB.Database = defaultDatabase
 	}
 
-	host, err := url.Parse(config.File.Outputs.InfluxDB.URL)
+	_, err := url.Parse(config.File.Outputs.InfluxDB.URL)
 	if err != nil {
 		log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:Parser - Error: %s", err))
 		return
 	}
 
-	conf := client.Config{
-		URL:      *host,
+
+	conf := client.HTTPConfig{
+		Addr: config.File.Outputs.InfluxDB.URL,
 		Username: config.File.Outputs.InfluxDB.Username,
 		Password: config.File.Outputs.InfluxDB.Password,
 	}
-
-	con, err := client.NewClient(conf)
+	con, err := client.NewHTTPClient(conf)
 	if err != nil {
 		log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:Client - Error: %s", err))
 		return
 	}
+	defer con.Close()
 
-	_, ver, err := con.Ping()
+	_, ver, err := con.Ping(0)
 	if err != nil {
 		log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:Ping - Error: %s", err))
 		return
@@ -61,34 +63,36 @@ func (l *OutputIndluxDB) Collect() {
 
 	log.Debug(fmt.Sprintf("Plugin - OutputIndluxDB - Connected to InfluxDB V-%s", ver))
 
-	var points = []client.Point{}
 	var events = Normalize(metrics.Load())
+	var database = config.File.Outputs.InfluxDB.Database
+
+	bp, _ := client.NewBatchPoints(client.BatchPointsConfig{
+		Database: database,
+		Precision: "s",
+	})
 
 	for k, l := range events {
 		for _, m := range l {
-			points = append(points, client.Point{
-				Measurement: k,
-				Tags:      m["tags"].(map[string]string),
-				Fields:    m["fields"].(map[string]interface{}),
-				Precision: "s",
-			})
+			pt, err := client.NewPoint(
+				k,
+				m["tags"].(map[string]string),
+				m["fields"].(map[string]interface{}),
+				time.Now(),
+			)
+			if err != nil {
+				fmt.Println("Error: ", err.Error())
+			}
+			bp.AddPoint(pt)
 		}
 	}
 
-	bps := client.BatchPoints{
-		Points:          points,
-		Database:        config.File.Outputs.InfluxDB.Database,
-	}
-
-	_, err = con.Write(bps)
-	if err != nil {
+	if con.Write(bp) != nil {
 		if strings.Contains(err.Error(), errDatabaseNotFound) {
-			query := client.Query{
-				Command:  fmt.Sprintf(
+			query := client.NewQuery(fmt.Sprintf(
 					`CREATE DATABASE "%s"`,
 					config.File.Outputs.InfluxDB.Database,
-				),
-			}
+				), "", "",
+			)
 
 			log.Debug(fmt.Sprintf(
 				"Plugin - OutputIndluxDB:CreateDatabase %s",
