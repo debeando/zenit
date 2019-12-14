@@ -34,6 +34,7 @@ type Config struct{
 		MySQL []struct {
 			Hostname  string `yaml:"hostname"`
 			DSN       string `yaml:"dsn"`
+			Aurora    bool `yaml:"aurora"`
 			Overflow  bool `yaml:"overflow"`
 			Slave     bool `yaml:"slave"`
 			Status    bool `yaml:"status"`
