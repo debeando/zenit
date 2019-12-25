@@ -9,9 +9,12 @@ type Config struct{
 	Path      string
 	IPAddress string
 	General   struct {
-		Hostname string        `yaml:"hostname"`
-		Interval time.Duration `yaml:"interval"`
-		Debug    bool          `yaml:"debug"`
+		Hostname           string        `yaml:"hostname"`
+		Interval           time.Duration `yaml:"interval"`
+		Debug              bool          `yaml:"debug"`
+		AWSRegion          string        `yaml:"aws_region"`
+		AWSAccessKeyID     string        `yaml:"aws_access_key_id"`
+		AWSSecretAccessKey string        `yaml:"aws_secret_access_key"`
 	}
 	Parser struct {
 		MySQL struct {
@@ -31,6 +34,19 @@ type Config struct{
 		}
 	}
 	Inputs struct {
+		AWSRDS struct {
+			Enable   bool `yaml:"enable"`
+			Username string `yaml:"username"`
+			Password string `yaml:"password"`
+			Plugins  struct {
+				Aurora    bool `yaml:"aurora"`
+				Overflow  bool `yaml:"overflow"`
+				Slave     bool `yaml:"slave"`
+				Status    bool `yaml:"status"`
+				Tables    bool `yaml:"tables"`
+				Variables bool `yaml:"variables"`
+			}
+		}
 		MySQL []struct {
 			Hostname  string `yaml:"hostname"`
 			DSN       string `yaml:"dsn"`

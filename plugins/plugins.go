@@ -9,6 +9,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/inputs"
 	"github.com/swapbyt3s/zenit/plugins/outputs"
 
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/awsrds"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/aurora"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/overflow"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/slave"
