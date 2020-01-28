@@ -28,6 +28,7 @@ inputs:
     enable: true
     username: monitor
     password: monitor
+    filter: prd
     plugins:
       aurora: false
       overflow: true

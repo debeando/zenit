@@ -2,6 +2,7 @@ package aurora
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
@@ -10,7 +11,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-const query = "SELECT * FROM mysql.ro_replica_status"
+const query = "SELECT iops, cpu, replica_lag_in_msec FROM mysql.ro_replica_status WHERE server_id = @@aurora_server_id;"
 
 type MySQLAurora struct{}
 
@@ -26,6 +27,8 @@ func (l *MySQLAurora) Collect() {
 			return
 		}
 
+		// Validar que es un aurora
+
 		log.Info(fmt.Sprintf("Plugin - InputMySQLAurora - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
 
 		var a = metrics.Load()
@@ -36,16 +39,29 @@ func (l *MySQLAurora) Collect() {
 
 		var r = m.Query(query)
 
-		for column := range r[0] {
-			if value, ok := mysql.ParseValue(r[0][column]); ok {
-				log.Debug(fmt.Sprintf("Plugin - InputMySQLAurora - %s=%d", column, value))
+		if r != nil {
+			for column := range r[0] {
+				log.Debug(fmt.Sprintf("Plugin - InputMySQLAurora - ParseValue: %#v", r[0][column]))				
+
+				var val interface{}
+
+				if isFloat(r[0][column]) {
+					val, _ = strconv.ParseFloat(r[0][column], 64)
+				}
+
+				if isInt(r[0][column]) {
+					if value, ok := mysql.ParseValue(r[0][column]); ok {
+						val = value
+					}
+				}
 
 				v = append(v, metrics.Value{
 					Key: column,
-					Value: value,
+					Value: val,
 				})
 			}
 		}
+		
 
 		a.Add(metrics.Metric{
 			Key:    "aws_rds_aurora",
@@ -59,4 +75,14 @@ func (l *MySQLAurora) Collect() {
 
 func init() {
 	inputs.Add("InputMySQLAurora", func() inputs.Input { return &MySQLAurora{} })
+}
+
+func isInt(s string) bool {
+    _, err := strconv.ParseInt(s, 10, 32)
+    return err == nil
+}
+
+func isFloat(s string) bool {
+    _, err := strconv.ParseFloat(s, 64)
+    return err == nil
 }

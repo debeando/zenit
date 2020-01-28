@@ -50,12 +50,13 @@ func (s *singleton) Query(query string) map[int]map[string]string {
 	// Execute the query
 	rows, err := s.Connection.Query(query)
 	if err != nil {
+		return nil
 		log.Error(fmt.Sprintf("%s - %s", s.Name, err))
 	}
 	defer rows.Close()
 
 	// Get column names
-	cols, _ := rows.Columns()
+	cols, err := rows.Columns()
 	if err != nil {
 		log.Error(fmt.Sprintf("%s - %s", s.Name, err))
 	}

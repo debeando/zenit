@@ -2,6 +2,7 @@ package awsrds
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
@@ -16,6 +17,7 @@ import (
 type InputAWSRDS struct{}
 
 type MySQL struct {
+	Source    string
 	Hostname  string `yaml:"hostname"`
 	DSN       string `yaml:"dsn"`
 	Aurora    bool `yaml:"aurora"`
@@ -70,13 +72,17 @@ func (l *InputAWSRDS) Collect() {
 		return
 	}
 
+	// Add new servers:
 	for _, d := range result.DBInstances {
-		if ! existInputMySQL(aws.StringValue(d.DBInstanceIdentifier)) {
+		hostname := aws.StringValue(d.DBInstanceIdentifier)
+
+		if ! existInputMySQL(hostname) && matchFilter(hostname) {
 			log.Debug(fmt.Sprintf("Plugin - InputAWSRDS - Register new server: %s", aws.StringValue(d.DBInstanceIdentifier)))
 
 			m := MySQL{}
-			m.Hostname = aws.StringValue(d.DBInstanceIdentifier)
-			m.DSN = fmt.Sprintf("%s:%s@tcp(%s:%d)/",
+			m.Source    = "AWSRDS"
+			m.Hostname  = hostname
+			m.DSN       = fmt.Sprintf("%s:%s@tcp(%s:%d)/",
 				config.File.Inputs.AWSRDS.Username,
 				config.File.Inputs.AWSRDS.Password,
 				aws.StringValue(d.Endpoint.Address),
@@ -92,6 +98,11 @@ func (l *InputAWSRDS) Collect() {
 			config.File.Inputs.MySQL = append(config.File.Inputs.MySQL, m)
 		}
 	}
+
+	// Remove old servers:
+	// for d := range config.File.Inputs.MySQL {
+
+	// }
 }
 
 func existInputMySQL(hostname string) bool {
@@ -100,6 +111,14 @@ func existInputMySQL(hostname string) bool {
 			return true
 		}
 	}
+	return false
+}
+
+func matchFilter(hostname string) bool {
+	if matched, err := regexp.MatchString(config.File.Inputs.AWSRDS.Filter, hostname); err == nil && matched == true {
+		return true
+	}
+
 	return false
 }
 

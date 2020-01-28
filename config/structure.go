@@ -38,6 +38,7 @@ type Config struct{
 			Enable   bool `yaml:"enable"`
 			Username string `yaml:"username"`
 			Password string `yaml:"password"`
+			Filter string `yaml:"filter"`
 			Plugins  struct {
 				Aurora    bool `yaml:"aurora"`
 				Overflow  bool `yaml:"overflow"`
@@ -48,6 +49,7 @@ type Config struct{
 			}
 		}
 		MySQL []struct {
+			Source    string
 			Hostname  string `yaml:"hostname"`
 			DSN       string `yaml:"dsn"`
 			Aurora    bool `yaml:"aurora"`
