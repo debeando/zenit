@@ -41,10 +41,9 @@ func (l *MySQLAurora) Collect() {
 
 		if r != nil {
 			for column := range r[0] {
-				log.Debug(fmt.Sprintf("Plugin - InputMySQLAurora - ParseValue: %#v", r[0][column]))				
-
 				var val interface{}
 
+				// buscar si hay un stringToInterface
 				if isFloat(r[0][column]) {
 					val, _ = strconv.ParseFloat(r[0][column], 64)
 				}
@@ -60,16 +59,15 @@ func (l *MySQLAurora) Collect() {
 					Value: val,
 				})
 			}
-		}
-		
 
-		a.Add(metrics.Metric{
-			Key:    "aws_rds_aurora",
-			Tags:   []metrics.Tag{
-				{"hostname", config.File.Inputs.MySQL[host].Hostname},
-			},
-			Values: v,
-		})
+			a.Add(metrics.Metric{
+				Key:    "aws_rds_aurora",
+				Tags:   []metrics.Tag{
+					{"hostname", config.File.Inputs.MySQL[host].Hostname},
+				},
+				Values: v,
+			})
+		}
 	}
 }
 

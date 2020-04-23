@@ -3,7 +3,7 @@ package influxdb
 import (
 	"fmt"
 	"net/url"
-	"strings"
+	// "strings"
 	"time"
 
 	"github.com/swapbyt3s/zenit/common/log"
@@ -22,11 +22,11 @@ const (
 type OutputIndluxDB struct{}
 
 func (l *OutputIndluxDB) Collect() {
-	defer func() {
-		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - OutputIndluxDB - Panic (code %d) has been recover from somewhere.\n", err))
-		}
-	}()
+	//defer func() {
+	//	if err := recover(); err != nil {
+	//		log.Debug(fmt.Sprintf("Plugin - OutputIndluxDB - Panic (code %d) has been recover from somewhere.\n", err))
+	//	}
+	//}()
 
 	if !config.File.Outputs.InfluxDB.Enable {
 		return
@@ -86,26 +86,26 @@ func (l *OutputIndluxDB) Collect() {
 		}
 	}
 
-	if con.Write(bp) != nil {
-		if strings.Contains(err.Error(), errDatabaseNotFound) {
-			query := client.NewQuery(fmt.Sprintf(
-					`CREATE DATABASE "%s"`,
-					config.File.Outputs.InfluxDB.Database,
-				), "", "",
-			)
-
-			log.Debug(fmt.Sprintf(
-				"Plugin - OutputIndluxDB:CreateDatabase %s",
-				config.File.Outputs.InfluxDB.Database,
-			))
-
-			if _, err := con.Query(query); err != nil {
-				log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:CreateDatabase - Error: %s", err))
-				return
-			}
-		} else {
+	if err = con.Write(bp); err != nil {
+		// if strings.Contains(err.Error(), errDatabaseNotFound) {
+//			query := client.NewQuery(fmt.Sprintf(
+//					`CREATE DATABASE "%s"`,
+//					config.File.Outputs.InfluxDB.Database,
+//				), "", "",
+//			)
+//
+//			log.Debug(fmt.Sprintf(
+//				"Plugin - OutputIndluxDB:CreateDatabase %s",
+//				config.File.Outputs.InfluxDB.Database,
+//			))
+//
+//			if _, err := con.Query(query); err != nil {
+//				log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:CreateDatabase - Error: %s", err))
+//				return
+//			}
+//		} else {
 			log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:Write - Error: %s", err))
-		}
+		// }
 	}
 }
 
