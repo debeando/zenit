@@ -23,6 +23,10 @@ fi
 FILE="zenit-linux_amd64.tar.gz"
 TAG=$(wget -qO- "https://api.github.com/repos/swapbyt3s/zenit/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
+if [ -f /etc/systemd/system/zenit.service ]; then
+  /usr/bin/zenit --uninstall
+fi
+
 if [ -f /usr/local/bin/zenit ]; then
   rm -f /usr/local/bin/zenit
 fi
