@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
@@ -47,7 +48,7 @@ func (l *InputProxySQLErrors) Collect() {
 					{"username", i["username"]},
 					{"schema", i["schemaname"]},
 					{"errno", i["errno"]},
-					{"last_error", i["last_error"]},
+					{"last_error", parseLastError(i["last_error"])},
 				},
 				Values: []metrics.Value{
 					{"count", common.StringToInt64(i["count_star"])},
@@ -57,6 +58,14 @@ func (l *InputProxySQLErrors) Collect() {
 			log.Debug(fmt.Sprintf("Plugin - InputProxySQLErrors - %#v", i))
 		}
 	}
+}
+
+func parseLastError(error string) string {
+	if ok, _ := regexp.MatchString("Duplicate entry '.*' for key 'PRIMARY'", error); ok {
+		error = "Duplicate entry for primary key"
+	}
+
+	return error
 }
 
 func init() {

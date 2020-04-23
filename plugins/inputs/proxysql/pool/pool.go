@@ -53,6 +53,8 @@ func (l *InputProxySQLPool) Collect() {
 		var r = p.Query(querySQLPool)
 
 		for _, i := range r {
+			log.Debug(fmt.Sprintf("Plugin - InputProxySQLPool - %#v", i))
+
 			a.Add(metrics.Metric{
 				Key: "proxysql_connections",
 				Tags: []metrics.Tag{
@@ -72,8 +74,6 @@ func (l *InputProxySQLPool) Collect() {
 					{"latency", common.StringToInt64(i["Latency_us"])},
 				},
 			})
-
-			log.Debug(fmt.Sprintf("Plugin - InputProxySQLPool - %#v", i))
 		}
 	}
 }

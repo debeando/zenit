@@ -24,6 +24,7 @@ inputs:
   mysql:
     - hostname: localhost
       dsn: root@tcp(127.0.0.1:3306)/
+      aurora: false
       overflow: true
       slave: true
       status: true

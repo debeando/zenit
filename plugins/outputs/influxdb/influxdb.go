@@ -42,7 +42,6 @@ func (l *OutputIndluxDB) Collect() {
 		return
 	}
 
-
 	conf := client.HTTPConfig{
 		Addr: config.File.Outputs.InfluxDB.URL,
 		Username: config.File.Outputs.InfluxDB.Username,
@@ -80,13 +79,14 @@ func (l *OutputIndluxDB) Collect() {
 				time.Now(),
 			)
 			if err != nil {
-				fmt.Println("Error: ", err.Error())
+				log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:Events - Error: %s", err.Error()))
 			}
 			bp.AddPoint(pt)
 		}
 	}
 
-	if con.Write(bp) != nil {
+	err = con.Write(bp)
+	if err != nil {
 		if strings.Contains(err.Error(), errDatabaseNotFound) {
 			query := client.NewQuery(fmt.Sprintf(
 					`CREATE DATABASE "%s"`,

@@ -88,11 +88,12 @@ func (l *Items) Update(m Metric) {
 				for itemValueIndex, itemValue := range (*l)[itemIndex].Values {
 					for _, metricValue := range m.Values {
 						if itemValue.Key == metricValue.Key {
-							sumValue := metricValue.Value.(int64)
-							oldValue := (*l)[itemIndex].Values[itemValueIndex].Value.(int64)
-							newValue := oldValue + sumValue
-
-							(*l)[itemIndex].Values[itemValueIndex].Value = newValue
+							switch v := metricValue.Value.(type) {
+							case int64:
+							    oldValue := (*l)[itemIndex].Values[itemValueIndex].Value.(int64)
+							    newValue := oldValue + v
+							    (*l)[itemIndex].Values[itemValueIndex].Value = newValue
+							}
 
 							break
 						}
