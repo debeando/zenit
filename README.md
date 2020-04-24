@@ -7,6 +7,8 @@ ProxySQL. Maybe not requires many another agents for this purpose, but with this
 - The name [Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) is inspired by a russian spy satellite.
 - This project is sponsored by [zinio](https://www.zinio.com).
 
+Why can you use it, this tool is make by DBA for DBA, other tools collect basic information, while this it collector low level information and variety than others not, all in one.
+
 ## Description:
 
 This agent collect all basic metrics from the hardware and more details from MySQL or ProxySQL services. And read logs in real time, each event is parsed to analyse later, the logs is send to [ClickHouse](https://github.com/yandex/ClickHouse/) because is very easy to analyse with SQL and have great performance. And the metrics is send only to [InfluxDB](https://github.com/influxdata/influxdb) and you can analize and monitoring with [Grafana](https://grafana.com/) for the moment.
@@ -21,7 +23,7 @@ This agent collect all basic metrics from the hardware and more details from MyS
 
 This tool collect stats data from:
 
-- **MySQL:** Collect typical metrics; variables, status, slave status, primary key overflow, tables sizes. And parser Slow and Audit Logs. For the moment is tested on MySQL 5.5
+- **MySQL:** Collect typical metrics; variables, status, slave status, primary key overflow, tables sizes. The parser Slow and Audit Logs is only tested on MySQL 5.5, the rest of the features work fine with any version.
 - **ProxySQL:** Collect for the moment query digest only. For the moment is tested in ProxySQL 1.4
 - **AWS RDS Aurora:** Basic metrics; IOPS, CPU, and Replica Lag.
 - **Percona ToolKit:** Verify is running specific tools, for the moment only check follow tools; pt-kill, pt-deadlock-logger and pt-slave-delay.
@@ -47,6 +49,8 @@ Before using this tool, please:
 - Read the tool's documentation.
 - Review the tool’s known "BUGS".
 - Test the tool on a non-production server.
+
+**Like most, you should not be surprised.**
 
 ## Limitations
 
