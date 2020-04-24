@@ -27,7 +27,8 @@ ID=$(curl -sH "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/
 
 rm -rf pkg/*
 
-export BUILD_DATE=$(date +%Y%m%d%H%M)
+BUILD_DATE=$(date +%Y%m%d%H%M)
+export BUILD_DATE
 
 go generate ./...
 mkdir -p pkg/linux_amd64/
