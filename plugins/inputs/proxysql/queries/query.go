@@ -1,7 +1,6 @@
 package queries
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -43,7 +42,7 @@ type InputProxySQLQuery struct{}
 func (l *InputProxySQLQuery) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputProxySQLQuery - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputProxySQLQuery", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -52,7 +51,7 @@ func (l *InputProxySQLQuery) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputProxySQLQuery - Hostname: %s", config.File.Inputs.ProxySQL[host].Hostname))
+		log.Info("InputProxySQLQuery", map[string]interface{}{"hostname": config.File.Inputs.ProxySQL[host].Hostname})
 
 		re, _ = regexp.Compile(ReQuery)
 		var a = metrics.Load()
@@ -69,6 +68,15 @@ func (l *InputProxySQLQuery) Collect() {
 				continue
 			}
 
+			log.Debug("InputProxySQLQuery", map[string]interface{}{
+				"group": i["group"],
+				"schema": i["schemaname"],
+				"table": table,
+				"command": command,
+				"count": common.StringToInt64(i["count_star"]),
+				"sum": common.StringToInt64(i["sum_time"]),
+			})
+
 			a.Add(metrics.Metric{
 				Key: "proxysql_queries",
 				Tags: []metrics.Tag{
@@ -82,16 +90,6 @@ func (l *InputProxySQLQuery) Collect() {
 					{"sum", common.StringToInt64(i["sum_time"])},
 				},
 			})
-
-			log.Debug(
-				fmt.Sprintf("Plugin - InputProxySQLQuery - (%s)%s.%s %s=%s",
-					i["group"],
-					i["schemaname"],
-					table,
-					command,
-					i["count_star"],
-				),
-			)
 		}
 	}
 }

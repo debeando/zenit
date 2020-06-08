@@ -1,7 +1,6 @@
 package slow
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/swapbyt3s/zenit/common"
@@ -34,18 +33,17 @@ func (l *MySQLSlowLog) Collect() {
 func (l *MySQLSlowLog) Load() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLSlowLog - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("MySQLSlowLog", map[string]interface{}{"error": err})
 		}
 	}()
 
 	if config.File.Parser.MySQL.SlowLog.Enable {
 		if config.File.General.Debug {
-			log.Debug("Load MySQL SlowLog")
-			log.Debug("Read MySQL SlowLog: " + config.File.Parser.MySQL.SlowLog.LogPath)
+			log.Info("MySQLSlowLog", map[string]interface{}{"slow_log_path": config.File.Parser.MySQL.SlowLog.LogPath})
 		}
 
 		if !clickhouse.Check() {
-			log.Error("SlowLog require active connection to ClickHouse.")
+			log.Error("MySQLSlowLog", map[string]interface{}{"error": "SlowLog require active connection to ClickHouse."})
 		}
 
 		channel_tail := make(chan string)

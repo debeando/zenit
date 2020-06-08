@@ -1,7 +1,6 @@
 package audit
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/swapbyt3s/zenit/common/log"
@@ -31,22 +30,20 @@ func (l *MySQLAuditLog) Collect() {
 func (l *MySQLAuditLog) Parser() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLAuditLog - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("MySQLAuditLog", map[string]interface{}{"error": err})
 		}
 	}()
 
 	if config.File.Parser.MySQL.AuditLog.Enable {
 		if config.File.General.Debug {
-			log.Debug("Load MySQL AuditLog")
-			log.Debug("Read MySQL AuditLog: " + config.File.Parser.MySQL.AuditLog.LogPath)
+			log.Info("MySQLAuditLog", map[string]interface{}{"slow_log_path": config.File.Parser.MySQL.AuditLog.LogPath})
 		}
 
 		if !clickhouse.Check() {
-			log.Error("AuditLog require active connection to ClickHouse.")
+			log.Error("MySQLAuditLog", map[string]interface{}{"error": "AuditLog require active connection to ClickHouse."})
 		}
 
 		if config.File.Parser.MySQL.AuditLog.Format == "xml-old" {
-			log.Info("Plugin - InputMySQLAuditLog - Load xml-old parser")
 			xmlold.Collect()
 		}
 	}

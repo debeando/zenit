@@ -1,8 +1,6 @@
 package global
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
@@ -17,7 +15,7 @@ type InputProxySQLGlobal struct{}
 func (l *InputProxySQLGlobal) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputProxySQLGlobal - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputProxySQLGlobal", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -26,7 +24,7 @@ func (l *InputProxySQLGlobal) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputProxySQLGlobal - Hostname=%s", config.File.Inputs.ProxySQL[host].Hostname))
+		log.Info("InputProxySQLGlobal", map[string]interface{}{"hostname": config.File.Inputs.ProxySQL[host].Hostname})
 
 		var a = metrics.Load()
 		var p = mysql.GetInstance(config.File.Inputs.ProxySQL[host].Hostname)
@@ -38,7 +36,7 @@ func (l *InputProxySQLGlobal) Collect() {
 
 		for _, i := range r {
 			if value, ok := mysql.ParseValue(i["Variable_Value"]); ok {
-				log.Debug(fmt.Sprintf("Plugin - InputProxySQLGlobal - %s=%d", i["Variable_Name"], value))
+				log.Debug("InputProxySQLGlobal", map[string]interface{}{"attribute": i["Variable_name"], "value": value})
 
 				v = append(v, metrics.Value{
 					Key: i["Variable_Name"],

@@ -17,7 +17,7 @@ type InputOSDisk struct{}
 func (l *InputOSDisk) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputOSDisk - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputOSDisk", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -30,8 +30,6 @@ func (l *InputOSDisk) Collect() {
 		return
 	}
 
-	log.Info("Plugin - InputOSDisk")
-
 	var a = metrics.Load()
 	var v = []metrics.Value{}
 
@@ -42,7 +40,7 @@ func (l *InputOSDisk) Collect() {
 			return
 		}
 
-		log.Debug(fmt.Sprintf("Plugin - InputOSDisk - Disk=%s(%.2f)", GetDevice(device.Device), u.UsedPercent))
+		log.Debug("InputOSDisk", map[string]interface{}{"device": GetDevice(device.Device), "usage": fmt.Sprintf("%.2f", u.UsedPercent)})
 
 		v = append(v, metrics.Value{
 			Key: GetDevice(device.Device),
@@ -51,8 +49,8 @@ func (l *InputOSDisk) Collect() {
 	}
 
 	a.Add(metrics.Metric{
-		Key:    "os_disk",
-		Tags:   []metrics.Tag{
+		Key:  "os_disk",
+		Tags: []metrics.Tag{
 			{"hostname", config.File.General.Hostname},
 		},
 		Values: v,

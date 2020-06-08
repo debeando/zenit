@@ -1,8 +1,6 @@
 package process
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
@@ -15,15 +13,13 @@ type InputsPerconaXtraBackup struct{}
 func (l *InputsPerconaXtraBackup) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputsPerconaXtraBackup - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputsPerconaXtraBackup", map[string]interface{}{"error": err})
 		}
 	}()
 
 	if !config.File.Inputs.Process.PerconaXtraBackup {
 		return
 	}
-
-	log.Info("Plugin - InputsPerconaXtraBackup")
 
 	var a = metrics.Load()
 	var pid = common.PGrep("xtrabackup")
@@ -32,6 +28,8 @@ func (l *InputsPerconaXtraBackup) Collect() {
 	if pid > 0 {
 		value = 1
 	}
+
+	log.Debug("InputsPerconaXtraBackup", map[string]interface{}{"xtrabackup": value})
 
 	a.Add(metrics.Metric{
 		Key: "process_xtrabackup",
@@ -42,8 +40,6 @@ func (l *InputsPerconaXtraBackup) Collect() {
 			{ "xtrabackup", value},
 		},
 	})
-
-	log.Debug(fmt.Sprintf("Plugin - InputsPerconaXtraBackup - %d", value))
 }
 
 func init() {

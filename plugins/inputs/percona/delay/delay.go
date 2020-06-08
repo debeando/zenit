@@ -1,8 +1,6 @@
 package process
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
@@ -15,15 +13,13 @@ type InputsPerconaToolkitSlaveDelay struct{}
 func (l *InputsPerconaToolkitSlaveDelay) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputsPerconaToolkitSlaveDelay - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputsPerconaToolkitSlaveDelay", map[string]interface{}{"error": err})
 		}
 	}()
 
 	if !config.File.Inputs.Process.PerconaToolKitSlaveDelay {
 		return
 	}
-
-	log.Info("Plugin - InputsPerconaToolkitSlaveDelay")
 
 	var a = metrics.Load()
 	var pid = common.PGrep("pt-slave-delay")
@@ -32,6 +28,8 @@ func (l *InputsPerconaToolkitSlaveDelay) Collect() {
 	if pid > 0 {
 		value = 1
 	}
+
+	log.Debug("InputsPerconaToolkitSlaveDelay", map[string]interface{}{"pt_slave_delay": value})
 
 	a.Add(metrics.Metric{
 		Key: "process_pt_slave_delay",
@@ -42,8 +40,6 @@ func (l *InputsPerconaToolkitSlaveDelay) Collect() {
 			{ "pt_slave_delay", value},
 		},
 	})
-
-	log.Debug(fmt.Sprintf("Plugin - InputsPerconaToolkitSlaveDelay - %d", value))
 }
 
 func init() {

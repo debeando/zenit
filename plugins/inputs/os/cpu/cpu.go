@@ -16,15 +16,13 @@ type InputOSCPU struct{}
 func (l *InputOSCPU) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputOSCPU - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputOSCPU", map[string]interface{}{"error": err})
 		}
 	}()
 
 	if !config.File.Inputs.OS.CPU {
 		return
 	}
-
-	log.Info("Plugin - InputOSCPU")
 
 	var a = metrics.Load()
 
@@ -41,7 +39,7 @@ func (l *InputOSCPU) Collect() {
 		})
 	}
 
-	log.Debug(fmt.Sprintf("Plugin - InputOSCPU - CPU=%.2f", percentage))
+	log.Debug("InputOSCPU", map[string]interface{}{"value": fmt.Sprintf("%.2f", percentage[0])})
 }
 
 func init() {

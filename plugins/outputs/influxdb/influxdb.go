@@ -24,7 +24,7 @@ type OutputIndluxDB struct{}
 func (l *OutputIndluxDB) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - OutputIndluxDB - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("OutputIndluxDB", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -38,7 +38,7 @@ func (l *OutputIndluxDB) Collect() {
 
 	_, err := url.Parse(config.File.Outputs.InfluxDB.URL)
 	if err != nil {
-		log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:Parser - Error: %s", err))
+		log.Error("OutputIndluxDB", map[string]interface{}{"step": "parser", "error": err})
 		return
 	}
 
@@ -49,18 +49,18 @@ func (l *OutputIndluxDB) Collect() {
 	}
 	con, err := client.NewHTTPClient(conf)
 	if err != nil {
-		log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:Client - Error: %s", err))
+		log.Error("OutputIndluxDB", map[string]interface{}{"step": "client", "error": err})
 		return
 	}
 	defer con.Close()
 
 	_, ver, err := con.Ping(0)
 	if err != nil {
-		log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:Ping - Error: %s", err))
+		log.Error("OutputIndluxDB", map[string]interface{}{"step": "ping", "error": err})
 		return
 	}
 
-	log.Debug(fmt.Sprintf("Plugin - OutputIndluxDB - Connected to InfluxDB V-%s", ver))
+	log.Debug("OutputIndluxDB", map[string]interface{}{"version": ver})
 
 	var events = Normalize(metrics.Load())
 	var database = config.File.Outputs.InfluxDB.Database
@@ -78,8 +78,11 @@ func (l *OutputIndluxDB) Collect() {
 				m["fields"].(map[string]interface{}),
 				time.Now(),
 			)
+
+			log.Debug("OutputIndluxDB", m["fields"].(map[string]interface{}))
+
 			if err != nil {
-				log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:Events - Error: %s", err.Error()))
+				log.Error("OutputIndluxDB", map[string]interface{}{"step": "event", "error": err})
 			}
 			bp.AddPoint(pt)
 		}
@@ -94,17 +97,14 @@ func (l *OutputIndluxDB) Collect() {
 				), "", "",
 			)
 
-			log.Debug(fmt.Sprintf(
-				"Plugin - OutputIndluxDB:CreateDatabase %s",
-				config.File.Outputs.InfluxDB.Database,
-			))
+			log.Debug("OutputIndluxDB", map[string]interface{}{"database": config.File.Outputs.InfluxDB.Database})
 
 			if _, err := con.Query(query); err != nil {
-				log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:CreateDatabase - Error: %s", err))
+				log.Error("OutputIndluxDB", map[string]interface{}{"step": "create", "error": err})
 				return
 			}
 		} else {
-			log.Error(fmt.Sprintf("Plugin - OutputIndluxDB:Write - Error: %s", err))
+			log.Error("OutputIndluxDB", map[string]interface{}{"error": err})
 		}
 	}
 }

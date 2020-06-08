@@ -1,13 +1,14 @@
 package config
 
 import (
+	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 
-	"github.com/go-yaml/yaml"
-
 	"github.com/swapbyt3s/zenit/common"
+
+	"github.com/sirupsen/logrus"
+	"github.com/go-yaml/yaml"
 )
 
 var File Config
@@ -19,7 +20,10 @@ func init() {
 		IPAddress: common.IPAddress(),
 	}
 
-	log.SetOutput(os.Stdout)
+	logrus.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp: true,
+	})
+	logrus.SetLevel(logrus.DebugLevel)
 }
 
 func (c *Config) Load() {
@@ -27,7 +31,9 @@ func (c *Config) Load() {
 	if err != nil {
 		source, err = ioutil.ReadFile("zenit.yaml")
 		if err != nil {
-			log.Printf("Fail to read config file: %s or %s", c.Path, "./zenit.yaml")
+			logrus.WithFields(map[string]interface{}{
+				"error": fmt.Sprintf("Fail to read config file: %s or %s", c.Path, "./zenit.yaml"),
+			}).Error("Config")
 			os.Exit(1)
 		}
 	}
@@ -36,7 +42,9 @@ func (c *Config) Load() {
 
 	err = yaml.Unmarshal(source, &c)
 	if err != nil {
-		log.Printf("Imposible to parse config file - %s", err)
+		logrus.WithFields(map[string]interface{}{
+			"error": fmt.Sprintf("Imposible to parse config file - %s", err),
+		}).Error("Config")
 		os.Exit(1)
 	}
 }
@@ -44,13 +52,17 @@ func (c *Config) Load() {
 // SanityCheck verify the minimum config settings and set default values to start.
 func (c *Config) SanityCheck() {
 	if c.General.Interval < 3 {
-		log.Println("W! Config - general.interval: Use positive value, and minimun start from 3 seconds.")
-		log.Println("W! Config - general.interval: Using default 30 seconds.")
+		logrus.Warning("Config", map[string]interface{}{
+			"message": "Use positive value, and minimun start from 3 seconds, using default 30 seconds.",
+		})
 		c.General.Interval = 30
 	}
 
 	if len(c.General.Hostname) == 0 {
-		log.Println("W! Config - general.hostname: Custom value is not set, using current.")
+		logrus.Warning("Config", map[string]interface{}{
+			"message": "general.hostname: Custom value is not set, using current.",
+		})
+
 		c.General.Hostname = common.Hostname()
 	}
 }

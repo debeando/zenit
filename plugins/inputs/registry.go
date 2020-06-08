@@ -1,7 +1,6 @@
 package inputs
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/swapbyt3s/zenit/common/log"
@@ -22,7 +21,7 @@ var Inputs = map[string]Creator{}
 // It will automatically be added to the Inputs map to be called externally
 func Add(name string, creator Creator) {
 	if len(os.Args) == 1 {
-		log.Info(fmt.Sprintf("Load Plugin - %s", name))
+		log.Info("Load Plugin", map[string]interface{}{"name": name})
 	}
 
 	Inputs[name] = creator

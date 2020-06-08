@@ -17,6 +17,7 @@ Usage: %s [--help | --install | --uninstall | --version]
 Options:
   --help        Show this help.
   --config      Print out full sample configuration to stdout.
+  --debug       Enable debug mode.
   --install     Install service on system.
   --uninstall   Uninstall service on system.
   --version     Print version numbers.
@@ -42,6 +43,7 @@ func Run() {
 	fInstall   := flag.Bool("install", false, "Install service on system.")
 	fUninstall := flag.Bool("uninstall", false, "Uninstall service on system.")
 	fVersion   := flag.Bool("version", false, "Show version.")
+	_           = flag.Bool("debug", false, "Enable debug mode.")
 
 	flag.Usage = func() { help(1) }
 	flag.Parse()

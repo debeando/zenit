@@ -1,8 +1,6 @@
 package aurora
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
@@ -17,7 +15,7 @@ type MySQLAurora struct{}
 func (l *MySQLAurora) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLAurora - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputMySQLAurora", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -26,7 +24,7 @@ func (l *MySQLAurora) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputMySQLAurora - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
+		log.Info("InputMySQLAurora", map[string]interface{}{"hostname": config.File.Inputs.MySQL[host].Hostname})
 
 		var a = metrics.Load()
 		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
@@ -38,7 +36,7 @@ func (l *MySQLAurora) Collect() {
 
 		for column := range r[0] {
 			if value, ok := mysql.ParseValue(r[0][column]); ok {
-				log.Debug(fmt.Sprintf("Plugin - InputMySQLAurora - %s=%d", column, value))
+				log.Debug("InputMySQLAurora", map[string]interface{}{"attribute": column, "value": value})
 
 				v = append(v, metrics.Value{
 					Key: column,

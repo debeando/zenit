@@ -1,8 +1,6 @@
 package process
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
@@ -15,15 +13,13 @@ type InputsPerconaKill struct{}
 func (l *InputsPerconaKill) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputsPerconaKill - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputsPerconaKill", map[string]interface{}{"error": err})
 		}
 	}()
 
 	if !config.File.Inputs.Process.PerconaToolKitKill {
 		return
 	}
-
-	log.Info("Plugin - InputsPerconaKill")
 
 	var a = metrics.Load()
 	var pid = common.PGrep("pt-kill")
@@ -32,6 +28,8 @@ func (l *InputsPerconaKill) Collect() {
 	if pid > 0 {
 		value = 1
 	}
+
+	log.Debug("InputsPerconaKill", map[string]interface{}{"pt_kill": value})
 
 	a.Add(metrics.Metric{
 		Key: "process_pt_kill",
@@ -42,8 +40,6 @@ func (l *InputsPerconaKill) Collect() {
 			{ "pt_kill", value},
 		},
 	})
-
-	log.Debug(fmt.Sprintf("Plugin - InputsPerconaKill - %d", value))
 }
 
 func init() {

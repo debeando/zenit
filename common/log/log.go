@@ -2,29 +2,37 @@ package log
 
 import (
 	"flag"
-	"log"
-	"strings"
+	"io/ioutil"
 
 	"github.com/swapbyt3s/zenit/config"
+	"github.com/sirupsen/logrus"
 )
 
-func Info(m string) {
-	if flag.Lookup("test.v") == nil {
-		log.Printf("I! - %s\n", m)
+func init() {
+	logrus.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp: true,
+	})
+	logrus.SetLevel(logrus.DebugLevel)
+
+	if flag.Lookup("test.v") != nil {
+		logrus.SetOutput(ioutil.Discard)
 	}
 }
 
-func Error(m string) {
-	if flag.Lookup("test.v") == nil {
-		log.Printf("E! - %s\n", m)
-	}
+func Info(m string, f map[string]interface{}) {
+	logrus.WithFields(f).Info(m)
 }
 
-func Debug(m string) {
+func Error(m string, f map[string]interface{}) {
+	logrus.WithFields(f).Error(m)
+}
+
+func Debug(m string, f map[string]interface{}) {
+	if flag.Lookup("debug") != nil {
+		config.File.General.Debug = flag.Lookup("debug").Value.(flag.Getter).Get().(bool)
+	}
+
 	if config.File.General.Debug {
-		if flag.Lookup("test.v") == nil {
-			m = strings.Replace(m, "\n", ",", 0)
-			log.Printf("D! - %s\n", m)
-		}
+		logrus.WithFields(f).Debug(m)
 	}
 }

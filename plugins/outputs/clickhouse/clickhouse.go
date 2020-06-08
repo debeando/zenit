@@ -3,7 +3,6 @@
 package clickhouse
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/swapbyt3s/zenit/common/http"
@@ -23,13 +22,13 @@ type Event struct {
 }
 
 func Check() bool {
-	log.Info(fmt.Sprintf("ClickHouse - DSN: %s", config.File.Outputs.ClickHouse.DSN))
+	log.Info("OutputClickHouse", map[string]interface{}{"dsn": config.File.Outputs.ClickHouse.DSN})
+
 	if http.Post(config.File.Outputs.ClickHouse.DSN, "SELECT 1;", map[string]string{}) != 200 {
-		log.Error("ClickHouse - Impossible to connect.")
+		log.Error("OutputClickHouse", map[string]interface{}{"error": "Impossible to connect."})
 		return false
 	}
 
-	log.Info("ClickHouse - Connected successfully.")
 	return true
 }
 
@@ -46,24 +45,25 @@ func Send(e *Event, data <-chan map[string]string) {
 	for {
 		select {
 		case <-timeout:
-			log.Debug(fmt.Sprintf("ClickHouse - Event timeout: %s - %#v", e.Type, e.Values))
+			log.Debug("OutputClickHouse", map[string]interface{}{"type": e.Type, "values": e.Values})
+
 			if len(e.Values) > 0 {
 				sql := sql.Insert(e.Schema, e.Table, e.Wildcard, e.Values)
 				e.Values = []map[string]string{}
 
-				log.Debug(fmt.Sprintf("ClickHouse - Event insert: %s - %s", e.Type, sql))
+				log.Debug("OutputClickHouse", map[string]interface{}{"type": e.Type, "values": sql})
 
 				go http.Post(config.File.Outputs.ClickHouse.DSN, sql, nil)
 			}
 		case d := <-data:
-			log.Debug(fmt.Sprintf("ClickHouse - Event capture: %s - %#v", e.Type, d))
+			log.Debug("OutputClickHouse", map[string]interface{}{"type": e.Type, "values": d})
 
 			e.Values = append(e.Values, d)
 			if len(e.Values) == e.Size {
 				sql := sql.Insert(e.Schema, e.Table, e.Wildcard, e.Values)
 				e.Values = []map[string]string{}
 
-				log.Debug(fmt.Sprintf("ClickHouse - Event insert: %s - %s", e.Type, sql))
+				log.Debug("OutputClickHouse", map[string]interface{}{"type": e.Type, "query": sql})
 
 				go http.Post(config.File.Outputs.ClickHouse.DSN, sql, nil)
 			}

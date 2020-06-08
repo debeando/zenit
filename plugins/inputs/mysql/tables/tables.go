@@ -1,8 +1,6 @@
 package tables
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
@@ -27,7 +25,7 @@ type MySQLTables struct{}
 func (l *MySQLTables) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputMySQLTables", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -36,8 +34,7 @@ func (l *MySQLTables) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputMySQLTables - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
-
+		log.Info("InputMySQLTables", map[string]interface{}{"hostname": config.File.Inputs.MySQL[host].Hostname})
 
 		var a = metrics.Load()
 		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
@@ -47,9 +44,13 @@ func (l *MySQLTables) Collect() {
 		var r = m.Query(query)
 
 		for _, i := range r {
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Size %s.%s=%s", i["schema"], i["table"], i["size"]))
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Rows %s.%s=%s", i["schema"], i["table"], i["rows"]))
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLTables - Increment %s.%s=%s", i["schema"], i["table"], i["increment"]))
+			log.Debug("InputMySQLTables", map[string]interface{}{
+				"schema": i["schema"],
+				"table": i["table"],
+				"size": i["size"],
+				"rows":  i["rows"],
+				"increment": i["increment"],
+			})
 
 			a.Add(metrics.Metric{
 				Key: "mysql_tables",

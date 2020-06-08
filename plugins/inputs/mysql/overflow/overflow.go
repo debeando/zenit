@@ -36,7 +36,7 @@ type MySQLOverflow struct{}
 func (l *MySQLOverflow) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLOverflow - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputMySQLOverflow", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -45,7 +45,7 @@ func (l *MySQLOverflow) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputMySQLOverflow - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
+		log.Info("InputMySQLOverflow", map[string]interface{}{"hostname": config.File.Inputs.MySQL[host].Hostname})
 
 		var a = metrics.Load()
 		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
@@ -86,19 +86,17 @@ func (l *MySQLOverflow) Collect() {
 					},
 				})
 
-				log.Debug(
-					fmt.Sprintf("Plugin - InputMySQLOverflow - %s.%s.%s(%s,%t)=%d [(%d/%d)*100=%.2f%%]",
-						rows[row]["table_schema"],
-						rows[row]["table_name"],
-						rows[row]["column_name"],
-						c.dataType,
-						c.unsigned,
-						value,
-						c.current,
-						c.maximum,
-						c.percent,
-					),
-				)
+				log.Debug("InputMySQLOverflow", map[string]interface{}{
+					"schema": rows[row]["table_schema"],
+					"table": rows[row]["table_name"],
+					"column": rows[row]["column_name"],
+					"data_type": c.dataType,
+					"unsigned": c.unsigned,
+					"value": value,
+					"current": c.current,
+					"maximum": c.maximum,
+					"percent": c.percent,
+				})
 			}
 		}
 	}

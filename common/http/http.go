@@ -1,7 +1,6 @@
 package http
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -15,7 +14,7 @@ func Post(uri string, data string, headers map[string]string) int {
 		strings.NewReader(data),
 	)
 	if err != nil {
-		log.Error(fmt.Sprintf("%s", err))
+		log.Error("HTTP(s) Client", map[string]interface{}{"error": err})
 	}
 
 	for key, value := range headers {
@@ -25,7 +24,7 @@ func Post(uri string, data string, headers map[string]string) int {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Error(fmt.Sprintf("%s", err))
+		log.Error("HTTP(s) Client", map[string]interface{}{"error": err})
 		return 520 // Status code 520 Unknown Error
 	}
 	defer resp.Body.Close()

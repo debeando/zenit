@@ -1,8 +1,6 @@
 package slave
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
@@ -17,7 +15,7 @@ type MySQLSlave struct{}
 func (l *MySQLSlave) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLSlave - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputMySQLSlave", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -26,7 +24,7 @@ func (l *MySQLSlave) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputMySQLSlave - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
+		log.Info("InputMySQLAurora", map[string]interface{}{"hostname": config.File.Inputs.MySQL[host].Hostname})
 
 		var a = metrics.Load()
 		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
@@ -38,7 +36,7 @@ func (l *MySQLSlave) Collect() {
 
 		for column := range r[0] {
 			if value, ok := mysql.ParseValue(r[0][column]); ok {
-				log.Debug(fmt.Sprintf("Plugin - InputMySQLSlave - %s=%d", column, value))
+				log.Debug("InputMySQLSlave", map[string]interface{}{"attribute": column, "value": value})
 
 				v = append(v, metrics.Value{
 					Key: column,
