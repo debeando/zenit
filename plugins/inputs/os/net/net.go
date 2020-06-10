@@ -1,7 +1,6 @@
 package net
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -18,15 +17,13 @@ type InputOSNet struct{}
 func (l *InputOSNet) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputOSNet - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputOSNet", map[string]interface{}{"error": err})
 		}
 	}()
 
 	if !config.File.Inputs.OS.Net {
 		return
 	}
-
-	log.Info("Plugin - InputOSNet")
 
 	var a = metrics.Load()
 
@@ -41,6 +38,12 @@ func (l *InputOSNet) Collect() {
 			match := reGroups.FindAllString(data[1], -1)
 			receive_bytes := common.StringToInt64(match[0])
 			transmit_bytes := common.StringToInt64(match[8])
+
+			log.Debug("InputOSNet", map[string]interface{}{
+				"device": dev,
+				"receive": receive_bytes,
+				"transmit": transmit_bytes,
+			})
 
 			a.Add(metrics.Metric{
 				Key: "os_net",

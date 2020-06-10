@@ -1,8 +1,6 @@
 package command
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins"
@@ -41,24 +39,24 @@ func init() {
 
 	daemon, err = service.New(prg, svcConfig)
 	if err != nil {
-		log.Error(fmt.Sprintf("%s", err))
+		log.Error("Daemon", map[string]interface{}{"error": err})
 	}
 }
 
 func Daemonize() {
 	if err = daemon.Run(); err != nil {
-		log.Error(fmt.Sprintf("%s", err))
+		log.Error("Daemon", map[string]interface{}{"error": err})
 	}
 }
 
 func Install() {
 	if err = daemon.Install(); err != nil {
-		log.Error(fmt.Sprintf("%s", err))
+		log.Error("Daemon", map[string]interface{}{"error": err})
 	}
 }
 
 func Uninstall() {
 	if err = daemon.Uninstall(); err != nil {
-		log.Error(fmt.Sprintf("%s", err))
+		log.Error("Daemon", map[string]interface{}{"error": err})
 	}
 }

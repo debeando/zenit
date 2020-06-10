@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"fmt"
 	"regexp"
 
 	"github.com/swapbyt3s/zenit/common"
@@ -19,7 +18,7 @@ type InputProxySQLErrors struct{}
 func (l *InputProxySQLErrors) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputProxySQLErrors - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputProxySQLErrors", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -28,7 +27,7 @@ func (l *InputProxySQLErrors) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputProxySQLErrors - Hostname=%s", config.File.Inputs.ProxySQL[host].Hostname))
+		log.Info("InputProxySQLErrors", map[string]interface{}{"hostname": config.File.Inputs.ProxySQL[host].Hostname})
 
 		var a = metrics.Load()
 		var p = mysql.GetInstance(config.File.Inputs.ProxySQL[host].Hostname)
@@ -38,6 +37,16 @@ func (l *InputProxySQLErrors) Collect() {
 		var r = p.Query(query)
 
 		for _, i := range r {
+			log.Debug("InputProxySQLErrors", map[string]interface{}{
+				"group": i["hostgroup"],
+				"server": i["hostname"],
+				"port": i["port"],
+				"username": i["username"],
+				"schema": i["schemaname"],
+				"errno": i["errno"],
+				"last_error": parseLastError(i["last_error"]),
+			})
+
 			a.Add(metrics.Metric{
 				Key: "proxysql_errors",
 				Tags: []metrics.Tag{
@@ -54,8 +63,6 @@ func (l *InputProxySQLErrors) Collect() {
 					{"count", common.StringToInt64(i["count_star"])},
 				},
 			})
-
-			log.Debug(fmt.Sprintf("Plugin - InputProxySQLErrors - %#v", i))
 		}
 	}
 }

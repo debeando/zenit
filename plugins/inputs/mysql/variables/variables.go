@@ -1,8 +1,6 @@
 package variables
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
@@ -17,7 +15,7 @@ type MySQLVariables struct{}
 func (l *MySQLVariables) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputMySQLVariables - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputMySQLVariables", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -26,7 +24,7 @@ func (l *MySQLVariables) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputMySQLVariables - Hostname=%s", config.File.Inputs.MySQL[host].Hostname))
+		log.Info("InputMySQLVariables", map[string]interface{}{"hostname": config.File.Inputs.MySQL[host].Hostname})
 
 		var a = metrics.Load()
 		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
@@ -38,7 +36,7 @@ func (l *MySQLVariables) Collect() {
 
 		for _, i := range r {
 			if value, ok := mysql.ParseValue(i["Value"]); ok {
-				log.Debug(fmt.Sprintf("Plugin - InputMySQLVariables - %s=%d", i["Variable_name"], value))
+				log.Debug("InputMySQLVariables", map[string]interface{}{"attribute": i["Variable_name"], "value": value})
 
 				v = append(v, metrics.Value{
 					Key: i["Variable_name"],

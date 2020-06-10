@@ -1,8 +1,6 @@
 package commands
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
@@ -18,7 +16,7 @@ type InputProxySQLCommands struct{}
 func (l *InputProxySQLCommands) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputProxySQLCommands - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputProxySQLCommands", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -27,7 +25,7 @@ func (l *InputProxySQLCommands) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputProxySQLCommands - Hostname=%s", config.File.Inputs.ProxySQL[host].Hostname))
+		log.Info("InputProxySQLCommands", map[string]interface{}{"hostname": config.File.Inputs.ProxySQL[host].Hostname})
 
 		var a = metrics.Load()
 		var p = mysql.GetInstance(config.File.Inputs.ProxySQL[host].Hostname)
@@ -37,6 +35,23 @@ func (l *InputProxySQLCommands) Collect() {
 		var r = p.Query(query)
 
 		for _, i := range r {
+			log.Debug("InputProxySQLCommands", map[string]interface{}{
+				"total_time_us": common.StringToInt64(i["Total_Time_us"]),
+				"total_cnt": common.StringToInt64(i["Total_cnt"]),
+				"cnt_100us": common.StringToInt64(i["cnt_100us"]),
+				"cnt_500us": common.StringToInt64(i["cnt_500us"]),
+				"cnt_1ms": common.StringToInt64(i["cnt_1ms"]),
+				"cnt_5ms": common.StringToInt64(i["cnt_5ms"]),
+				"cnt_10ms": common.StringToInt64(i["cnt_10ms"]),
+				"cnt_50ms": common.StringToInt64(i["cnt_50ms"]),
+				"cnt_100ms": common.StringToInt64(i["cnt_100ms"]),
+				"cnt_500ms": common.StringToInt64(i["cnt_500ms"]),
+				"cnt_1s": common.StringToInt64(i["cnt_1s"]),
+				"cnt_5s": common.StringToInt64(i["cnt_5s"]),
+				"cnt_10s": common.StringToInt64(i["cnt_10s"]),
+				"cnt_infs": common.StringToInt64(i["cnt_infs"]),
+			})
+
 			a.Add(metrics.Metric{
 				Key: "proxysql_commands",
 				Tags: []metrics.Tag{
@@ -60,8 +75,6 @@ func (l *InputProxySQLCommands) Collect() {
 					{"cnt_infs", common.StringToInt64(i["cnt_infs"])},
 				},
 			})
-
-			log.Debug(fmt.Sprintf("Plugin - InputProxySQLCommands - %#v", i))
 		}
 	}
 }

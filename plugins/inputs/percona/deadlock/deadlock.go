@@ -1,8 +1,6 @@
 package process
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
@@ -15,15 +13,13 @@ type InputsPerconaDeadlock struct{}
 func (l *InputsPerconaDeadlock) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputsPerconaDeadlock - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputsPerconaDeadlock", map[string]interface{}{"error": err})
 		}
 	}()
 
 	if !config.File.Inputs.Process.PerconaToolKitDeadlockLogger {
 		return
 	}
-
-	log.Info("Plugin - InputsPerconaDeadlock")
 
 	var a = metrics.Load()
 	var pid = common.PGrep("pt-deadlock-logger")
@@ -32,6 +28,8 @@ func (l *InputsPerconaDeadlock) Collect() {
 	if pid > 0 {
 		value = 1
 	}
+
+	log.Debug("InputsPerconaDeadlock", map[string]interface{}{"pt_deadlock_logger": value})
 
 	a.Add(metrics.Metric{
 		Key: "process_pt_deadlock_logger",
@@ -42,8 +40,6 @@ func (l *InputsPerconaDeadlock) Collect() {
 			{ "pt_deadlock_logger", value},
 		},
 	})
-
-	log.Debug(fmt.Sprintf("Plugin - InputsPerconaDeadlock - %d", value))
 }
 
 func init() {

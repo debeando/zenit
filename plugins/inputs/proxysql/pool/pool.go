@@ -1,8 +1,6 @@
 package pool
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
@@ -34,7 +32,7 @@ type InputProxySQLPool struct{}
 func (l *InputProxySQLPool) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputProxySQLPool - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputProxySQLPool", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -43,7 +41,7 @@ func (l *InputProxySQLPool) Collect() {
 			return
 		}
 
-		log.Info(fmt.Sprintf("Plugin - InputProxySQLPool - Hostname=%s", config.File.Inputs.ProxySQL[host].Hostname))
+		log.Info("InputProxySQLPool", map[string]interface{}{"hostname": config.File.Inputs.ProxySQL[host].Hostname})
 
 		var a = metrics.Load()
 		var p = mysql.GetInstance(config.File.Inputs.ProxySQL[host].Hostname)
@@ -53,7 +51,19 @@ func (l *InputProxySQLPool) Collect() {
 		var r = p.Query(querySQLPool)
 
 		for _, i := range r {
-			log.Debug(fmt.Sprintf("Plugin - InputProxySQLPool - %#v", i))
+			log.Debug("InputProxySQLPool", map[string]interface{}{
+				"group": i["group"],
+				"host": i["srv_host"],
+				"status": i["status"],
+				"used": common.StringToInt64(i["ConnUsed"]),
+				"free": common.StringToInt64(i["ConnFree"]),
+				"ok": common.StringToInt64(i["ConnOK"]),
+				"errors": common.StringToInt64(i["ConnERR"]),
+				"queries": common.StringToInt64(i["Queries"]),
+				"tx": common.StringToInt64(i["Bytes_data_sent"]),
+				"rx": common.StringToInt64(i["Bytes_data_recv"]),
+				"latency": common.StringToInt64(i["Latency_us"]),
+			})
 
 			a.Add(metrics.Metric{
 				Key: "proxysql_connections",

@@ -16,15 +16,13 @@ type InputOSMem struct{}
 func (l *InputOSMem) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputOSMem - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputOSMem", map[string]interface{}{"error": err})
 		}
 	}()
 
 	if !config.File.Inputs.OS.Mem {
 		return
 	}
-
-	log.Info("Plugin - InputOSMem")
 
 	var a = metrics.Load()
 
@@ -40,7 +38,7 @@ func (l *InputOSMem) Collect() {
 			},
 		})
 
-		log.Debug(fmt.Sprintf("Plugin - InputOSMem - MEM=%.2f", vmStat.UsedPercent))
+		log.Debug("InputOSMem", map[string]interface{}{"value": fmt.Sprintf("%.2f", vmStat.UsedPercent)})
 	}
 }
 

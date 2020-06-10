@@ -1,8 +1,6 @@
 package sys
 
 import (
-	"fmt"
-
 	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
@@ -18,7 +16,7 @@ type InputOSLimits struct{}
 func (l *InputOSLimits) Collect() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug(fmt.Sprintf("Plugin - InputOSLimits - Panic (code %d) has been recover from somewhere.\n", err))
+			log.Error("InputOSLimits", map[string]interface{}{"error": err})
 		}
 	}()
 
@@ -26,7 +24,10 @@ func (l *InputOSLimits) Collect() {
 		return
 	}
 
-	log.Info("Plugin - InputOSLimits")
+	log.Debug("InputOSLimits", map[string]interface{}{
+		"nr_open": common.GetInt64FromFile(NR_OPEN),
+		"file_max": common.GetInt64FromFile(FILE_MAX),
+	})
 
 	var a = metrics.Load()
 
