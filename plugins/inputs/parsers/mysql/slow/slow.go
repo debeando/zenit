@@ -38,9 +38,7 @@ func (l *MySQLSlowLog) Load() {
 	}()
 
 	if config.File.Parser.MySQL.SlowLog.Enable {
-		if config.File.General.Debug {
-			log.Info("MySQLSlowLog", map[string]interface{}{"slow_log_path": config.File.Parser.MySQL.SlowLog.LogPath})
-		}
+		log.Debug("MySQLSlowLog", map[string]interface{}{"slow_log_path": config.File.Parser.MySQL.SlowLog.LogPath})
 
 		if !clickhouse.Check() {
 			log.Error("MySQLSlowLog", map[string]interface{}{"error": "SlowLog require active connection to ClickHouse."})

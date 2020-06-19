@@ -15,6 +15,7 @@ This agent collect all basic metrics from the hardware and more details from MyS
 
 ### Advantage
 
+- Auto discover database servers on Amazon Web Services.
 - Centralize all logs in a single point of view, you have more details for debugging and analyse, with this you can optimize queries, understand what happen inside, and more.
 - Audit database security access and identify possible risk.
 - One agent for all, easy to install and configure, low memory consumption and high performance.

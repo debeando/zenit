@@ -9,6 +9,7 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/inputs"
 	"github.com/swapbyt3s/zenit/plugins/outputs"
 
+	_ "github.com/swapbyt3s/zenit/plugins/inputs/aws"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/aurora"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/overflow"
 	_ "github.com/swapbyt3s/zenit/plugins/inputs/mysql/slave"
@@ -43,15 +44,19 @@ func Load() {
 
 		for key := range inputs.Inputs {
 			if creator, ok := inputs.Inputs[key]; ok {
-				c := creator()
-				c.Collect()
+				go func(){				
+					c := creator()
+					c.Collect()
+				}()
 			}
 		}
 
 		for key := range outputs.Outputs {
 			if creator, ok := outputs.Outputs[key]; ok {
-				c := creator()
-				c.Collect()
+				go func(){
+					c := creator()
+					c.Collect()
+				}()
 			}
 		}
 

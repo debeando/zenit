@@ -3,8 +3,11 @@ package config
 const ExampleFile = `---
 general:
   hostname: localhost
-  interval: 60 # Seconds
+  interval: 10 # Seconds
   debug: true
+  aws_region: ${AWS_REGION}
+  aws_access_key_id: ${AWS_ACCESS_KEY_ID}
+  aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
 
 parser:
   mysql:
@@ -21,9 +24,21 @@ parser:
       buffer_timeout: 60 # Seconds
 
 inputs:
+  awsdiscover:
+    enable: true
+    username: monitor
+    password: monitor
+    filter: prd
+    plugins:
+      aurora: false
+      overflow: true
+      slave: true
+      status: true
+      tables: true
+      variables: true
   mysql:
     - hostname: localhost
-      dsn: root@tcp(127.0.0.1:3306)/
+      dsn: root@tcp(127.0.0.1:3306)/?timeout=3s
       aurora: false
       overflow: true
       slave: true
@@ -32,7 +47,7 @@ inputs:
       variables: true
   proxysql:
     - hostname: localhost
-      dsn: proxysql:admin@tcp(127.0.0.1:6032)/
+      dsn: proxysql:admin@tcp(127.0.0.1:6032)/?timeout=3s
       commands: true
       errors: true
       global: true

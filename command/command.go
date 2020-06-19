@@ -43,7 +43,6 @@ func Run() {
 	fInstall   := flag.Bool("install", false, "Install service on system.")
 	fUninstall := flag.Bool("uninstall", false, "Uninstall service on system.")
 	fVersion   := flag.Bool("version", false, "Show version.")
-	_           = flag.Bool("debug", false, "Enable debug mode.")
 
 	flag.Usage = func() { help(1) }
 	flag.Parse()

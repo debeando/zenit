@@ -1,6 +1,8 @@
 package command
 
 import (
+	"os"
+
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins"
@@ -16,8 +18,14 @@ var (
 type program struct{}
 
 func (p *program) Start(s service.Service) error {
-	config.File.Load()
-	config.File.SanityCheck()
+	if err := config.File.Load(); err != nil {
+		log.Error("Config", map[string]interface{}{"error": err})
+		os.Exit(1)
+	}
+	
+	if warn := config.File.SanityCheck(); len(warn) > 0 {
+		log.Warning("Config", map[string]interface{}{"message": warn})
+	}
 	plugins.Load()
 
 	return nil

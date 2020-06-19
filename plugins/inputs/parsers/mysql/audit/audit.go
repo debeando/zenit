@@ -35,9 +35,7 @@ func (l *MySQLAuditLog) Parser() {
 	}()
 
 	if config.File.Parser.MySQL.AuditLog.Enable {
-		if config.File.General.Debug {
-			log.Info("MySQLAuditLog", map[string]interface{}{"slow_log_path": config.File.Parser.MySQL.AuditLog.LogPath})
-		}
+		log.Debug("MySQLAuditLog", map[string]interface{}{"slow_log_path": config.File.Parser.MySQL.AuditLog.LogPath})
 
 		if !clickhouse.Check() {
 			log.Error("MySQLAuditLog", map[string]interface{}{"error": "AuditLog require active connection to ClickHouse."})
