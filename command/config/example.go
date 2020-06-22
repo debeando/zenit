@@ -28,6 +28,7 @@ inputs:
     enable: true
     username: monitor
     password: monitor
+    # filter: ".*(prd)|(stg).*"
     filter: prd
     plugins:
       aurora: false

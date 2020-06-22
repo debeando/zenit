@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/swapbyt3s/zenit/command/config"
+	"github.com/swapbyt3s/zenit/common/log"
 )
 
 // USAGE is a const to have help description for CLI.
@@ -43,9 +44,12 @@ func Run() {
 	fInstall   := flag.Bool("install", false, "Install service on system.")
 	fUninstall := flag.Bool("uninstall", false, "Uninstall service on system.")
 	fVersion   := flag.Bool("version", false, "Show version.")
+	_           = flag.Bool("debug", false, "Enable debug mode.")
 
 	flag.Usage = func() { help(1) }
 	flag.Parse()
+
+	log.Configure()
 
 	switch {
 	case *fVersion:
