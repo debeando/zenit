@@ -27,6 +27,10 @@ if [ -f /etc/systemd/system/zenit.service ]; then
   /usr/bin/zenit --uninstall
 fi
 
+if [ -f /etc/init/zenit.conf ]; then
+  /usr/bin/zenit --uninstall
+fi
+
 if [ -f /usr/local/bin/zenit ]; then
   rm -f /usr/local/bin/zenit
 fi

@@ -59,12 +59,12 @@ func Daemonize() {
 
 func Install() {
 	if err = daemon.Install(); err != nil {
-		log.Error("Daemon", map[string]interface{}{"error": err})
+		log.Error("Daemon install", map[string]interface{}{"error": err})
 	}
 }
 
 func Uninstall() {
 	if err = daemon.Uninstall(); err != nil {
-		log.Error("Daemon", map[string]interface{}{"error": err})
+		log.Error("Daemon uninstall", map[string]interface{}{"error": err})
 	}
 }
