@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/swapbyt3s/zenit/command/config"
+	"github.com/swapbyt3s/zenit/command/daemon"
 	"github.com/swapbyt3s/zenit/common/log"
 )
 
@@ -50,6 +51,7 @@ func Run() {
 	flag.Parse()
 
 	log.Configure()
+	daemon.Configure()
 
 	switch {
 	case *fVersion:
@@ -59,11 +61,11 @@ func Run() {
 	case *fConfig:
 		fmt.Printf(config.GetExampleFile())
 	case *fInstall:
-		Install()
+		daemon.Install()
 	case *fUninstall:
-		Uninstall()
+		daemon.Uninstall()
 	default:
-		Daemonize()
+		daemon.Daemonize()
 	}
 }
 

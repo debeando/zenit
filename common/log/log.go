@@ -12,6 +12,7 @@ import (
 var debug bool
 
 func init() {
+	logrus.SetLevel(logrus.ErrorLevel)
 	logrus.SetFormatter(&logrus.TextFormatter{
 		FullTimestamp: true,
 	})
@@ -21,11 +22,11 @@ func init() {
 	} else {
 		logrus.SetOutput(os.Stdout)
 	}
-
-	logrus.SetLevel(logrus.InfoLevel)
 }
 
 func Configure() {
+	logrus.SetLevel(logrus.InfoLevel)
+
 	if flag.Lookup("debug") != nil && flag.Lookup("debug").Value.(flag.Getter).Get().(bool) {
 		logrus.SetLevel(logrus.DebugLevel)
 		logrus.Info("Enable debug mode")
