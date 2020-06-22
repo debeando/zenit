@@ -32,7 +32,16 @@ func (l *MySQLAurora) Collect() {
 
 		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
+		var c = m.Query("SELECT 1 FROM information_schema.TABLES WHERE (TABLE_SCHEMA = 'mysql') AND (TABLE_NAME = 'ro_replica_status')")
+		if len(c) == 0 {
+			continue
+		}
+
 		var r = m.Query(query)
+
+		if len(r) == 0 {
+			continue
+		}
 
 		for column := range r[0] {
 			if value, ok := mysql.ParseValue(r[0][column]); ok {
