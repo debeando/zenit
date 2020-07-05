@@ -35,6 +35,11 @@ func (l *MySQLVariables) Collect() {
 		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
 		var r = m.Query(query)
+		if len(r) == 0 {
+			continue
+		}
+
+		var v = []metrics.Value{}
 
 		for _, i := range r {
 			if value, ok := mysql.ParseValue(i["Value"]); ok {
@@ -43,17 +48,17 @@ func (l *MySQLVariables) Collect() {
 					i["Variable_name"]: value,
 				})
 
-				a.Add(metrics.Metric{
-					Key:  "mysql_variables",
-					Tags: []metrics.Tag{
-						{"hostname", config.File.Inputs.MySQL[host].Hostname},
-					},
-					Values: []metrics.Value{
-						{i["Variable_name"], value},
-					},
-				})
+				v = append(v, metrics.Value{i["Variable_name"], value})
 			}
 		}
+
+		a.Add(metrics.Metric{
+			Key:  "mysql_variables",
+			Tags: []metrics.Tag{
+				{"hostname", config.File.Inputs.MySQL[host].Hostname},
+			},
+			Values: v,
+		})
 	}
 }
 
