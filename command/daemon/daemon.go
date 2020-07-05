@@ -1,10 +1,7 @@
 package daemon
 
 import (
-	"os"
-
 	"github.com/swapbyt3s/zenit/common/log"
-	"github.com/swapbyt3s/zenit/config"
 	"github.com/swapbyt3s/zenit/plugins"
 
 	"github.com/kardianos/service"
@@ -34,15 +31,6 @@ func Configure() {
 }
 
 func (p *program) Start(s service.Service) error {
-	if err := config.File.Load(); err != nil {
-		log.Error("Config", map[string]interface{}{"error": err})
-		os.Exit(1)
-	}
-	
-	if warn := config.File.SanityCheck(); len(warn) > 0 {
-		log.Warning("Config", map[string]interface{}{"message": warn})
-	}
-
 	plugins.Load()
 
 	return nil

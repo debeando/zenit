@@ -20,7 +20,7 @@ func main() {
 	}
 	defer out.Close()
 
-	out.Write([]byte("package config\n\nconst ExampleFile = `"))
+	out.Write([]byte("package example\n\nconst ExampleFile = `"))
 	io.Copy(out, in)
 	out.Write([]byte("`\n"))
 }

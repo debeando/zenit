@@ -24,11 +24,12 @@ func (l *MySQLVariables) Collect() {
 			return
 		}
 
-		log.Info("InputMySQLVariables", map[string]interface{}{"hostname": config.File.Inputs.MySQL[host].Hostname})
+		log.Info("InputMySQLVariables", map[string]interface{}{
+			"hostname": config.File.Inputs.MySQL[host].Hostname,
+		})
 
 		var a = metrics.Load()
 		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
-		var v = []metrics.Value{}
 
 		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
@@ -36,22 +37,22 @@ func (l *MySQLVariables) Collect() {
 
 		for _, i := range r {
 			if value, ok := mysql.ParseValue(i["Value"]); ok {
-				log.Debug("InputMySQLVariables", map[string]interface{}{"attribute": i["Variable_name"], "value": value})
+				log.Debug("InputMySQLVariables", map[string]interface{}{
+					"hostname": config.File.Inputs.MySQL[host].Hostname,
+					i["Variable_name"]: value,
+				})
 
-				v = append(v, metrics.Value{
-					Key: i["Variable_name"],
-					Value: value,
+				a.Add(metrics.Metric{
+					Key:  "mysql_variables",
+					Tags: []metrics.Tag{
+						{"hostname", config.File.Inputs.MySQL[host].Hostname},
+					},
+					Values: []metrics.Value{
+						{i["Variable_name"], value},
+					},
 				})
 			}
 		}
-
-		a.Add(metrics.Metric{
-			Key:    "mysql_variables",
-			Tags:   []metrics.Tag{
-				{"hostname", config.File.Inputs.MySQL[host].Hostname},
-			},
-			Values: v,
-		})
 	}
 }
 

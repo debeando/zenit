@@ -51,7 +51,9 @@ func (l *InputProxySQLQuery) Collect() {
 			return
 		}
 
-		log.Info("InputProxySQLQuery", map[string]interface{}{"hostname": config.File.Inputs.ProxySQL[host].Hostname})
+		log.Info("InputProxySQLQuery", map[string]interface{}{
+			"hostname": config.File.Inputs.ProxySQL[host].Hostname,
+		})
 
 		re, _ = regexp.Compile(ReQuery)
 		var a = metrics.Load()
@@ -75,11 +77,13 @@ func (l *InputProxySQLQuery) Collect() {
 				"command": command,
 				"count": common.StringToInt64(i["count_star"]),
 				"sum": common.StringToInt64(i["sum_time"]),
+				"hostname": config.File.Inputs.ProxySQL[host].Hostname,
 			})
 
 			a.Add(metrics.Metric{
 				Key: "proxysql_queries",
 				Tags: []metrics.Tag{
+					{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
 					{"group", i["group"]},
 					{"schema", i["schemaname"]},
 					{"table", table},

@@ -45,7 +45,9 @@ func (l *MySQLOverflow) Collect() {
 			return
 		}
 
-		log.Info("InputMySQLOverflow", map[string]interface{}{"hostname": config.File.Inputs.MySQL[host].Hostname})
+		log.Info("InputMySQLOverflow", map[string]interface{}{
+			"hostname": config.File.Inputs.MySQL[host].Hostname,
+		})
 
 		var a = metrics.Load()
 		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
@@ -87,6 +89,7 @@ func (l *MySQLOverflow) Collect() {
 				})
 
 				log.Debug("InputMySQLOverflow", map[string]interface{}{
+					"hostname": config.File.Inputs.MySQL[host].Hostname,
 					"schema": rows[row]["table_schema"],
 					"table": rows[row]["table_name"],
 					"column": rows[row]["column_name"],

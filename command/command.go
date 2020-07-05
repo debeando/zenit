@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/swapbyt3s/zenit/command/config"
 	"github.com/swapbyt3s/zenit/command/daemon"
+	"github.com/swapbyt3s/zenit/command/example"
 	"github.com/swapbyt3s/zenit/common/log"
+	"github.com/swapbyt3s/zenit/config"
 )
 
 // USAGE is a const to have help description for CLI.
@@ -39,6 +40,17 @@ For more help, plese visit: https://github.com/swapbyt3s/zenit/wiki
 
 `
 
+func init() {
+	if err := config.File.Load(); err != nil {
+		log.Error("Config", map[string]interface{}{"error": err})
+		os.Exit(1)
+	}
+	
+	if warn := config.File.SanityCheck(); len(warn) > 0 {
+		log.Warning("Config", map[string]interface{}{"message": warn})
+	}
+}
+
 func Run() {
 	fHelp      := flag.Bool("help", false, "Show this help.")
 	fConfig    := flag.Bool("config", false, "Print out full sample configuration to stdout.")
@@ -59,7 +71,7 @@ func Run() {
 	case *fHelp:
 		help(0)
 	case *fConfig:
-		fmt.Printf(config.GetExampleFile())
+		fmt.Printf(example.GetConfigFile())
 	case *fInstall:
 		daemon.Install()
 	case *fUninstall:

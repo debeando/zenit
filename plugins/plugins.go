@@ -43,20 +43,16 @@ func Load() {
 		metrics.Load().Reset()
 
 		for key := range inputs.Inputs {
-			if creator, ok := inputs.Inputs[key]; ok {
-				go func(){				
-					c := creator()
-					c.Collect()
-				}()
+			if creator, ok := inputs.Inputs[key]; ok {			
+				c := creator()
+				c.Collect()
 			}
 		}
 
 		for key := range outputs.Outputs {
 			if creator, ok := outputs.Outputs[key]; ok {
-				go func(){
-					c := creator()
-					c.Collect()
-				}()
+				c := creator()
+				c.Collect()
 			}
 		}
 

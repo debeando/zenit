@@ -50,6 +50,7 @@ func (l *MySQLTables) Collect() {
 				"size": i["size"],
 				"rows":  i["rows"],
 				"increment": i["increment"],
+				"hostname": config.File.Inputs.MySQL[host].Hostname,
 			})
 
 			a.Add(metrics.Metric{

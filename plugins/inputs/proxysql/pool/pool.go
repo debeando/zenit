@@ -41,7 +41,9 @@ func (l *InputProxySQLPool) Collect() {
 			return
 		}
 
-		log.Info("InputProxySQLPool", map[string]interface{}{"hostname": config.File.Inputs.ProxySQL[host].Hostname})
+		log.Info("InputProxySQLPool", map[string]interface{}{
+			"hostname": config.File.Inputs.ProxySQL[host].Hostname,
+		})
 
 		var a = metrics.Load()
 		var p = mysql.GetInstance(config.File.Inputs.ProxySQL[host].Hostname)
@@ -63,6 +65,7 @@ func (l *InputProxySQLPool) Collect() {
 				"tx": common.StringToInt64(i["Bytes_data_sent"]),
 				"rx": common.StringToInt64(i["Bytes_data_recv"]),
 				"latency": common.StringToInt64(i["Latency_us"]),
+				"hostname": config.File.Inputs.ProxySQL[host].Hostname,
 			})
 
 			a.Add(metrics.Metric{

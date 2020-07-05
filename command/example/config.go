@@ -1,7 +1,7 @@
-package config
+package example
 
 //go:generate go run ./generate.go
 
-func GetExampleFile() string {
+func GetConfigFile() string {
 	return ExampleFile
 }

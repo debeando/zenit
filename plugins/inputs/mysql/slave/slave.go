@@ -24,11 +24,12 @@ func (l *MySQLSlave) Collect() {
 			return
 		}
 
-		log.Info("InputMySQLAurora", map[string]interface{}{"hostname": config.File.Inputs.MySQL[host].Hostname})
+		log.Info("InputMySQLAurora", map[string]interface{}{
+			"hostname": config.File.Inputs.MySQL[host].Hostname,
+		})
 
 		var a = metrics.Load()
 		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
-		var v = []metrics.Value{}
 
 		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
@@ -36,22 +37,22 @@ func (l *MySQLSlave) Collect() {
 
 		for column := range r[0] {
 			if value, ok := mysql.ParseValue(r[0][column]); ok {
-				log.Debug("InputMySQLSlave", map[string]interface{}{"attribute": column, "value": value})
+				log.Debug("InputMySQLSlave", map[string]interface{}{
+					"hostname": config.File.Inputs.MySQL[host].Hostname,
+					column: value,
+				})
 
-				v = append(v, metrics.Value{
-					Key: column,
-					Value: value,
+				a.Add(metrics.Metric{
+					Key:    "mysql_slave",
+					Tags:   []metrics.Tag{
+						{"hostname", config.File.Inputs.MySQL[host].Hostname},
+					},
+					Values: []metrics.Value{
+						{column, value},
+					},
 				})
 			}
 		}
-
-		a.Add(metrics.Metric{
-			Key:    "mysql_slave",
-			Tags:   []metrics.Tag{
-				{"hostname", config.File.Inputs.MySQL[host].Hostname},
-			},
-			Values: v,
-		})
 	}
 }
 

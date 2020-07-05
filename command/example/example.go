@@ -1,4 +1,4 @@
-package config
+package example
 
 const ExampleFile = `---
 general:

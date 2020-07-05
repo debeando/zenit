@@ -25,7 +25,9 @@ func (l *InputProxySQLCommands) Collect() {
 			return
 		}
 
-		log.Info("InputProxySQLCommands", map[string]interface{}{"hostname": config.File.Inputs.ProxySQL[host].Hostname})
+		log.Info("InputProxySQLCommands", map[string]interface{}{
+			"hostname": config.File.Inputs.ProxySQL[host].Hostname,
+		})
 
 		var a = metrics.Load()
 		var p = mysql.GetInstance(config.File.Inputs.ProxySQL[host].Hostname)
@@ -50,6 +52,7 @@ func (l *InputProxySQLCommands) Collect() {
 				"cnt_5s": common.StringToInt64(i["cnt_5s"]),
 				"cnt_10s": common.StringToInt64(i["cnt_10s"]),
 				"cnt_infs": common.StringToInt64(i["cnt_infs"]),
+				"hostname": config.File.Inputs.ProxySQL[host].Hostname,
 			})
 
 			a.Add(metrics.Metric{

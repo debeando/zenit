@@ -24,11 +24,12 @@ func (l *InputProxySQLGlobal) Collect() {
 			return
 		}
 
-		log.Info("InputProxySQLGlobal", map[string]interface{}{"hostname": config.File.Inputs.ProxySQL[host].Hostname})
+		log.Info("InputProxySQLGlobal", map[string]interface{}{
+			"hostname": config.File.Inputs.ProxySQL[host].Hostname,
+		})
 
 		var a = metrics.Load()
 		var p = mysql.GetInstance(config.File.Inputs.ProxySQL[host].Hostname)
-		var v = []metrics.Value{}
 
 		p.Connect(config.File.Inputs.ProxySQL[host].DSN)
 
@@ -36,22 +37,23 @@ func (l *InputProxySQLGlobal) Collect() {
 
 		for _, i := range r {
 			if value, ok := mysql.ParseValue(i["Variable_Value"]); ok {
-				log.Debug("InputProxySQLGlobal", map[string]interface{}{"attribute": i["Variable_name"], "value": value})
+				log.Debug("InputProxySQLGlobal", map[string]interface{}{
+					"attribute": i["Variable_name"],
+					"value": value,
+					"hostname": config.File.Inputs.ProxySQL[host].Hostname,
+				})
 
-				v = append(v, metrics.Value{
-					Key: i["Variable_Name"],
-					Value: value,
+				a.Add(metrics.Metric{
+					Key:    "proxysql_global",
+					Tags:   []metrics.Tag{
+						{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
+					},
+					Values: []metrics.Value{
+						{i["Variable_Name"], value},
+					},
 				})
 			}
 		}
-
-		a.Add(metrics.Metric{
-			Key:    "proxysql_global",
-			Tags:   []metrics.Tag{
-				{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
-			},
-			Values: v,
-		})
 	}
 }
 

@@ -8,8 +8,6 @@ import (
 	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
 )
 
-const query = "SELECT * FROM mysql.ro_replica_status"
-
 type MySQLAurora struct{}
 
 func (l *MySQLAurora) Collect() {
@@ -24,11 +22,12 @@ func (l *MySQLAurora) Collect() {
 			return
 		}
 
-		log.Info("InputMySQLAurora", map[string]interface{}{"hostname": config.File.Inputs.MySQL[host].Hostname})
+		log.Info("InputMySQLAurora", map[string]interface{}{
+			"hostname": config.File.Inputs.MySQL[host].Hostname,
+		})
 
 		var a = metrics.Load()
 		var m = mysql.GetInstance(config.File.Inputs.MySQL[host].Hostname)
-		var v = []metrics.Value{}
 
 		m.Connect(config.File.Inputs.MySQL[host].DSN)
 
@@ -37,30 +36,30 @@ func (l *MySQLAurora) Collect() {
 			continue
 		}
 
-		var r = m.Query(query)
+		var r = m.Query("SELECT * FROM mysql.ro_replica_status WHERE Server_id = '" + config.File.Inputs.MySQL[host].Hostname + "'")
 
 		if len(r) == 0 {
 			continue
 		}
 
-		for column := range r[0] {
+		for column := range r {
 			if value, ok := mysql.ParseValue(r[0][column]); ok {
-				log.Debug("InputMySQLAurora", map[string]interface{}{"attribute": column, "value": value})
+				log.Debug("InputMySQLAurora", map[string]interface{}{
+					"hostname": config.File.Inputs.MySQL[host].Hostname,
+					column: value,
+				})
 
-				v = append(v, metrics.Value{
-					Key: column,
-					Value: value,
+				a.Add(metrics.Metric{
+					Key:  "aws_aurora_rds",
+					Tags: []metrics.Tag{
+						{"hostname", config.File.Inputs.MySQL[host].Hostname},
+					},
+					Values: []metrics.Value{
+						{column, value},
+					},
 				})
 			}
 		}
-
-		a.Add(metrics.Metric{
-			Key:    "aws_rds_aurora",
-			Tags:   []metrics.Tag{
-				{"hostname", config.File.Inputs.MySQL[host].Hostname},
-			},
-			Values: v,
-		})
 	}
 }
 

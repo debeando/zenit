@@ -27,7 +27,9 @@ func (l *InputProxySQLErrors) Collect() {
 			return
 		}
 
-		log.Info("InputProxySQLErrors", map[string]interface{}{"hostname": config.File.Inputs.ProxySQL[host].Hostname})
+		log.Info("InputProxySQLErrors", map[string]interface{}{
+			"hostname": config.File.Inputs.ProxySQL[host].Hostname,
+		})
 
 		var a = metrics.Load()
 		var p = mysql.GetInstance(config.File.Inputs.ProxySQL[host].Hostname)
@@ -45,6 +47,7 @@ func (l *InputProxySQLErrors) Collect() {
 				"schema": i["schemaname"],
 				"errno": i["errno"],
 				"last_error": parseLastError(i["last_error"]),
+				"hostname": config.File.Inputs.ProxySQL[host].Hostname,
 			})
 
 			a.Add(metrics.Metric{
