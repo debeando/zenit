@@ -42,6 +42,7 @@ func (l *MySQLOverflow) Collect() {
 
 	for host := range config.File.Inputs.MySQL {
 		if !config.File.Inputs.MySQL[host].Overflow {
+			log.Debug("InputMySQLOverflow", map[string]interface{}{"message": "Is not enabled."})
 			return
 		}
 

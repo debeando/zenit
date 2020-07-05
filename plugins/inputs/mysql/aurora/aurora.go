@@ -1,6 +1,7 @@
 package aurora
 
 import (
+	"github.com/swapbyt3s/zenit/common"
 	"github.com/swapbyt3s/zenit/common/log"
 	"github.com/swapbyt3s/zenit/common/mysql"
 	"github.com/swapbyt3s/zenit/config"
@@ -19,6 +20,7 @@ func (l *MySQLAurora) Collect() {
 
 	for host := range config.File.Inputs.MySQL {
 		if !config.File.Inputs.MySQL[host].Aurora {
+			log.Debug("InputMySQLAurora", map[string]interface{}{"message": "Is not enabled."})
 			return
 		}
 
@@ -42,24 +44,53 @@ func (l *MySQLAurora) Collect() {
 			continue
 		}
 
-		for column := range r {
-			if value, ok := mysql.ParseValue(r[0][column]); ok {
-				log.Debug("InputMySQLAurora", map[string]interface{}{
-					"hostname": config.File.Inputs.MySQL[host].Hostname,
-					column: value,
-				})
+		log.Debug("InputMySQLAurora", map[string]interface{}{
+			"hostname": config.File.Inputs.MySQL[host].Hostname,
+			"Active_lsn": r[0]["Active_lsn"],
+			"Average_replay_latency_in_usec": r[0]["Average_replay_latency_in_usec"],
+			"Cpu": r[0]["Cpu"],
+			"Current_replay_latency_in_usec": r[0]["Current_replay_latency_in_usec"],
+			"Durable_lsn": r[0]["Durable_lsn"],
+			"Highest_lsn_received": r[0]["Highest_lsn_received"],
+			"Iops": r[0]["Iops"],
+			"Is_current": r[0]["Is_current"],
+			"Last_transport_error": r[0]["Last_transport_error"],
+			"Log_buffer_sequence_number": r[0]["Log_buffer_sequence_number"],
+			"Log_stream_speed_in_KiB_per_second": r[0]["Log_stream_speed_in_KiB_per_second"],
+			"Master_slave_latency_in_usec": r[0]["Master_slave_latency_in_usec"],
+			"Max_replay_latency_in_usec": r[0]["Max_replay_latency_in_usec"],
+			"Oldest_read_view_lsn": r[0]["Oldest_read_view_lsn"],
+			"Oldest_read_view_trx_id": r[0]["Oldest_read_view_trx_id"],
+			"Pending_Read_IOs": r[0]["Pending_Read_IOs"],
+			"Read_IOs Replica_lag_in_msec": r[0]["Read_IOs"],
+		})
 
-				a.Add(metrics.Metric{
-					Key:  "aws_aurora_rds",
-					Tags: []metrics.Tag{
-						{"hostname", config.File.Inputs.MySQL[host].Hostname},
-					},
-					Values: []metrics.Value{
-						{column, value},
-					},
-				})
-			}
-		}
+		a.Add(metrics.Metric{
+			Key:  "aws_aurora_rds",
+			Tags: []metrics.Tag{
+				{"hostname", config.File.Inputs.MySQL[host].Hostname},
+			},
+			Values: []metrics.Value{
+				{"Active_lsn", common.StringToInt64(r[0]["Active_lsn"])},
+				{"Average_replay_latency_in_usec", common.StringToInt64(r[0]["Average_replay_latency_in_usec"])},
+				{"Cpu", common.StringToFloat64(r[0]["Cpu"])},
+				{"Current_replay_latency_in_usec", common.StringToInt64(r[0]["Current_replay_latency_in_usec"])},
+				{"Durable_lsn", common.StringToInt64(r[0]["Durable_lsn"])},
+				{"Highest_lsn_received", common.StringToInt64(r[0]["Highest_lsn_received"])},
+				{"Iops", common.StringToInt64(r[0]["Iops"])},
+				{"Is_current", common.StringToInt64(r[0]["Is_current"])},
+				{"Last_transport_error", common.StringToInt64(r[0]["Last_transport_error"])},
+				{"Log_buffer_sequence_number", common.StringToInt64(r[0]["Log_buffer_sequence_number"])},
+				{"Log_stream_speed_in_KiB_per_second", common.StringToFloat64(r[0]["Log_stream_speed_in_KiB_per_second"])},
+				{"Master_slave_latency_in_usec", common.StringToInt64(r[0]["Master_slave_latency_in_usec"])},
+				{"Max_replay_latency_in_usec", common.StringToInt64(r[0]["Max_replay_latency_in_usec"])},
+				{"Oldest_read_view_lsn", common.StringToInt64(r[0]["Oldest_read_view_lsn"])},
+				{"Oldest_read_view_trx_id", common.StringToInt64(r[0]["Oldest_read_view_trx_id"])},
+				{"Pending_Read_IOs", common.StringToInt64(r[0]["Pending_Read_IOs"])},
+				{"Read_IOs", common.StringToInt64(r[0]["Read_IOs"])},
+				{"Replica_lag_in_msec", common.StringToFloat64(r[0]["Replica_lag_in_msec"])},
+			},
+		})
 	}
 }
 

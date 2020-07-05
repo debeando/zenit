@@ -21,6 +21,7 @@ func (l *MySQLSlave) Collect() {
 
 	for host := range config.File.Inputs.MySQL {
 		if !config.File.Inputs.MySQL[host].Slave {
+			log.Debug("InputMySQLSlave", map[string]interface{}{"message": "Is not enabled."})
 			return
 		}
 

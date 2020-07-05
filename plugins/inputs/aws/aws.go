@@ -41,6 +41,7 @@ func (l *InputAWSDiscover) Collect() {
 	}()
 
 	if !config.File.Inputs.AWSDiscover.Enable {
+		log.Debug("InputAWSDiscover", map[string]interface{}{"message": "Is not enabled."})
 		return
 	}
 

@@ -59,6 +59,15 @@ func StringToInt64(value string) int64 {
 	return i
 }
 
+func StringToFloat64(value string) float64 {
+	i, err := strconv.ParseFloat(strings.TrimSpace(value), 64)
+	if err != nil {
+		return 0
+	}
+	return i
+}
+
+
 func KeyInMap(key string, list map[string]string) bool {
 	if _, ok := list[key]; ok {
 		return true

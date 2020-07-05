@@ -31,6 +31,7 @@ func (l *MySQLTables) Collect() {
 
 	for host := range config.File.Inputs.MySQL {
 		if !config.File.Inputs.MySQL[host].Tables {
+			log.Debug("InputMySQLTables", map[string]interface{}{"message": "Is not enabled."})
 			return
 		}
 

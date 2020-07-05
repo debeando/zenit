@@ -21,6 +21,7 @@ func (l *MySQLStatus) Collect() {
 
 	for host := range config.File.Inputs.MySQL {
 		if !config.File.Inputs.MySQL[host].Status {
+			log.Debug("InputMySQLStatus", map[string]interface{}{"message": "Is not enabled."})
 			return
 		}
 
