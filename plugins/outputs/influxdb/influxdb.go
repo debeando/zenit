@@ -79,7 +79,7 @@ func (l *OutputIndluxDB) Collect() {
 				time.Now(),
 			)
 
-			log.Debug("OutputIndluxDB", m["fields"].(map[string]interface{}))
+			log.Debug(fmt.Sprintf("OutputIndluxDB\t%s", k), m["fields"].(map[string]interface{}))
 
 			if err != nil {
 				log.Error("OutputIndluxDB", map[string]interface{}{"step": "event", "error": err})

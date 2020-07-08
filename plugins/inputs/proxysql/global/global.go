@@ -34,26 +34,30 @@ func (l *InputProxySQLGlobal) Collect() {
 		p.Connect(config.File.Inputs.ProxySQL[host].DSN)
 
 		var r = p.Query(querySQLGlobal)
+		if len(r) == 0 {
+			continue
+		}
+
+		var v = []metrics.Value{}
 
 		for _, i := range r {
 			if value, ok := mysql.ParseValue(i["Variable_Value"]); ok {
 				log.Debug("InputProxySQLGlobal", map[string]interface{}{
-					"attribute": i["Variable_name"],
-					"value": value,
+					i["Variable_Name"]: value,
 					"hostname": config.File.Inputs.ProxySQL[host].Hostname,
 				})
 
-				a.Add(metrics.Metric{
-					Key:    "proxysql_global",
-					Tags:   []metrics.Tag{
-						{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
-					},
-					Values: []metrics.Value{
-						{i["Variable_Name"], value},
-					},
-				})
+				v = append(v, metrics.Value{i["Variable_Name"], value})
 			}
 		}
+
+		a.Add(metrics.Metric{
+			Key:  "proxysql_global",
+			Tags: []metrics.Tag{
+				{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
+			},
+			Values: v,
+		})
 	}
 }
 
