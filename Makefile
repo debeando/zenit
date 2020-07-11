@@ -9,6 +9,7 @@ help: ## Show this help.
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-40s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 deps: ## Install dependencies
+	go get -u github.com/aws/aws-sdk-go
 	go get -u github.com/go-sql-driver/mysql
 	go get -u github.com/go-yaml/yaml
 	go get -u github.com/hpcloud/tail
