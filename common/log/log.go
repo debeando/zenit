@@ -29,12 +29,10 @@ func Configure() {
 
 	if flag.Lookup("debug") != nil && flag.Lookup("debug").Value.(flag.Getter).Get().(bool) {
 		logrus.SetLevel(logrus.DebugLevel)
-		logrus.Info("Enable debug mode")
 	}
 
 	if config.File.General.Debug {
 		logrus.SetLevel(logrus.DebugLevel)
-		logrus.Info("Enable debug mode")
 	}
 }
 
