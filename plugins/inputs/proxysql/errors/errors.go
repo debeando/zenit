@@ -40,14 +40,14 @@ func (l *InputProxySQLErrors) Collect() {
 
 		for _, i := range r {
 			log.Debug("InputProxySQLErrors", map[string]interface{}{
-				"group": i["hostgroup"],
-				"server": i["hostname"],
-				"port": i["port"],
-				"username": i["username"],
-				"schema": i["schemaname"],
-				"errno": i["errno"],
+				"group":      i["hostgroup"],
+				"server":     i["hostname"],
+				"port":       i["port"],
+				"username":   i["username"],
+				"schema":     i["schemaname"],
+				"errno":      i["errno"],
 				"last_error": parseLastError(i["last_error"]),
-				"hostname": config.File.Inputs.ProxySQL[host].Hostname,
+				"hostname":   config.File.Inputs.ProxySQL[host].Hostname,
 			})
 
 			a.Add(metrics.Metric{

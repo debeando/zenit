@@ -46,12 +46,12 @@ func (l *MySQLTables) Collect() {
 
 		for _, i := range r {
 			log.Debug("InputMySQLTables", map[string]interface{}{
-				"schema": i["schema"],
-				"table": i["table"],
-				"size": i["size"],
-				"rows":  i["rows"],
+				"schema":    i["schema"],
+				"table":     i["table"],
+				"size":      i["size"],
+				"rows":      i["rows"],
 				"increment": i["increment"],
-				"hostname": config.File.Inputs.MySQL[host].Hostname,
+				"hostname":  config.File.Inputs.MySQL[host].Hostname,
 			})
 
 			a.Add(metrics.Metric{

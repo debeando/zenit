@@ -43,7 +43,7 @@ func (l *OutputIndluxDB) Collect() {
 	}
 
 	conf := client.HTTPConfig{
-		Addr: config.File.Outputs.InfluxDB.URL,
+		Addr:     config.File.Outputs.InfluxDB.URL,
 		Username: config.File.Outputs.InfluxDB.Username,
 		Password: config.File.Outputs.InfluxDB.Password,
 	}
@@ -66,7 +66,7 @@ func (l *OutputIndluxDB) Collect() {
 	var database = config.File.Outputs.InfluxDB.Database
 
 	bp, _ := client.NewBatchPoints(client.BatchPointsConfig{
-		Database: database,
+		Database:  database,
 		Precision: "s",
 	})
 
@@ -92,9 +92,9 @@ func (l *OutputIndluxDB) Collect() {
 	if err != nil {
 		if strings.Contains(err.Error(), errDatabaseNotFound) {
 			query := client.NewQuery(fmt.Sprintf(
-					`CREATE DATABASE "%s"`,
-					config.File.Outputs.InfluxDB.Database,
-				), "", "",
+				`CREATE DATABASE "%s"`,
+				config.File.Outputs.InfluxDB.Database,
+			), "", "",
 			)
 
 			log.Debug("OutputIndluxDB", map[string]interface{}{"database": config.File.Outputs.InfluxDB.Database})

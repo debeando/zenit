@@ -85,21 +85,21 @@ func (l *MySQLOverflow) Collect() {
 						{"data_type", c.dataType},
 						{"unsigned", strconv.FormatBool(c.unsigned)}},
 					Values: []metrics.Value{
-						{"percentage", c.percent },
+						{"percentage", c.percent},
 					},
 				})
 
 				log.Debug("InputMySQLOverflow", map[string]interface{}{
-					"hostname": config.File.Inputs.MySQL[host].Hostname,
-					"schema": rows[row]["table_schema"],
-					"table": rows[row]["table_name"],
-					"column": rows[row]["column_name"],
+					"hostname":  config.File.Inputs.MySQL[host].Hostname,
+					"schema":    rows[row]["table_schema"],
+					"table":     rows[row]["table_name"],
+					"column":    rows[row]["column_name"],
 					"data_type": c.dataType,
-					"unsigned": c.unsigned,
-					"value": value,
-					"current": c.current,
-					"maximum": c.maximum,
-					"percent": c.percent,
+					"unsigned":  c.unsigned,
+					"value":     value,
+					"current":   c.current,
+					"maximum":   c.maximum,
+					"percent":   c.percent,
 				})
 			}
 		}

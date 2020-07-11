@@ -37,7 +37,7 @@ func (l *InputsPerconaOSC) Collect() {
 			{"hostname", config.File.General.Hostname},
 		},
 		Values: []metrics.Value{
-			{ "pt_online_schema_change", value},
+			{"pt_online_schema_change", value},
 		},
 	})
 }

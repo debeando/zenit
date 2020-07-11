@@ -37,7 +37,7 @@ func (l *InputsPerconaXtraBackup) Collect() {
 			{"hostname", config.File.General.Hostname},
 		},
 		Values: []metrics.Value{
-			{ "xtrabackup", value},
+			{"xtrabackup", value},
 		},
 	})
 }

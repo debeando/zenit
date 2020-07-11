@@ -37,7 +37,7 @@ func (l *InputsPerconaKill) Collect() {
 			{"hostname", config.File.General.Hostname},
 		},
 		Values: []metrics.Value{
-			{ "pt_kill", value},
+			{"pt_kill", value},
 		},
 	})
 }

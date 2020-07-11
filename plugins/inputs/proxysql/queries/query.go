@@ -71,12 +71,12 @@ func (l *InputProxySQLQuery) Collect() {
 			}
 
 			log.Debug("InputProxySQLQuery", map[string]interface{}{
-				"group": i["group"],
-				"schema": i["schemaname"],
-				"table": table,
-				"command": command,
-				"count": common.StringToInt64(i["count_star"]),
-				"sum": common.StringToInt64(i["sum_time"]),
+				"group":    i["group"],
+				"schema":   i["schemaname"],
+				"table":    table,
+				"command":  command,
+				"count":    common.StringToInt64(i["count_star"]),
+				"sum":      common.StringToInt64(i["sum_time"]),
 				"hostname": config.File.Inputs.ProxySQL[host].Hostname,
 			})
 

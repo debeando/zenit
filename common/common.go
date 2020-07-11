@@ -67,7 +67,6 @@ func StringToFloat64(value string) float64 {
 	return i
 }
 
-
 func KeyInMap(key string, list map[string]string) bool {
 	if _, ok := list[key]; ok {
 		return true

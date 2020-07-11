@@ -44,7 +44,7 @@ func (l *MySQLStatus) Collect() {
 		for _, i := range r {
 			if value, ok := mysql.ParseValue(i["Value"]); ok {
 				log.Debug("InputMySQLStatus", map[string]interface{}{
-					"hostname": config.File.Inputs.MySQL[host].Hostname,
+					"hostname":         config.File.Inputs.MySQL[host].Hostname,
 					i["Variable_name"]: value,
 				})
 
@@ -53,7 +53,7 @@ func (l *MySQLStatus) Collect() {
 		}
 
 		a.Add(metrics.Metric{
-			Key:  "mysql_status",
+			Key: "mysql_status",
 			Tags: []metrics.Tag{
 				{"hostname", config.File.Inputs.MySQL[host].Hostname},
 			},

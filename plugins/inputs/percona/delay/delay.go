@@ -37,7 +37,7 @@ func (l *InputsPerconaToolkitSlaveDelay) Collect() {
 			{"hostname", config.File.General.Hostname},
 		},
 		Values: []metrics.Value{
-			{ "pt_slave_delay", value},
+			{"pt_slave_delay", value},
 		},
 	})
 }

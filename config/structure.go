@@ -5,16 +5,16 @@ import (
 )
 
 // All is a struct to contain all configuration imported or loaded from config file.
-type Config struct{
+type Config struct {
 	Path      string
 	IPAddress string
 	General   struct {
-		Hostname string        `yaml:"hostname"`
-		Interval time.Duration `yaml:"interval"`
-		Debug    bool          `yaml:"debug"`
-		AWSRegion          string `yaml:"aws_region"`
-		AWSAccessKeyID     string `yaml:"aws_access_key_id"`
-		AWSSecretAccessKey string `yaml:"aws_secret_access_key"`
+		Hostname           string        `yaml:"hostname"`
+		Interval           time.Duration `yaml:"interval"`
+		Debug              bool          `yaml:"debug"`
+		AWSRegion          string        `yaml:"aws_region"`
+		AWSAccessKeyID     string        `yaml:"aws_access_key_id"`
+		AWSSecretAccessKey string        `yaml:"aws_secret_access_key"`
 	}
 	Parser struct {
 		MySQL struct {
@@ -35,10 +35,10 @@ type Config struct{
 	}
 	Inputs struct {
 		AWSDiscover struct {
-			Enable   bool `yaml:"enable"`
+			Enable   bool   `yaml:"enable"`
 			Username string `yaml:"username"`
 			Password string `yaml:"password"`
-			Filter string `yaml:"filter"`
+			Filter   string `yaml:"filter"`
 			Plugins  struct {
 				Aurora    bool `yaml:"aurora"`
 				Overflow  bool `yaml:"overflow"`
@@ -51,21 +51,21 @@ type Config struct{
 		MySQL []struct {
 			Hostname  string `yaml:"hostname"`
 			DSN       string `yaml:"dsn"`
-			Aurora    bool `yaml:"aurora"`
-			Overflow  bool `yaml:"overflow"`
-			Slave     bool `yaml:"slave"`
-			Status    bool `yaml:"status"`
-			Tables    bool `yaml:"tables"`
-			Variables bool `yaml:"variables"`
+			Aurora    bool   `yaml:"aurora"`
+			Overflow  bool   `yaml:"overflow"`
+			Slave     bool   `yaml:"slave"`
+			Status    bool   `yaml:"status"`
+			Tables    bool   `yaml:"tables"`
+			Variables bool   `yaml:"variables"`
 		}
 		ProxySQL []struct {
 			Hostname string `yaml:"hostname"`
 			DSN      string `yaml:"dsn"`
-			Commands bool `yaml:"commands"`
-			Errors bool `yaml:"errors"`
-			Global   bool `yaml:"global"`
-			Pool     bool `yaml:"pool"`
-			Queries  bool `yaml:"queries"`
+			Commands bool   `yaml:"commands"`
+			Errors   bool   `yaml:"errors"`
+			Global   bool   `yaml:"global"`
+			Pool     bool   `yaml:"pool"`
+			Queries  bool   `yaml:"queries"`
 		}
 		OS struct {
 			CPU    bool `yaml:"cpu"`

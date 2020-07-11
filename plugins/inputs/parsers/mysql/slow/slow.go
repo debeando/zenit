@@ -88,7 +88,7 @@ func (l *MySQLSlowLog) Load() {
 	}
 }
 
-func (l *MySQLSlowLog) Parser (in <-chan string, out chan<- map[string]string) {
+func (l *MySQLSlowLog) Parser(in <-chan string, out chan<- map[string]string) {
 	channelTail := make(chan string)
 	channelEvent := make(chan string)
 

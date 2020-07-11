@@ -10,7 +10,7 @@ import (
 func main() {
 	in, err := os.Open("../../zenit.yaml")
 	if err != nil {
-			return
+		return
 	}
 	defer in.Close()
 

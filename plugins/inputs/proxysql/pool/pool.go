@@ -54,17 +54,17 @@ func (l *InputProxySQLPool) Collect() {
 
 		for _, i := range r {
 			log.Debug("InputProxySQLPool", map[string]interface{}{
-				"group": i["group"],
-				"host": i["srv_host"],
-				"status": i["status"],
-				"used": common.StringToInt64(i["ConnUsed"]),
-				"free": common.StringToInt64(i["ConnFree"]),
-				"ok": common.StringToInt64(i["ConnOK"]),
-				"errors": common.StringToInt64(i["ConnERR"]),
-				"queries": common.StringToInt64(i["Queries"]),
-				"tx": common.StringToInt64(i["Bytes_data_sent"]),
-				"rx": common.StringToInt64(i["Bytes_data_recv"]),
-				"latency": common.StringToInt64(i["Latency_us"]),
+				"group":    i["group"],
+				"host":     i["srv_host"],
+				"status":   i["status"],
+				"used":     common.StringToInt64(i["ConnUsed"]),
+				"free":     common.StringToInt64(i["ConnFree"]),
+				"ok":       common.StringToInt64(i["ConnOK"]),
+				"errors":   common.StringToInt64(i["ConnERR"]),
+				"queries":  common.StringToInt64(i["Queries"]),
+				"tx":       common.StringToInt64(i["Bytes_data_sent"]),
+				"rx":       common.StringToInt64(i["Bytes_data_recv"]),
+				"latency":  common.StringToInt64(i["Latency_us"]),
 				"hostname": config.File.Inputs.ProxySQL[host].Hostname,
 			})
 

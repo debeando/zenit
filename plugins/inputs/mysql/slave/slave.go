@@ -45,7 +45,7 @@ func (l *MySQLSlave) Collect() {
 			if value, ok := mysql.ParseValue(r[0][column]); ok {
 				log.Debug("InputMySQLSlave", map[string]interface{}{
 					"hostname": config.File.Inputs.MySQL[host].Hostname,
-					column: value,
+					column:     value,
 				})
 
 				v = append(v, metrics.Value{column, value})
@@ -53,8 +53,8 @@ func (l *MySQLSlave) Collect() {
 		}
 
 		a.Add(metrics.Metric{
-			Key:    "mysql_slave",
-			Tags:   []metrics.Tag{
+			Key: "mysql_slave",
+			Tags: []metrics.Tag{
 				{"hostname", config.File.Inputs.MySQL[host].Hostname},
 			},
 			Values: v,

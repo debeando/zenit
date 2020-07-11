@@ -25,7 +25,7 @@ func (l *InputOSLimits) Collect() {
 	}
 
 	log.Debug("InputOSLimits", map[string]interface{}{
-		"nr_open": common.GetInt64FromFile(NR_OPEN),
+		"nr_open":  common.GetInt64FromFile(NR_OPEN),
 		"file_max": common.GetInt64FromFile(FILE_MAX),
 	})
 

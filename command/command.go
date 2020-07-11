@@ -45,19 +45,19 @@ func init() {
 		log.Error("Config", map[string]interface{}{"error": err})
 		os.Exit(1)
 	}
-	
+
 	if warn := config.File.SanityCheck(); len(warn) > 0 {
 		log.Warning("Config", map[string]interface{}{"message": warn})
 	}
 }
 
 func Run() {
-	fHelp      := flag.Bool("help", false, "Show this help.")
-	fConfig    := flag.Bool("config", false, "Print out full sample configuration to stdout.")
-	fInstall   := flag.Bool("install", false, "Install service on system.")
+	fHelp := flag.Bool("help", false, "Show this help.")
+	fConfig := flag.Bool("config", false, "Print out full sample configuration to stdout.")
+	fInstall := flag.Bool("install", false, "Install service on system.")
 	fUninstall := flag.Bool("uninstall", false, "Uninstall service on system.")
-	fVersion   := flag.Bool("version", false, "Show version.")
-	_           = flag.Bool("debug", false, "Enable debug mode.")
+	fVersion := flag.Bool("version", false, "Show version.")
+	_ = flag.Bool("debug", false, "Enable debug mode.")
 
 	flag.Usage = func() { help(1) }
 	flag.Parse()

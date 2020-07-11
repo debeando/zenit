@@ -40,8 +40,8 @@ func (l *InputOSNet) Collect() {
 			transmit_bytes := common.StringToInt64(match[8])
 
 			log.Debug("InputOSNet", map[string]interface{}{
-				"device": dev,
-				"receive": receive_bytes,
+				"device":   dev,
+				"receive":  receive_bytes,
 				"transmit": transmit_bytes,
 			})
 

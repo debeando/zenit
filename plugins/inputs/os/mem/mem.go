@@ -34,7 +34,7 @@ func (l *InputOSMem) Collect() {
 				{"hostname", config.File.General.Hostname},
 			},
 			Values: []metrics.Value{
-				{ "percentage", vmStat.UsedPercent },
+				{"percentage", vmStat.UsedPercent},
 			},
 		})
 

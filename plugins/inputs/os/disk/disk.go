@@ -43,13 +43,13 @@ func (l *InputOSDisk) Collect() {
 		log.Debug("InputOSDisk", map[string]interface{}{"device": GetDevice(device.Device), "usage": fmt.Sprintf("%.2f", u.UsedPercent)})
 
 		v = append(v, metrics.Value{
-			Key: GetDevice(device.Device),
+			Key:   GetDevice(device.Device),
 			Value: u.UsedPercent,
 		})
 	}
 
 	a.Add(metrics.Metric{
-		Key:  "os_disk",
+		Key: "os_disk",
 		Tags: []metrics.Tag{
 			{"hostname", config.File.General.Hostname},
 		},

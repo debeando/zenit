@@ -15,8 +15,8 @@ var File Config
 
 // Init does any initialization necessary for the module.
 func init() {
-	File = Config {
-		Path: "/etc/zenit/zenit.yaml",
+	File = Config{
+		Path:      "/etc/zenit/zenit.yaml",
 		IPAddress: common.IPAddress(),
 	}
 }

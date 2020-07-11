@@ -37,7 +37,7 @@ func (l *InputsPerconaDeadlock) Collect() {
 			{"hostname", config.File.General.Hostname},
 		},
 		Values: []metrics.Value{
-			{ "pt_deadlock_logger", value},
+			{"pt_deadlock_logger", value},
 		},
 	})
 }

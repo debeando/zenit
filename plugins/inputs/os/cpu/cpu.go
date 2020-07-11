@@ -34,7 +34,7 @@ func (l *InputOSCPU) Collect() {
 				{"hostname", config.File.General.Hostname},
 			},
 			Values: []metrics.Value{
-				{ "percentage", percentage[0] },
+				{"percentage", percentage[0]},
 			},
 		})
 	}

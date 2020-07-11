@@ -90,9 +90,9 @@ func (l *Items) Update(m Metric) {
 						if itemValue.Key == metricValue.Key {
 							switch v := metricValue.Value.(type) {
 							case int64:
-							    oldValue := (*l)[itemIndex].Values[itemValueIndex].Value.(int64)
-							    newValue := oldValue + v
-							    (*l)[itemIndex].Values[itemValueIndex].Value = newValue
+								oldValue := (*l)[itemIndex].Values[itemValueIndex].Value.(int64)
+								newValue := oldValue + v
+								(*l)[itemIndex].Values[itemValueIndex].Value = newValue
 							}
 
 							break
