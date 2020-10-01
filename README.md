@@ -1,5 +1,5 @@
-# ![Zenit](https://raw.githubusercontent.com/swapbyt3s/zenit/master/assets/images/zenit_logo.png)
-[![Build Status](https://travis-ci.org/swapbyt3s/zenit.svg?branch=master)](https://travis-ci.org/swapbyt3s/zenit) [![Coverage Status](https://coveralls.io/repos/github/swapbyt3s/zenit/badge.svg?branch=master)](https://coveralls.io/github/swapbyt3s/zenit?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/swapbyt3s/zenit)](https://goreportcard.com/report/github.com/swapbyt3s/zenit) [![Gitter chat](https://badges.gitter.im/Zenit-Agent/Lobby.png)](https://gitter.im/Zenit-Agent/Lobby)
+# ![Zenit](https://raw.githubusercontent.com/debeando/zenit/master/assets/images/zenit_logo.png)
+[![Build Status](https://travis-ci.org/debeando/zenit.svg?branch=master)](https://travis-ci.org/debeando/zenit) [![Coverage Status](https://coveralls.io/repos/github/debeando/zenit/badge.svg?branch=master)](https://coveralls.io/github/debeando/zenit?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/debeando/zenit)](https://goreportcard.com/report/github.com/debeando/zenit) [![Gitter chat](https://badges.gitter.im/Zenit-Agent/Lobby.png)](https://gitter.im/Zenit-Agent/Lobby)
 
 Zenit is a daemon collector for metrics and log parsers for dedicated host for MySQL/Percona/MariaDB Servers and
 ProxySQL. Maybe not requires many another agents for this purpose, but with this one you'll find an excellent tool for database administration.
@@ -63,10 +63,10 @@ Before using this tool, please:
 For the moment, this tool only run in any Linux distribution with 64 bits. Paste that at a Terminal prompt:
 
 ```bash
-bash < <(curl -s https://raw.githubusercontent.com/swapbyt3s/zenit/master/scripts/install.sh)
+bash < <(curl -s https://raw.githubusercontent.com/debeando/zenit/master/scripts/install.sh)
 ```
 
-For more details, please visit the [wiki](https://github.com/swapbyt3s/zenit/wiki/Install-agent).
+For more details, please visit the [wiki](https://github.com/debeando/zenit/wiki/Install-agent).
 
 ## How to use it:
 
