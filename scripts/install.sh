@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Apache License Version 2.0, January 2004
-# https://github.com/swapbyt3s/zenit/blob/master/LICENSE.md
+# https://github.com/debeando/zenit/blob/master/LICENSE.md
 
 set -e
 
@@ -21,7 +21,7 @@ if ! type "wget" > /dev/null; then
 fi
 
 FILE="zenit-linux_amd64.tar.gz"
-TAG=$(wget -qO- "https://api.github.com/repos/swapbyt3s/zenit/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+TAG=$(wget -qO- "https://api.github.com/repos/debeando/zenit/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
 if [ -f /etc/systemd/system/zenit.service ]; then
   /usr/bin/zenit --uninstall
@@ -40,7 +40,7 @@ if [ -L /usr/bin/zenit ]; then
 fi
 
 if [ -n "${FILE}" ]; then
-  wget -qO- "https://github.com/swapbyt3s/zenit/releases/download/${TAG}/${FILE}" | tar xz -C /usr/local/bin/
+  wget -qO- "https://github.com/debeando/zenit/releases/download/${TAG}/${FILE}" | tar xz -C /usr/local/bin/
 fi
 
 if [ -f /usr/local/bin/zenit ]; then
