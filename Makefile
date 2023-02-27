@@ -28,15 +28,15 @@ tests: ## Run tests
 
 build: ## Build binary for local operating system
 	go generate ./...
-	go build -ldflags "-s -w -X github.com/swapbyt3s/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
+	go build -ldflags "-s -w -X github.com/debeando/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
 
 build_linux: ## Build binary for Linux
 	go generate ./...
-	GOOS=linux go build -ldflags "-s -w -X github.com/swapbyt3s/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
+	GOOS=linux go build -ldflags "-s -w -X github.com/debeando/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
 
 build-and-run: ## Build binary for Linux and run
 	go generate ./...
-	GOOS=linux go build -ldflags "-s -w -X github.com/swapbyt3s/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
+	GOOS=linux go build -ldflags "-s -w -X github.com/debeando/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
 	docker cp zenit zenit_percona_server_primary:/usr/bin/
 	docker exec -i -t -u root zenit_percona_server_primary /usr/bin/zenit
 

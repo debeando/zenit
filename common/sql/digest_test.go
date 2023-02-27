@@ -3,7 +3,7 @@ package sql_test
 import (
 	"testing"
 
-	"github.com/swapbyt3s/zenit/common/sql"
+	"github.com/debeando/zenit/common/sql"
 )
 
 var queries = []struct{ ID, Input, Expected string }{

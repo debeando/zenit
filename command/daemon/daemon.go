@@ -1,8 +1,8 @@
 package daemon
 
 import (
-	"github.com/swapbyt3s/zenit/common/log"
-	"github.com/swapbyt3s/zenit/plugins"
+	"github.com/debeando/zenit/common/log"
+	"github.com/debeando/zenit/plugins"
 
 	"github.com/kardianos/service"
 )

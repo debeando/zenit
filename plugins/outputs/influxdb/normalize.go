@@ -1,7 +1,7 @@
 package influxdb
 
 import (
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/debeando/zenit/plugins/lists/metrics"
 )
 
 func Normalize(items *metrics.Items) map[string][]map[string]interface{} {

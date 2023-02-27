@@ -1,7 +1,7 @@
 package outputs
 
 import (
-	"github.com/swapbyt3s/zenit/common/log"
+	"github.com/debeando/zenit/common/log"
 )
 
 // Output defines the interface that can interact with the registry

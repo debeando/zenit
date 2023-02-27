@@ -1,11 +1,11 @@
 package global
 
 import (
-	"github.com/swapbyt3s/zenit/common/log"
-	"github.com/swapbyt3s/zenit/common/mysql"
-	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/inputs"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/debeando/zenit/common/log"
+	"github.com/debeando/zenit/common/mysql"
+	"github.com/debeando/zenit/config"
+	"github.com/debeando/zenit/plugins/inputs"
+	"github.com/debeando/zenit/plugins/lists/metrics"
 )
 
 const querySQLGlobal = `SELECT Variable_Name, Variable_Value FROM stats.stats_mysql_global;`

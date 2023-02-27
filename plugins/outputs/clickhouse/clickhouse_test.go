@@ -9,11 +9,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/swapbyt3s/zenit/common/sql"
-	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
+	"github.com/debeando/zenit/common/sql"
+	"github.com/debeando/zenit/config"
+	"github.com/debeando/zenit/plugins/outputs/clickhouse"
 
-	test "github.com/swapbyt3s/zenit/common/http"
+	test "github.com/debeando/zenit/common/http"
 )
 
 var ts *httptest.Server

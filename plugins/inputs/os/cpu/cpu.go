@@ -3,10 +3,10 @@ package cpu
 import (
 	"fmt"
 
-	"github.com/swapbyt3s/zenit/common/log"
-	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/inputs"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/debeando/zenit/common/log"
+	"github.com/debeando/zenit/config"
+	"github.com/debeando/zenit/plugins/inputs"
+	"github.com/debeando/zenit/plugins/lists/metrics"
 
 	"github.com/shirou/gopsutil/cpu"
 )

@@ -3,11 +3,11 @@ package audit
 import (
 	"sync"
 
-	"github.com/swapbyt3s/zenit/common/log"
-	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/inputs"
-	"github.com/swapbyt3s/zenit/plugins/inputs/parsers/mysql/audit/xml-old"
-	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
+	"github.com/debeando/zenit/common/log"
+	"github.com/debeando/zenit/config"
+	"github.com/debeando/zenit/plugins/inputs"
+	"github.com/debeando/zenit/plugins/inputs/parsers/mysql/audit/xml-old"
+	"github.com/debeando/zenit/plugins/outputs/clickhouse"
 )
 
 type MySQLAuditLog struct{}

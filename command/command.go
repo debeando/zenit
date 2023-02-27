@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/swapbyt3s/zenit/command/daemon"
-	"github.com/swapbyt3s/zenit/command/example"
-	"github.com/swapbyt3s/zenit/common/log"
-	"github.com/swapbyt3s/zenit/config"
+	"github.com/debeando/zenit/command/daemon"
+	"github.com/debeando/zenit/command/example"
+	"github.com/debeando/zenit/common/log"
+	"github.com/debeando/zenit/config"
 )
 
 // USAGE is a const to have help description for CLI.
@@ -36,7 +36,7 @@ Example:
   # Start zenit agent:
   $ sudo [systemctl|initctl] [start|stop|restart|status] zenit
 
-For more help, plese visit: https://github.com/swapbyt3s/zenit/wiki
+For more help, plese visit: https://github.com/debeando/zenit
 
 `
 

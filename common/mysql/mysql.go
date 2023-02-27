@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/swapbyt3s/zenit/common/log"
+	"github.com/debeando/zenit/common/log"
 
 	_ "github.com/go-sql-driver/mysql"
 )

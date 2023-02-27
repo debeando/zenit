@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/swapbyt3s/zenit/command"
+	"github.com/debeando/zenit/command"
 )
 
 func main() {

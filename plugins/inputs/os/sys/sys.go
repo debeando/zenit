@@ -1,11 +1,11 @@
 package sys
 
 import (
-	"github.com/swapbyt3s/zenit/common"
-	"github.com/swapbyt3s/zenit/common/log"
-	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/inputs"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
+	"github.com/debeando/zenit/common"
+	"github.com/debeando/zenit/common/log"
+	"github.com/debeando/zenit/config"
+	"github.com/debeando/zenit/plugins/inputs"
+	"github.com/debeando/zenit/plugins/lists/metrics"
 )
 
 const NR_OPEN string = "/proc/sys/fs/nr_open"

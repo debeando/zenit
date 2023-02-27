@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/swapbyt3s/zenit/common/log"
+	"github.com/debeando/zenit/common/log"
 )
 
 func Post(uri string, data string, headers map[string]string) int {

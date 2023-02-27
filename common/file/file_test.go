@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/swapbyt3s/zenit/common/file"
+	"github.com/debeando/zenit/common/file"
 )
 
 var (

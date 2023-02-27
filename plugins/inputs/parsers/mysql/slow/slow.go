@@ -3,14 +3,14 @@ package slow
 import (
 	"sync"
 
-	"github.com/swapbyt3s/zenit/common"
-	"github.com/swapbyt3s/zenit/common/log"
-	"github.com/swapbyt3s/zenit/common/mysql"
-	"github.com/swapbyt3s/zenit/common/sql"
-	"github.com/swapbyt3s/zenit/common/sql/parser/slow"
-	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/inputs"
-	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
+	"github.com/debeando/zenit/common"
+	"github.com/debeando/zenit/common/log"
+	"github.com/debeando/zenit/common/mysql"
+	"github.com/debeando/zenit/common/sql"
+	"github.com/debeando/zenit/common/sql/parser/slow"
+	"github.com/debeando/zenit/config"
+	"github.com/debeando/zenit/plugins/inputs"
+	"github.com/debeando/zenit/plugins/outputs/clickhouse"
 )
 
 type MySQLSlowLog struct{}

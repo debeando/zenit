@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/swapbyt3s/zenit/common"
-	"github.com/swapbyt3s/zenit/common/sql/parser/slow"
+	"github.com/debeando/zenit/common"
+	"github.com/debeando/zenit/common/sql/parser/slow"
 )
 
 var event = []string{

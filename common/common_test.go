@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/swapbyt3s/zenit/common"
+	"github.com/debeando/zenit/common"
 )
 
 var wd string

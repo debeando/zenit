@@ -5,10 +5,10 @@ package clickhouse
 import (
 	"time"
 
-	"github.com/swapbyt3s/zenit/common/http"
-	"github.com/swapbyt3s/zenit/common/log"
-	"github.com/swapbyt3s/zenit/common/sql"
-	"github.com/swapbyt3s/zenit/config"
+	"github.com/debeando/zenit/common/http"
+	"github.com/debeando/zenit/common/log"
+	"github.com/debeando/zenit/common/sql"
+	"github.com/debeando/zenit/config"
 )
 
 type Event struct {

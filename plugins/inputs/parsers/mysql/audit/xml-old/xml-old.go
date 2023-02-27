@@ -5,11 +5,11 @@
 package xmlold
 
 import (
-	"github.com/swapbyt3s/zenit/common"
-	"github.com/swapbyt3s/zenit/common/mysql"
-	"github.com/swapbyt3s/zenit/common/sql"
-	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/outputs/clickhouse"
+	"github.com/debeando/zenit/common"
+	"github.com/debeando/zenit/common/mysql"
+	"github.com/debeando/zenit/common/sql"
+	"github.com/debeando/zenit/config"
+	"github.com/debeando/zenit/plugins/outputs/clickhouse"
 )
 
 func Collect() {

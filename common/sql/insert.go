@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/swapbyt3s/zenit/common"
+	"github.com/debeando/zenit/common"
 )
 
 func Insert(schema string, table string, wildcard map[string]string, values []map[string]string) string {

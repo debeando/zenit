@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/swapbyt3s/zenit/common"
+	"github.com/debeando/zenit/common"
 
 	"github.com/go-yaml/yaml"
 )

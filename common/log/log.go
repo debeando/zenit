@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	"github.com/swapbyt3s/zenit/config"
+	"github.com/debeando/zenit/config"
 )
 
 var debug bool

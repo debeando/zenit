@@ -3,7 +3,7 @@ package mysql_test
 import (
 	"testing"
 
-	"github.com/swapbyt3s/zenit/common/mysql"
+	"github.com/debeando/zenit/common/mysql"
 )
 
 func TestParseValue(t *testing.T) {

@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/swapbyt3s/zenit/common/log"
-	"github.com/swapbyt3s/zenit/config"
-	"github.com/swapbyt3s/zenit/plugins/lists/metrics"
-	"github.com/swapbyt3s/zenit/plugins/outputs"
+	"github.com/debeando/zenit/common/log"
+	"github.com/debeando/zenit/config"
+	"github.com/debeando/zenit/plugins/lists/metrics"
+	"github.com/debeando/zenit/plugins/outputs"
 
 	client "github.com/influxdata/influxdb1-client/v2"
 )
