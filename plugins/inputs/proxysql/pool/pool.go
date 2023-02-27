@@ -71,20 +71,20 @@ func (l *InputProxySQLPool) Collect() {
 			a.Add(metrics.Metric{
 				Key: "proxysql_connections",
 				Tags: []metrics.Tag{
-					{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
-					{"group", i["group"]},
-					{"host", i["srv_host"]},
+					{Name: "hostname", Value: config.File.Inputs.ProxySQL[host].Hostname},
+					{Name: "group", Value: i["group"]},
+					{Name: "host", Value: i["srv_host"]},
 				},
 				Values: []metrics.Value{
-					{"status", i["status"]},
-					{"used", common.StringToInt64(i["ConnUsed"])},
-					{"free", common.StringToInt64(i["ConnFree"])},
-					{"ok", common.StringToInt64(i["ConnOK"])},
-					{"errors", common.StringToInt64(i["ConnERR"])},
-					{"queries", common.StringToInt64(i["Queries"])},
-					{"tx", common.StringToInt64(i["Bytes_data_sent"])},
-					{"rx", common.StringToInt64(i["Bytes_data_recv"])},
-					{"latency", common.StringToInt64(i["Latency_us"])},
+					{Key: "status", Value: i["status"]},
+					{Key: "used", Value: common.StringToInt64(i["ConnUsed"])},
+					{Key: "free", Value: common.StringToInt64(i["ConnFree"])},
+					{Key: "ok", Value: common.StringToInt64(i["ConnOK"])},
+					{Key: "errors", Value: common.StringToInt64(i["ConnERR"])},
+					{Key: "queries", Value: common.StringToInt64(i["Queries"])},
+					{Key: "tx", Value: common.StringToInt64(i["Bytes_data_sent"])},
+					{Key: "rx", Value: common.StringToInt64(i["Bytes_data_recv"])},
+					{Key: "latency", Value: common.StringToInt64(i["Latency_us"])},
 				},
 			})
 		}

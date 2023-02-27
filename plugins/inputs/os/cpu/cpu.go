@@ -31,10 +31,10 @@ func (l *InputOSCPU) Collect() {
 		a.Add(metrics.Metric{
 			Key: "os_cpu",
 			Tags: []metrics.Tag{
-				{"hostname", config.File.General.Hostname},
+				{Name: "hostname", Value: config.File.General.Hostname},
 			},
 			Values: []metrics.Value{
-				{"percentage", percentage[0]},
+				{Key: "percentage", Value: percentage[0]},
 			},
 		})
 	}

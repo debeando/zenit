@@ -57,14 +57,14 @@ func (l *MySQLTables) Collect() {
 			a.Add(metrics.Metric{
 				Key: "mysql_tables",
 				Tags: []metrics.Tag{
-					{"hostname", config.File.Inputs.MySQL[host].Hostname},
-					{"schema", i["schema"]},
-					{"table", i["table"]},
+					{Name: "hostname", Value: config.File.Inputs.MySQL[host].Hostname},
+					{Name: "schema", Value: i["schema"]},
+					{Name: "table", Value: i["table"]},
 				},
 				Values: []metrics.Value{
-					{"size", common.StringToInt64(i["size"])},
-					{"rows", common.StringToInt64(i["rows"])},
-					{"increment", common.StringToInt64(i["increment"])},
+					{Key: "size", Value: common.StringToInt64(i["size"])},
+					{Key: "rows", Value: common.StringToInt64(i["rows"])},
+					{Key: "increment", Value: common.StringToInt64(i["increment"])},
 				},
 			})
 		}

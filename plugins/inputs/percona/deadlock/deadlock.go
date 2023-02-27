@@ -34,10 +34,10 @@ func (l *InputsPerconaDeadlock) Collect() {
 	a.Add(metrics.Metric{
 		Key: "process_pt_deadlock_logger",
 		Tags: []metrics.Tag{
-			{"hostname", config.File.General.Hostname},
+			{Name: "hostname", Value: config.File.General.Hostname},
 		},
 		Values: []metrics.Value{
-			{"pt_deadlock_logger", value},
+			{Key: "pt_deadlock_logger", Value: value},
 		},
 	})
 }

@@ -31,10 +31,10 @@ func (l *InputOSMem) Collect() {
 		a.Add(metrics.Metric{
 			Key: "os_mem",
 			Tags: []metrics.Tag{
-				{"hostname", config.File.General.Hostname},
+				{Name: "hostname", Value: config.File.General.Hostname},
 			},
 			Values: []metrics.Value{
-				{"percentage", vmStat.UsedPercent},
+				{Key: "percentage", Value: vmStat.UsedPercent},
 			},
 		})
 

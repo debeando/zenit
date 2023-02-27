@@ -34,10 +34,10 @@ func (l *InputsPerconaOSC) Collect() {
 	a.Add(metrics.Metric{
 		Key: "process_pt_online_schema_change",
 		Tags: []metrics.Tag{
-			{"hostname", config.File.General.Hostname},
+			{Name: "hostname", Value: config.File.General.Hostname},
 		},
 		Values: []metrics.Value{
-			{"pt_online_schema_change", value},
+			{Key: "pt_online_schema_change", Value: value},
 		},
 	})
 }

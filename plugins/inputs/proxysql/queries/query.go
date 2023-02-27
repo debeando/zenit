@@ -83,15 +83,15 @@ func (l *InputProxySQLQuery) Collect() {
 			a.Add(metrics.Metric{
 				Key: "proxysql_queries",
 				Tags: []metrics.Tag{
-					{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
-					{"group", i["group"]},
-					{"schema", i["schemaname"]},
-					{"table", table},
-					{"command", command},
+					{Name: "hostname", Value: config.File.Inputs.ProxySQL[host].Hostname},
+					{Name: "group", Value: i["group"]},
+					{Name: "schema", Value: i["schemaname"]},
+					{Name: "table", Value: table},
+					{Name: "command", Value: command},
 				},
 				Values: []metrics.Value{
-					{"count", common.StringToInt64(i["count_star"])},
-					{"sum", common.StringToInt64(i["sum_time"])},
+					{Key: "count", Value: common.StringToInt64(i["count_star"])},
+					{Key: "sum", Value: common.StringToInt64(i["sum_time"])},
 				},
 			})
 		}

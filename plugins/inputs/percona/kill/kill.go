@@ -34,10 +34,10 @@ func (l *InputsPerconaKill) Collect() {
 	a.Add(metrics.Metric{
 		Key: "process_pt_kill",
 		Tags: []metrics.Tag{
-			{"hostname", config.File.General.Hostname},
+			{Name: "hostname", Value: config.File.General.Hostname},
 		},
 		Values: []metrics.Value{
-			{"pt_kill", value},
+			{Key: "pt_kill", Value: value},
 		},
 	})
 }

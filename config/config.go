@@ -33,7 +33,7 @@ func (c *Config) Load() error {
 	source = []byte(os.ExpandEnv(string(source)))
 
 	if err := yaml.Unmarshal(source, &c); err != nil {
-		errors.New(fmt.Sprintf("Imposible to parse config file - %s", err))
+		return errors.New(fmt.Sprintf("Imposible to parse config file - %s", err))
 	}
 
 	return nil

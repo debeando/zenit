@@ -79,13 +79,13 @@ func (l *MySQLOverflow) Collect() {
 				a.Add(metrics.Metric{
 					Key: "mysql_overflow",
 					Tags: []metrics.Tag{
-						{"hostname", config.File.Inputs.MySQL[host].Hostname},
-						{"schema", rows[row]["table_schema"]},
-						{"table", rows[row]["table_name"]},
-						{"data_type", c.dataType},
-						{"unsigned", strconv.FormatBool(c.unsigned)}},
+						{Name: "hostname", Value: config.File.Inputs.MySQL[host].Hostname},
+						{Name: "schema", Value: rows[row]["table_schema"]},
+						{Name: "table", Value: rows[row]["table_name"]},
+						{Name: "data_type", Value: c.dataType},
+						{Name: "unsigned", Value: strconv.FormatBool(c.unsigned)}},
 					Values: []metrics.Value{
-						{"percentage", c.percent},
+						{Key: "percentage", Value: c.percent},
 					},
 				})
 

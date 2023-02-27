@@ -48,14 +48,14 @@ func (l *MySQLVariables) Collect() {
 					i["Variable_name"]: value,
 				})
 
-				v = append(v, metrics.Value{i["Variable_name"], value})
+				v = append(v, metrics.Value{Key: i["Variable_name"], Value: value})
 			}
 		}
 
 		a.Add(metrics.Metric{
 			Key: "mysql_variables",
 			Tags: []metrics.Tag{
-				{"hostname", config.File.Inputs.MySQL[host].Hostname},
+				{Name: "hostname", Value: config.File.Inputs.MySQL[host].Hostname},
 			},
 			Values: v,
 		})

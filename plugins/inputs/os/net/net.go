@@ -48,12 +48,12 @@ func (l *InputOSNet) Collect() {
 			a.Add(metrics.Metric{
 				Key: "os_net",
 				Tags: []metrics.Tag{
-					{"hostname", config.File.General.Hostname},
-					{"device", dev},
+					{Name: "hostname", Value: config.File.General.Hostname},
+					{Name: "device", Value: dev},
 				},
 				Values: []metrics.Value{
-					{"receive", receive_bytes},
-					{"transmit", transmit_bytes},
+					{Key: "receive", Value: receive_bytes},
+					{Key: "transmit", Value: transmit_bytes},
 				},
 			})
 		}

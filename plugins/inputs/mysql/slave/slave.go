@@ -48,14 +48,14 @@ func (l *MySQLSlave) Collect() {
 					column:     value,
 				})
 
-				v = append(v, metrics.Value{column, value})
+				v = append(v, metrics.Value{Key: column, Value: value})
 			}
 		}
 
 		a.Add(metrics.Metric{
 			Key: "mysql_slave",
 			Tags: []metrics.Tag{
-				{"hostname", config.File.Inputs.MySQL[host].Hostname},
+				{Name: "hostname", Value: config.File.Inputs.MySQL[host].Hostname},
 			},
 			Values: v,
 		})

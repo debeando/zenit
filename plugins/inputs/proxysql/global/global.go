@@ -47,14 +47,14 @@ func (l *InputProxySQLGlobal) Collect() {
 					"hostname":         config.File.Inputs.ProxySQL[host].Hostname,
 				})
 
-				v = append(v, metrics.Value{i["Variable_Name"], value})
+				v = append(v, metrics.Value{Key: i["Variable_Name"], Value: value})
 			}
 		}
 
 		a.Add(metrics.Metric{
 			Key: "proxysql_global",
 			Tags: []metrics.Tag{
-				{"hostname", config.File.Inputs.ProxySQL[host].Hostname},
+				{Name: "hostname", Value: config.File.Inputs.ProxySQL[host].Hostname},
 			},
 			Values: v,
 		})
