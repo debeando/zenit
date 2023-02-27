@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/sirupsen/logrus"
 	"github.com/debeando/zenit/config"
+	"github.com/sirupsen/logrus"
 )
 
 var debug bool
