@@ -1,5 +1,5 @@
 builds:
-  - binary: mylinter
+  - binary: zenit
     env:
       - CGO_ENABLED=0
     targets:
