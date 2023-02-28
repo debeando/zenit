@@ -23,3 +23,6 @@ tests: ## Run tests
 build: ## Build binary for local operating system
 	@go generate ./...
 	@go build -ldflags "-s -w -X github.com/debeando/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
+
+release: ## Creare release of this project
+	@./scripts/release.sh
