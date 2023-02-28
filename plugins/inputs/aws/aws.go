@@ -9,7 +9,6 @@ import (
 	"github.com/debeando/zenit/plugins/inputs"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/rds"
 )
@@ -50,25 +49,10 @@ func (l *InputAWSDiscover) Collect() {
 		return
 	}
 
-	if len(config.File.General.AWSAccessKeyID) == 0 {
-		log.Info("InputAWSDiscover", map[string]interface{}{"message": "Require to define aws_access_key_id"})
-		return
-	}
-
-	if len(config.File.General.AWSSecretAccessKey) == 0 {
-		log.Info("InputAWSDiscover", map[string]interface{}{"message": "Require to define aws_secret_access_key"})
-		return
-	}
-
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(config.File.General.AWSRegion),
-		Credentials: credentials.NewStaticCredentials(
-			config.File.General.AWSAccessKeyID,
-			config.File.General.AWSSecretAccessKey,
-			"",
-		),
-	},
-	)
+	})
+
 	if err != nil {
 		log.Error("InputAWSDiscover", map[string]interface{}{"error": err})
 		return

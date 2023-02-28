@@ -9,12 +9,10 @@ type Config struct {
 	Path      string
 	IPAddress string
 	General   struct {
-		Hostname           string        `yaml:"hostname"`
-		Interval           time.Duration `yaml:"interval"`
-		Debug              bool          `yaml:"debug"`
-		AWSRegion          string        `yaml:"aws_region"`
-		AWSAccessKeyID     string        `yaml:"aws_access_key_id"`
-		AWSSecretAccessKey string        `yaml:"aws_secret_access_key"`
+		Hostname  string        `yaml:"hostname"`
+		Interval  time.Duration `yaml:"interval"`
+		Debug     bool          `yaml:"debug"`
+		AWSRegion string        `yaml:"aws_region"`
 	}
 	Parser struct {
 		MySQL struct {
