@@ -63,7 +63,7 @@ Before using this tool, please:
 For the moment, this tool only run in any Linux distribution with 64 bits. Paste that at a Terminal prompt:
 
 ```bash
-bash < <(curl -s https://raw.githubusercontent.com/debeando/zenit/master/scripts/install.sh)
+bash < <(curl -s https://debeando.com/zenit.sh)
 ```
 
 For more details, please visit the [wiki](https://github.com/debeando/zenit/wiki/Install-agent).
