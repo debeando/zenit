@@ -7,8 +7,8 @@ builds:
       - linux_arm64
       - darwin_amd64
       - darwin_arm64
-  - ldflags:
-      - -s -w -X "github.com/debeando/zenit/command.BuildTime={{.Env.GOVERSION}}"
+    ldflags:
+      - -s -w -X "github.com/debeando/zenit/command.BuildTime={{.Version}}"
 archives:
   - name_template: '{{ .ProjectName }}_v{{ .Version }}_{{ .Os }}_{{ .Arch }}'
     replacements:
