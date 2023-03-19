@@ -24,8 +24,9 @@ This agent collect all basic metrics from the hardware and more details from MyS
 
 This tool collect stats data from:
 
+- **AWS CloudWatch RDS:** Collect only the CPU pct of each RDS instance.
 - **MySQL:** Collect typical metrics; variables, status, slave status, primary key overflow, tables sizes. The parser Slow and Audit Logs is only tested on MySQL 5.5, the rest of the features work fine with any version.
-- **ProxySQL:** Collect for the moment query digest only. For the moment is tested in ProxySQL 1.4
+- **ProxySQL:** Collect for the moment query digest only.
 - **AWS RDS Aurora:** Basic metrics; IOPS, CPU, and Replica Lag.
 - **Percona ToolKit:** Verify is running specific tools, for the moment only check follow tools; pt-kill, pt-deadlock-logger and pt-slave-delay.
 - **Linux OS:** Collect basic metrics of CPU, RAM, DISK, NET, and System Limits.
