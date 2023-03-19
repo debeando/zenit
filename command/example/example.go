@@ -6,6 +6,8 @@ general:
   interval: 10 # Seconds
   debug: true
   aws_region: ${AWS_REGION}
+  aws_access_key_id: ${AWS_ACCESS_KEY_ID}
+  aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
 
 parser:
   mysql:
@@ -35,6 +37,8 @@ inputs:
       status: true
       tables: true
       variables: true
+  awscloudwatch:
+    enable: true
   mysql:
     - hostname: localhost
       dsn: root@tcp(127.0.0.1:3306)/?timeout=3s

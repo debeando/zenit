@@ -35,6 +35,8 @@ inputs:
       status: true
       tables: true
       variables: true
+  awscloudwatch:
+    enable: true
   mysql:
     - hostname: localhost
       dsn: root@tcp(127.0.0.1:3306)/?timeout=3s

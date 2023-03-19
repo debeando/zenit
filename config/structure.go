@@ -46,6 +46,9 @@ type Config struct {
 				Variables bool `yaml:"variables"`
 			}
 		}
+		AWSCloudWatch struct {
+			Enable bool `yaml:"enable"`
+		}
 		MySQL []struct {
 			Hostname  string `yaml:"hostname"`
 			DSN       string `yaml:"dsn"`
