@@ -11,7 +11,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 if ! [[ "${OSTYPE}" == "linux"* ]]; then
-  echo "Only works on Linux amd64."
+  echo "Only works on Linux."
   exit
 fi
 
@@ -24,11 +24,11 @@ FILE="zenit-linux_amd64.tar.gz"
 TAG=$(wget -qO- "https://api.github.com/repos/debeando/zenit/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
 if [ -f /etc/systemd/system/zenit.service ]; then
-  /usr/bin/zenit --uninstall
+  /usr/bin/zenit service --uninstall
 fi
 
 if [ -f /etc/init/zenit.conf ]; then
-  /usr/bin/zenit --uninstall
+  /usr/bin/zenit service --uninstall
 fi
 
 if [ -f /usr/local/bin/zenit ]; then
@@ -49,7 +49,7 @@ fi
 
 if [ ! -f /etc/zenit/zenit.yaml ]; then
   mkdir -p /etc/zenit/
-  /usr/bin/zenit --config > /etc/zenit/zenit.yaml
+  /usr/bin/zenit --config-example > /etc/zenit/zenit.yaml
 fi
 
 if [ -d "/etc/logrotate.d" ]; then
@@ -67,4 +67,4 @@ EOL
   fi
 fi
 
-/usr/bin/zenit --install
+/usr/bin/zenit service --install
