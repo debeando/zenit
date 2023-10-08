@@ -1,5 +1,5 @@
 # ![Zenit](https://raw.githubusercontent.com/debeando/zenit/master/assets/images/zenit_logo.png)
-[![Build Status](https://travis-ci.org/debeando/zenit.svg?branch=master)](https://travis-ci.org/debeando/zenit) [![Coverage Status](https://coveralls.io/repos/github/debeando/zenit/badge.svg?branch=master)](https://coveralls.io/github/debeando/zenit?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/debeando/zenit)](https://goreportcard.com/report/github.com/debeando/zenit)
+[![Coverage Status](https://coveralls.io/repos/github/debeando/zenit/badge.svg?branch=master)](https://coveralls.io/github/debeando/zenit?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/debeando/zenit)](https://goreportcard.com/report/github.com/debeando/zenit)
 
 Zenit is a daemon collector for metrics and log parsers for dedicated host for MySQL/Percona/MariaDB Servers and
 ProxySQL. Maybe not requires many another agents for this purpose, but with this one you'll find an excellent tool for database administration.
@@ -25,6 +25,7 @@ This agent collect all basic metrics from the hardware and more details from MyS
 This tool collect stats data from:
 
 - **AWS CloudWatch RDS:** Collect only the CPU pct of each RDS instance.
+- **AWS Disvocer RDS:** Discover any RDS compatible with MySQL.
 - **MySQL:** Collect typical metrics; variables, status, slave status, primary key overflow, tables sizes. The parser Slow and Audit Logs is only tested on MySQL 5.5, the rest of the features work fine with any version.
 - **ProxySQL:** Collect for the moment query digest only.
 - **AWS RDS Aurora:** Basic metrics; IOPS, CPU, and Replica Lag.
