@@ -7,8 +7,8 @@
 FROM ubuntu:18.04
 
 # File Author / Maintainer
-MAINTAINER Swapbyt3s
-LABEL vendor="Swapbyt3s" \
+MAINTAINER DeBeAndo
+LABEL vendor="DeBeAndo" \
       description="Percona Server 5.x on Ubuntu 18.04" \
       version="5.x"
 

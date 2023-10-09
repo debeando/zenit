@@ -1,7 +1,7 @@
 ---
 general:
   hostname: localhost
-  interval: 10 # Seconds
+  interval: 3 # Seconds
   debug: true
   aws_region: ${AWS_REGION}
   aws_access_key_id: ${AWS_ACCESS_KEY_ID}
@@ -22,33 +22,37 @@ parser:
       buffer_timeout: 60 # Seconds
 
 inputs:
-  awsdiscover:
-    enable: true
-    username: monitor
-    password: monitor
-    # filter: ".*(prd)|(stg).*"
-    filter: prd
-    plugins:
-      aurora: false
-      overflow: true
-      slave: true
-      status: true
-      tables: true
-      variables: true
-  awscloudwatch:
-    enable: true
+  aws:
+    discover:
+      enable: true
+      filter: ".*(prd)|(stg).*"
+      username: monitor
+      password: monitor
+      plugins:
+        mysql:
+          enable: true
+          aurora: true
+          overflow: false
+          replica: true
+          status: true
+          tables: true
+          variables: true
+    cloudwatch:
+      enable: true
   mysql:
     - hostname: localhost
       dsn: root@tcp(127.0.0.1:3306)/?timeout=3s
+      enable: false
       aurora: false
       overflow: true
-      slave: true
+      replica: true
       status: true
       tables: true
       variables: true
   proxysql:
     - hostname: localhost
       dsn: proxysql:admin@tcp(127.0.0.1:6032)/?timeout=3s
+      enable: true
       commands: true
       errors: true
       global: true

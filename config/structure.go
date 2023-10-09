@@ -32,36 +32,33 @@ type Config struct {
 		}
 	}
 	Inputs struct {
-		AWSDiscover struct {
-			Enable   bool   `yaml:"enable"`
-			Username string `yaml:"username"`
-			Password string `yaml:"password"`
-			Filter   string `yaml:"filter"`
-			Plugins  struct {
-				Aurora    bool `yaml:"aurora"`
-				Overflow  bool `yaml:"overflow"`
-				Slave     bool `yaml:"slave"`
-				Status    bool `yaml:"status"`
-				Tables    bool `yaml:"tables"`
-				Variables bool `yaml:"variables"`
+		AWS struct {
+			Discover struct {
+				Enable   bool   `yaml:"enable"`
+				Username string `yaml:"username"`
+				Password string `yaml:"password"`
+				Filter   string `yaml:"filter"`
+				Plugins  struct {
+					MySQL struct {
+						Enable    bool `yaml:"enable"`
+						Aurora    bool `yaml:"aurora"`
+						Overflow  bool `yaml:"overflow"`
+						Replica   bool `yaml:"replica"`
+						Status    bool `yaml:"status"`
+						Tables    bool `yaml:"tables"`
+						Variables bool `yaml:"variables"`
+					}
+				}
+			}
+			CloudWatch struct {
+				Enable bool `yaml:"enable"`
 			}
 		}
-		AWSCloudWatch struct {
-			Enable bool `yaml:"enable"`
-		}
-		MySQL []struct {
-			Hostname  string `yaml:"hostname"`
-			DSN       string `yaml:"dsn"`
-			Aurora    bool   `yaml:"aurora"`
-			Overflow  bool   `yaml:"overflow"`
-			Slave     bool   `yaml:"slave"`
-			Status    bool   `yaml:"status"`
-			Tables    bool   `yaml:"tables"`
-			Variables bool   `yaml:"variables"`
-		}
+		MySQL    []MySQL
 		ProxySQL []struct {
 			Hostname string `yaml:"hostname"`
 			DSN      string `yaml:"dsn"`
+			Enable   bool   `yaml:"enable"`
 			Commands bool   `yaml:"commands"`
 			Errors   bool   `yaml:"errors"`
 			Global   bool   `yaml:"global"`
@@ -95,4 +92,17 @@ type Config struct {
 			Database string `yaml:"database"`
 		}
 	}
+}
+
+type MySQL struct {
+	Engine    string
+	Hostname  string `yaml:"hostname"`
+	DSN       string `yaml:"dsn"`
+	Enable    bool   `yaml:"enable"`
+	Aurora    bool   `yaml:"aurora"`
+	Overflow  bool   `yaml:"overflow"`
+	Replica   bool   `yaml:"replica"`
+	Status    bool   `yaml:"status"`
+	Tables    bool   `yaml:"tables"`
+	Variables bool   `yaml:"variables"`
 }

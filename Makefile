@@ -21,8 +21,9 @@ tests: ## Run tests
 	@go test -cover -race -coverprofile=coverage.txt -covermode=atomic ./...
 
 build: ## Build binary for local operating system
+	@go env -w CGO_ENABLED="0"
 	@go generate ./...
-	@go build -ldflags "-s -w -X github.com/debeando/zenit/command.BuildTime=$(BUILD_DATE)" -o zenit main.go
+	@go build -ldflags "-s -w" -o zenit main.go
 
 release: ## Creare release of this project
 	@./scripts/release.sh
