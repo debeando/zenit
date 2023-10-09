@@ -3,7 +3,7 @@ package metrics_test
 import (
 	"testing"
 
-	"github.com/debeando/zenit/plugins/lists/metrics"
+	"zenit/monitor/plugins/lists/metrics"
 )
 
 var a = metrics.Load()

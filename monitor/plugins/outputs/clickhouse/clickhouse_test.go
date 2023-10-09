@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/debeando/zenit/common/sql"
-	"github.com/debeando/zenit/config"
-	"github.com/debeando/zenit/plugins/outputs/clickhouse"
+	"zenit/config"
+	"zenit/monitor/plugins/outputs/clickhouse"
 
+	"github.com/debeando/go-common/mysql/sql"
 	test "github.com/debeando/zenit/common/http"
 )
 
@@ -98,7 +98,7 @@ func HandlerResponse() http.Handler {
 func setup() {
 	ts = httptest.NewServer(HandlerResponse())
 
-	config.File.Outputs.ClickHouse.DSN = fmt.Sprintf("%s/?database=zenit", ts.URL)
+	config.GetInstance().Outputs.ClickHouse.DSN = fmt.Sprintf("%s/?database=zenit", ts.URL)
 }
 
 func shutdown() {
@@ -140,7 +140,7 @@ func TestSQLInsert(t *testing.T) {
 	})
 
 	sql_insert := sql.Insert(event.Schema, event.Table, event.Wildcard, event.Values)
-	status_code := test.Post(config.File.Outputs.ClickHouse.DSN, sql_insert, nil)
+	status_code := test.Post(config.GetInstance().Outputs.ClickHouse.DSN, sql_insert, nil)
 
 	if status_code != 200 {
 		t.Errorf("Expected: '200', got: '%v'", status_code)
