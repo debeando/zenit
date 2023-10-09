@@ -4,6 +4,8 @@ github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46t
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/debeando/go-common v0.1.0 h1:wb20i9bt2N+FSR6ixypxrQQ6SCYMKjYLWW2SkuH0cg0=
+github.com/debeando/go-common v0.1.0/go.mod h1:umr0E911UyrjnUAuzuJH+9eXpSQbYGuI9aUTDmiLuw8=
 github.com/debeando/zenit v1.4.5 h1:3qecmh8v2KT2llPA96r9PEBEMWZAZ8EdWEywwzUab6o=
 github.com/debeando/zenit v1.4.5/go.mod h1:SQy1dXrENEK+kOQRguYYj7edS6k9SLNGKWO/SO3p+CY=
 github.com/fsnotify/fsnotify v1.6.0 h1:n+5WquG0fcWoWp6xPWfHdbskMCQaFnG6PfBrh1Ky4HY=

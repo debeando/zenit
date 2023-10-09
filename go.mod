@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/aws/aws-sdk-go v1.45.23
-	github.com/debeando/go-common v0.0.0-20230822194859-f0f15d442d4e
+	github.com/debeando/go-common v0.1.0
 	github.com/debeando/zenit v1.4.5
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/influxdata/influxdb1-client v0.0.0-20220302092344-a9ab5670611c
@@ -28,5 +28,3 @@ require (
 	gopkg.in/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 )
-
-replace github.com/debeando/go-common => /Users/nsc/go/src/github.com/debeando/go-common
