@@ -34,7 +34,6 @@ This tool collect stats data from:
 
 And this is ingested on:
 
-- **ClickHouse:** This a columnar database to save all log parsers to analyze them.
 - **InfluxDB:** Scalable datastore for metrics, events, and real-time analytics.
 
 The numeric values has represent time has in microseconds.
@@ -42,7 +41,6 @@ The numeric values has represent time has in microseconds.
 ## Warnings
 
 - The activation of the Audit and Slow Log compromise the writing performance on disk, and another resources, use another disk for logs and have the necessary resources to support this process.
-- The parse files with very high QPS does big CPU consumption and compromise the server performance. Ensure that you have one available core for this process.
 
 ## Risks
 
