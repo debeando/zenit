@@ -65,7 +65,10 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		})
 
 		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
-		m.Connect()
+		err := m.Connect()
+		if err != nil {
+			continue
+		}
 
 		rows, _ := m.Query(queryFields)
 		for row := range rows {
