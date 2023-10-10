@@ -25,7 +25,7 @@ This agent collect all basic metrics from the hardware and more details from MyS
 This tool collect stats data from:
 
 - **AWS CloudWatch RDS:** Collect only the CPU pct of each RDS instance.
-- **AWS Disvocer RDS:** Discover any RDS compatible with MySQL.
+- **AWS Disvocer RDS:** Discover any RDS compatible with MySQL. Make sure your IAM or the EC2 IAM has RDS/EC2/CloudWatch read permissions.
 - **MySQL:** Collect typical metrics; variables, status, slave status, primary key overflow, tables sizes. The parser Slow and Audit Logs is only tested on MySQL 5.5, the rest of the features work fine with any version.
 - **ProxySQL:** Collect for the moment query digest only.
 - **AWS RDS Aurora:** Basic metrics; IOPS, CPU, and Replica Lag.
