@@ -25,8 +25,9 @@ parser:
 inputs:
   aws:
     discover:
-      enable: false
-      filter: ".*(prd)|(stg).*"
+      enable: true
+      # filter: ".*(prd)|(stg).*"
+      filter: "."
       username: monitor
       password: monitor
       plugins:

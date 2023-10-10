@@ -79,8 +79,6 @@ func (p *Plugin) Deliver(name string, cnf *config.Config, mtc *metrics.Items) {
 				time.Now(),
 			)
 
-			// log.Debug(fmt.Sprintf("OutputIndluxDB\t%s", k), m["fields"].(map[string]interface{}))
-
 			if err != nil {
 				log.ErrorWithFields(name, log.Fields{"step": "event", "message": err})
 			}

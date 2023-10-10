@@ -23,8 +23,6 @@ import (
 	_ "zenit/monitor/plugins/inputs/os/mem"
 	_ "zenit/monitor/plugins/inputs/os/net"
 	_ "zenit/monitor/plugins/inputs/os/sys"
-	_ "zenit/monitor/plugins/inputs/parsers/mysql/audit"
-	_ "zenit/monitor/plugins/inputs/parsers/mysql/slow"
 	_ "zenit/monitor/plugins/inputs/percona/deadlock"
 	_ "zenit/monitor/plugins/inputs/percona/delay"
 	_ "zenit/monitor/plugins/inputs/percona/kill"
@@ -42,6 +40,7 @@ import (
 
 func Load() {
 	cnf := config.GetInstance()
+	cnf.Load()
 
 	for {
 		// Flush old metrics:

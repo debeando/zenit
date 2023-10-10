@@ -4,8 +4,7 @@ go 1.21
 
 require (
 	github.com/aws/aws-sdk-go v1.45.24
-	github.com/debeando/go-common v0.2.0
-	github.com/debeando/zenit v1.4.5
+	github.com/debeando/go-common v0.2.1
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/influxdata/influxdb1-client v0.0.0-20220302092344-a9ab5670611c
 	github.com/kardianos/service v1.2.2
@@ -17,7 +16,6 @@ require (
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/hpcloud/tail v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/klauspost/compress v1.17.0 // indirect
@@ -36,6 +34,4 @@ require (
 	golang.org/x/sync v0.4.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
-	gopkg.in/fsnotify.v1 v1.4.7 // indirect
-	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 )
