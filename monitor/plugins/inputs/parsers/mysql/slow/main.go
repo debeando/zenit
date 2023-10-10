@@ -28,6 +28,10 @@ var (
 )
 
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
+	if !cnf.Parser.MySQL.SlowLog.Enable {
+		return
+	}
+
 	once.Do(func() {
 		if instance == nil {
 			instance = &Plugin{}
@@ -42,7 +46,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 func (p *Plugin) Load() {
 	defer func() {
 		if err := recover(); err != nil {
-			log.ErrorWithFields(p.Name, log.Fields{"error": err})
+			log.ErrorWithFields(p.Name, log.Fields{"message": err})
 		}
 	}()
 
@@ -50,7 +54,7 @@ func (p *Plugin) Load() {
 		log.DebugWithFields(p.Name, log.Fields{"slow_log_path": p.Config.Parser.MySQL.SlowLog.LogPath})
 
 		if !clickhouse.Check() {
-			log.ErrorWithFields(p.Name, log.Fields{"error": "SlowLog require active connection to ClickHouse."})
+			log.ErrorWithFields(p.Name, log.Fields{"message": "SlowLog require active connection to ClickHouse."})
 		}
 
 		channel_tail := make(chan string)

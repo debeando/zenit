@@ -23,7 +23,7 @@ type Plugin struct {
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.ErrorWithFields(name, log.Fields{"error": err})
+			log.ErrorWithFields(name, log.Fields{"message": err})
 		}
 	}()
 
@@ -67,7 +67,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	}
 }
 
-func (p *Plugin) iterate(k string, data reflect.Value) {
+func (p *Plugin) iterate(prefixKey string, data reflect.Value) {
 	switch data.Kind() {
 	case reflect.Map:
 		for _, mapKey := range data.MapKeys() {
@@ -77,23 +77,16 @@ func (p *Plugin) iterate(k string, data reflect.Value) {
 				p.iterate(mapKey.String(), reflect.ValueOf(mapValue))
 			} else {
 				if cast.InterfaceIsNumber(mapValue) {
-					key := fmt.Sprintf("%s%s%s", strings.ToCamel(k), separator(k, "."), strings.ToCamel(mapKey.String()))
+					key := strings.ToCamel(fmt.Sprintf("%s %s", prefixKey, mapKey.String()))
 					log.DebugWithFields(p.Name, log.Fields{
 						"hostname": p.Hostname,
 						key:        mapValue,
 					})
-					p.Values.Add(metrics.Value{Key: k, Value: mapValue})
+					p.Values.Add(metrics.Value{Key: key, Value: mapValue})
 				}
 			}
 		}
 	}
-}
-
-func separator(value, char string) string {
-	if len(value) > 0 {
-		return char
-	}
-	return ""
 }
 
 func init() {

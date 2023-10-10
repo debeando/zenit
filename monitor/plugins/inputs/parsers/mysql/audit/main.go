@@ -20,6 +20,10 @@ var (
 )
 
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
+	if !cnf.Parser.MySQL.AuditLog.Enable {
+		return
+	}
+
 	once.Do(func() {
 		if instance == nil {
 			instance = &Plugin{}
@@ -32,7 +36,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 func (p *Plugin) Parser(name string, cnf *config.Config) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.ErrorWithFields(name, log.Fields{"error": err})
+			log.ErrorWithFields(name, log.Fields{"message": err})
 		}
 	}()
 
@@ -40,7 +44,7 @@ func (p *Plugin) Parser(name string, cnf *config.Config) {
 		log.DebugWithFields(name, log.Fields{"slow_log_path": cnf.Parser.MySQL.AuditLog.LogPath})
 
 		if !clickhouse.Check() {
-			log.ErrorWithFields(name, log.Fields{"error": "AuditLog require active connection to ClickHouse."})
+			log.ErrorWithFields(name, log.Fields{"message": "AuditLog require active connection to ClickHouse."})
 		}
 
 		if cnf.Parser.MySQL.AuditLog.Format == "xml-old" {

@@ -11,7 +11,6 @@ type Config struct {
 	General   struct {
 		Hostname  string        `yaml:"hostname"`
 		Interval  time.Duration `yaml:"interval"`
-		Debug     bool          `yaml:"debug"`
 		AWSRegion string        `yaml:"aws_region"`
 	}
 	Parser struct {
@@ -83,7 +82,8 @@ type Config struct {
 	}
 	Outputs struct {
 		ClickHouse struct {
-			DSN string `yaml:"dsn"`
+			Enable bool   `yaml:"enable"`
+			DSN    string `yaml:"dsn"`
 		}
 		InfluxDB struct {
 			Enable   bool   `yaml:"enable"`

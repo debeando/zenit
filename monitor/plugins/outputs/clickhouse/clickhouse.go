@@ -24,6 +24,9 @@ type Event struct {
 
 func Check() bool {
 	cnf := config.GetInstance()
+	if !cnf.Outputs.ClickHouse.Enable {
+		return false
+	}
 
 	log.InfoWithFields("OutputClickHouse", log.Fields{"dsn": cnf.Outputs.ClickHouse.DSN})
 
@@ -39,6 +42,10 @@ func Send(e *Event, data <-chan map[string]string) {
 	timeout := make(chan bool)
 	ticker := time.NewTicker(time.Duration(e.Timeout) * time.Second)
 	cnf := config.GetInstance()
+
+	if !cnf.Outputs.ClickHouse.Enable {
+		return
+	}
 
 	go func() {
 		for range ticker.C {
