@@ -41,7 +41,10 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		})
 
 		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
-		m.Connect()
+		err := m.Connect()
+		if err != nil {
+			continue
+		}
 
 		c, _ := m.Query("SELECT 1 FROM information_schema.TABLES WHERE (table_schema = 'mysql') AND (table_name = 'ro_replica_status')")
 		if len(c) == 0 {
