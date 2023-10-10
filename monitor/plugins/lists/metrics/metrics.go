@@ -14,13 +14,7 @@ type Tag struct {
 type Metric struct {
 	Key    string
 	Tags   []Tag
-	Values []Value
-}
-
-// Value is a collection for specific metric.
-type Value struct {
-	Key   string
-	Value interface{}
+	Values Values
 }
 
 // Items is a collection of metrics

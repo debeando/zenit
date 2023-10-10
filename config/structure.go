@@ -54,6 +54,7 @@ type Config struct {
 				Enable bool `yaml:"enable"`
 			}
 		}
+		MongoDB  []MongoDB
 		MySQL    []MySQL
 		ProxySQL []struct {
 			Hostname string `yaml:"hostname"`
@@ -105,4 +106,11 @@ type MySQL struct {
 	Status    bool   `yaml:"status"`
 	Tables    bool   `yaml:"tables"`
 	Variables bool   `yaml:"variables"`
+}
+
+type MongoDB struct {
+	Hostname     string `yaml:"hostname"`
+	DSN          string `yaml:"dsn"`
+	Enable       bool   `yaml:"enable"`
+	ServerStatus bool   `yaml:"serverstatus"`
 }

@@ -47,7 +47,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			continue
 		}
 
-		var v = []metrics.Value{}
+		var v = metrics.Values{}
 
 		for _, i := range r {
 			if value, ok := mysql.ParseValue(i["Value"]); ok {
@@ -56,7 +56,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 					i["Variable_name"]: value,
 				})
 
-				v = append(v, metrics.Value{Key: i["Variable_name"], Value: value})
+				v.Add(metrics.Value{Key: i["Variable_name"], Value: value})
 			}
 		}
 

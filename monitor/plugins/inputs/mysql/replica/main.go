@@ -43,7 +43,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			"hostname": cnf.Inputs.MySQL[host].Hostname,
 		})
 
-		var v = []metrics.Value{}
+		var v = metrics.Values{}
 
 		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
 		m.Connect()
@@ -60,7 +60,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 					column:     value,
 				})
 
-				v = append(v, metrics.Value{Key: column, Value: value})
+				v.Add(metrics.Value{Key: column, Value: value})
 			}
 		}
 

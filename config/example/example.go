@@ -41,6 +41,11 @@ inputs:
           variables: true
     cloudwatch:
       enable: true
+  mongodb:
+    - hostname: localhost
+      dsn: mongodb://localhost:27017
+      enable: true
+      serverstatus: true
   mysql:
     - hostname: localhost
       dsn: root@tcp(127.0.0.1:3306)/?timeout=3s
