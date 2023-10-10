@@ -17,7 +17,7 @@ type Plugin struct{}
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.ErrorWithFields(name, log.Fields{"error": err})
+			log.ErrorWithFields(name, log.Fields{"message": err})
 		}
 	}()
 
@@ -30,7 +30,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		return
 	}
 
-	var v = []metrics.Value{}
+	var v = metrics.Values{}
 
 	for _, device := range devices {
 		u, err := disk.Usage(device.Mountpoint)
@@ -41,7 +41,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 
 		log.DebugWithFields(name, log.Fields{"device": GetDevice(device.Device), "usage": fmt.Sprintf("%.2f", u.UsedPercent)})
 
-		v = append(v, metrics.Value{
+		v.Add(metrics.Value{
 			Key:   GetDevice(device.Device),
 			Value: u.UsedPercent,
 		})

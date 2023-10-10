@@ -16,7 +16,7 @@ type Plugin struct{}
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.ErrorWithFields(name, log.Fields{"error": err})
+			log.ErrorWithFields(name, log.Fields{"message": err})
 		}
 	}()
 
@@ -43,7 +43,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			"hostname": cnf.Inputs.ProxySQL[host].Hostname,
 		})
 
-		var v = []metrics.Value{}
+		var v = metrics.Values{}
 
 		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
 		m.Connect()
@@ -60,7 +60,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 					"hostname":         cnf.Inputs.ProxySQL[host].Hostname,
 				})
 
-				v = append(v, metrics.Value{Key: i["Variable_Name"], Value: value})
+				v.Add(metrics.Value{Key: i["Variable_Name"], Value: value})
 			}
 		}
 

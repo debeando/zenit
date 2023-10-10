@@ -4,7 +4,6 @@ const File = `---
 general:
   hostname: localhost
   interval: 3 # Seconds
-  debug: true
   aws_region: ${AWS_REGION}
   aws_access_key_id: ${AWS_ACCESS_KEY_ID}
   aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
@@ -12,12 +11,12 @@ general:
 parser:
   mysql:
     slowlog:
-      enable: true
+      enable: false
       log_path: /var/lib/mysql/slow.log
       buffer_size: 100   # Number of events.
       buffer_timeout: 60 # Seconds
     auditlog:
-      enable: true
+      enable: false
       format: xml-old
       log_path: /var/lib/mysql/audit.log
       buffer_size: 100   # Number of events.
@@ -27,7 +26,8 @@ inputs:
   aws:
     discover:
       enable: true
-      filter: ".*(prd)|(stg).*"
+      # filter: ".*(prd)|(stg).*"
+      filter: "."
       username: monitor
       password: monitor
       plugins:
@@ -40,7 +40,13 @@ inputs:
           tables: true
           variables: true
     cloudwatch:
-      enable: true
+      enable: false
+  mongodb:
+    - hostname: localhost
+      dsn: mongodb://localhost:27017
+      # dsn: mongodb://user:password@localhost:27017
+      enable: false
+      serverstatus: true
   mysql:
     - hostname: localhost
       dsn: root@tcp(127.0.0.1:3306)/?timeout=3s
@@ -54,25 +60,24 @@ inputs:
   proxysql:
     - hostname: localhost
       dsn: proxysql:admin@tcp(127.0.0.1:6032)/?timeout=3s
-      enable: true
+      enable: false
       commands: true
       errors: true
       global: true
       pool: true
       queries: true
   os:
-    cpu: true
-    disk: true
-    limits: true
-    mem: true
-    net: true
+    cpu: false
+    disk: false
+    limits: false
+    mem: false
+    net: false
   process:
-    pt_deadlock_logger: true
-    pt_kill: true
-    pt_online_schema_change: true
-    pt_slave_delay: true
-    xtrabackup: true
-
+    pt_deadlock_logger: false
+    pt_kill: false
+    pt_online_schema_change: false
+    pt_slave_delay: false
+    xtrabackup: false
 outputs:
   clickhouse:
     enable: false
@@ -81,7 +86,7 @@ outputs:
   influxdb:
     enable: true
     url: http://127.0.0.1:8086
-    # username: zenit
-    # password: zenit
+    username: zenit
+    password: zenit
     database: zenit
 `

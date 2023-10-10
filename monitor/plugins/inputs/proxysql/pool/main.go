@@ -33,7 +33,7 @@ type Plugin struct{}
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.ErrorWithFields(name, log.Fields{"error": err})
+			log.ErrorWithFields(name, log.Fields{"message": err})
 		}
 	}()
 

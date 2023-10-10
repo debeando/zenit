@@ -11,7 +11,6 @@ type Config struct {
 	General   struct {
 		Hostname  string        `yaml:"hostname"`
 		Interval  time.Duration `yaml:"interval"`
-		Debug     bool          `yaml:"debug"`
 		AWSRegion string        `yaml:"aws_region"`
 	}
 	Parser struct {
@@ -54,6 +53,7 @@ type Config struct {
 				Enable bool `yaml:"enable"`
 			}
 		}
+		MongoDB  []MongoDB
 		MySQL    []MySQL
 		ProxySQL []struct {
 			Hostname string `yaml:"hostname"`
@@ -82,7 +82,8 @@ type Config struct {
 	}
 	Outputs struct {
 		ClickHouse struct {
-			DSN string `yaml:"dsn"`
+			Enable bool   `yaml:"enable"`
+			DSN    string `yaml:"dsn"`
 		}
 		InfluxDB struct {
 			Enable   bool   `yaml:"enable"`
@@ -105,4 +106,11 @@ type MySQL struct {
 	Status    bool   `yaml:"status"`
 	Tables    bool   `yaml:"tables"`
 	Variables bool   `yaml:"variables"`
+}
+
+type MongoDB struct {
+	Hostname     string `yaml:"hostname"`
+	DSN          string `yaml:"dsn"`
+	Enable       bool   `yaml:"enable"`
+	ServerStatus bool   `yaml:"serverstatus"`
 }

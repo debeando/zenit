@@ -20,12 +20,11 @@ type Plugin struct{}
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.ErrorWithFields(name, log.Fields{"error": err})
+			log.ErrorWithFields(name, log.Fields{"message": err})
 		}
 	}()
 
 	if !cnf.Inputs.AWS.CloudWatch.Enable {
-		log.DebugWithFields(name, log.Fields{"message": "Is not enabled."})
 		return
 	}
 
@@ -39,7 +38,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	})
 
 	if err != nil {
-		log.ErrorWithFields(name, log.Fields{"error": err})
+		log.ErrorWithFields(name, log.Fields{"message": err})
 		return
 	}
 
@@ -49,7 +48,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 
 	result, err := svcRDS.DescribeDBInstances(nil)
 	if err != nil {
-		log.ErrorWithFields(name, log.Fields{"error": err})
+		log.ErrorWithFields(name, log.Fields{"message": err})
 		return
 	}
 
@@ -69,7 +68,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 
 		resp, err := svcCW.GetMetricStatistics(&search)
 		if err != nil {
-			log.ErrorWithFields(name, log.Fields{"error": err})
+			log.ErrorWithFields(name, log.Fields{"message": err})
 			return
 		}
 

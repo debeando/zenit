@@ -24,7 +24,7 @@ type Plugin struct{}
 func (p *Plugin) Deliver(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.ErrorWithFields(name, log.Fields{"error": err})
+			log.ErrorWithFields(name, log.Fields{"message": err})
 		}
 	}()
 
@@ -38,7 +38,7 @@ func (p *Plugin) Deliver(name string, cnf *config.Config, mtc *metrics.Items) {
 
 	_, err := url.Parse(cnf.Outputs.InfluxDB.URL)
 	if err != nil {
-		log.ErrorWithFields(name, log.Fields{"step": "parser", "error": err})
+		log.ErrorWithFields(name, log.Fields{"step": "parser", "message": err})
 		return
 	}
 
@@ -49,14 +49,14 @@ func (p *Plugin) Deliver(name string, cnf *config.Config, mtc *metrics.Items) {
 	}
 	con, err := client.NewHTTPClient(conf)
 	if err != nil {
-		log.ErrorWithFields(name, log.Fields{"step": "client", "error": err})
+		log.ErrorWithFields(name, log.Fields{"step": "client", "message": err})
 		return
 	}
 	defer con.Close()
 
 	_, ver, err := con.Ping(0)
 	if err != nil {
-		log.ErrorWithFields(name, log.Fields{"step": "ping", "error": err})
+		log.ErrorWithFields(name, log.Fields{"step": "ping", "message": err})
 		return
 	}
 
@@ -79,10 +79,8 @@ func (p *Plugin) Deliver(name string, cnf *config.Config, mtc *metrics.Items) {
 				time.Now(),
 			)
 
-			log.DebugWithFields(fmt.Sprintf("OutputIndluxDB\t%s", k), m["fields"].(log.Fields))
-
 			if err != nil {
-				log.ErrorWithFields(name, log.Fields{"step": "event", "error": err})
+				log.ErrorWithFields(name, log.Fields{"step": "event", "message": err})
 			}
 			bp.AddPoint(pt)
 		}
@@ -101,11 +99,11 @@ func (p *Plugin) Deliver(name string, cnf *config.Config, mtc *metrics.Items) {
 			log.DebugWithFields(name, log.Fields{"database": cnf.Outputs.InfluxDB.Database})
 
 			if _, err := con.Query(query); err != nil {
-				log.ErrorWithFields(name, log.Fields{"step": "create", "error": err})
+				log.ErrorWithFields(name, log.Fields{"step": "create", "message": err})
 				return
 			}
 		} else {
-			log.ErrorWithFields(name, log.Fields{"error": err})
+			log.ErrorWithFields(name, log.Fields{"message": err})
 		}
 	}
 }
