@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/debeando/go-common/file"
 	"github.com/debeando/go-common/log"
 	"github.com/kardianos/service"
 	"github.com/spf13/cobra"
@@ -36,7 +37,7 @@ func NewCommand() *cobra.Command {
 				DisplayName: "Zenit",
 				Description: "Zenit Agent",
 				Executable:  "/usr/bin/zenit",
-				Arguments:   []string{"monitor", "--config=/etc/zenit/zenit.yaml"},
+				Arguments:   []string{"agent", "--config=/etc/zenit/zenit.yaml"},
 			}
 
 			srv, err := service.New(prg, svcConfig)
@@ -45,6 +46,11 @@ func NewCommand() *cobra.Command {
 			}
 
 			if install {
+				if ! file.Exist("/usr/bin/zenit") {
+					log.ErrorWithFields("The executable file was not found.", log.Fields{"path": "/usr/bin/zenit"})
+					return
+				}
+
 				if err = srv.Install(); err != nil {
 					log.Error(err.Error())
 				}

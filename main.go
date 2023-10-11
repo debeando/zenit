@@ -1,7 +1,7 @@
 package main
 
 import (
-	"zenit/monitor"
+	"zenit/agent"
 	"zenit/service"
 	"zenit/version"
 
@@ -29,7 +29,7 @@ Find more information at: https://github.com/debeando/zenit`,
 
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Verbose output")
 
-	rootCmd.AddCommand(monitor.NewCommand())
+	rootCmd.AddCommand(agent.NewCommand())
 	rootCmd.AddCommand(service.NewCommand())
 	rootCmd.AddCommand(version.NewCommand())
 	rootCmd.Execute()
