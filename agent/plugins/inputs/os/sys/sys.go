@@ -1,9 +1,9 @@
 package sys
 
 import (
-	"zenit/config"
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 
 	"github.com/debeando/go-common/file"
 	"github.com/debeando/go-common/log"

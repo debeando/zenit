@@ -1,8 +1,8 @@
 package inputs
 
 import (
-	"zenit/config"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 )
 
 // Input defines the interface that can interact with the registry

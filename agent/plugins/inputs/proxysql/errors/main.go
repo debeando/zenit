@@ -3,16 +3,16 @@ package commands
 import (
 	"regexp"
 
-	"zenit/config"
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 
 	"github.com/debeando/go-common/cast"
 	"github.com/debeando/go-common/log"
 	"github.com/debeando/go-common/mysql"
 )
 
-const query = "SELECT * FROM stats_mysql_errors;"
+const SQLErrors = "SELECT * FROM stats_mysql_errors;"
 
 type Plugin struct{}
 
@@ -43,25 +43,16 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		})
 
 		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
-		err := m.Connect()
-		if err != nil {
-			continue
-		}
-
-		r, _ := m.Query(query)
-		if len(r) == 0 {
-			continue
-		}
-
-		for _, i := range r {
+		m.Connect()
+		m.FetchAll(SQLErrors, func(row map[string]string) {
 			log.DebugWithFields(name, log.Fields{
-				"group":      i["hostgroup"],
-				"server":     i["hostname"],
-				"port":       i["port"],
-				"username":   i["username"],
-				"schema":     i["schemaname"],
-				"errno":      i["errno"],
-				"last_error": parseLastError(i["last_error"]),
+				"group":      row["hostgroup"],
+				"server":     row["hostname"],
+				"port":       row["port"],
+				"username":   row["username"],
+				"schema":     row["schemaname"],
+				"errno":      row["errno"],
+				"last_error": parseLastError(row["last_error"]),
 				"hostname":   cnf.Inputs.ProxySQL[host].Hostname,
 			})
 
@@ -69,19 +60,19 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 				Key: "proxysql_errors",
 				Tags: []metrics.Tag{
 					{Name: "hostname", Value: cnf.Inputs.ProxySQL[host].Hostname},
-					{Name: "group", Value: i["hostgroup"]},
-					{Name: "server", Value: i["hostname"]},
-					{Name: "port", Value: i["port"]},
-					{Name: "username", Value: i["username"]},
-					{Name: "schema", Value: i["schemaname"]},
-					{Name: "errno", Value: i["errno"]},
-					{Name: "last_error", Value: parseLastError(i["last_error"])},
+					{Name: "group", Value: row["hostgroup"]},
+					{Name: "server", Value: row["hostname"]},
+					{Name: "port", Value: row["port"]},
+					{Name: "username", Value: row["username"]},
+					{Name: "schema", Value: row["schemaname"]},
+					{Name: "errno", Value: row["errno"]},
+					{Name: "last_error", Value: parseLastError(row["last_error"])},
 				},
 				Values: []metrics.Value{
-					{Key: "count", Value: cast.StringToInt64(i["count_star"])},
+					{Key: "count", Value: cast.StringToInt64(row["count_star"])},
 				},
 			})
-		}
+		})
 	}
 }
 

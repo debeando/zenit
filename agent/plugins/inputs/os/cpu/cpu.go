@@ -3,9 +3,9 @@ package cpu
 import (
 	"fmt"
 
-	"zenit/config"
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 
 	"github.com/debeando/go-common/log"
 	"github.com/shirou/gopsutil/cpu"

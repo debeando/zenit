@@ -1,16 +1,16 @@
 package tables
 
 import (
-	"zenit/config"
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 
 	"github.com/debeando/go-common/cast"
 	"github.com/debeando/go-common/log"
 	"github.com/debeando/go-common/mysql"
 )
 
-const query = `
+const SQLTables = `
 SELECT table_schema AS 'schema',
 			 table_name AS 'table',
 			 COALESCE(data_length + index_length, 0) AS 'size',
@@ -50,23 +50,14 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		})
 
 		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
-		err := m.Connect()
-		if err != nil {
-			continue
-		}
-
-		r, _ := m.Query(query)
-		if len(r) == 0 {
-			continue
-		}
-
-		for _, i := range r {
+		m.Connect()
+		m.FetchAll(SQLTables, func(row map[string]string) {
 			log.DebugWithFields(name, log.Fields{
-				"schema":    i["schema"],
-				"table":     i["table"],
-				"size":      i["size"],
-				"rows":      i["rows"],
-				"increment": i["increment"],
+				"schema":    row["schema"],
+				"table":     row["table"],
+				"size":      row["size"],
+				"rows":      row["rows"],
+				"increment": row["increment"],
 				"hostname":  cnf.Inputs.MySQL[host].Hostname,
 			})
 
@@ -74,16 +65,16 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 				Key: "mysql_tables",
 				Tags: []metrics.Tag{
 					{Name: "hostname", Value: cnf.Inputs.MySQL[host].Hostname},
-					{Name: "schema", Value: i["schema"]},
-					{Name: "table", Value: i["table"]},
+					{Name: "schema", Value: row["schema"]},
+					{Name: "table", Value: row["table"]},
 				},
 				Values: []metrics.Value{
-					{Key: "size", Value: cast.StringToInt64(i["size"])},
-					{Key: "rows", Value: cast.StringToInt64(i["rows"])},
-					{Key: "increment", Value: cast.StringToInt64(i["increment"])},
+					{Key: "size", Value: cast.StringToInt64(row["size"])},
+					{Key: "rows", Value: cast.StringToInt64(row["rows"])},
+					{Key: "increment", Value: cast.StringToInt64(row["increment"])},
 				},
 			})
-		}
+		})
 	}
 }
 

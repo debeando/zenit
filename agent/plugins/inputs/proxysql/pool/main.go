@@ -1,16 +1,16 @@
 package pool
 
 import (
-	"zenit/config"
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 
 	"github.com/debeando/go-common/cast"
 	"github.com/debeando/go-common/log"
 	"github.com/debeando/go-common/mysql"
 )
 
-const query = `SELECT CASE
+const SQLConnectionPool = `SELECT CASE
 			WHEN hostgroup IN (SELECT writer_hostgroup FROM main.mysql_replication_hostgroups) THEN 'writer'
 			WHEN hostgroup IN (SELECT reader_hostgroup FROM main.mysql_replication_hostgroups) THEN 'reader'
 		END AS 'group',
@@ -61,29 +61,20 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		})
 
 		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
-		err := m.Connect()
-		if err != nil {
-			continue
-		}
-
-		r, _ := m.Query(query)
-		if len(r) == 0 {
-			continue
-		}
-
-		for _, i := range r {
+		m.Connect()
+		m.FetchAll(SQLConnectionPool, func(row map[string]string) {
 			log.DebugWithFields(name, log.Fields{
-				"group":    i["group"],
-				"host":     i["srv_host"],
-				"status":   i["status"],
-				"used":     cast.StringToInt64(i["ConnUsed"]),
-				"free":     cast.StringToInt64(i["ConnFree"]),
-				"ok":       cast.StringToInt64(i["ConnOK"]),
-				"errors":   cast.StringToInt64(i["ConnERR"]),
-				"queries":  cast.StringToInt64(i["Queries"]),
-				"tx":       cast.StringToInt64(i["Bytes_data_sent"]),
-				"rx":       cast.StringToInt64(i["Bytes_data_recv"]),
-				"latency":  cast.StringToInt64(i["Latency_us"]),
+				"group":    row["group"],
+				"host":     row["srv_host"],
+				"status":   row["status"],
+				"used":     cast.StringToInt64(row["ConnUsed"]),
+				"free":     cast.StringToInt64(row["ConnFree"]),
+				"ok":       cast.StringToInt64(row["ConnOK"]),
+				"errors":   cast.StringToInt64(row["ConnERR"]),
+				"queries":  cast.StringToInt64(row["Queries"]),
+				"tx":       cast.StringToInt64(row["Bytes_data_sent"]),
+				"rx":       cast.StringToInt64(row["Bytes_data_recv"]),
+				"latency":  cast.StringToInt64(row["Latency_us"]),
 				"hostname": cnf.Inputs.ProxySQL[host].Hostname,
 			})
 
@@ -91,22 +82,22 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 				Key: "proxysql_connections",
 				Tags: []metrics.Tag{
 					{Name: "hostname", Value: cnf.Inputs.ProxySQL[host].Hostname},
-					{Name: "group", Value: i["group"]},
-					{Name: "host", Value: i["srv_host"]},
+					{Name: "group", Value: row["group"]},
+					{Name: "host", Value: row["srv_host"]},
 				},
 				Values: []metrics.Value{
-					{Key: "status", Value: i["status"]},
-					{Key: "used", Value: cast.StringToInt64(i["ConnUsed"])},
-					{Key: "free", Value: cast.StringToInt64(i["ConnFree"])},
-					{Key: "ok", Value: cast.StringToInt64(i["ConnOK"])},
-					{Key: "errors", Value: cast.StringToInt64(i["ConnERR"])},
-					{Key: "queries", Value: cast.StringToInt64(i["Queries"])},
-					{Key: "tx", Value: cast.StringToInt64(i["Bytes_data_sent"])},
-					{Key: "rx", Value: cast.StringToInt64(i["Bytes_data_recv"])},
-					{Key: "latency", Value: cast.StringToInt64(i["Latency_us"])},
+					{Key: "status", Value: row["status"]},
+					{Key: "used", Value: cast.StringToInt64(row["ConnUsed"])},
+					{Key: "free", Value: cast.StringToInt64(row["ConnFree"])},
+					{Key: "ok", Value: cast.StringToInt64(row["ConnOK"])},
+					{Key: "errors", Value: cast.StringToInt64(row["ConnERR"])},
+					{Key: "queries", Value: cast.StringToInt64(row["Queries"])},
+					{Key: "tx", Value: cast.StringToInt64(row["Bytes_data_sent"])},
+					{Key: "rx", Value: cast.StringToInt64(row["Bytes_data_recv"])},
+					{Key: "latency", Value: cast.StringToInt64(row["Latency_us"])},
 				},
 			})
-		}
+		})
 	}
 }
 

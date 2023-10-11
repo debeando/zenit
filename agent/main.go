@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
+	"zenit/agent/plugins"
 	"zenit/config"
 	"zenit/config/example"
-	"zenit/agent/plugins"
 
 	"github.com/debeando/go-common/file"
 	"github.com/debeando/go-common/log"

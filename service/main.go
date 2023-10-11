@@ -46,7 +46,7 @@ func NewCommand() *cobra.Command {
 			}
 
 			if install {
-				if ! file.Exist("/usr/bin/zenit") {
+				if !file.Exist("/usr/bin/zenit") {
 					log.ErrorWithFields("The executable file was not found.", log.Fields{"path": "/usr/bin/zenit"})
 					return
 				}

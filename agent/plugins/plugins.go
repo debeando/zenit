@@ -3,8 +3,8 @@ package plugins
 import (
 	"time"
 
-	"zenit/config"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/outputs"

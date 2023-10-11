@@ -1,9 +1,9 @@
 package process
 
 import (
-	"zenit/config"
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 
 	"github.com/debeando/go-common/exec"
 	"github.com/debeando/go-common/log"

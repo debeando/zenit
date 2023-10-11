@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"reflect"
 
-	"zenit/config"
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 
 	"github.com/debeando/go-common/cast"
 	"github.com/debeando/go-common/log"

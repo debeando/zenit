@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"strings"
 
-	"zenit/config"
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 
 	"github.com/debeando/go-common/log"
 	"github.com/debeando/go-common/math"
@@ -23,7 +23,7 @@ type Column struct {
 }
 
 const (
-	queryFields = `SELECT DISTINCT
+	SQLOverflow = `SELECT DISTINCT
 	c.table_schema,
 	c.table_name,
 	c.column_name,
@@ -33,7 +33,7 @@ WHERE c.table_schema NOT IN ('mysql','sys','performance_schema','information_sch
   AND c.column_type LIKE '%int%'
   AND c.column_key = 'PRI'
 ORDER BY c.table_schema, c.table_name, c.column_name`
-	queryMax = "SELECT COALESCE(MAX(%s), 0) AS max FROM `%s`.`%s`"
+	SQLMaxPrimaryKey = "SELECT COALESCE(MAX(%s), 0) AS max FROM `%s`.`%s`"
 )
 
 type Plugin struct{}
@@ -65,66 +65,59 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		})
 
 		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
-		err := m.Connect()
-		if err != nil {
-			continue
-		}
-
-		rows, _ := m.Query(queryFields)
-		for row := range rows {
+		m.Connect()
+		m.FetchAll(SQLOverflow, func(table map[string]string) {
 			log.DebugWithFields(name, log.Fields{
 				"hostname":  cnf.Inputs.MySQL[host].Hostname,
-				"database":  rows[row]["TABLE_SCHEMA"],
-				"table":     rows[row]["TABLE_NAME"],
-				"column":    rows[row]["COLUMN_NAME"],
-				"data_type": rows[row]["data_type"],
+				"database":  table["TABLE_SCHEMA"],
+				"table":     table["TABLE_NAME"],
+				"column":    table["COLUMN_NAME"],
+				"data_type": table["data_type"],
 			})
 
-			max, _ := m.Query(
+			m.FetchAll(
 				fmt.Sprintf(
-					queryMax,
-					rows[row]["COLUMN_NAME"],
-					rows[row]["TABLE_SCHEMA"],
-					rows[row]["TABLE_NAME"],
-				),
-			)
+					SQLMaxPrimaryKey,
+					table["COLUMN_NAME"],
+					table["TABLE_SCHEMA"],
+					table["TABLE_NAME"],
+				), func(primaryKey map[string]string) {
+					if value, ok := mysql.ParseValue(primaryKey["max"]); ok {
+						c := Column{}
+						c.dataType = table["data_type"]
+						c.current = value
+						c.Unsigned()
+						c.Maximum()
+						c.Percentage()
 
-			if value, ok := mysql.ParseValue(max[0]["max"]); ok {
-				var c Column
-				c.dataType = rows[row]["data_type"]
-				c.current = int64(value)
+						mtc.Add(metrics.Metric{
+							Key: "mysql_overflow",
+							Tags: []metrics.Tag{
+								{Name: "hostname", Value: cnf.Inputs.MySQL[host].Hostname},
+								{Name: "schema", Value: table["TABLE_SCHEMA"]},
+								{Name: "table", Value: table["TABLE_NAME"]},
+								{Name: "data_type", Value: c.dataType},
+								{Name: "unsigned", Value: strconv.FormatBool(c.unsigned)}},
+							Values: []metrics.Value{
+								{Key: "percentage", Value: c.percent},
+							},
+						})
 
-				c.Unsigned()
-				c.Maximum()
-				c.Percentage()
-
-				mtc.Add(metrics.Metric{
-					Key: "mysql_overflow",
-					Tags: []metrics.Tag{
-						{Name: "hostname", Value: cnf.Inputs.MySQL[host].Hostname},
-						{Name: "schema", Value: rows[row]["TABLE_SCHEMA"]},
-						{Name: "table", Value: rows[row]["TABLE_NAME"]},
-						{Name: "data_type", Value: c.dataType},
-						{Name: "unsigned", Value: strconv.FormatBool(c.unsigned)}},
-					Values: []metrics.Value{
-						{Key: "percentage", Value: c.percent},
-					},
+						log.DebugWithFields(name, log.Fields{
+							"hostname":  cnf.Inputs.MySQL[host].Hostname,
+							"schema":    table["TABLE_SCHEMA"],
+							"table":     table["TABLE_NAME"],
+							"column":    table["COLUMN_NAME"],
+							"data_type": c.dataType,
+							"unsigned":  c.unsigned,
+							"value":     value,
+							"current":   c.current,
+							"maximum":   c.maximum,
+							"percent":   c.percent,
+						})
+					}
 				})
-
-				log.DebugWithFields(name, log.Fields{
-					"hostname":  cnf.Inputs.MySQL[host].Hostname,
-					"schema":    rows[row]["TABLE_SCHEMA"],
-					"table":     rows[row]["TABLE_NAME"],
-					"column":    rows[row]["COLUMN_NAME"],
-					"data_type": c.dataType,
-					"unsigned":  c.unsigned,
-					"value":     value,
-					"current":   c.current,
-					"maximum":   c.maximum,
-					"percent":   c.percent,
-				})
-			}
-		}
+		})
 	}
 }
 

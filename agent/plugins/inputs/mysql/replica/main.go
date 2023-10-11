@@ -1,9 +1,9 @@
 package replica
 
 import (
-	"zenit/config"
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 
 	"github.com/debeando/go-common/log"
 	"github.com/debeando/go-common/mysql"
@@ -13,7 +13,7 @@ import (
 //   - This command in future version is deprecated.
 //     Use: SHOW REPLICA STATUS
 //   - You need detect version.
-const query = "SHOW SLAVE STATUS"
+const SQLShowReplicaStatus = "SHOW SLAVE STATUS"
 
 type Plugin struct{}
 
@@ -43,29 +43,21 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			"hostname": cnf.Inputs.MySQL[host].Hostname,
 		})
 
-		var v = metrics.Values{}
-
+		v := metrics.Values{}
 		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
-		err := m.Connect()
-		if err != nil {
-			continue
-		}
+		m.Connect()
+		m.FetchAll(SQLShowReplicaStatus, func(row map[string]string) {
+			for column := range row {
+				if value, ok := mysql.ParseValue(row[column]); ok {
+					log.DebugWithFields(name, log.Fields{
+						"hostname": cnf.Inputs.MySQL[host].Hostname,
+						column:     value,
+					})
 
-		r, _ := m.Query(query)
-		if len(r) == 0 {
-			continue
-		}
-
-		for column := range r[0] {
-			if value, ok := mysql.ParseValue(r[0][column]); ok {
-				log.DebugWithFields(name, log.Fields{
-					"hostname": cnf.Inputs.MySQL[host].Hostname,
-					column:     value,
-				})
-
-				v.Add(metrics.Value{Key: column, Value: value})
+					v.Add(metrics.Value{Key: column, Value: value})
+				}
 			}
-		}
+		})
 
 		mtc.Add(metrics.Metric{
 			Key: "mysql_slave",

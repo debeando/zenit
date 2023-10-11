@@ -3,9 +3,9 @@ package aurora
 import (
 	"fmt"
 
-	"zenit/config"
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 
 	"github.com/debeando/go-common/cast"
 	"github.com/debeando/go-common/log"
@@ -15,7 +15,7 @@ import (
 type Plugin struct{}
 
 var (
-	SQLIsAurora = "SELECT 1 FROM information_schema.TABLES WHERE (table_schema = 'mysql') AND (table_name = 'ro_replica_status')"
+	SQLIsAurora      = "SELECT 1 FROM information_schema.TABLES WHERE (table_schema = 'mysql') AND (table_name = 'ro_replica_status')"
 	SQLReplicaStatus = "SELECT * FROM mysql.ro_replica_status WHERE Server_id = '%s'"
 )
 
@@ -48,7 +48,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
 		m.Connect()
 
-		if ! m.FetchBool(SQLIsAurora) {
+		if !m.FetchBool(SQLIsAurora) {
 			log.WarningWithFields(name, log.Fields{
 				"message":  "This server is not RDS Aurora.",
 				"hostname": cnf.Inputs.MySQL[host].Hostname,
@@ -56,7 +56,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			})
 		}
 
-		m.FetchAll(fmt.Sprintf(SQLReplicaStatus, cnf.Inputs.MySQL[host].Hostname), func(row map[string]string){
+		m.FetchAll(fmt.Sprintf(SQLReplicaStatus, cnf.Inputs.MySQL[host].Hostname), func(row map[string]string) {
 			log.DebugWithFields(name, log.Fields{
 				"hostname":                           cnf.Inputs.MySQL[host].Hostname,
 				"active_lsn":                         row["Active_lsn"],

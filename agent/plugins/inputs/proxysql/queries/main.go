@@ -4,9 +4,9 @@ import (
 	"regexp"
 	"strings"
 
-	"zenit/config"
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
+	"zenit/config"
 
 	"github.com/debeando/go-common/cast"
 	"github.com/debeando/go-common/log"
@@ -24,8 +24,8 @@ type Query struct {
 }
 
 const (
-	ReQuery        = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z0-9._]+)`
-	querySQDigestL = `SELECT CASE
+	ReQuery    = `^(?i)(SELECT|INSERT|UPDATE|DELETE)(?:.*FROM|.*INTO)?\W+([a-zA-Z0-9._]+)`
+	SQLQueries = `SELECT CASE
          WHEN hostgroup IN (SELECT writer_hostgroup FROM main.mysql_replication_hostgroups) THEN 'writer'
          WHEN hostgroup IN (SELECT reader_hostgroup FROM main.mysql_replication_hostgroups) THEN 'reader'
        END AS 'group',
@@ -73,30 +73,21 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		re, _ = regexp.Compile(ReQuery)
 
 		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
-		err := m.Connect()
-		if err != nil {
-			continue
-		}
-
-		r, _ := m.Query(querySQDigestL)
-		if len(r) == 0 {
-			continue
-		}
-
-		for _, i := range r {
-			table, command := Match(i["digest_text"])
+		m.Connect()
+		m.FetchAll(SQLQueries, func(row map[string]string) {
+			table, command := Match(row["digest_text"])
 
 			if table == "unknown" || command == "unknown" {
-				continue
+				return
 			}
 
 			log.DebugWithFields(name, log.Fields{
-				"group":    i["group"],
-				"schema":   i["schemaname"],
+				"group":    row["group"],
+				"schema":   row["schemaname"],
 				"table":    table,
 				"command":  command,
-				"count":    cast.StringToInt64(i["count_star"]),
-				"sum":      cast.StringToInt64(i["sum_time"]),
+				"count":    cast.StringToInt64(row["count_star"]),
+				"sum":      cast.StringToInt64(row["sum_time"]),
 				"hostname": cnf.Inputs.ProxySQL[host].Hostname,
 			})
 
@@ -104,17 +95,17 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 				Key: "proxysql_queries",
 				Tags: []metrics.Tag{
 					{Name: "hostname", Value: cnf.Inputs.ProxySQL[host].Hostname},
-					{Name: "group", Value: i["group"]},
-					{Name: "schema", Value: i["schemaname"]},
+					{Name: "group", Value: row["group"]},
+					{Name: "schema", Value: row["schemaname"]},
 					{Name: "table", Value: table},
 					{Name: "command", Value: command},
 				},
 				Values: []metrics.Value{
-					{Key: "count", Value: cast.StringToInt64(i["count_star"])},
-					{Key: "sum", Value: cast.StringToInt64(i["sum_time"])},
+					{Key: "count", Value: cast.StringToInt64(row["count_star"])},
+					{Key: "sum", Value: cast.StringToInt64(row["sum_time"])},
 				},
 			})
-		}
+		})
 	}
 }
 

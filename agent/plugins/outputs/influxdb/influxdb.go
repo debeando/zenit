@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"zenit/config"
 	"zenit/agent/plugins/lists/metrics"
 	"zenit/agent/plugins/outputs"
+	"zenit/config"
 
 	"github.com/debeando/go-common/log"
 	client "github.com/influxdata/influxdb1-client/v2"
