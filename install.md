@@ -36,6 +36,12 @@ inputs:
       global: true
       pool: true
       queries: false
+  os:
+    cpu: true
+    disk: true
+    limits: true
+    mem: true
+    net: true
 outputs:
   influxdb:
     enable: true
