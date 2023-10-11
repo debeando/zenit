@@ -43,7 +43,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
 		m.Connect()
 		m.FetchAll(SQLShowVariables, func(row map[string]string) {
-			if value, ok := mysql.ParseValue(row["Value"]); ok {
+			if value, ok := mysql.ParseNumberValue(row["Value"]); ok {
 				log.DebugWithFields(name, log.Fields{
 					"hostname":           cnf.Inputs.MySQL[host].Hostname,
 					row["Variable_name"]: value,

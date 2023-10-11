@@ -82,7 +82,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 					table["TABLE_SCHEMA"],
 					table["TABLE_NAME"],
 				), func(primaryKey map[string]string) {
-					if value, ok := mysql.ParseValue(primaryKey["max"]); ok {
+					if value, ok := mysql.ParseNumberValue(primaryKey["max"]); ok {
 						c := Column{}
 						c.dataType = table["data_type"]
 						c.current = value

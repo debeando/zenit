@@ -8,20 +8,6 @@ general:
   aws_access_key_id: ${AWS_ACCESS_KEY_ID}
   aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
 
-parser:
-  mysql:
-    slowlog:
-      enable: false
-      log_path: /var/lib/mysql/slow.log
-      buffer_size: 100   # Number of events.
-      buffer_timeout: 60 # Seconds
-    auditlog:
-      enable: false
-      format: xml-old
-      log_path: /var/lib/mysql/audit.log
-      buffer_size: 100   # Number of events.
-      buffer_timeout: 60 # Seconds
-
 inputs:
   aws:
     discover:
@@ -79,10 +65,6 @@ inputs:
     pt_slave_delay: false
     xtrabackup: false
 outputs:
-  clickhouse:
-    enable: false
-    dsn: http://127.0.0.1:8123/?database=zenit
-    # dsn: http://127.0.0.1:8123/?user=admin&password=admin&database=zenit
   influxdb:
     enable: true
     url: http://127.0.0.1:8086

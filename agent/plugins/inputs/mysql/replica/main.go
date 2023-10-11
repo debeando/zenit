@@ -48,7 +48,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		m.Connect()
 		m.FetchAll(SQLShowReplicaStatus, func(row map[string]string) {
 			for column := range row {
-				if value, ok := mysql.ParseValue(row[column]); ok {
+				if value, ok := mysql.ParseNumberValue(row[column]); ok {
 					log.DebugWithFields(name, log.Fields{
 						"hostname": cnf.Inputs.MySQL[host].Hostname,
 						column:     value,

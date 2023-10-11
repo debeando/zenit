@@ -72,7 +72,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 
 		re, _ = regexp.Compile(ReQuery)
 
-		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
+		m := mysql.New(cnf.Inputs.ProxySQL[host].Hostname, cnf.Inputs.ProxySQL[host].DSN)
 		m.Connect()
 		m.FetchAll(SQLQueries, func(row map[string]string) {
 			table, command := Match(row["digest_text"])

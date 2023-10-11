@@ -80,7 +80,12 @@ func (p *Plugin) Deliver(name string, cnf *config.Config, mtc *metrics.Items) {
 			)
 
 			if err != nil {
-				log.ErrorWithFields(name, log.Fields{"step": "event", "message": err})
+				log.ErrorWithFields(name, log.Fields{
+					"step":    "event",
+					"message": err,
+					"tags":    m["tags"],
+					"fields":  m["fields"],
+				})
 			}
 			bp.AddPoint(pt)
 		}

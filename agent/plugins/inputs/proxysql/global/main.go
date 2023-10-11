@@ -44,10 +44,10 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		})
 
 		v := metrics.Values{}
-		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
+		m := mysql.New(cnf.Inputs.ProxySQL[host].Hostname, cnf.Inputs.ProxySQL[host].DSN)
 		m.Connect()
 		m.FetchAll(SQLGlobal, func(row map[string]string) {
-			if value, ok := mysql.ParseValue(row["Variable_Value"]); ok {
+			if value, ok := mysql.ParseNumberValue(row["Variable_Value"]); ok {
 				log.DebugWithFields(name, log.Fields{
 					row["Variable_Name"]: value,
 					"hostname":           cnf.Inputs.ProxySQL[host].Hostname,

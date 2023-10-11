@@ -13,23 +13,6 @@ type Config struct {
 		Interval  time.Duration `yaml:"interval"`
 		AWSRegion string        `yaml:"aws_region"`
 	}
-	Parser struct {
-		MySQL struct {
-			AuditLog struct {
-				Enable        bool   `yaml:"enable"`
-				Format        string `yaml:"format"`
-				LogPath       string `yaml:"log_path"`
-				BufferSize    int    `yaml:"buffer_size"`
-				BufferTimeOut int    `yaml:"buffer_timeout"`
-			}
-			SlowLog struct {
-				Enable        bool   `yaml:"enable"`
-				LogPath       string `yaml:"log_path"`
-				BufferSize    int    `yaml:"buffer_size"`
-				BufferTimeOut int    `yaml:"buffer_timeout"`
-			}
-		}
-	}
 	Inputs struct {
 		AWS struct {
 			Discover struct {
@@ -81,10 +64,6 @@ type Config struct {
 		}
 	}
 	Outputs struct {
-		ClickHouse struct {
-			Enable bool   `yaml:"enable"`
-			DSN    string `yaml:"dsn"`
-		}
 		InfluxDB struct {
 			Enable   bool   `yaml:"enable"`
 			URL      string `yaml:"url"`

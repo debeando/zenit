@@ -60,7 +60,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			"hostname": cnf.Inputs.ProxySQL[host].Hostname,
 		})
 
-		m := mysql.New(cnf.Inputs.MySQL[host].Hostname, cnf.Inputs.MySQL[host].DSN)
+		m := mysql.New(cnf.Inputs.ProxySQL[host].Hostname, cnf.Inputs.ProxySQL[host].DSN)
 		m.Connect()
 		m.FetchAll(SQLConnectionPool, func(row map[string]string) {
 			log.DebugWithFields(name, log.Fields{
