@@ -11,6 +11,16 @@ sudo systemctl start zenit
 sudo systemctl status zenit
 ```
 
+## Reinstall
+
+```bash
+sudo systemctl stop zenit
+sudo /usr/bin/zenit service --uninstall
+sudo rm /usr/bin/zenit
+```
+
+And repeat the install process.
+
 ## Test
 
 ```bash
@@ -52,6 +62,8 @@ outputs:
 ## Uninstall
 
 ```bash
+sudo systemctl stop zenit
 sudo /usr/bin/zenit service --uninstall
 sudo rm /usr/bin/zenit
+sudo rm -rf /etc/zenit/
 ```
