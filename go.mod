@@ -8,6 +8,7 @@ require (
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/influxdata/influxdb1-client v0.0.0-20220302092344-a9ab5670611c
 	github.com/kardianos/service v1.2.2
+	github.com/rodaine/table v1.1.0
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/spf13/cobra v1.7.0
 )
@@ -35,3 +36,5 @@ require (
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 )
+
+replace github.com/debeando/go-common => /Users/nsc/go/src/github.com/debeando/go-common
