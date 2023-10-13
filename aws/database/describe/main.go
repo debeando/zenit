@@ -1,12 +1,12 @@
 package describe
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 
 	"github.com/debeando/go-common/aws/rds"
+	"github.com/debeando/go-common/table"
 
-	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +26,7 @@ func NewCommand() *cobra.Command {
 			r := rds.Config{}
 			r.Init()
 			i, err := r.Describe(args[0])
-			if err != nil{
+			if err != nil {
 				fmt.Println(err)
 				return
 			}
@@ -36,8 +36,9 @@ func NewCommand() *cobra.Command {
 			json.Unmarshal(a, &z)
 
 			tbl := table.New("ATTRIBUTE", "VALUE")
-			for k,v := range z {
-				tbl.AddRow(k,v)
+			tbl.SetFirstColumnAlignment(table.Right)
+			for k, v := range z {
+				tbl.AddRow(k, v)
 			}
 			tbl.Print()
 		},

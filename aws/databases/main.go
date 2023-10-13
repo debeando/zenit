@@ -2,7 +2,8 @@ package databases
 
 import (
 	"github.com/debeando/go-common/aws/rds"
-	"github.com/rodaine/table"
+	"github.com/debeando/go-common/table"
+
 	"github.com/spf13/cobra"
 )
 
