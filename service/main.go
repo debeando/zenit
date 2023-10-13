@@ -19,11 +19,11 @@ func NewCommand() *cobra.Command {
 		Use:   "service [OPTIONS]",
 		Short: "Run monitoring in daemon mode",
 		Example: `
-  Install init script:
-    $ sudo zenit service --install
+  # Install init script:
+  sudo zenit service --install
 
-  Start zenit agent:
-    $ sudo [systemctl|initctl] [start|stop|restart|status] zenit`,
+  # Start zenit agent:
+  sudo [systemctl|initctl] [start|stop|restart|status] zenit`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if !install && !uninstall {
 				cmd.Help()
