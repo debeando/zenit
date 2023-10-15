@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TAG=$(grep "const Number string" < command/version.go | awk -F'"' '{$0=$2}1')
+TAG=$(grep "const VERSION string" < version/main.go | awk -F'"' '{$0=$2}1')
 
 git push --delete origin "v${TAG}"
 git tag --delete "v${TAG}"
