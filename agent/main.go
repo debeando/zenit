@@ -22,11 +22,11 @@ func NewCommand() *cobra.Command {
 		Use:   "agent",
 		Short: "Agent to collect any information for many services; MySQL, ProxySQL and more...",
 		Example: `
-  Generate a zenit config file:
-    $ zenit agent --config-example > /etc/zenit/zenit.yaml
+  # Generate a zenit config file:
+  zenit agent --config-example > /etc/zenit/zenit.yaml
 
-  Use specific config file:
-    $ zenit agent --config=/etc/zenit/zenit.yaml`,
+  # Use specific config file:
+  zenit agent --config=/etc/zenit/zenit.yaml`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if configExample {
 				fmt.Print(example.Load())
