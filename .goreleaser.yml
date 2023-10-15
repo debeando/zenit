@@ -9,10 +9,6 @@ builds:
       - darwin_arm64
     ldflags:
       - -s -w
-archives:
-  - name_template: '{{ .ProjectName }}_v{{ .Version }}_{{ .Os }}_{{ .Arch }}'
-    replacements:
-      darwin: mac
 checksum:
   name_template: '{{ .ProjectName }}_checksums_{{ .Version }}.txt'
 snapshot:
