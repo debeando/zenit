@@ -84,7 +84,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 					{Name: "name", Value: *d.DBInstanceIdentifier},
 				},
 				Values: []metrics.Value{
-					{Key: "percentage", Value: *resp.Datapoints[i].Average},
+					{Key: "cpu", Value: *resp.Datapoints[i].Average},
 				},
 			})
 
