@@ -77,8 +77,28 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 }
 
 func parseLastError(error string) string {
+	if ok, _ := regexp.MatchString("You have an error in your SQL syntax; .*", error); ok {
+		error = "Error on your SQL syntax"
+	}
+
 	if ok, _ := regexp.MatchString("Duplicate entry '.*' for key 'PRIMARY'", error); ok {
 		error = "Duplicate entry for primary key"
+	}
+
+	if ok, _ := regexp.MatchString("Unknown column '.*' in 'where clause'", error); ok {
+		error = "Unknown column in where clause"
+	}
+
+	if ok, _ := regexp.MatchString("Table '.*' doesn't exist", error); ok {
+		error = "Table doesn't exist"
+	}
+
+	if ok, _ := regexp.MatchString("Data too long for column '.*' at row .*", error); ok {
+		error = "Data too long in column"
+	}
+
+	if ok, _ := regexp.MatchString("Unknown column '.*' in '.*'", error); ok {
+		error = "Unknown column 'encode_url' in 'field list'	"
 	}
 
 	return error
