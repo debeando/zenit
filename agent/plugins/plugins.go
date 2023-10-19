@@ -11,6 +11,7 @@ import (
 
 	_ "zenit/agent/plugins/inputs/aws/cloudwatch/rds"
 	_ "zenit/agent/plugins/inputs/aws/discover/rds"
+	_ "zenit/agent/plugins/inputs/mongodb/collections"
 	_ "zenit/agent/plugins/inputs/mongodb/serverstatus"
 	_ "zenit/agent/plugins/inputs/mysql/aurora"
 	_ "zenit/agent/plugins/inputs/mysql/overflow"

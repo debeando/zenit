@@ -1,4 +1,4 @@
-package serverstatus
+package collections
 
 import (
 	"encoding/json"
@@ -29,16 +29,16 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 
 	for host := range cnf.Inputs.MongoDB {
 		log.DebugWithFields(name, log.Fields{
-			"hostname":      cnf.Inputs.MongoDB[host].Hostname,
-			"enable":        cnf.Inputs.MongoDB[host].Enable,
-			"server_status": cnf.Inputs.MongoDB[host].ServerStatus,
+			"hostname":           cnf.Inputs.MongoDB[host].Hostname,
+			"enable":             cnf.Inputs.MongoDB[host].Enable,
+			"server_collections": cnf.Inputs.MongoDB[host].Collections,
 		})
 
 		if !cnf.Inputs.MongoDB[host].Enable {
 			continue
 		}
 
-		if !cnf.Inputs.MongoDB[host].ServerStatus {
+		if !cnf.Inputs.MongoDB[host].Collections {
 			continue
 		}
 
@@ -51,27 +51,30 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			continue
 		}
 
-		ss := m.ServerStatus()
+		databases := m.Databases()
+		for _, database := range databases.Databases {
+			ss := m.Collections(database.Name)
 
-		p.Name = name
-		p.Hostname = cnf.Inputs.MongoDB[host].Hostname
+			p.Name = name
+			p.Hostname = cnf.Inputs.MongoDB[host].Hostname
 
-		var obj map[string]interface{}
-		t, _ := json.Marshal(ss)
-		json.Unmarshal(t, &obj)
+			var obj map[string]interface{}
+			t, _ := json.Marshal(ss)
+			json.Unmarshal(t, &obj)
 
-		entry := reflect.ValueOf(obj)
-		p.Iterate([]string{""}, entry)
+			entry := reflect.ValueOf(obj)
+			p.Iterate([]string{""}, entry)
 
-		mtc.Add(metrics.Metric{
-			Key: "mongodb_serverstatus",
-			Tags: []metrics.Tag{
-				{Name: "hostname", Value: cnf.Inputs.MongoDB[host].Hostname},
-			},
-			Values: p.Values,
-		})
+			mtc.Add(metrics.Metric{
+				Key: "mongodb_collections",
+				Tags: []metrics.Tag{
+					{Name: "hostname", Value: cnf.Inputs.MongoDB[host].Hostname},
+				},
+				Values: p.Values,
+			})
 
-		p.Values.Reset()
+			p.Values.Reset()
+		}
 	}
 }
 
@@ -113,5 +116,5 @@ func (p *Plugin) Iterate(parent []string, data reflect.Value) {
 }
 
 func init() {
-	inputs.Add("InputMongoDBServerStatus", func() inputs.Input { return &Plugin{} })
+	inputs.Add("InputMongoDBCollections", func() inputs.Input { return &Plugin{} })
 }
