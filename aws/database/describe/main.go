@@ -3,6 +3,7 @@ package describe
 import (
 	"fmt"
 
+	"github.com/debeando/go-common/log"
 	"github.com/debeando/go-common/aws/rds"
 	"github.com/debeando/go-common/table"
 
@@ -22,8 +23,13 @@ func NewCommand() *cobra.Command {
 				return
 			}
 
-			r := rds.Config{}
-			r.Init()
+			r := rds.RDS{}
+
+			if err := r.Init(); err != nil {
+				log.Error(err.Error())
+				return
+			}
+
 			instance, err := r.Describe(args[0])
 			if err != nil {
 				fmt.Println(err)

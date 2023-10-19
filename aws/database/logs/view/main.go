@@ -3,6 +3,7 @@ package view
 import (
 	"fmt"
 
+	"github.com/debeando/go-common/log"
 	"github.com/debeando/go-common/aws/rds"
 
 	"github.com/spf13/cobra"
@@ -21,8 +22,12 @@ func NewCommand() *cobra.Command {
 				return
 			}
 
-			r := rds.Config{}
-			r.Init()
+			r := rds.RDS{}
+
+			if err := r.Init(); err != nil {
+				log.Error(err.Error())
+				return
+			}
 
 			if len(args) == 2 && len(args[0]) > 0 && len(args[1]) > 0 {
 				data, err := r.PollLogs(args[0], args[1])
