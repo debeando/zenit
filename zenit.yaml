@@ -29,8 +29,9 @@ inputs:
     - hostname: localhost
       dsn: mongodb://localhost:27017
       # dsn: mongodb://user:password@localhost:27017
-      enable: false
+      enable: true
       serverstatus: true
+      collections: true
   mysql:
     - hostname: localhost
       dsn: root@tcp(127.0.0.1:3306)/?timeout=3s

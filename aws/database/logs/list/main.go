@@ -3,8 +3,8 @@ package list
 import (
 	"fmt"
 
-	"github.com/debeando/go-common/log"
 	"github.com/debeando/go-common/aws/rds"
+	"github.com/debeando/go-common/log"
 	"github.com/debeando/go-common/table"
 
 	"github.com/spf13/cobra"
