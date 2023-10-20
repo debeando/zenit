@@ -9,48 +9,50 @@ general:
 inputs:
   aws:
     discover:
-      enable: true
+      enable: false
       # filter: ".*(prd)|(stg).*"
       filter: "."
       username: monitor
       password: monitor
       plugins:
         mysql:
-          enable: true
-          aurora: true
+          enable: false
+          aurora: false
+          innodb: false
           overflow: false
-          replica: true
-          status: true
-          tables: true
-          variables: true
+          replica: false
+          status: false
+          tables: false
+          variables: false
     cloudwatch:
       enable: false
   mongodb:
     - hostname: localhost
       dsn: mongodb://localhost:27017
       # dsn: mongodb://user:password@localhost:27017
-      enable: true
-      serverstatus: true
-      collections: true
+      enable: false
+      serverstatus: false
+      collections: false
   mysql:
     - hostname: localhost
       dsn: root@tcp(127.0.0.1:3306)/?timeout=3s
       enable: false
       aurora: false
-      overflow: true
-      replica: true
-      status: true
-      tables: true
-      variables: true
+      innodb: false
+      overflow: false
+      replica: false
+      status: false
+      tables: false
+      variables: false
   proxysql:
     - hostname: localhost
       dsn: proxysql:admin@tcp(127.0.0.1:6032)/?timeout=3s
       enable: false
-      commands: true
-      errors: true
-      global: true
-      pool: true
-      queries: true
+      commands: false
+      errors: false
+      global: false
+      pool: false
+      queries: false
   os:
     cpu: false
     disk: false
@@ -65,7 +67,7 @@ inputs:
     xtrabackup: false
 outputs:
   influxdb:
-    enable: true
+    enable: false
     url: http://127.0.0.1:8086
     username: zenit
     password: zenit

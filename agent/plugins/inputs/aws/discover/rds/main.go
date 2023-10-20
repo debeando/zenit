@@ -65,6 +65,8 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 				m.Engine = aws.StringValue(d.Engine)
 				m.Hostname = hostname
 				m.Enable = cnf.Inputs.AWS.Discover.Plugins.MySQL.Enable
+				m.Aurora = cnf.Inputs.AWS.Discover.Plugins.MySQL.Aurora
+				m.InnoDB = cnf.Inputs.AWS.Discover.Plugins.MySQL.InnoDB
 				m.Overflow = cnf.Inputs.AWS.Discover.Plugins.MySQL.Overflow
 				m.Replica = cnf.Inputs.AWS.Discover.Plugins.MySQL.Replica
 				m.Status = cnf.Inputs.AWS.Discover.Plugins.MySQL.Status
@@ -77,17 +79,15 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 					aws.Int64Value(d.Endpoint.Port),
 				)
 
-				if m.Engine == "aurora-mysql" {
-					m.Aurora = true
-				}
-
 				cnf.Inputs.MySQL = append(cnf.Inputs.MySQL, m)
 
 				log.DebugWithFields(name, log.Fields{
+					"aurora":    m.Aurora,
 					"dsn":       m.DSN,
 					"enable":    m.Enable,
 					"engine":    m.Engine,
 					"hostname":  m.Hostname,
+					"innodb":    m.InnoDB,
 					"overflow":  m.Overflow,
 					"replica":   m.Replica,
 					"status":    m.Status,
