@@ -14,6 +14,7 @@ import (
 	_ "zenit/agent/plugins/inputs/mongodb/collections"
 	_ "zenit/agent/plugins/inputs/mongodb/serverstatus"
 	_ "zenit/agent/plugins/inputs/mysql/aurora"
+	_ "zenit/agent/plugins/inputs/mysql/innodb"
 	_ "zenit/agent/plugins/inputs/mysql/overflow"
 	_ "zenit/agent/plugins/inputs/mysql/replica"
 	_ "zenit/agent/plugins/inputs/mysql/status"

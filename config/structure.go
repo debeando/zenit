@@ -22,8 +22,9 @@ type Config struct {
 				Filter   string `yaml:"filter"`
 				Plugins  struct {
 					MySQL struct {
-						Enable    bool `yaml:"enable"`
 						Aurora    bool `yaml:"aurora"`
+						Enable    bool `yaml:"enable"`
+						InnoDB    bool `yaml:"innodb"`
 						Overflow  bool `yaml:"overflow"`
 						Replica   bool `yaml:"replica"`
 						Status    bool `yaml:"status"`
@@ -78,8 +79,9 @@ type MySQL struct {
 	Engine    string
 	Hostname  string `yaml:"hostname"`
 	DSN       string `yaml:"dsn"`
-	Enable    bool   `yaml:"enable"`
 	Aurora    bool   `yaml:"aurora"`
+	Enable    bool   `yaml:"enable"`
+	InnoDB    bool   `yaml:"innodb"`
 	Overflow  bool   `yaml:"overflow"`
 	Replica   bool   `yaml:"replica"`
 	Status    bool   `yaml:"status"`
