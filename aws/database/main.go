@@ -3,6 +3,7 @@ package database
 import (
 	"zenit/aws/database/describe"
 	"zenit/aws/database/logs"
+	"zenit/aws/database/parameters"
 
 	"github.com/spf13/cobra"
 )
@@ -18,6 +19,7 @@ func NewCommand() *cobra.Command {
 
 	cmd.AddCommand(describe.NewCommand())
 	cmd.AddCommand(logs.NewCommand())
+	cmd.AddCommand(parameters.NewCommand())
 
 	return cmd
 }

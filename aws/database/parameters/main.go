@@ -1,23 +1,23 @@
-package logs
+package parameters
 
 import (
-	"zenit/aws/database/logs/list"
-	"zenit/aws/database/logs/view"
+	"zenit/aws/database/parameters/describe"
+	"zenit/aws/database/parameters/list"
 
 	"github.com/spf13/cobra"
 )
 
 func NewCommand() *cobra.Command {
 	var cmd = &cobra.Command{
-		Use:   "logs",
-		Short: "Manage logs about database; error, slow logs, general log, ...",
+		Use:   "parameters",
+		Short: "Manage parameter groups",
 		Run: func(cmd *cobra.Command, args []string) {
 			cmd.Help()
 		},
 	}
 
 	cmd.AddCommand(list.NewCommand())
-	cmd.AddCommand(view.NewCommand())
+	cmd.AddCommand(describe.NewCommand())
 
 	return cmd
 }
