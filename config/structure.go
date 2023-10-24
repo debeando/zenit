@@ -90,5 +90,8 @@ type MongoDB struct {
 	DSN          string `yaml:"dsn"`
 	Enable       bool   `yaml:"enable"`
 	ServerStatus bool   `yaml:"serverstatus"`
-	Collections  bool   `yaml:"collections"`
+	Collections  struct {
+		Enable   bool `yaml:"enable"`
+		Interval int  `yaml:"interval"`
+	}
 }

@@ -1,6 +1,8 @@
 package collections
 
 import (
+	"time"
+
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
 	"zenit/config"
@@ -9,11 +11,9 @@ import (
 	"github.com/debeando/go-common/mongodb"
 )
 
-type Plugin struct {
-	Name     string
-	Hostname string
-	Values   metrics.Values
-}
+type Plugin struct{}
+
+var interval int64
 
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
@@ -24,16 +24,21 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 
 	for host := range cnf.Inputs.MongoDB {
 		log.DebugWithFields(name, log.Fields{
-			"hostname":           cnf.Inputs.MongoDB[host].Hostname,
-			"enable":             cnf.Inputs.MongoDB[host].Enable,
-			"server_collections": cnf.Inputs.MongoDB[host].Collections,
+			"hostname":    cnf.Inputs.MongoDB[host].Hostname,
+			"enable":      cnf.Inputs.MongoDB[host].Enable,
+			"collections": cnf.Inputs.MongoDB[host].Collections.Enable,
+			"interval":    cnf.Inputs.MongoDB[host].Collections.Interval,
 		})
 
 		if !cnf.Inputs.MongoDB[host].Enable {
 			continue
 		}
 
-		if !cnf.Inputs.MongoDB[host].Collections {
+		if !cnf.Inputs.MongoDB[host].Collections.Enable {
+			continue
+		}
+
+		if !IsTimeToCollect(cnf.Inputs.MongoDB[host].Collections.Interval) {
 			continue
 		}
 
@@ -52,7 +57,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			for _, collection := range collections {
 				colStats := m.CollectionStats(database.Name, collection)
 
-				log.DebugWithFields(p.Name, log.Fields{
+				log.DebugWithFields(name, log.Fields{
 					"hostname":         cnf.Inputs.MongoDB[host].Hostname,
 					"name":             colStats.Collection,
 					"count":            colStats.Count,
@@ -78,10 +83,18 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		}
 
 		m.Close()
-		p.Values.Reset()
 	}
 }
 
 func init() {
 	inputs.Add("InputMongoDBCollections", func() inputs.Input { return &Plugin{} })
+}
+
+func IsTimeToCollect(i int) bool {
+	if interval == 0 || int(time.Since(time.Unix(interval, 0)).Seconds()) >= i {
+		interval = int64(time.Now().Unix())
+		return true
+	}
+
+	return false
 }
