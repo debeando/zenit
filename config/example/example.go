@@ -21,11 +21,13 @@ inputs:
           enable: false
           aurora: false
           innodb: false
-          overflow: false
           replica: false
           status: false
           tables: false
           variables: false
+          overflow:
+            enable: false
+            interval: 900 # Seconds
     cloudwatch:
       enable: false
   mongodb:
@@ -43,11 +45,13 @@ inputs:
       enable: false
       aurora: false
       innodb: false
-      overflow: false
       replica: false
       status: false
       tables: false
       variables: false
+      overflow:
+        enable: false
+        interval: 900 # Seconds
   proxysql:
     - hostname: localhost
       dsn: proxysql:admin@tcp(127.0.0.1:6032)/?timeout=3s
