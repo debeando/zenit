@@ -1,6 +1,8 @@
 package tables
 
 import (
+	"time"
+
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
 	"zenit/config"
@@ -23,6 +25,8 @@ ORDER BY table_schema, table_name;
 
 type Plugin struct{}
 
+var interval int64
+
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
 		if err := recover(); err != nil {
@@ -34,14 +38,19 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		log.DebugWithFields(name, log.Fields{
 			"hostname": cnf.Inputs.MySQL[host].Hostname,
 			"enable":   cnf.Inputs.MySQL[host].Enable,
-			"tables":   cnf.Inputs.MySQL[host].Tables,
+			"tables":   cnf.Inputs.MySQL[host].Tables.Enable,
+			"interval": cnf.Inputs.MySQL[host].Tables.Interval,
 		})
 
 		if !cnf.Inputs.MySQL[host].Enable {
 			continue
 		}
 
-		if !cnf.Inputs.MySQL[host].Tables {
+		if !cnf.Inputs.MySQL[host].Tables.Enable {
+			continue
+		}
+
+		if !IsTimeToCollect(cnf.Inputs.MySQL[host].Tables.Interval) {
 			continue
 		}
 
@@ -80,4 +89,13 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 
 func init() {
 	inputs.Add("InputMySQLTables", func() inputs.Input { return &Plugin{} })
+}
+
+func IsTimeToCollect(i int) bool {
+	if interval == 0 || int(time.Since(time.Unix(interval, 0)).Seconds()) >= i {
+		interval = int64(time.Now().Unix())
+		return true
+	}
+
+	return false
 }
