@@ -23,9 +23,11 @@ inputs:
           innodb: false
           replica: false
           status: false
-          tables: false
           variables: false
           overflow:
+            enable: false
+            interval: 900 # Seconds
+          tables:
             enable: false
             interval: 900 # Seconds
     cloudwatch:
@@ -47,9 +49,11 @@ inputs:
       innodb: false
       replica: false
       status: false
-      tables: false
       variables: false
       overflow:
+        enable: false
+        interval: 900 # Seconds
+      tables:
         enable: false
         interval: 900 # Seconds
   proxysql:
