@@ -1,17 +1,13 @@
 package config
 
-import (
-	"time"
-)
-
 // All is a struct to contain all configuration imported or loaded from config file.
 type Config struct {
 	Path      string
 	IPAddress string
 	General   struct {
-		Hostname  string        `yaml:"hostname"`
-		Interval  time.Duration `yaml:"interval"`
-		AWSRegion string        `yaml:"aws_region"`
+		Hostname  string `yaml:"hostname"`
+		Interval  int    `yaml:"interval"`
+		AWSRegion string `yaml:"aws_region"`
 	}
 	Inputs struct {
 		AWS struct {

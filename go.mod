@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/aws/aws-sdk-go v1.46.2
-	github.com/debeando/go-common v0.4.2
+	github.com/debeando/go-common v0.4.3
 	github.com/influxdata/influxdb1-client v0.0.0-20220302092344-a9ab5670611c
 	github.com/kardianos/service v1.2.2
 	github.com/shirou/gopsutil v3.21.11+incompatible

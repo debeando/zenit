@@ -42,7 +42,9 @@ import (
 
 func Load() {
 	cnf := config.GetInstance()
-	cnf.Load()
+	if err := cnf.Load(); err != nil {
+		return
+	}
 
 	for {
 		// Flush old metrics:
@@ -62,7 +64,7 @@ func Load() {
 		}
 
 		// Wait loop:
-		log.DebugWithFields("Wait until next collect metrics", log.Fields{"interval": cnf.General.Interval * time.Second})
-		time.Sleep(config.GetInstance().General.Interval * time.Second)
+		log.DebugWithFields("Wait until next collect metrics", log.Fields{"interval": time.Duration(cnf.General.Interval) * time.Second})
+		time.Sleep(time.Duration(cnf.General.Interval) * time.Second)
 	}
 }
