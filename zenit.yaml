@@ -32,7 +32,9 @@ inputs:
       # dsn: mongodb://user:password@localhost:27017
       enable: false
       serverstatus: false
-      collections: false
+      collections:
+        enable: false
+        interval: 900 # Seconds
   mysql:
     - hostname: localhost
       dsn: root@tcp(127.0.0.1:3306)/?timeout=3s
