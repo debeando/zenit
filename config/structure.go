@@ -18,10 +18,13 @@ type Config struct {
 				Filter   string `yaml:"filter"`
 				Plugins  struct {
 					MySQL struct {
-						Aurora    bool `yaml:"aurora"`
-						Enable    bool `yaml:"enable"`
-						InnoDB    bool `yaml:"innodb"`
-						Overflow  bool `yaml:"overflow"`
+						Aurora   bool `yaml:"aurora"`
+						Enable   bool `yaml:"enable"`
+						InnoDB   bool `yaml:"innodb"`
+						Overflow struct {
+							Enable   bool `yaml:"enable"`
+							Interval int  `yaml:"interval"`
+						}
 						Replica   bool `yaml:"replica"`
 						Status    bool `yaml:"status"`
 						Tables    bool `yaml:"tables"`
@@ -78,11 +81,14 @@ type MySQL struct {
 	Aurora    bool   `yaml:"aurora"`
 	Enable    bool   `yaml:"enable"`
 	InnoDB    bool   `yaml:"innodb"`
-	Overflow  bool   `yaml:"overflow"`
 	Replica   bool   `yaml:"replica"`
 	Status    bool   `yaml:"status"`
 	Tables    bool   `yaml:"tables"`
 	Variables bool   `yaml:"variables"`
+	Overflow  struct {
+		Enable   bool `yaml:"enable"`
+		Interval int  `yaml:"interval"`
+	}
 }
 
 type MongoDB struct {

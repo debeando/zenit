@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
@@ -38,6 +39,8 @@ ORDER BY c.table_schema, c.table_name, c.column_name`
 
 type Plugin struct{}
 
+var interval int64
+
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
 		if err := recover(); err != nil {
@@ -49,14 +52,19 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		log.DebugWithFields(name, log.Fields{
 			"hostname": cnf.Inputs.MySQL[host].Hostname,
 			"enable":   cnf.Inputs.MySQL[host].Enable,
-			"overflow": cnf.Inputs.MySQL[host].Overflow,
+			"overflow": cnf.Inputs.MySQL[host].Overflow.Enable,
+			"interval": cnf.Inputs.MySQL[host].Overflow.Interval,
 		})
 
 		if !cnf.Inputs.MySQL[host].Enable {
 			continue
 		}
 
-		if !cnf.Inputs.MySQL[host].Overflow {
+		if !cnf.Inputs.MySQL[host].Overflow.Enable {
+			continue
+		}
+
+		if !IsTimeToCollect(cnf.Inputs.MySQL[host].Overflow.Interval) {
 			continue
 		}
 
@@ -139,4 +147,13 @@ func (c *Column) Percentage() {
 
 func init() {
 	inputs.Add("InputMySQLOverflow", func() inputs.Input { return &Plugin{} })
+}
+
+func IsTimeToCollect(i int) bool {
+	if interval == 0 || int(time.Since(time.Unix(interval, 0)).Seconds()) >= i {
+		interval = int64(time.Now().Unix())
+		return true
+	}
+
+	return false
 }
