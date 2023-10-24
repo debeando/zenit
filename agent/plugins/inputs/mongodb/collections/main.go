@@ -1,17 +1,12 @@
 package collections
 
 import (
-	"encoding/json"
-	"reflect"
-
 	"zenit/agent/plugins/inputs"
 	"zenit/agent/plugins/lists/metrics"
 	"zenit/config"
 
-	"github.com/debeando/go-common/cast"
 	"github.com/debeando/go-common/log"
 	"github.com/debeando/go-common/mongodb"
-	"github.com/debeando/go-common/strings"
 )
 
 type Plugin struct {
@@ -53,65 +48,36 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 
 		databases := m.Databases()
 		for _, database := range databases.Databases {
-			ss := m.Collections(database.Name)
+			collections := m.Collections(database.Name)
+			for _, collection := range collections {
+				colStats := m.CollectionStats(database.Name, collection)
 
-			p.Name = name
-			p.Hostname = cnf.Inputs.MongoDB[host].Hostname
+				log.DebugWithFields(p.Name, log.Fields{
+					"hostname":         cnf.Inputs.MongoDB[host].Hostname,
+					"name":             colStats.Collection,
+					"count":            colStats.Count,
+					"size":             colStats.Size,
+					"storage_size":     colStats.StorageSize,
+					"total_index_size": colStats.TotalIndexSize,
+				})
 
-			var obj map[string]interface{}
-			t, _ := json.Marshal(ss)
-			json.Unmarshal(t, &obj)
-
-			entry := reflect.ValueOf(obj)
-			p.Iterate([]string{""}, entry)
-
-			mtc.Add(metrics.Metric{
-				Key: "mongodb_collections",
-				Tags: []metrics.Tag{
-					{Name: "hostname", Value: cnf.Inputs.MongoDB[host].Hostname},
-				},
-				Values: p.Values,
-			})
-
-			p.Values.Reset()
-		}
-	}
-}
-
-func (p *Plugin) Iterate(parent []string, data reflect.Value) {
-	switch data.Kind() {
-	case reflect.Map:
-		for _, key := range data.MapKeys() {
-			value := data.MapIndex(key)
-
-			if value.IsZero() {
-				continue
+				mtc.Add(metrics.Metric{
+					Key: "mongodb_collections",
+					Tags: []metrics.Tag{
+						{Name: "hostname", Value: cnf.Inputs.MongoDB[host].Hostname},
+						{Name: "collection", Value: colStats.Collection},
+					},
+					Values: []metrics.Value{
+						{Key: "count", Value: colStats.Count},
+						{Key: "size", Value: colStats.Size},
+						{Key: "storage_size", Value: colStats.StorageSize},
+						{Key: "total_index_size", Value: colStats.TotalIndexSize},
+					},
+				})
 			}
-			if value.IsNil() {
-				continue
-			}
-
-			parent = append(parent, key.String())
-
-			p.Iterate(parent, reflect.ValueOf(value.Interface()))
-
-			parent = parent[:len(parent)-1]
 		}
-	default:
-		if cast.InterfaceIsNumber(data.Interface()) {
-			key := strings.ToCamel(strings.Join(parent, ""))
-			log.DebugWithFields(p.Name, log.Fields{
-				"hostname": p.Hostname,
-				key:        data,
-			})
 
-			p.Values.Add(
-				metrics.Value{
-					Key:   key,
-					Value: cast.InterfaceToFloat64(data.Interface()),
-				},
-			)
-		}
+		p.Values.Reset()
 	}
 }
 
