@@ -77,6 +77,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			}
 		}
 
+		m.Close()
 		p.Values.Reset()
 	}
 }
