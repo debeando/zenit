@@ -32,6 +32,7 @@ inputs:
             interval: 900 # Seconds
     cloudwatch:
       enable: false
+      interval: 300 # Seconds
   mongodb:
     - hostname: localhost
       dsn: mongodb://localhost:27017
