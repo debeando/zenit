@@ -17,6 +17,8 @@ import (
 
 type Plugin struct{}
 
+var interval int64
+
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
 		if err := recover(); err != nil {
@@ -24,7 +26,16 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 		}
 	}()
 
+	log.DebugWithFields(name, log.Fields{
+		"enable":   cnf.Inputs.AWS.CloudWatch.Enable,
+		"interval": cnf.Inputs.AWS.CloudWatch.Interval,
+	})
+
 	if !cnf.Inputs.AWS.CloudWatch.Enable {
+		return
+	}
+
+	if !IsTimeToCollect(cnf.Inputs.AWS.CloudWatch.Interval) {
 		return
 	}
 
@@ -98,4 +109,13 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 
 func init() {
 	inputs.Add("InputAWSCloudWatchRDS", func() inputs.Input { return &Plugin{} })
+}
+
+func IsTimeToCollect(i int) bool {
+	if interval == 0 || int(time.Since(time.Unix(interval, 0)).Seconds()) >= i {
+		interval = int64(time.Now().Unix())
+		return true
+	}
+
+	return false
 }

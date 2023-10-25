@@ -21,7 +21,8 @@ type Config struct {
 				}
 			}
 			CloudWatch struct {
-				Enable bool `yaml:"enable"`
+				Enable   bool `yaml:"enable"`
+				Interval int  `yaml:"interval"`
 			}
 		}
 		MongoDB  []MongoDB
