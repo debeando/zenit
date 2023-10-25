@@ -17,22 +17,7 @@ type Config struct {
 				Password string `yaml:"password"`
 				Filter   string `yaml:"filter"`
 				Plugins  struct {
-					MySQL struct {
-						Aurora    bool `yaml:"aurora"`
-						Enable    bool `yaml:"enable"`
-						InnoDB    bool `yaml:"innodb"`
-						Replica   bool `yaml:"replica"`
-						Status    bool `yaml:"status"`
-						Variables bool `yaml:"variables"`
-						Overflow  struct {
-							Enable   bool `yaml:"enable"`
-							Interval int  `yaml:"interval"`
-						}
-						Tables struct {
-							Enable   bool `yaml:"enable"`
-							Interval int  `yaml:"interval"`
-						}
-					}
+					MySQL MySQL
 				}
 			}
 			CloudWatch struct {
