@@ -1,42 +1,25 @@
 # ![Zenit](https://raw.githubusercontent.com/debeando/zenit/master/assets/images/zenit_logo.png)
-[![Coverage Status](https://coveralls.io/repos/github/debeando/zenit/badge.svg?branch=master)](https://coveralls.io/github/debeando/zenit?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/debeando/zenit)](https://goreportcard.com/report/github.com/debeando/zenit)
+[![Go Report Card](https://goreportcard.com/badge/github.com/debeando/zenit)](https://goreportcard.com/report/github.com/debeando/zenit)
 
-Zenit is a daemon collector for metrics and log parsers for dedicated host for MySQL/Percona/MariaDB Servers and
-ProxySQL. Maybe not requires many another agents for this purpose, but with this one you'll find an excellent tool for database administration.
+Zenit is a daemon collector for metrics in yours Database's and Proxy's service in small environment. Maybe not requires many another agents for this purpose, but with this one you'll find an excellent tool for database administration.
 
-- The name [Zenit](https://en.wikipedia.org/wiki/Zenit_(satellite)) is inspired by a russian spy satellite.
-- This project is sponsored by [zinio](https://www.zinio.com) and [The Hotel Networks](https://www.thehotelsnetwork.com).
+Why can you use it, this tool is make by DBA for DBA, other tools collect basic information with many services and complex configs, while this it collector low level information and variety than others not, all in one and easy usage.
 
-Why can you use it, this tool is make by DBA for DBA, other tools collect basic information, while this it collector low level information and variety than others not, all in one.
+## Sponsored by
+
+- [OneClick](https://oneclick.es).
+- [Security Online Solutions](https://securityonlinesolutions.com).
+- [The Hotel Networks](https://www.thehotelsnetwork.com).
+- [Zinio](https://www.zinio.com).
 
 ## Description:
 
-This agent collect all basic metrics from the hardware and more details from MySQL or ProxySQL services. And read logs in real time, each event is parsed to analyse later, the logs is send to [ClickHouse](https://github.com/yandex/ClickHouse/) because is very easy to analyse with SQL and have great performance. And the metrics is send only to [InfluxDB](https://github.com/influxdata/influxdb) and you can analize and monitoring with [Grafana](https://grafana.com/) for the moment.
+This agent collect all basic metrics from the hardware and more details from MySQL, MongoDB or ProxySQL services. And the metrics is send only to [InfluxDB](https://github.com/influxdata/influxdb) and you can analize and monitoring with [Grafana](https://grafana.com).
 
-### Advantage
+## Advantage
 
-- Auto discover database servers on Amazon Web Services.
-- Centralize all logs in a single point of view, you have more details for debugging and analyse, with this you can optimize queries, understand what happen inside, and more.
-- Audit database security access and identify possible risk.
 - One agent for all, easy to install and configure, low memory consumption and high performance.
-
-### Compatibility
-
-This tool collect stats data from:
-
-- **AWS CloudWatch RDS:** Collect only the CPU pct of each RDS instance.
-- **AWS Disvocer RDS:** Discover any RDS compatible with MySQL. Make sure your IAM or the EC2 IAM has RDS/EC2/CloudWatch read permissions.
-- **MySQL:** Collect typical metrics; variables, status, slave status, primary key overflow, tables sizes. The parser Slow and Audit Logs is only tested on MySQL 5.5, the rest of the features work fine with any version.
-- **ProxySQL:** Collect for the moment query digest only.
-- **AWS RDS Aurora:** Basic metrics; IOPS, CPU, and Replica Lag.
-- **Percona ToolKit:** Verify is running specific tools, for the moment only check follow tools; pt-kill, pt-deadlock-logger and pt-slave-delay.
-- **Linux OS:** Collect basic metrics of CPU, RAM, DISK, NET, and System Limits.
-
-And this is ingested on:
-
-- **InfluxDB:** Scalable datastore for metrics, events, and real-time analytics.
-
-The numeric values has represent time has in microseconds.
+- Auto discover database servers on Amazon Web Services.
 
 ## Warnings
 
@@ -53,20 +36,15 @@ Before using this tool, please:
 
 **Like most, you should not be surprised.**
 
-## Limitations
-
-- The audit log cut long query.
-- ClickHouse no have retention policy for data storage.
-
 ## Install agent
 
-For the moment, this tool only run in any Linux distribution with 64 bits. Paste that at a Terminal prompt:
+For the moment, this tool only run in any Linux distribution with amd/aarch 64 bits. Paste that at a Terminal prompt:
 
 ```bash
 bash < <(curl -s https://debeando.com/zenit.sh)
 ```
 
-For more details, please visit the [wiki](https://github.com/debeando/zenit/wiki/Install-agent).
+For more details, please visit the [wiki](https://github.com/debeando/zenit/wiki).
 
 ## How to use it:
 
