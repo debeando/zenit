@@ -5,10 +5,12 @@ Manual instalation:
 ```bash
 sudo cp zenit /usr/bin/zenit
 sudo mkdir /etc/zenit/
+sudo /usr/bin/zenit completion bash > /etc/bash_completion.d/zenit
 sudo /usr/bin/zenit agent --config-example > /etc/zenit/zenit.yaml
 sudo /usr/bin/zenit service --install
 sudo systemctl start zenit
 sudo systemctl status zenit
+source <(/usr/bin/zenit completion bash)
 ```
 
 ## Reinstall
@@ -64,6 +66,7 @@ outputs:
 ```bash
 sudo systemctl stop zenit
 sudo /usr/bin/zenit service --uninstall
+sudo rm /etc/bash_completion.d/zenit
 sudo rm /usr/bin/zenit
 sudo rm -rf /etc/zenit/
 ```
