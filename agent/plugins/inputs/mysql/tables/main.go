@@ -23,9 +23,11 @@ WHERE table_schema NOT IN ('mysql','sys','performance_schema','information_schem
 ORDER BY table_schema, table_name;
 `
 
-type Plugin struct{}
+type Plugin struct {
+	Counter int64
+}
 
-var interval int64
+var plugin = new(Plugin)
 
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
@@ -40,6 +42,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			"enable":   cnf.Inputs.MySQL[host].Enable,
 			"tables":   cnf.Inputs.MySQL[host].Tables.Enable,
 			"interval": cnf.Inputs.MySQL[host].Tables.Interval,
+			"counter":  p.Counter,
 		})
 
 		if !cnf.Inputs.MySQL[host].Enable {
@@ -50,7 +53,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			continue
 		}
 
-		if !IsTimeToCollect(cnf.Inputs.MySQL[host].Tables.Interval) {
+		if !p.isTimeToCollect(cnf.Inputs.MySQL[host].Tables.Interval) {
 			continue
 		}
 
@@ -87,15 +90,16 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	}
 }
 
-func init() {
-	inputs.Add("InputMySQLTables", func() inputs.Input { return &Plugin{} })
-}
+func (p *Plugin) isTimeToCollect(i int) bool {
+	if p.Counter == 0 || int(time.Since(time.Unix(p.Counter, 0)).Seconds()) >= i {
+		(*p).Counter = int64(time.Now().Unix())
 
-func IsTimeToCollect(i int) bool {
-	if interval == 0 || int(time.Since(time.Unix(interval, 0)).Seconds()) >= i {
-		interval = int64(time.Now().Unix())
 		return true
 	}
 
 	return false
+}
+
+func init() {
+	inputs.Add("InputMySQLTables", func() inputs.Input { return plugin })
 }

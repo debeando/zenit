@@ -11,9 +11,11 @@ import (
 	"github.com/debeando/go-common/mongodb"
 )
 
-type Plugin struct{}
+type Plugin struct {
+	Counter int64
+}
 
-var interval int64
+var plugin = new(Plugin)
 
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
@@ -28,6 +30,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			"enable":      cnf.Inputs.MongoDB[host].Enable,
 			"collections": cnf.Inputs.MongoDB[host].Collections.Enable,
 			"interval":    cnf.Inputs.MongoDB[host].Collections.Interval,
+			"counter":     p.Counter,
 		})
 
 		if !cnf.Inputs.MongoDB[host].Enable {
@@ -38,7 +41,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			continue
 		}
 
-		if !IsTimeToCollect(cnf.Inputs.MongoDB[host].Collections.Interval) {
+		if !p.isTimeToCollect(cnf.Inputs.MongoDB[host].Collections.Interval) {
 			continue
 		}
 
@@ -86,15 +89,16 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	}
 }
 
-func init() {
-	inputs.Add("InputMongoDBCollections", func() inputs.Input { return &Plugin{} })
-}
+func (p *Plugin) isTimeToCollect(i int) bool {
+	if p.Counter == 0 || int(time.Since(time.Unix(p.Counter, 0)).Seconds()) >= i {
+		(*p).Counter = int64(time.Now().Unix())
 
-func IsTimeToCollect(i int) bool {
-	if interval == 0 || int(time.Since(time.Unix(interval, 0)).Seconds()) >= i {
-		interval = int64(time.Now().Unix())
 		return true
 	}
 
 	return false
+}
+
+func init() {
+	inputs.Add("InputMongoDBCollections", func() inputs.Input { return plugin })
 }

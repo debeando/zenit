@@ -37,9 +37,11 @@ ORDER BY c.table_schema, c.table_name, c.column_name`
 	SQLMaxPrimaryKey = "SELECT COALESCE(MAX(%s), 0) AS max FROM `%s`.`%s`"
 )
 
-type Plugin struct{}
+type Plugin struct {
+	Counter int64
+}
 
-var interval int64
+var plugin = new(Plugin)
 
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
@@ -54,6 +56,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			"enable":   cnf.Inputs.MySQL[host].Enable,
 			"overflow": cnf.Inputs.MySQL[host].Overflow.Enable,
 			"interval": cnf.Inputs.MySQL[host].Overflow.Interval,
+			"counter":  p.Counter,
 		})
 
 		if !cnf.Inputs.MySQL[host].Enable {
@@ -64,7 +67,7 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 			continue
 		}
 
-		if !IsTimeToCollect(cnf.Inputs.MySQL[host].Overflow.Interval) {
+		if !p.isTimeToCollect(cnf.Inputs.MySQL[host].Overflow.Interval) {
 			continue
 		}
 
@@ -145,15 +148,16 @@ func (c *Column) Percentage() {
 	c.percent = math.Percentage(c.current, c.maximum)
 }
 
-func init() {
-	inputs.Add("InputMySQLOverflow", func() inputs.Input { return &Plugin{} })
-}
+func (p *Plugin) isTimeToCollect(i int) bool {
+	if p.Counter == 0 || int(time.Since(time.Unix(p.Counter, 0)).Seconds()) >= i {
+		(*p).Counter = int64(time.Now().Unix())
 
-func IsTimeToCollect(i int) bool {
-	if interval == 0 || int(time.Since(time.Unix(interval, 0)).Seconds()) >= i {
-		interval = int64(time.Now().Unix())
 		return true
 	}
 
 	return false
+}
+
+func init() {
+	inputs.Add("InputMySQLOverflow", func() inputs.Input { return plugin })
 }
