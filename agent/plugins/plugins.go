@@ -50,16 +50,12 @@ func Load() {
 		mtc := metrics.Load()
 		mtc.Reset()
 
-		for key := range inputs.Inputs {
-			if creator, ok := inputs.Inputs[key]; ok {
-				creator().Collect(key, cnf, mtc)
-			}
+		for name, plugin := range inputs.Inputs {
+			plugin().Collect(name, cnf, mtc)
 		}
 
-		for key := range outputs.Outputs {
-			if creator, ok := outputs.Outputs[key]; ok {
-				creator().Deliver(key, cnf, mtc)
-			}
+		for name, plugin := range outputs.Outputs {
+			plugin().Deliver(name, cnf, mtc)
 		}
 
 		interval := time.Duration(cnf.General.Interval)

@@ -15,9 +15,11 @@ import (
 	"github.com/debeando/go-common/log"
 )
 
-type Plugin struct{}
+type Plugin struct {
+	Counter int64
+}
 
-var interval int64
+var plugin = new(Plugin)
 
 func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	defer func() {
@@ -29,13 +31,14 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	log.DebugWithFields(name, log.Fields{
 		"enable":   cnf.Inputs.AWS.CloudWatch.Enable,
 		"interval": cnf.Inputs.AWS.CloudWatch.Interval,
+		"counter":  p.Counter,
 	})
 
 	if !cnf.Inputs.AWS.CloudWatch.Enable {
 		return
 	}
 
-	if !IsTimeToCollect(cnf.Inputs.AWS.CloudWatch.Interval) {
+	if !p.isTimeToCollect(cnf.Inputs.AWS.CloudWatch.Interval) {
 		return
 	}
 
@@ -107,15 +110,16 @@ func (p *Plugin) Collect(name string, cnf *config.Config, mtc *metrics.Items) {
 	}
 }
 
-func init() {
-	inputs.Add("InputAWSCloudWatchRDS", func() inputs.Input { return &Plugin{} })
-}
+func (p *Plugin) isTimeToCollect(i int) bool {
+	if p.Counter == 0 || int(time.Since(time.Unix(p.Counter, 0)).Seconds()) >= i {
+		(*p).Counter = int64(time.Now().Unix())
 
-func IsTimeToCollect(i int) bool {
-	if interval == 0 || int(time.Since(time.Unix(interval, 0)).Seconds()) >= i {
-		interval = int64(time.Now().Unix())
 		return true
 	}
 
 	return false
+}
+
+func init() {
+	inputs.Add("InputAWSCloudWatchRDS", func() inputs.Input { return plugin })
 }
