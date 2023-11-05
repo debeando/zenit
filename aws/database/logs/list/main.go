@@ -19,13 +19,13 @@ func NewCommand() *cobra.Command {
 		Short: "List all logs about database.",
 		Example: `
   # List logs of specific database instance:
-  zenit aws database logs test-rds
+  zenit aws database logs list test-rds
 
   # List slow query logs of specific database instance:
-  zenit aws database logs test-rds --filter=slowquery
+  zenit aws database logs list test-rds --filter=slowquery
 
   # Sort list slow query logs of specific database instance:
-  zenit aws database logs test-rds --filter=slowquery --sort`,
+  zenit aws database logs list test-rds --filter=slowquery --sort`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 || len(args) > 1 {
 				cmd.Help()
