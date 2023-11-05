@@ -3,6 +3,7 @@ package main
 import (
 	"zenit/agent"
 	"zenit/aws"
+	"zenit/mysql"
 	"zenit/service"
 	"zenit/version"
 
@@ -30,8 +31,9 @@ Find more information at: https://github.com/debeando/zenit`,
 
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Verbose output")
 
-	rootCmd.AddCommand(aws.NewCommand())
 	rootCmd.AddCommand(agent.NewCommand())
+	rootCmd.AddCommand(aws.NewCommand())
+	rootCmd.AddCommand(mysql.NewCommand())
 	rootCmd.AddCommand(service.NewCommand())
 	rootCmd.AddCommand(version.NewCommand())
 	rootCmd.Execute()
