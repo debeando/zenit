@@ -37,9 +37,9 @@ func NewCommand() *cobra.Command {
 			}
 
 			tbl := table.New("ATTRIBUTE", "VALUE")
-			tbl.SetFirstColumnAlignment(table.Right)
+			tbl.Column(0, table.Column{Alignment: table.Right})
 			for k, v := range instance.JSON() {
-				tbl.AddRow(k, v)
+				tbl.Add(k, v)
 			}
 			tbl.Print()
 		},

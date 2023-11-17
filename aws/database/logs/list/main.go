@@ -51,7 +51,7 @@ func NewCommand() *cobra.Command {
 
 			tbl := table.New("FILE", "SIZE")
 			for _, log := range logs {
-				tbl.AddRow(log.FileName, log.Size)
+				tbl.Add(log.FileName, log.Size)
 			}
 			tbl.Print()
 		},
