@@ -38,7 +38,7 @@ func NewCommand() *cobra.Command {
 
 			tbl := table.New("NAME", "DESCRIPTION", "FAMILY")
 			for _, parameter := range parameters {
-				tbl.AddRow(parameter.Name, parameter.Description, parameter.Family)
+				tbl.Add(parameter.Name, parameter.Description, parameter.Family)
 			}
 			tbl.Print()
 

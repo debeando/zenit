@@ -66,7 +66,7 @@ func NewCommand() *cobra.Command {
 			max := queries.ScoreMax()
 
 			for index := range *queries {
-				tbl.AddRow(
+				tbl.Add(
 					(*queries)[index].ID,
 					formatScore(min, max, (*queries)[index].Score),
 					(*queries)[index].Count,
