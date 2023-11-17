@@ -7,7 +7,7 @@ import (
 )
 
 // Version is a const to have the latest version number for this code.
-const VERSION string = "1.5.0-beta.1"
+const VERSION string = "1.5.0-beta.4"
 
 func NewCommand() *cobra.Command {
 	var cmd = &cobra.Command{

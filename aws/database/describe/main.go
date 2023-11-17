@@ -36,8 +36,9 @@ func NewCommand() *cobra.Command {
 				return
 			}
 
-			tbl := table.New("ATTRIBUTE", "VALUE")
-			tbl.Column(0, table.Column{Alignment: table.Right})
+			tbl := table.New()
+			tbl.Column(0, table.Column{Name: "ATTRIBUTE", Alignment: table.Right})
+			tbl.Column(1, table.Column{Name: "VALUE"})
 			for k, v := range instance.JSON() {
 				tbl.Add(k, v)
 			}

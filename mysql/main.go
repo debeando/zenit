@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"zenit/mysql/digest"
+	"zenit/mysql/top"
 
 	"github.com/spf13/cobra"
 )
@@ -16,6 +17,7 @@ func NewCommand() *cobra.Command {
 	}
 
 	cmd.AddCommand(digest.NewCommand())
+	cmd.AddCommand(top.NewCommand())
 
 	return cmd
 }
