@@ -54,11 +54,14 @@ func NewCommand() *cobra.Command {
 					queries.Analyzed(),
 					queries.Unique()))
 
-			tbl := table.New(
-				"DIGEST ID", "SCORE", "COUNT", "Q. TIME",
-				"L. TIME", "R. SENT", "R. EXAMINED",
-			)
-
+			tbl := table.New()
+			tbl.Column(0, table.Column{Name: "DIGEST ID"})
+			tbl.Column(1, table.Column{Name: "SCORE"})
+			tbl.Column(2, table.Column{Name: "COUNT"})
+			tbl.Column(3, table.Column{Name: "Q. TIME"})
+			tbl.Column(4, table.Column{Name: "L. TIME"})
+			tbl.Column(5, table.Column{Name: "R. SENT"})
+			tbl.Column(6, table.Column{Name: "R. EXAMINED"})
 			queries.Clean()
 			queries.SortByScore()
 

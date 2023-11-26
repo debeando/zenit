@@ -36,7 +36,10 @@ func NewCommand() *cobra.Command {
 				return
 			}
 
-			tbl := table.New("NAME", "DESCRIPTION", "FAMILY")
+			tbl := table.New()
+			tbl.Column(0, table.Column{Name: "NAME"})
+			tbl.Column(1, table.Column{Name: "DESCRIPTION"})
+			tbl.Column(2, table.Column{Name: "FAMILY"})
 			for _, parameter := range parameters {
 				tbl.Add(parameter.Name, parameter.Description, parameter.Family)
 			}

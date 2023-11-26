@@ -22,7 +22,12 @@ func NewCommand() *cobra.Command {
 
 			instances := r.List()
 
-			tbl := table.New("ENGINE", "VERSION", "IDENTIFIER", "CLASS", "STATUS")
+			tbl := table.New()
+			tbl.Column(0, table.Column{Name: "ENGINE"})
+			tbl.Column(1, table.Column{Name: "VERSION"})
+			tbl.Column(2, table.Column{Name: "IDENTIFIER"})
+			tbl.Column(3, table.Column{Name: "CLASS"})
+			tbl.Column(4, table.Column{Name: "STATUS"})
 			for _, instance := range instances {
 				tbl.Add(instance.Engine, instance.Version, instance.Identifier, instance.Class, instance.Status)
 			}

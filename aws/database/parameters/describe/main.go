@@ -36,7 +36,12 @@ func NewCommand() *cobra.Command {
 				return
 			}
 
-			tbl := table.New("NAME", "VALUES", "APPLY METHOD", "APPLY TYPE", "MODIFIABLE")
+			tbl := table.New()
+			tbl.Column(0, table.Column{Name: "NAME"})
+			tbl.Column(1, table.Column{Name: "VALUES"})
+			tbl.Column(2, table.Column{Name: "APPLY METHOD"})
+			tbl.Column(3, table.Column{Name: "APPLY TYPE"})
+			tbl.Column(4, table.Column{Name: "MODIFIABLE"})
 			for _, parameter := range parameters {
 				tbl.Add(parameter.Name, parameter.Value, parameter.ApplyMethod, parameter.ApplyType, parameter.IsModifiable)
 			}
