@@ -11,11 +11,11 @@ import (
 
 	_ "zenit/agent/plugins/inputs/aws/cloudwatch/rds"
 	_ "zenit/agent/plugins/inputs/aws/discover/rds"
-	_ "zenit/agent/plugins/inputs/mongodb/collections"
-	_ "zenit/agent/plugins/inputs/mongodb/serverstatus"
-	_ "zenit/agent/plugins/inputs/mysql/aurora"
-	_ "zenit/agent/plugins/inputs/mysql/innodb"
-	_ "zenit/agent/plugins/inputs/mysql/overflow"
+	// _ "zenit/agent/plugins/inputs/mongodb/collections"
+	// _ "zenit/agent/plugins/inputs/mongodb/serverstatus"
+	// _ "zenit/agent/plugins/inputs/mysql/aurora" // Incrementa.
+	// _ "zenit/agent/plugins/inputs/mysql/innodb"
+	// _ "zenit/agent/plugins/inputs/mysql/overflow"
 	_ "zenit/agent/plugins/inputs/mysql/replica"
 	_ "zenit/agent/plugins/inputs/mysql/status"
 	_ "zenit/agent/plugins/inputs/mysql/tables"

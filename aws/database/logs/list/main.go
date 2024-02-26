@@ -45,15 +45,14 @@ func NewCommand() *cobra.Command {
 				return
 			}
 
-			if sort {
-				logs.SortBySize()
-			}
-
 			tbl := table.New()
 			tbl.Column(0, table.Column{Name: "File"})
 			tbl.Column(1, table.Column{Name: "Size"})
 			for _, log := range logs {
 				tbl.Add(log.FileName, log.Size)
+			}
+			if sort {
+				tbl.SortBy(1)
 			}
 			tbl.Print()
 		},

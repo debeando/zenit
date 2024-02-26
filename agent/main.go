@@ -37,8 +37,8 @@ func NewCommand() *cobra.Command {
 				c := config.GetInstance()
 				c.Path = configPath
 				c.IPAddress = net.IPAddress()
-
 				c.Load()
+
 				plugins.Load()
 			} else {
 				log.Error("Invalid config file, please verify.")

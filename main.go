@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var verbose bool
+var debug bool
 
 func main() {
 	var rootCmd = &cobra.Command{
@@ -22,14 +22,13 @@ data model and more, please see available commands.
 
 Find more information at: https://github.com/debeando/zenit`,
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
-			// Enable verbose/debug mode.
-			if verbose {
+			if debug {
 				log.SetLevel(log.DebugLevel)
 			}
 		},
 	}
 
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Verbose output")
+	rootCmd.PersistentFlags().BoolVarP(&debug, "debug", "v", false, "Debug output")
 
 	rootCmd.AddCommand(agent.NewCommand())
 	rootCmd.AddCommand(aws.NewCommand())

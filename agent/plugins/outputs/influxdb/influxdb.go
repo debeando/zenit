@@ -32,6 +32,10 @@ func (p *Plugin) Deliver(name string, cnf *config.Config, mtc *metrics.Items) {
 		return
 	}
 
+	if mtc.Count() == 0 {
+		return
+	}
+
 	if cnf.Outputs.InfluxDB.Database == "" {
 		cnf.Outputs.InfluxDB.Database = defaultDatabase
 	}
@@ -72,6 +76,10 @@ func (p *Plugin) Deliver(name string, cnf *config.Config, mtc *metrics.Items) {
 
 	for k, l := range events {
 		for _, m := range l {
+			if len(m["fields"].(map[string]interface{})) == 0 {
+				continue
+			}
+
 			pt, err := client.NewPoint(
 				k,
 				m["tags"].(map[string]string),

@@ -1,14 +1,14 @@
 package top
 
 import (
-	"fmt"
+	// "fmt"
 
-	"github.com/debeando/go-common/aws/rds"
-	"github.com/debeando/go-common/cast"
-	"github.com/debeando/go-common/log"
-	"github.com/debeando/go-common/mysql"
-	"github.com/debeando/go-common/table"
-	"github.com/debeando/go-common/terminal"
+	// "github.com/debeando/go-common/aws/rds"
+	// "github.com/debeando/go-common/cast"
+	// "github.com/debeando/go-common/log"
+	// "github.com/debeando/go-common/mysql"
+	// "github.com/debeando/go-common/table"
+	// "github.com/debeando/go-common/terminal"
 
 	"github.com/spf13/cobra"
 )
@@ -28,7 +28,7 @@ WHERE id <> connection_id()
 	AND user NOT IN ('rdsadmin');`
 
 func NewCommand() *cobra.Command {
-	defer terminal.CursorShow()
+	// defer terminal.CursorShow()
 
 	var cmd = &cobra.Command{
 		Use:   "top [IDENTIFIER] |",
@@ -52,50 +52,50 @@ func NewCommand() *cobra.Command {
 			}
 
 			if len(args) == 1 && len(args[0]) > 0 {
-				r := rds.RDS{}
+				// r := rds.RDS{}
 
-				if err := r.Init(); err != nil {
-					log.Error(err.Error())
-					return
-				}
+				// if err := r.Init(); err != nil {
+				// 	log.Error(err.Error())
+				// 	return
+				// }
 
-				instance, err := r.Describe(args[0])
-				if err != nil {
-					log.Error(err.Error())
-					return
-				}
+				// instance, err := r.Describe(args[0])
+				// if err != nil {
+				// 	log.Error(err.Error())
+				// 	return
+				// }
 
-				host = instance.Endpoint
-				port = instance.Port
+				// host = instance.Endpoint
+				// port = instance.Port
 			}
 
-			fmt.Printf("Connecting to %s:%d...\n", host, port)
+			// fmt.Printf("Connecting to %s:%d...\n", host, port)
 
-			dsn = fmt.Sprintf("%s:%s@tcp(%s:%d)/information_schema?timeout=3s", user, password, host, port)
+			// dsn = fmt.Sprintf("%s:%s@tcp(%s:%d)/information_schema?timeout=3s", user, password, host, port)
 
-			m := mysql.New("top", dsn)
-			if err := m.Connect(); err != nil {
-				log.Error(err.Error())
-				return
-			}
+			// m := mysql.New("top", dsn)
+			// if err := m.Connect(); err != nil {
+			// 	log.Error(err.Error())
+			// 	return
+			// }
 
-			terminal.Refresh(delay, func() bool {
-				processlist, _ := m.Query(SQL_PROCESSLIST)
+			// terminal.Refresh(delay, func() bool {
+			// 	processlist, _ := m.Query(SQL_PROCESSLIST)
 
-				tbl := table.New()
-				tbl.Title("Process List")
-				tbl.Column(0, table.Column{Name: "ID", Truncate: 10, Width: 10})
-				tbl.Column(1, table.Column{Name: "User", Truncate: 10, Width: 10})
-				tbl.Column(2, table.Column{Name: "Host", Truncate: 16, Width: 16})
-				tbl.Column(3, table.Column{Name: "Time", Truncate: 4, Width: 4})
-				tbl.Column(4, table.Column{Name: "Query", Truncate: 50, Width: 50})
-				for _, row := range processlist {
-					tbl.Add(row["id"], row["user"], row["host"], cast.StringToInt(row["time"]), row["info"])
-				}
-				tbl.SortBy(3).Print()
+			// 	tbl := table.New()
+			// 	tbl.Title("Process List")
+			// 	tbl.Column(0, table.Column{Name: "ID", Truncate: 10, Width: 10})
+			// 	tbl.Column(1, table.Column{Name: "User", Truncate: 10, Width: 10})
+			// 	tbl.Column(2, table.Column{Name: "Host", Truncate: 16, Width: 16})
+			// 	tbl.Column(3, table.Column{Name: "Time", Truncate: 4, Width: 4})
+			// 	tbl.Column(4, table.Column{Name: "Query", Truncate: 50, Width: 50})
+			// 	for _, row := range processlist {
+			// 		tbl.Add(row["id"], row["user"], row["host"], cast.StringToInt(row["time"]), row["info"])
+			// 	}
+			// 	tbl.SortBy(3).Print()
 
-				return true
-			})
+			// 	return true
+			// })
 		},
 	}
 
